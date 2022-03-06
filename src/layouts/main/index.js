@@ -1,18 +1,18 @@
-import { Link as ScrollLink } from 'react-scroll';
-import { useLocation, Outlet } from 'react-router-dom';
+import { Link as ScrollLink } from "react-scroll";
+import { useLocation, Outlet } from "react-router-dom";
 // material
-import { Box, Link, Container, Typography } from '@material-ui/core';
+import { Box, Link, Container, Typography } from "@material-ui/core";
 // components
-import Logo from '../../components/Logo';
+import Logo from "../../components/Logo";
 //
-import MainNavbar from './MainNavbar';
-import MainFooter from './MainFooter';
+import MainNavbar from "./MainNavbar";
+import MainFooter from "./MainFooter";
 
 // ----------------------------------------------------------------------
 
 export default function MainLayout() {
   const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  const isHome = pathname === "/";
 
   return (
     <>

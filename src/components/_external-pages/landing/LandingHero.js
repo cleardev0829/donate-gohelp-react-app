@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import flashFill from "@iconify/icons-eva/flash-fill";
 import { Link as RouterLink } from "react-router-dom";
+import trash2Fill from "@iconify/icons-eva/trash-2-fill";
 
 // material
 import { experimentalStyled as styled } from "@material-ui/core/styles";
@@ -12,9 +13,10 @@ import {
   Container,
   Typography,
   Stack,
+  IconButton,
 } from "@material-ui/core";
 // routes
-import { PATH_DASHBOARD } from "../../../routes/paths";
+import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 //
 import {
   varFadeIn,
@@ -94,62 +96,67 @@ export default function LandingHero() {
               <ContentStyle>
                 <motion.div variants={varFadeInRight}>
                   <Typography variant="h1" sx={{ color: "text.primary" }}>
-                    Start a <br />
-                    new project <br /> with
-                    <Typography
+                    Trusted fundrasing <br />
+                    for all of life's <br /> moments
+                    {/* <Typography
                       component="span"
                       variant="h1"
                       sx={{ color: "primary.main" }}
                     >
                       &nbsp;Minimal
-                    </Typography>
+                    </Typography> */}
                   </Typography>
                 </motion.div>
 
                 <motion.div variants={varFadeInRight}>
-                  <Typography sx={{ color: "text.primary" }}>
-                    The starting point for your next project based on
-                    easy-to-customize Material-UI © helps you build apps faster
-                    and better.
+                  <Typography variant="p3" sx={{ color: "text.primary" }}>
+                    Get help. Give kindness. Start in just 5 minutes.
                   </Typography>
                 </motion.div>
 
                 <Stack
-                  component={motion.div}
-                  variants={varFadeInRight}
                   direction="row"
-                  spacing={1}
+                  spacing={2}
                   justifyContent={{ xs: "center", md: "flex-start" }}
+                  alignItems={{ xs: "center", md: "center" }}
                 >
-                  <img
-                    alt="sketch icon"
-                    src="/static/home/ic_sketch.svg"
-                    width={20}
-                    height={20}
-                  />
-                  <Link
-                    underline="always"
-                    href="https://www.sketch.com/s/0fa4699d-a3ff-4cd5-a3a7-d851eb7e17f0"
-                    target="_blank"
-                    sx={{ color: "common.white" }}
+                  <motion.div variants={varFadeInRight}>
+                    <Button
+                      size="large"
+                      variant="contained"
+                      component={RouterLink}
+                      to={PATH_PAGE.page404}
+                      // startIcon={<Icon icon={flashFill} width={20} height={20} />}
+                    >
+                      Start a GoHelp
+                    </Button>
+                  </motion.div>
+
+                  <Stack
+                    component={motion.div}
+                    variants={varFadeInRight}
+                    direction="row"
+                    spacing={1}
+                    justifyContent={{ xs: "center", md: "flex-start" }}
                   >
-                    Preview in Sketch Cloud
-                  </Link>
+                    {/* <img
+                      alt="sketch icon"
+                      src="/static/home/ic_sketch.svg"
+                      width={20}
+                      height={20}
+                    /> */}
+                    <Link
+                      underline="always"
+                      href="#"
+                      target="_blank"
+                      sx={{ color: "common.white" }}
+                    >
+                      <Typography variant="p1">See how GoHelp work </Typography>
+                    </Link>
+                  </Stack>
                 </Stack>
 
-                <motion.div variants={varFadeInRight}>
-                  <Button
-                    size="large"
-                    variant="contained"
-                    component={RouterLink}
-                    to={PATH_DASHBOARD.root}
-                    startIcon={<Icon icon={flashFill} width={20} height={20} />}
-                  >
-                    Live Preview
-                  </Button>
-                </motion.div>
-
-                <Stack
+                {/* <Stack
                   direction="row"
                   spacing={1.5}
                   justifyContent={{ xs: "center", md: "flex-start" }}
@@ -178,7 +185,7 @@ export default function LandingHero() {
                     variants={varFadeInRight}
                     src="/static/home/ic_m_ts.svg"
                   />
-                </Stack>
+                </Stack> */}
               </ContentStyle>
             </Grid>
             <Grid item xs={12} sm={6} justify="center" alignItems="center">
@@ -190,7 +197,7 @@ export default function LandingHero() {
             </Grid>
           </Grid>
           <Grid container alignItems="center" justify="center">
-            <MouseScroll/>
+            <MouseScroll />
           </Grid>
         </Container>
       </RootStyle>

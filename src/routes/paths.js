@@ -7,13 +7,13 @@ function path(root, sublink) {
 const ROOTS_AUTH = "/auth";
 const ROOTS_DOCS = "/docs";
 const ROOTS_DASHBOARD = "/dashboard";
-const ROOTS_ONLY = "/only"
+const ROOTS_ONLY = "/only";
 
 // ----------------------------------------------------------------------
 
 export const PATH_ONLY = {
-  payment: path(ROOTS_ONLY, "/payment")
-}
+  payment: path(ROOTS_ONLY, "/payment"),
+};
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,

@@ -17,7 +17,7 @@ const GREY = {
   600: "#637381",
   700: "#454F5B",
   800: "#1c1a22",
-  900: "#1c1a22",
+  900: "#333333",
   500_8: alpha("#919EAB", 0.08),
   500_12: alpha("#919EAB", 0.12),
   500_16: alpha("#919EAB", 0.16),
@@ -31,7 +31,7 @@ const GREY = {
 const PRIMARY = {
   lighter: "#C8FACD",
   light: "#5BE584",
-  main: "#00db1a",
+  main: "#3EB489",
   dark: "#007B55",
   darker: "#005249",
   contrastText: "#fff",
@@ -39,7 +39,8 @@ const PRIMARY = {
 const SECONDARY = {
   lighter: "#D6E4FF",
   light: "#84A9FF",
-  main: "#3366FF",
+  // main: "#3366FF",
+  main: "#444444",
   dark: "#1939B7",
   darker: "#091A7A",
   contrastText: "#fff",

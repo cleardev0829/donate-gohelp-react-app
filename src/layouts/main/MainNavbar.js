@@ -1,11 +1,21 @@
 import { NavLink as RouterLink, useLocation } from "react-router-dom";
 // material
 import { experimentalStyled as styled } from "@material-ui/core/styles";
-import { Box, Button, AppBar, Toolbar, Container } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  AppBar,
+  Toolbar,
+  Container,
+  Stack,
+  Typography,
+} from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
 // hooks
 import useOffSetTop from "../../hooks/useOffSetTop";
 // components
 import Logo from "../../components/Logo";
+import Search from "../../components/Search";
 import Label from "../../components/Label";
 import { MHidden } from "../../components/@material-extend";
 //
@@ -14,6 +24,7 @@ import MenuMobile from "./MenuMobile";
 import navConfig from "./MenuConfig";
 // routes
 import { PATH_AUTH, PATH_PAGE } from "../../routes/paths";
+import { BlogPostsSearch } from "src/components/_dashboard/blog";
 
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 88;
@@ -68,13 +79,17 @@ export default function MainNavbar() {
             justifyContent: "space-between",
           }}
         >
-          <RouterLink to="/">
-            <Logo />
-          </RouterLink>
-          <Label color="info" sx={{ ml: 1 }}>
-            v2.1.0
-          </Label>
-          <Box sx={{ flexGrow: 1 }} />
+          <Stack direction="row">
+            <RouterLink to="/">
+              <Logo />
+            </RouterLink>
+            {/* <Label color="primary" sx={{ ml: 1 }}>
+            Gohelp
+          </Label> */}
+            <Typography variant="h5" color="primary">
+              Gohelp
+            </Typography>
+          </Stack>
 
           <MHidden width="mdDown">
             <MenuDesktop
@@ -83,18 +98,25 @@ export default function MainNavbar() {
               navConfig={navConfig}
             />
           </MHidden>
+
+          {/* <Box sx={{ flexGrow: 1 }} /> */}
+
+          <MHidden width="mdDown">
+            <Search />
+          </MHidden>
+
           <RouterLink
-            to={PATH_PAGE.pricing}
+            to={PATH_PAGE.page404}
             style={{ textDecoration: "none", marginRight: 10, color: "#fff" }}
           >
-            <Button variant="contained">Price</Button>
+            <Button variant="contained">Connect your wallet</Button>
           </RouterLink>
-          <RouterLink
+          {/* <RouterLink
             to={PATH_AUTH.register}
-            style={{ textDecoration: "none", marginRight: 10, }}
+            style={{ textDecoration: "none", marginRight: 10 }}
           >
             <Button variant="contained">Sign up</Button>
-          </RouterLink>
+          </RouterLink> */}
           <MHidden width="mdUp">
             <MenuMobile
               isOffset={isOffset}
