@@ -47,7 +47,7 @@ const IconWrapperStyle = styled("div")(({ theme }) => ({
   height: theme.spacing(8),
   marginBottom: theme.spacing(3),
   color: theme.palette.primary.main,
-  backgroundColor: `${alpha(theme.palette.common.white, 0.08)}`,
+  backgroundColor: theme.palette.common.white,
 }));
 
 const CoverImgStyle = styled("img")({
@@ -186,7 +186,6 @@ export default function FundraisingShare() {
                 <Card
                   sx={{
                     p: (theme) => theme.spacing(1.25, 3),
-                    backgroundColor: "background.neutral",
                   }}
                 >
                   <Stack spacing={1} direction="row" alignItems="center">
@@ -216,7 +215,6 @@ export default function FundraisingShare() {
                 <Card
                   sx={{
                     p: (theme) => theme.spacing(1.25, 3),
-                    backgroundColor: "background.neutral",
                   }}
                 >
                   <Stack spacing={1} direction="row" alignItems="center">

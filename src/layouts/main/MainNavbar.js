@@ -61,7 +61,7 @@ export default function MainNavbar() {
   const isHome = pathname === "/";
 
   return (
-    <AppBar color={isHome ? "transparent" : "default"} sx={{ boxShadow: 0 }}>
+    <AppBar color={isHome ? "transparent" : "inherit"} sx={{ boxShadow: 0 }}>
       <ToolbarStyle
         disableGutters
         sx={{
@@ -79,7 +79,7 @@ export default function MainNavbar() {
             justifyContent: "space-between",
           }}
         >
-          <Stack direction="row">
+          <Stack spacing={1} direction="row" alignItems={"center"}>
             <RouterLink to="/">
               <Logo />
             </RouterLink>

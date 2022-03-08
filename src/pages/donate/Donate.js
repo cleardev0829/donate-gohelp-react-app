@@ -42,7 +42,7 @@ import {
   DonateComplete,
   DonateMain,
   DonatePayment,
-} from "src/components/_external-pages/donate";
+} from "../../components/_external-pages/donate";
 import useIsMountedRef from "../../hooks/useIsMountedRef";
 
 import {

@@ -164,7 +164,6 @@ export default function FundraisingStory() {
               <Card
                 sx={{
                   p: 3,
-                  backgroundColor: "background.neutral",
                 }}
               >
                 <Stack spacing={3}>

@@ -40,7 +40,7 @@ const SECONDARY = {
   lighter: "#D6E4FF",
   light: "#84A9FF",
   // main: "#3366FF",
-  main: "#444444",
+  main: "#c2c2c2",
   dark: "#1939B7",
   darker: "#091A7A",
   contrastText: "#fff",
@@ -136,10 +136,10 @@ const palette = {
       disabled: GREY[600],
     },
     background: {
-      paper: GREY[500_16],
+      paper: "#1B1D1F", //card
       default: "#141719",
       neutral: GREY[500_16],
-      body: "#16151b",
+      body: "#141719", //background
     },
     action: { active: GREY[500], ...COMMON.action },
   },

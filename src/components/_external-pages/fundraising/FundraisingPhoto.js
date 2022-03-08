@@ -26,7 +26,7 @@ import {
 import fakeRequest from "../../../utils/fakeRequest";
 //
 import { QuillEditor } from "../../editor";
-import { UploadSingleFile } from "../../upload";
+import { UploadSingleFileOverride } from "../../upload";
 //
 // import BlogNewPostPreview from "./BlogNewPostPreview";
 
@@ -164,7 +164,6 @@ export default function FundraisingGoal() {
               <Card
                 sx={{
                   p: 3,
-                  backgroundColor: "background.neutral",
                 }}
               >
                 <Stack spacing={3}>
@@ -201,7 +200,7 @@ export default function FundraisingGoal() {
                   </Typography>
 
                   <div>
-                    <UploadSingleFile
+                    <UploadSingleFileOverride
                       maxSize={3145728}
                       accept="image/*"
                       file={values.cover}

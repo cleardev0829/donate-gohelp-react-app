@@ -48,7 +48,7 @@ import {
   FundraisingShare,
   FundraisingDetails,
   FundraisingComplete,
-} from "src/components/_external-pages/fundraising";
+} from "../../components/_external-pages/fundraising";
 
 // ----------------------------------------------------------------------
 

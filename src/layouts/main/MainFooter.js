@@ -32,7 +32,7 @@ const SOCIALS = [
 
 const RootStyle = styled("div")(({ theme }) => ({
   position: "relative",
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: "#333333",
   padding: theme.spacing(10, 0),
 }));
 
@@ -51,11 +51,11 @@ export default function MainFooter() {
           }}
         >
           {/* <Grid item xs={12} md={4}> */}
-          <Stack spacing={1} direction="row">
+          <Stack spacing={1} direction="row" alignItems="center">
             <RouterLink to="/">
               <Logo />
             </RouterLink>
-            <Typography variant="h5" color="primary">
+            <Typography variant="h5" color="secondary">
               Gohelp
             </Typography>
           </Stack>
@@ -72,6 +72,7 @@ export default function MainFooter() {
             variant="body2"
             sx={{
               fontSize: 14,
+              color: (theme) => theme.palette.secondary.main,
               textAlign: { xs: "center", md: "left" },
             }}
           >

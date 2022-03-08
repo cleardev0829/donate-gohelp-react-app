@@ -58,7 +58,7 @@ const TitleStyle = styled(Link)({
 });
 
 const CardMediaStyle = styled("div")({
-  height: 100,
+  // height: 100,
   position: "relative",
   paddingTop: "calc(100% * 3 / 4)",
 });
@@ -281,19 +281,16 @@ export default function FundraisingDetails() {
               <Card
                 sx={{
                   p: 3,
-                  backgroundColor: "background.neutral",
                 }}
               >
                 <Grid container spacing={5}>
                   <Grid item xs={12} md={3}>
-                    <Card sx={{ position: "relative" }}>
-                      <CardMediaStyle>
-                        <CoverImgStyle
-                          alt={"title"}
-                          src={"/static/home/social-marketing.png"}
-                        />
-                      </CardMediaStyle>
-                    </Card>
+                    <CardMediaStyle>
+                      <CoverImgStyle
+                        alt={"title"}
+                        src={"/static/home/social-marketing.png"}
+                      />
+                    </CardMediaStyle>
                   </Grid>
 
                   <Grid item xs={12} md={9}>

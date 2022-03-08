@@ -134,6 +134,7 @@ export default function TopFundraiserCard({ post, index }) {
               variant="p1"
               sx={{
                 display: "block",
+                color: (theme) => theme.palette.common.white,
               }}
             >
               {country}

@@ -38,7 +38,9 @@ import {
 // ----------------------------------------------------------------------
 
 const CardStyle = styled("div")(({ theme }) => ({
-  height: 350,
+  // height: 350,
+  minWidth: 350,
+  minHeight: 370,
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
@@ -64,7 +66,7 @@ const CardMediaStyle = styled("div")(({ theme }) => ({
   justifyContent: "center",
   flexDirection: "row",
   padding: theme.spacing(1.5),
-  backgroundColor: theme.palette.background.neutral,
+  backgroundColor: theme.palette.background.paper,
   borderRadius: 50,
 }));
 
@@ -113,34 +115,36 @@ export default function OnlineFundraisingCard({ post, index }) {
         </CardMediaStyle>
 
         <CardContentStyle>
-          <TitleStyle
-            // to={linkTo}
-            color="inherit"
-            variant="h4"
-            // component={RouterLink}
-            sx={{
-              ...(latestPostLarge && { typography: "h4", height: 60 }),
-              ...((latestPostLarge || latestPost) &&
-                {
-                  // color: "common.white",
-                }),
-            }}
-            onClick={() => {
-              // window.open(pdfUrl, "_blank");
-            }}
-          >
-            {title}
-          </TitleStyle>
+          <Stack spacing={2}>
+            <TitleStyle
+              // to={linkTo}
+              color="inherit"
+              variant="h4"
+              // component={RouterLink}
+              sx={{
+                ...(latestPostLarge && { typography: "h4", height: 60 }),
+                ...((latestPostLarge || latestPost) &&
+                  {
+                    // color: "common.white",
+                  }),
+              }}
+              onClick={() => {
+                // window.open(pdfUrl, "_blank");
+              }}
+            >
+              {title}
+            </TitleStyle>
 
-          <Typography gutterBottom variant="p1" sx={{ display: "block" }}>
-            {description}
-          </Typography>
+            <Typography gutterBottom variant="p1" sx={{ display: "block" }}>
+              {description}
+            </Typography>
 
-          {link && (
-            <Link variant="body1" underline="always">
-              {link}
-            </Link>
-          )}
+            {link && (
+              <Link variant="body1" underline="always">
+                {link}
+              </Link>
+            )}
+          </Stack>
         </CardContentStyle>
       </CardStyle>
     </Grid>

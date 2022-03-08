@@ -64,7 +64,7 @@ const CardMediaStyle = styled("div")(({ theme }) => ({
   justifyContent: "center",
   flexDirection: "row",
   padding: theme.spacing(1.5),
-  backgroundColor: theme.palette.background.neutral,
+  backgroundColor: theme.palette.background.paper,
   borderRadius: 50,
 }));
 
