@@ -73,7 +73,7 @@ ProgressItem.propTypes = {
   index: PropTypes.number,
 };
 
-function ProgressItem({ progress, index }) {
+export function ProgressItem({ progress, index }) {
   return (
     <Stack spacing={0}>
       <Stack direction="row" justifyContent="space-between" sx={{ width: 1 }}>
@@ -110,6 +110,10 @@ export default function TopFundraiserCard({ post, index }) {
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
 
+  const handleDonate = () => {
+    alert();
+  };
+
   return (
     <Grid
       item
@@ -138,32 +142,13 @@ export default function TopFundraiserCard({ post, index }) {
           <CoverImgStyle alt={title} src={cover} />
         </CardMediaStyle>
 
-        <CardContent
-          sx={
-            {
-              // pt: 4,
-              // ...((latestPostLarge || latestPost) && {
-              //   bottom: 0,
-              //   width: '100%',
-              //   position: 'absolute'
-              // })
-            }
-          }
-        >
+        <CardContent>
           <TitleStyle
-            // to={linkTo}
             color="inherit"
             variant="h5"
-            // component={RouterLink}
             sx={{
-              ...(latestPostLarge && { typography: "h5", height: 60 }),
-              ...((latestPostLarge || latestPost) &&
-                {
-                  // color: "common.white",
-                }),
-            }}
-            onClick={() => {
-              // window.open(pdfUrl, "_blank");
+              typography: "h5",
+              height: 60,
             }}
           >
             {title}
@@ -204,7 +189,7 @@ export default function TopFundraiserCard({ post, index }) {
                 size="middle"
                 variant="contained"
                 component={RouterLink}
-                to={PATH_PAGE.page404}
+                to={PATH_PAGE.donate}
               >
                 Donate
               </Button>

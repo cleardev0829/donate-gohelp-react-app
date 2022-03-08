@@ -1,13 +1,23 @@
-import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { NavLink as RouterLink, useLocation } from 'react-router-dom';
-import arrowIosUpwardFill from '@iconify/icons-eva/arrow-ios-upward-fill';
-import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
+import PropTypes from "prop-types";
+import { Icon } from "@iconify/react";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { NavLink as RouterLink, useLocation } from "react-router-dom";
+import arrowIosUpwardFill from "@iconify/icons-eva/arrow-ios-upward-fill";
+import arrowIosDownwardFill from "@iconify/icons-eva/arrow-ios-downward-fill";
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Link, Grid, List, Stack, Popover, ListItem, ListSubheader, CardActionArea } from '@material-ui/core';
+import { experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  Box,
+  Link,
+  Grid,
+  List,
+  Stack,
+  Popover,
+  ListItem,
+  ListSubheader,
+  CardActionArea,
+} from "@material-ui/core";
 
 // ----------------------------------------------------------------------
 
@@ -15,33 +25,38 @@ const LinkStyle = styled(Link)(({ theme }) => ({
   ...theme.typography.subtitle2,
   color: theme.palette.text.primary,
   marginRight: theme.spacing(5),
-  transition: theme.transitions.create('opacity', {
-    duration: theme.transitions.duration.shortest
+  transition: theme.transitions.create("opacity", {
+    duration: theme.transitions.duration.shortest,
   }),
-  '&:hover': {
+  "&:hover": {
     opacity: 0.48,
-    textDecoration: 'none'
-  }
+    textDecoration: "none",
+  },
 }));
 
 // ----------------------------------------------------------------------
 
 IconBullet.propTypes = {
-  type: PropTypes.oneOf(['subheader', 'item'])
+  type: PropTypes.oneOf(["subheader", "item"]),
 };
 
-function IconBullet({ type = 'item' }) {
+export function IconBullet({ type = "item" }) {
   return (
-    <Box sx={{ width: 24, height: 16, display: 'flex', alignItems: 'center' }}>
+    <Box sx={{ width: 24, height: 16, display: "flex", alignItems: "center" }}>
       <Box
         component="span"
         sx={{
-          ml: '2px',
+          ml: "2px",
           width: 4,
           height: 4,
-          borderRadius: '50%',
-          bgcolor: 'currentColor',
-          ...(type !== 'item' && { ml: 0, width: 8, height: 2, borderRadius: 2 })
+          borderRadius: "50%",
+          bgcolor: "currentColor",
+          ...(type !== "item" && {
+            ml: 0,
+            width: 8,
+            height: 2,
+            borderRadius: 2,
+          }),
         }}
       />
     </Box>
@@ -55,10 +70,18 @@ MenuDesktopItem.propTypes = {
   isOffset: PropTypes.bool,
   isOpen: PropTypes.bool,
   onOpen: PropTypes.func,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
-function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onClose }) {
+function MenuDesktopItem({
+  item,
+  pathname,
+  isHome,
+  isOpen,
+  isOffset,
+  onOpen,
+  onClose,
+}) {
   const { title, path, children } = item;
   const isActive = pathname === path;
 
@@ -68,12 +91,12 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
         <LinkStyle
           onClick={onOpen}
           sx={{
-            display: 'flex',
-            cursor: 'pointer',
-            alignItems: 'center',
-            ...(isHome && { color: 'common.white' }),
-            ...(isOffset && { color: 'text.primary' }),
-            ...(isOpen && { opacity: 0.48 })
+            display: "flex",
+            cursor: "pointer",
+            alignItems: "center",
+            ...(isHome && { color: "common.white" }),
+            ...(isOffset && { color: "text.primary" }),
+            ...(isOpen && { opacity: 0.48 }),
           }}
         >
           {title}
@@ -86,8 +109,8 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
 
         <Popover
           open={isOpen}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          transformOrigin={{ vertical: "top", horizontal: "center" }}
           onClose={onClose}
           PaperProps={{
             sx: {
@@ -95,11 +118,11 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
               pb: 3,
               top: "80px !important",
               right: 16,
-              margin: 'auto',
+              margin: "auto",
               maxWidth: 350,
               borderRadius: 2,
-              boxShadow: (theme) => theme.customShadows.z24
-            }
+              boxShadow: (theme) => theme.customShadows.z24,
+            },
           }}
         >
           <Grid container spacing={3}>
@@ -118,24 +141,25 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
                         sx={{
                           p: 0,
                           mt: 3,
-                          typography: 'body2',
-                          color: 'text.secondary',
-                          transition: (theme) => theme.transitions.create('color'),
-                          '&:hover': { color: 'text.primary' },
+                          typography: "body2",
+                          color: "text.secondary",
+                          transition: (theme) =>
+                            theme.transitions.create("color"),
+                          "&:hover": { color: "text.primary" },
                           ...(item.path === pathname && {
-                            typography: 'subtitle2',
-                            color: 'text.primary'
-                          })
+                            typography: "subtitle2",
+                            color: "text.primary",
+                          }),
                         }}
                       >
-                        {item.title === 'Dashboard' ? (
+                        {item.title === "Dashboard" ? (
                           <CardActionArea
                             sx={{
                               py: 5,
                               px: 10,
                               borderRadius: 2,
-                              color: 'primary.main',
-                              bgcolor: 'background.neutral'
+                              color: "primary.main",
+                              bgcolor: "background.neutral",
                             }}
                           >
                             <Box
@@ -144,7 +168,7 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
                               whileHover="hover"
                               variants={{
                                 hover: { scale: 1.02 },
-                                tap: { scale: 0.98 }
+                                tap: { scale: 0.98 },
                               }}
                               src="/static/illustrations/illustration_dashboard.png"
                               sx={{ minWidth: 420 }}
@@ -174,9 +198,9 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
       to={path}
       component={RouterLink}
       sx={{
-        ...(isHome && { color: 'common.white' }),
-        ...(isOffset && { color: 'text.primary' }),
-        ...(isActive && { color: 'primary.main' })
+        ...(isHome && { color: "common.white" }),
+        ...(isOffset && { color: "text.primary" }),
+        ...(isActive && { color: "primary.main" }),
       }}
     >
       {title}
@@ -187,7 +211,7 @@ function MenuDesktopItem({ item, pathname, isHome, isOpen, isOffset, onOpen, onC
 MenuDesktop.propTypes = {
   isOffset: PropTypes.bool,
   isHome: PropTypes.bool,
-  navConfig: PropTypes.array
+  navConfig: PropTypes.array,
 };
 
 export default function MenuDesktop({ isOffset, isHome, navConfig }) {

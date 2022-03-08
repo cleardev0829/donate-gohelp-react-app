@@ -125,7 +125,7 @@ export default function LandingHero() {
                       size="large"
                       variant="contained"
                       component={RouterLink}
-                      to={PATH_PAGE.page404}
+                      to={PATH_PAGE.fundraising}
                       // startIcon={<Icon icon={flashFill} width={20} height={20} />}
                     >
                       Start a GoHelp

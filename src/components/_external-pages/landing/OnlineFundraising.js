@@ -96,20 +96,6 @@ const SkeletonLoad = (
 
 export default function OnlineFundraising() {
   const dispatch = useDispatch();
-  const [filters, setFilters] = useState("latest");
-  // const { posts, hasMore, index, step } = useSelector((state) => state.blog);
-
-  // const sortedPosts = applySort(posts, filters);
-  // const onScroll = useCallback(() => dispatch(getMorePosts()), [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getPostsInitial(index, step));
-  // }, [dispatch, index, step]);
-
-  // const handleChangeSort = (event) => {
-  //   setFilters(event.target.value);
-  // };
-
   const theme = useTheme();
   const isLight = theme.palette.mode === "light";
 

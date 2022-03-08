@@ -64,7 +64,7 @@ const CardMediaStyle = styled("div")(({ theme }) => ({
   justifyContent: "center",
   flexDirection: "row",
   padding: theme.spacing(1.5),
-  backgroundColor: "#1B1D1F",
+  backgroundColor: theme.palette.background.neutral,
   borderRadius: 50,
 }));
 
@@ -89,7 +89,7 @@ OnlineFundraisingCard.propTypes = {
 };
 
 export default function OnlineFundraisingCard({ post, index }) {
-  const { cover, title, view, comment, share, description } = post;
+  const { cover, title, view, comment, share, description, link } = post;
   const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
@@ -135,6 +135,12 @@ export default function OnlineFundraisingCard({ post, index }) {
           <Typography gutterBottom variant="p1" sx={{ display: "block" }}>
             {description}
           </Typography>
+
+          {link && (
+            <Link variant="body1" underline="always">
+              {link}
+            </Link>
+          )}
         </CardContentStyle>
       </CardStyle>
     </Grid>

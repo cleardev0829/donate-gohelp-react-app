@@ -1,7 +1,7 @@
-import { sum, map, filter, uniqBy, reject } from 'lodash';
-import { createSlice } from '@reduxjs/toolkit';
+import { sum, map, filter, uniqBy, reject } from "lodash";
+import { createSlice } from "@reduxjs/toolkit";
 // utils
-import axios from '../../utils/axios';
+import axios from "../../utils/axios";
 
 // ----------------------------------------------------------------------
 
@@ -13,10 +13,10 @@ const initialState = {
   sortBy: null,
   filters: {
     gender: [],
-    category: 'All',
+    category: "All",
     colors: [],
-    priceRange: '',
-    rating: ''
+    priceRange: "",
+    rating: "",
   },
   checkout: {
     activeStep: 0,
@@ -25,12 +25,12 @@ const initialState = {
     total: 0,
     discount: 0,
     shipping: 0,
-    billing: null
-  }
+    billing: null,
+  },
 };
 
 const slice = createSlice({
-  name: 'product',
+  name: "product",
   initialState,
   reducers: {
     // START LOADING
@@ -78,7 +78,9 @@ const slice = createSlice({
     getCart(state, action) {
       const cart = action.payload;
 
-      const subtotal = sum(cart.map((product) => product.price * product.quantity));
+      const subtotal = sum(
+        cart.map((product) => product.price * product.quantity)
+      );
       const discount = cart.length === 0 ? 0 : state.checkout.discount;
       const shipping = cart.length === 0 ? 0 : state.checkout.shipping;
       const billing = cart.length === 0 ? null : state.checkout.billing;
@@ -103,17 +105,20 @@ const slice = createSlice({
           if (isExisted) {
             return {
               ..._product,
-              quantity: _product.quantity + 1
+              quantity: _product.quantity + 1,
             };
           }
           return _product;
         });
       }
-      state.checkout.cart = uniqBy([...state.checkout.cart, product], 'id');
+      state.checkout.cart = uniqBy([...state.checkout.cart, product], "id");
     },
 
     deleteCart(state, action) {
-      const updateCart = filter(state.checkout.cart, (item) => item.id !== action.payload);
+      const updateCart = filter(
+        state.checkout.cart,
+        (item) => item.id !== action.payload
+      );
 
       state.checkout.cart = updateCart;
     },
@@ -147,7 +152,7 @@ const slice = createSlice({
         if (product.id === productId) {
           return {
             ...product,
-            quantity: product.quantity + 1
+            quantity: product.quantity + 1,
           };
         }
         return product;
@@ -162,7 +167,7 @@ const slice = createSlice({
         if (product.id === productId) {
           return {
             ...product,
-            quantity: product.quantity - 1
+            quantity: product.quantity - 1,
           };
         }
         return product;
@@ -184,9 +189,10 @@ const slice = createSlice({
     applyShipping(state, action) {
       const shipping = action.payload;
       state.checkout.shipping = shipping;
-      state.checkout.total = state.checkout.subtotal - state.checkout.discount + shipping;
-    }
-  }
+      state.checkout.total =
+        state.checkout.subtotal - state.checkout.discount + shipping;
+    },
+  },
 });
 
 // Reducer
@@ -208,7 +214,7 @@ export const {
   filterProducts,
   sortByProducts,
   increaseQuantity,
-  decreaseQuantity
+  decreaseQuantity,
 } = slice.actions;
 
 // ----------------------------------------------------------------------
@@ -217,7 +223,7 @@ export function getProducts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/products');
+      const response = await axios.get("/api/products");
       dispatch(slice.actions.getProductsSuccess(response.data.products));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -231,8 +237,8 @@ export function getProduct(name) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/products/product', {
-        params: { name }
+      const response = await axios.get("/api/products/product", {
+        params: { name },
       });
       dispatch(slice.actions.getProductSuccess(response.data.product));
     } catch (error) {

@@ -10,6 +10,8 @@ import productReducer from "./slices/product";
 import calendarReducer from "./slices/calendar";
 import kanbanReducer from "./slices/kanban";
 import fundraiserReducer from "./slices/fundraiser";
+import donateReducer from "./slices/donate";
+import fundraiseReducer from "./slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +29,13 @@ const productPersistConfig = {
   whitelist: ["sortBy", "checkout"],
 };
 
+const donatePersistConfig = {
+  key: "donate",
+  storage,
+  keyPrefix: "redux-",
+  whitelist: ["sortBy", "checkout"],
+};
+
 const rootReducer = combineReducers({
   mail: mailReducer,
   chat: chatReducer,
@@ -36,6 +45,9 @@ const rootReducer = combineReducers({
   kanban: kanbanReducer,
   fundraiser: fundraiserReducer,
   product: persistReducer(productPersistConfig, productReducer),
+  // donate: persistReducer(donatePersistConfig, donateReducer),
+  donate: donateReducer,
+  fundraise: fundraiseReducer,
 });
 
 export { rootPersistConfig, rootReducer };

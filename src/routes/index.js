@@ -63,12 +63,12 @@ export default function Router() {
             </GuestGuard>
           ),
         },
-        { path: 'reset-password', element: <ResetPassword /> },
+        { path: "reset-password", element: <ResetPassword /> },
       ],
     },
     {
       path: "only",
-      element: < OnlyLayout />,
+      element: <OnlyLayout />,
       children: [
         {
           path: "payment",
@@ -76,9 +76,9 @@ export default function Router() {
             <PaymentGuard>
               <Billing />
             </PaymentGuard>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     // Dashboard Routes
     {
@@ -139,6 +139,8 @@ export default function Router() {
       element: <MainLayout />,
       children: [
         { path: "/", element: <LandingPage /> },
+        { path: "fundraising", element: <Fundraising /> },
+        { path: "donate", element: <Donate /> },
       ],
     },
     { path: "*", element: <Navigate to="/404" replace /> },
@@ -152,7 +154,9 @@ const Login = Loadable(lazy(() => import("../pages/authentication/Login")));
 const Register = Loadable(
   lazy(() => import("../pages/authentication/Register"))
 );
-const ResetPassword = Loadable(lazy(() => import('../pages/authentication/ResetPassword')));
+const ResetPassword = Loadable(
+  lazy(() => import("../pages/authentication/ResetPassword"))
+);
 // Dashboard
 const GeneralApp = Loadable(
   lazy(() => import("../pages/dashboard/GeneralApp"))
@@ -180,4 +184,14 @@ const LandingPage = Loadable(lazy(() => import("../pages/LandingPage")));
 const Pricing = Loadable(lazy(() => import("../pages/Pricing")));
 const Page500 = Loadable(lazy(() => import("../pages/Page500")));
 const NotFound = Loadable(lazy(() => import("../pages/Page404")));
-const Billing = Loadable(lazy(() => import("../components/_dashboard/user/account/AccountBillingForOnly")));
+const Billing = Loadable(
+  lazy(() =>
+    import("../components/_dashboard/user/account/AccountBillingForOnly")
+  )
+);
+
+const Fundraising = Loadable(
+  lazy(() => import("../pages/fundraising/Fundraising"))
+);
+const Donate = Loadable(lazy(() => import("../pages/donate/Donate")));
+const DonatePayment = Loadable();
