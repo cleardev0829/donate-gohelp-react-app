@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { paramCase } from "change-case";
 import eyeFill from "@iconify/icons-eva/eye-fill";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import shareFill from "@iconify/icons-eva/share-fill";
 import messageCircleFill from "@iconify/icons-eva/message-circle-fill";
 import { fPercent, fCurrency } from "../../../utils/formatNumber";
@@ -32,15 +32,33 @@ import {
 
 // ----------------------------------------------------------------------
 
-const CardMediaStyle = styled("div")({
+export const CardMediaStyle = styled("div")({
   position: "relative",
   paddingTop: "calc(100% * 3 / 4)",
 });
 
-const TitleStyle = styled(Link)({
+export const CoverImgStyle = styled("img")({
+  top: 0,
+  width: "100%",
+  height: "100%",
+  // objectFit: "contain",
+  objectFit: "cover",
+  position: "absolute",
+  borderRadius: 8,
+});
+
+const TitleStyle = styled(Typography)({
   height: 64,
   overflow: "hidden",
   WebkitLineClamp: 2,
+  display: "-webkit-box",
+  WebkitBoxOrient: "vertical",
+});
+
+const DescriptionStyle = styled(Typography)({
+  height: 64,
+  overflow: "hidden",
+  WebkitLineClamp: 3,
   display: "-webkit-box",
   WebkitBoxOrient: "vertical",
 });
@@ -52,19 +70,10 @@ const CountryStyle = styled(Box)(({ theme }) => ({
   position: "absolute",
   left: theme.spacing(3),
   bottom: theme.spacing(2),
-  backgroundColor: theme.palette.secondary.main,
+  backgroundColor: "#333333",
   borderRadius: 8,
   padding: theme.spacing(0.75, 3),
 }));
-
-const CoverImgStyle = styled("img")({
-  top: 0,
-  width: "100%",
-  height: "100%",
-  // objectFit: "contain",
-  objectFit: "cover",
-  position: "absolute",
-});
 
 // ----------------------------------------------------------------------
 const COLORS = ["primary", "info", "warning"];
@@ -105,89 +114,84 @@ TopFundraiserCard.propTypes = {
 };
 
 export default function TopFundraiserCard({ post, index }) {
+  const navigate = useNavigate();
   const { cover, title, description, country } = post;
   const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
-  const latestPostLarge = index === 0;
-  const latestPost = index === 1 || index === 2;
 
   const handleDonate = () => {
     alert();
   };
 
   return (
-    <Grid
-      item
-      xs={12}
-      sm={latestPostLarge ? 6 : 6}
-      md={latestPostLarge ? 4 : 4}
-    >
+    <Grid item xs={12} sm={6} md={4}>
       <Card sx={{ position: "relative" }}>
-        <CardMediaStyle>
-          <CountryStyle
-            sx={{
-              ...((latestPostLarge || latestPost) && {
-                zIndex: 9,
-              }),
-            }}
+        <CardContent sx={{ p: 2.5 }}>
+          <Box
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate(PATH_PAGE.fundraising)}
           >
-            <Typography
-              variant="p1"
-              sx={{
-                display: "block",
-                color: (theme) => theme.palette.common.white,
-              }}
-            >
-              {country}
-            </Typography>
-          </CountryStyle>
-          <CoverImgStyle alt={title} src={cover} />
-        </CardMediaStyle>
+            <Stack>
+              <CardMediaStyle>
+                <CountryStyle>
+                  <Typography
+                    variant="p1"
+                    sx={{
+                      display: "block",
+                      color: (theme) => theme.palette.common.white,
+                    }}
+                  >
+                    {country}
+                  </Typography>
+                </CountryStyle>
+                <CoverImgStyle alt={title} src={cover} />
+              </CardMediaStyle>
 
-        <CardContent>
-          <TitleStyle
-            color="inherit"
-            variant="h5"
-            sx={{
-              typography: "h5",
-              height: 60,
-            }}
-          >
-            {title}
-          </TitleStyle>
+              <TitleStyle
+                color="inherit"
+                variant="h5"
+                sx={{
+                  mt: 2,
+                  height: 60,
+                }}
+              >
+                {title}
+              </TitleStyle>
 
-          <Typography
-            gutterBottom
-            variant="p1"
-            sx={{ display: "block", mt: 1, mb: 2 }}
-          >
-            {`${description.substring(0, 120)}...`}
-          </Typography>
+              <DescriptionStyle
+                color="inherit"
+                variant="p1"
+                sx={{ height: 78, mt: 1, mb: 2 }}
+              >
+                {description}
+              </DescriptionStyle>
 
-          <ProgressItem
-            key={" Last donation 3 min ago"}
-            progress={{ value: 78 }}
-            index={0}
-          />
+              <ProgressItem
+                key={" Last donation 3 min ago"}
+                progress={{ value: 78 }}
+                index={0}
+              />
 
-          <Typography
-            gutterBottom
-            variant="h6"
-            sx={{ display: "block", mt: 2 }}
-          >
-            7,800 token raised of 10,000 Token
-          </Typography>
+              <Typography
+                gutterBottom
+                variant="p1"
+                sx={{ display: "block", mt: 2 }}
+              >
+                7,800 token raised of 10,000 Token
+              </Typography>
+            </Stack>
+          </Box>
 
           <Box
             sx={{
               width: "100%",
               display: "flex",
               justifyContent: "center",
-              mt: 3,
+              mt: 2,
             }}
           >
             <motion.div variants={varFadeInRight}>
               <Button
-                size="middle"
+                size="large"
                 variant="contained"
                 component={RouterLink}
                 to={PATH_PAGE.donate}

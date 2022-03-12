@@ -125,11 +125,11 @@ export default function Settings() {
                 <Typography variant="subtitle2">Mode</Typography>
                 <SettingMode />
               </Stack>
-              {/* 
+
               <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Color</Typography>
                 <SettingColor />
-              </Stack> */}
+              </Stack>
             </Stack>
           </Scrollbar>
         </Paper>

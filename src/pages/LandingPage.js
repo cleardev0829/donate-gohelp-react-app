@@ -1,25 +1,15 @@
 import React from "react";
-// material
 import { experimentalStyled as styled } from "@material-ui/core/styles";
-// components
 import Page from "../components/Page";
 import {
   LandingHero,
   LandingBottom,
-  // LandingBuild,
-  // LandingScale,
-  // LandingMonitor,
-  // LandingAdvertisement,
   TopFundraisers,
   StartFundraise,
   DonateCategories,
-  DonateCategoryCard,
-  LandingHugePackElements,
   OnlineFundraising,
 } from "../components/_external-pages/landing";
-
-// hooks
-import useSettings from "../hooks/useSettings";
+import MainFooter from "src/layouts/main/MainFooter";
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +32,8 @@ export default function LandingPage() {
         <StartFundraise />
         <DonateCategories />
         <OnlineFundraising />
-        {/* <LandingBottom /> */}
+        <LandingBottom />
+        <MainFooter />
       </ContentStyle>
     </RootStyle>
   );

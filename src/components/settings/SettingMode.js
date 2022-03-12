@@ -30,7 +30,7 @@ export default function SettingMode() {
                 zIndex: 0,
                 overflow: "hidden",
                 position: "relative",
-                bgcolor: mode === "dark" ? "grey.900" : "common.white",
+                // bgcolor: mode === "dark" ? "grey.900" : "common.white",
                 ...(themeMode === mode && {
                   boxShadow: (theme) => theme.customShadows.z12,
                 }),
@@ -39,7 +39,7 @@ export default function SettingMode() {
               <CardActionArea sx={{ color: "primary.main" }}>
                 <Box
                   sx={{
-                    py: 4,
+                    // py: 4,
                     display: "flex",
                     color: "text.disabled",
                     justifyContent: "center",

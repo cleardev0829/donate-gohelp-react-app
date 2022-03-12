@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 // material
 import { useTheme } from "@material-ui/core/styles";
+import { experimentalStyled as styled } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 
 // ----------------------------------------------------------------------
@@ -9,65 +10,32 @@ Logo.propTypes = {
   sx: PropTypes.object,
 };
 
-export default function Logo({ sx }) {
+export default function Logo({ sx, type = "default" }) {
   const theme = useTheme();
-  const PRIMARY_LIGHT = theme.palette.primary.light;
-  const PRIMARY_MAIN = theme.palette.primary.main;
-  const PRIMARY_DARK = theme.palette.primary.dark;
 
   return (
-    <Box sx={{ width: 40, height: 40, ...sx }}>
-      {/* <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 512 512">
-        <defs>
-          <linearGradient id="BG1" x1="100%" x2="50%" y1="9.946%" y2="50%">
-            <stop offset="0%" stopColor={PRIMARY_DARK} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
-          </linearGradient>
-          <linearGradient id="BG2" x1="50%" x2="50%" y1="0%" y2="100%">
-            <stop offset="0%" stopColor={PRIMARY_LIGHT} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
-          </linearGradient>
-          <linearGradient id="BG3" x1="50%" x2="50%" y1="0%" y2="100%">
-            <stop offset="0%" stopColor={PRIMARY_LIGHT} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
-          </linearGradient>
-        </defs>
-        <g fill={PRIMARY_MAIN} fillRule="evenodd" stroke="none" strokeWidth="1">
-          <path
-            fill="url(#BG1)"
-            d="M183.168 285.573l-2.918 5.298-2.973 5.363-2.846 5.095-2.274 4.043-2.186 3.857-2.506 4.383-1.6 2.774-2.294 3.939-1.099 1.869-1.416 2.388-1.025 1.713-1.317 2.18-.95 1.558-1.514 2.447-.866 1.38-.833 1.312-.802 1.246-.77 1.18-.739 1.111-.935 1.38-.664.956-.425.6-.41.572-.59.8-.376.497-.537.69-.171.214c-10.76 13.37-22.496 23.493-36.93 29.334-30.346 14.262-68.07 14.929-97.202-2.704l72.347-124.682 2.8-1.72c49.257-29.326 73.08 1.117 94.02 40.927z"
-          />
-          <path
-            fill="url(#BG2)"
-            d="M444.31 229.726c-46.27-80.956-94.1-157.228-149.043-45.344-7.516 14.384-12.995 42.337-25.267 42.337v-.142c-12.272 0-17.75-27.953-25.265-42.337C189.79 72.356 141.96 148.628 95.69 229.584c-3.483 6.106-6.828 11.932-9.69 16.996 106.038-67.127 97.11 135.667 184 137.278V384c86.891-1.611 77.962-204.405 184-137.28-2.86-5.062-6.206-10.888-9.69-16.994"
-          />
-          <path
-            fill="url(#BG3)"
-            d="M450 384c26.509 0 48-21.491 48-48s-21.491-48-48-48-48 21.491-48 48 21.491 48 48 48"
-          />
-        </g>
-      </svg> */}
-
-      <svg
-        version="1.1"
-        id="Layer_1"
-        xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
-        x="0px"
-        y="0px"
-        width="39px"
-        height="39px"
-        viewBox="0 0 39 39"
-        enable-background="new 0 0 39 39"
-        // xml:space="preserve"
-      >
-        <image
-          id="image0"
-          width="39"
-          height="39"
-          x="0"
-          y="0"
-          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAYAAACMo1E1AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+    <Box sx={{ width: 41, height: 42, ...sx }}>
+      {type === "default" ? (
+        <svg
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          // xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          width="39px"
+          height="39px"
+          viewBox="0 0 39 39"
+          enable-background="new 0 0 39 39"
+          // xml:space="preserve"
+        >
+          <image
+            id="image0"
+            width="39"
+            height="39"
+            x="0"
+            y="0"
+            href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAYAAACMo1E1AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAA
 CXBIWXMAAAsTAAALEwEAmpwYAAAIn0lEQVRYw7WYe3ATxx3Hv7+98xvXJrzygAIDaVPoZJJQQrGt
 s/OAwZbtApM4nUlKJu1MYdqMQxljCXBQzVMSxBBDJgNJadM82tpgUlsyECjIEoZ0QkhaiAuYDhDy
@@ -111,8 +79,52 @@ NqZvcjinQLyR8cNRxGZ0kCJl7BY9bp24vzJJ5osE+heABIAFiAQYAQZLyMijI0vxBQs+TQyljwxL
 0H/i7fN/LYOw5h7vtmMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjItMDMtMDRUMDc6Mzk6NDArMDA6
 MDDJZSA1AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIyLTAzLTA0VDA3OjM5OjQwKzAwOjAwuDiYiQAA
 AABJRU5ErkJggg=="
-        />
-      </svg>
+          />
+        </svg>
+      ) : (
+        <svg
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          width="39px"
+          height="39px"
+          viewBox="0 0 39 39"
+          enable-background="new 0 0 39 39"
+        >
+          <image
+            id="image0"
+            width="39"
+            height="39"
+            x="0"
+            y="0"
+            href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAQAAAAmqpm+AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZ
+cwAACxMAAAsTAQCanBgAAAAHdElNRQfmAwoIMxNaEr3dAAAD8ElEQVRIx52WWWxVVRSGv91WCxig
+UChRQCAMweJAGOIDxmoiRiREUBKMCJggiBKgTtHEOgVF0QphMDhhosRgSQoISjQgVo2BBMWgFCk0
+FgEhylDgQVOGfj7c09tzB+SW9XDv3v/617/XOmvvs0+gDWYxi2hmF9/xc7AtkdnESlznDeBQn3OD
+b3uH4fLFiv3KgbF5Hydb5SY7Xo5YP7+0bwZaaY3j2y7W368tScOCy33Ifla2Vew6t1mUhnXzY0cD
+uCaOF+SgV8ZxltnIRrYk+mkvFlAZfgHghEXhVFvkdtAlvGY/hrPGJr6hjgpmhQORdzfD2JpbmZMs
+s8CObkgi+d7uVm+Mccosz02s3F1Wu84RrvbKGP6w98ZmXa1uneVdVOxl2jGZPWFC+JG9POhKH3EI
+ADVc38oLJ+l0STlf5UJ4nXoGAPAt7XmCQyz2agj13BxjzqcmM7yPHZLjApf7aDSush1Y6CoAZybK
+tMpCANu70BlgccuubMluG3WJ42I7qtgaVkT4HvpDaKLEzsB2Ek3Yy0gwn+XsCe/bm/28F88tz2Z1
+FIBveH9Kb2cAeJvrrHaMnwB4kxUWutqxAM5W6+PZFRGAMgCO8Wdspe2MBAg1YQITOUiwg0/TlTI+
+483wBQDDgZRiE2+F3gD8Smmsb3/QNzk21LKPUjYzinzKw87I0RO4ytamOlg1sX8Mro0Ve4/rrXa1
+Uy2Nin48o407VO0ELYcs8Ts4kYPJg+c8+ofxYCG3Ms2h1PE9ZSxOEevMwFaNgljJ11gS/gYOOyTU
+gi+QF+YChCY2sxkcxDS6pCVXSufWSUKoOWpILwA2cje4iMbwUlpoMQOYkIb1iP7PtyY8SNWjiZe3
+Ja73U8dlPKOxrjAtN4N3eUQ1dqq9VtVJnrLeO8Gf/MARaYFTXJmxwFSP2+B09UIcLlJ1uqrnvM8O
+jnaB613qLRHjKZeY9m60wnPqecvVk6kpN6nL3K7q2ZbrxMHOcaMbfMsXMzJ71oRVWa3Wpjp3qo1O
+9Yyqp5wd8/VwTIbY/EjssPNUfSfV/YyqDZFTdcnFblCL3BJxGh3nUVVT+22e+1Td5RyPReQGJ2YR
+m5n0H3SKDap+nknrGzX8dyd5IJnjwhROd1clPbU+5klV6+yZrYgB7lf1tA/EBJfEGFuSaL1PekHV
+H+yW/aFgdzepesJZEVl1WOSdnET+cZbnVF3K/5n5Vkar/5sMjjaJ7yaRxij757m0+ZGp1iK3Mg1/
+JTM22002l6NZ10nl7g4VOcmF06zNKpd6yD689IotdiIHzpnc5c7mwDmfDcxObc4BzcrJ/kF2iN+4
+gjzyOE9z8qI8Qh350Vj+yhb4Hxbj7fGCYyqdAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIyLTAzLTEw
+VDA4OjUxOjE5KzAwOjAwm5izxAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMi0wMy0xMFQwODo1MTox
+OSswMDowMOrFC3gAAAAASUVORK5CYII="
+          />
+        </svg>
+      )}
     </Box>
   );
 }

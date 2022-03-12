@@ -32,42 +32,15 @@ import MouseScroll from "../../scroll-down/MouseScroll";
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
-  // position: "relative",
-  backgroundColor: theme.palette.background.body,
+  width: "100%",
+  position: "absolute",
+  bottom: theme.spacing(20),
+  zIndex: 1,
   [theme.breakpoints.up("md")]: {
-    // bottom: 0,
-    // left: 0,
-    // width: "100%",
-    // height: "30vh",
     display: "flex",
-    // position: "fixed",
     alignItems: "center",
   },
 }));
-
-const ContentStyle = styled((props) => <Stack spacing={5} {...props} />)(
-  ({ theme }) => ({
-    zIndex: 10,
-    maxWidth: 520,
-    margin: "auto",
-    textAlign: "center",
-    position: "relative",
-    paddingTop: theme.spacing(15),
-    paddingBottom: theme.spacing(15),
-    [theme.breakpoints.up("md")]: {
-      margin: "unset",
-      textAlign: "left",
-    },
-  })
-);
-
-const HeroOverlayStyle = styled(motion.img)({
-  zIndex: 9,
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-  position: "absolute",
-});
 
 const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   top: 0,
@@ -80,7 +53,7 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   [theme.breakpoints.up("lg")]: {
     right: "8%",
     width: "auto",
-    height: "48vh",
+    // height: "48vh",
   },
 }));
 
@@ -88,45 +61,47 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
 
 export default function LandingBottom() {
   return (
-    <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
-      <Container
-        maxWidth="lg"
-        sx={{
-          backgroundColor: (theme) => theme.palette.background.neutral,
-          borderRadius: 5,
-        }}
-      >
-        <Grid container spacing={3} justify="center" alignItems="center">
-          <Grid item xs={12} sm={6}>
-            <ContentStyle>
-              <motion.div variants={varFadeInRight}>
-                <Typography variant="h1" sx={{ color: "text.primary" }}>
-                  Are you ready to <br />
-                  fundraising
-                </Typography>
-              </motion.div>
+    <RootStyle>
+      <Container maxWidth="lg" sx={{ pb: 10 }}>
+        <Box
+          sx={{
+            backgroundColor: (theme) => theme.palette.background.paper,
+            borderRadius: 2,
+            px: 5,
+          }}
+        >
+          <Grid container spacing={3} justify="center" alignItems="center">
+            <Grid item xs={12} sm={6}>
+              <Stack spacing={5}>
+                <motion.div variants={varFadeInRight}>
+                  <Typography variant="h1" sx={{ color: "text.primary" }}>
+                    Are you ready to <br />
+                    fundraising
+                  </Typography>
+                </motion.div>
 
-              <motion.div variants={varFadeInRight}>
-                <Button
-                  size="large"
-                  variant="contained"
-                  component={RouterLink}
-                  to={PATH_PAGE.page404}
-                  // startIcon={<Icon icon={flashFill} width={20} height={20} />}
-                >
-                  Start a GoHelp
-                </Button>
-              </motion.div>
-            </ContentStyle>
+                <motion.div variants={varFadeInRight}>
+                  <Button
+                    size="large"
+                    variant="contained"
+                    component={RouterLink}
+                    to={PATH_PAGE.page404}
+                    // startIcon={<Icon icon={flashFill} width={20} height={20} />}
+                  >
+                    Start a GoHelp
+                  </Button>
+                </motion.div>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} sm={6} justify="center" alignItems="center">
+              <HeroImgStyle
+                alt="hero"
+                src="/static/home/bottom-hero.png"
+                variants={varFadeInUp}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} justify="center" alignItems="center">
-            <HeroImgStyle
-              alt="hero"
-              src="/static/home/bottom-hero.png"
-              variants={varFadeInUp}
-            />
-          </Grid>
-        </Grid>
+        </Box>
       </Container>
     </RootStyle>
   );

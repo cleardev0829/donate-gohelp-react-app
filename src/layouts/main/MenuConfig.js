@@ -33,13 +33,10 @@ const menuConfig = [
       // {
       //   subheader: "Fundraise for",
       //   items: [
-      //     {
-      //       title: "Recruitment Solution",
-      //       path: PATH_PAGE.recruitmentSolution,
-      //     },
-      //     { title: "Resume Parsing", path: PATH_PAGE.resumeParsing },
-      //     { title: "Candidate Sourcing", path: PATH_PAGE.candidateSourcing },
-      //     { title: "Rekommendation", path: PATH_PAGE.rekommendation },
+      //     { title: "category-1", path: PATH_PAGE.page404 },
+      //     { title: "category-2", path: PATH_PAGE.page404 },
+      //     { title: "category-3", path: PATH_PAGE.page404 },
+      //     { title: "category-4", path: PATH_PAGE.page404 },
       //   ],
       // },
     ],

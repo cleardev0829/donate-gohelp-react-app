@@ -32,42 +32,22 @@ import MouseScroll from "../../scroll-down/MouseScroll";
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
-  position: "relative",
+  // position: "relative",
+  paddingTop: theme.spacing(20),
   backgroundColor: theme.palette.background.body,
-  [theme.breakpoints.up("md")]: {
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100vh",
-    display: "flex",
-    position: "fixed",
-    alignItems: "center",
-  },
 }));
 
 const ContentStyle = styled((props) => <Stack spacing={5} {...props} />)(
   ({ theme }) => ({
     zIndex: 10,
-    maxWidth: 520,
     margin: "auto",
     textAlign: "center",
-    position: "relative",
-    paddingTop: theme.spacing(15),
-    paddingBottom: theme.spacing(15),
     [theme.breakpoints.up("md")]: {
       margin: "unset",
       textAlign: "left",
     },
   })
 );
-
-const HeroOverlayStyle = styled(motion.img)({
-  zIndex: 9,
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-  position: "absolute",
-});
 
 const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   top: 0,
@@ -91,20 +71,14 @@ export default function LandingHero() {
     <>
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
         <Container maxWidth="lg">
-          <Grid container spacing={3} justify="center" alignItems="center">
+          <Grid container spacing={1} justify="center" alignItems="center">
             <Grid item xs={12} sm={6}>
               <ContentStyle>
                 <motion.div variants={varFadeInRight}>
                   <Typography variant="h1" sx={{ color: "text.primary" }}>
-                    Trusted fundrasing <br />
-                    for all of life's <br /> moments
-                    {/* <Typography
-                      component="span"
-                      variant="h1"
-                      sx={{ color: "primary.main" }}
-                    >
-                      &nbsp;Minimal
-                    </Typography> */}
+                    Trusted fundraising <br />
+                    for all of life’s
+                    <br /> moments
                   </Typography>
                 </motion.div>
 
@@ -126,7 +100,6 @@ export default function LandingHero() {
                       variant="contained"
                       component={RouterLink}
                       to={PATH_PAGE.fundraising}
-                      // startIcon={<Icon icon={flashFill} width={20} height={20} />}
                     >
                       Start a GoHelp
                     </Button>
@@ -139,12 +112,6 @@ export default function LandingHero() {
                     spacing={1}
                     justifyContent={{ xs: "center", md: "flex-start" }}
                   >
-                    {/* <img
-                      alt="sketch icon"
-                      src="/static/home/ic_sketch.svg"
-                      width={20}
-                      height={20}
-                    /> */}
                     <Link
                       underline="always"
                       href="#"
@@ -155,37 +122,6 @@ export default function LandingHero() {
                     </Link>
                   </Stack>
                 </Stack>
-
-                {/* <Stack
-                  direction="row"
-                  spacing={1.5}
-                  justifyContent={{ xs: "center", md: "flex-start" }}
-                >
-                  <motion.img
-                    variants={varFadeInRight}
-                    src="/static/home/ic_m_sketch.svg"
-                  />
-                  <motion.img
-                    variants={varFadeInRight}
-                    src="/static/home/ic_m_figma.svg"
-                  />
-                  <motion.img
-                    variants={varFadeInRight}
-                    src="/static/home/ic_m_material.svg"
-                  />
-                  <motion.img
-                    variants={varFadeInRight}
-                    src="/static/home/ic_m_react.svg"
-                  />
-                  <motion.img
-                    variants={varFadeInRight}
-                    src="/static/home/ic_m_js.svg"
-                  />
-                  <motion.img
-                    variants={varFadeInRight}
-                    src="/static/home/ic_m_ts.svg"
-                  />
-                </Stack> */}
               </ContentStyle>
             </Grid>
             <Grid item xs={12} sm={6} justify="center" alignItems="center">
@@ -196,12 +132,8 @@ export default function LandingHero() {
               />
             </Grid>
           </Grid>
-          <Grid container alignItems="center" justify="center">
-            <MouseScroll />
-          </Grid>
         </Container>
       </RootStyle>
-      <Box sx={{ height: { md: "100vh" } }} />
     </>
   );
 }

@@ -33,7 +33,6 @@ const RootStyle = styled("div")(({ theme }) => ({
       duration: theme.transitions.duration.shorter,
     }),
     "&.Mui-focused": {
-      width: 240,
       "& .MuiAutocomplete-inputRoot": {
         boxShadow: theme.customShadows.z12,
       },
@@ -125,6 +124,7 @@ export default function Search({ sx }) {
                 </>
               ),
             }}
+            sx={{ backgroundColor: "background.default" }}
           />
         )}
         renderOption={(props, post, { inputValue }) => {

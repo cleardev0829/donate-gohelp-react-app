@@ -19,17 +19,17 @@ function responsiveFontSizes({ sm, md, lg }) {
   };
 }
 
-const FONT_PRIMARY = "Public Sans, sans-serif"; // Google Font
+const FONT_PRIMARY = "Metropolis"; // Google Font
 // const FONT_SECONDARY = 'CircularStd, sans-serif'; // Local Font
 
 const typography = {
   fontFamily: FONT_PRIMARY,
-  fontWeightRegular: 400,
-  fontWeightMedium: 600,
-  fontWeightBold: 700,
+  // fontWeightRegular: 400,
+  // fontWeightMedium: 600,
+  // fontWeightBold: 700,
   h1: {
     fontWeight: 700,
-    lineHeight: 80 / 56,
+    lineHeight: 72 / 56,
     fontSize: pxToRem(40),
     ...responsiveFontSizes({ sm: 52, md: 54, lg: 56 }),
   },
@@ -61,10 +61,10 @@ const typography = {
     fontWeight: 600,
     lineHeight: 1.5,
     fontSize: pxToRem(18),
-    ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
+    ...responsiveFontSizes({ sm: 19, md: 20, lg: 18 }),
   },
   h7: {
-    fontWeight: 300,
+    fontWeight: 600,
     lineHeight: 28 / 18,
     fontSize: pxToRem(16),
     ...responsiveFontSizes({ sm: 16, md: 16, lg: 16 }),

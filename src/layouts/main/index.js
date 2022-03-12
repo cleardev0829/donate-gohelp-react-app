@@ -21,7 +21,7 @@ export default function MainLayout() {
         <Outlet />
       </div>
 
-      {isHome && <MainFooter />}
+      {/* {isHome && <MainFooter />} */}
     </>
   );
 }

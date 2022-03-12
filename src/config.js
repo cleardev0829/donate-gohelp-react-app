@@ -1,11 +1,11 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyAeETETep1aJkJnuX7pYHxd5msmfolooCg",
-  authDomain: "react-app-50ed0.firebaseapp.com",
-  databaseURL: "https://react-app-50ed0-default-rtdb.firebaseio.com",
-  projectId: "react-app-50ed0",
-  storageBucket: "react-app-50ed0.appspot.com",
-  messagingSenderId: "471881041644",
-  appId: "1:471881041644:web:6fd18b2a4f3b0e9eddc7c9",
+  apiKey: "AIzaSyBdN-wBBEFtf_xmC6X-a_gEEq56orqxRCY",
+  authDomain: "gohelpdao1.firebaseapp.com",
+  projectId: "gohelpdao1",
+  storageBucket: "gohelpdao1.appspot.com",
+  messagingSenderId: "695315569461",
+  appId: "1:695315569461:web:c932111ec0434b4df24a7c",
+  measurementId: "G-246N5JN6FX",
 };
 
 export const cognitoConfig = {
