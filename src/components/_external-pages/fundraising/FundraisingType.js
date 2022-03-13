@@ -93,7 +93,7 @@ export default function FundraisingType() {
 
   return (
     <RootStyle>
-      <Container maxWidth="md">
+      <Container>
         <ContentStyle>
           <MotionInView variants={varFadeInUp}>
             <Typography

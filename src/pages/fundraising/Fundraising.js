@@ -15,7 +15,10 @@ import {
   StepLabel,
   StepConnector,
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import {
+  withStyles,
+  experimentalStyled as styled,
+} from "@material-ui/core/styles";
 // redux
 import { useDispatch, useSelector } from "../../redux/store";
 import {
@@ -49,6 +52,7 @@ import {
   FundraisingDetails,
   FundraisingComplete,
 } from "../../components/_external-pages/fundraising";
+import { MHidden } from "src/components/@material-extend";
 
 // ----------------------------------------------------------------------
 
@@ -111,6 +115,14 @@ function QontoStepIcon({ active, completed }) {
   );
 }
 
+export const NoteStyle = styled("div")({
+  position: "fixed",
+  width: 258,
+  height: 472,
+  right: 10,
+  backgroundColor: "rgba(62, 180, 137, 0.1);",
+});
+
 export default function Fundraising() {
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
@@ -143,7 +155,13 @@ export default function Fundraising() {
   };
 
   return (
-    <Page title="Fundraise" sx={{ paddingTop: (theme) => theme.spacing(20) }}>
+    <Page
+      title="Fundraise"
+      sx={{
+        paddingTop: (theme) => theme.spacing(20),
+        paddingBottom: (theme) => theme.spacing(15),
+      }}
+    >
       <Container maxWidth="lg">
         <HeaderStepBreadcrumbs
           heading="Checkout"
@@ -157,53 +175,30 @@ export default function Fundraising() {
           ]}
           cancelAction={
             activeStep === -1 ? (
-              <Button
-                variant="outlined"
-                // color="inherit"
-                component={RouterLink}
-                to={"/"}
-                // startIcon={<Icon icon={plusFill} />}
-              >
+              <Button variant="outlined" component={RouterLink} to={"/"}>
                 Cancel
               </Button>
             ) : (
-              <Button
-                variant="outlined"
-                // color="inherit"
-                // component={RouterLink}
-                // to={PATH_PAGE.page404}
-                // startIcon={<Icon icon={plusFill} />}
-                onClick={handleBackStep}
-              >
+              <Button variant="outlined" onClick={handleBackStep}>
                 Back
               </Button>
             )
           }
           continueAction={
             activeStep === 6 ? (
-              <Button
-                variant="contained"
-                // component={RouterLink}
-                // to={PATH_PAGE.page404}
-                // startIcon={<Icon icon={plusFill} />}
-                onClick={handleNextStep}
-              >
+              <Button variant="contained" onClick={handleNextStep}>
                 Share
               </Button>
             ) : (
-              <Button
-                variant="contained"
-                // component={RouterLink}
-                // to={PATH_PAGE.page404}
-                // startIcon={<Icon icon={plusFill} />}
-                onClick={handleNextStep}
-              >
+              <Button variant="contained" onClick={handleNextStep}>
                 Continue
               </Button>
             )
           }
         />
+      </Container>
 
+      <Container maxWidth="md">
         <Grid container justifyContent={isComplete ? "center" : "flex-start"}>
           <Grid item xs={12} md={12} sx={{ mb: 0 }}>
             {activeStep > -1 && activeStep <= 4 && (
@@ -235,6 +230,9 @@ export default function Fundraising() {
       </Container>
 
       <Container maxWidth={activeStep === 6 ? "lg" : "md"}>
+        {/* <MHidden width="lgDown">
+          <NoteStyle />
+        </MHidden> */}
         {!isComplete ? (
           <>
             {activeStep === -1 && <FundraisingType />}

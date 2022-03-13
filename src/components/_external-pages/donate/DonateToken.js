@@ -24,7 +24,7 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import { ProgressItem } from "../landing/TopFundraiserCard";
+import ProgressItem from "../../../components/ProgressItem";
 import {
   getCart,
   createBilling,

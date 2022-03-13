@@ -8,6 +8,7 @@ export default function Button(theme) {
           "&:hover": {
             boxShadow: "none",
           },
+          "text-transform": "none",
         },
         sizeLarge: {
           height: 48,
@@ -20,7 +21,7 @@ export default function Button(theme) {
           },
         },
         containedPrimary: {
-          boxShadow: theme.customShadows.primary,
+          // boxShadow: theme.customShadows.primary,
         },
         containedSecondary: {
           boxShadow: theme.customShadows.secondary,

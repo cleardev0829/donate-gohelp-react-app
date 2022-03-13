@@ -84,18 +84,21 @@ function MenuDesktopItem({
 }) {
   const { title, path, children } = item;
   const isActive = pathname === path;
+  const [anchorEl, setAnchorEl] = useState(null);
 
   if (children) {
     return (
       <div key={title}>
         <LinkStyle
-          onClick={onOpen}
+          onClick={(e) => {
+            setAnchorEl(e.currentTarget), onOpen();
+          }}
           sx={{
             display: "flex",
             cursor: "pointer",
             alignItems: "center",
-            ...(isHome && { color: "common.white" }),
-            ...(isOffset && { color: "text.primary" }),
+            // ...(isHome && { color: "common.white" }),
+            // ...(isOffset && { color: "text.primary" }),
             ...(isOpen && { opacity: 0.48 }),
           }}
         >
@@ -108,21 +111,22 @@ function MenuDesktopItem({
         </LinkStyle>
 
         <Popover
+          keepMounted
+          id="simple-menu"
+          anchorEl={anchorEl}
           open={isOpen}
-          anchorReference="anchorPosition"
-          anchorPosition={{ top: 80, left: 0 }}
+          anchorReference="anchorEl"
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           transformOrigin={{ vertical: "top", horizontal: "center" }}
           onClose={onClose}
           PaperProps={{
             sx: {
               px: 3,
-              pt: 5,
+              pt: 2,
               pb: 3,
-              right: 16,
               margin: "auto",
-              maxWidth: 280,
-              borderRadius: 2,
+              maxWidth: 500,
+              borderRadius: 1,
               boxShadow: (theme) => theme.customShadows.z24,
             },
           }}
@@ -132,12 +136,7 @@ function MenuDesktopItem({
               const { subheader, items } = list;
 
               return (
-                <Grid
-                  key={subheader}
-                  item
-                  xs={12}
-                  md={subheader === "Dashboard" ? 6 : 2}
-                >
+                <Grid key={subheader} item xs={12} md={12}>
                   <List disablePadding>
                     <ListSubheader
                       disableSticky
@@ -219,8 +218,8 @@ function MenuDesktopItem({
       to={path}
       component={RouterLink}
       sx={{
-        ...(isHome && { color: "common.primary" }),
-        ...(isOffset && { color: "text.primary" }),
+        // ...(isHome && { color: "common.primary" }),
+        // ...(isOffset && { color: "text.primary" }),
         ...(isActive && { color: "primary.main" }),
       }}
     >

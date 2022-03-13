@@ -3,13 +3,18 @@ import PropTypes from "prop-types";
 import { useDropzone } from "react-dropzone";
 // material
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-import { Paper, Box, Typography } from "@material-ui/core";
+import { Stack, Paper, Box, Typography } from "@material-ui/core";
 // utils
 import { fData } from "../../utils/formatNumber";
 //
 import { UploadIllustration } from "../../assets";
 
 // ----------------------------------------------------------------------
+
+const ImgStyle = styled("img")({
+  width: 60,
+  height: 60,
+});
 
 const DropZoneStyle = styled("div")(({ theme }) => ({
   outline: "none",
@@ -20,7 +25,7 @@ const DropZoneStyle = styled("div")(({ theme }) => ({
   alignItems: "center",
   flexDirection: "column",
   justifyContent: "center",
-  padding: theme.spacing(5, 0),
+  padding: theme.spacing(2, 0),
   borderRadius: theme.shape.borderRadius,
   transition: theme.transitions.create("padding"),
   backgroundColor: theme.palette.background.paper,
@@ -97,25 +102,31 @@ export default function UploadSingleFile({ error, file, sx, ...other }) {
       >
         <input {...getInputProps()} />
 
-        <UploadIllustration sx={{ width: 220 }} />
+        {/* <UploadIllustration sx={{ width: 220 }} /> */}
 
-        <Box sx={{ p: 3, ml: { md: 2 } }}>
-          <Typography gutterBottom variant="h5">
-            Drop or Select file
-          </Typography>
+        <Stack spacing={2} alignItems="center">
+          <ImgStyle src="/static/home/paste.png" />
 
-          <Typography variant="body2">
-            Drop files here or click&nbsp;
-            <Typography
-              variant="body2"
-              component="span"
-              sx={{ color: "primary.main" }}
-            >
-              browse
-            </Typography>
-            &nbsp;thorough your machine
-          </Typography>
-        </Box>
+          <Box sx={{ px: 6, ml: { md: 2 }, textAlign: "center" }}>
+            <Stack spacing={2} justifyContent="space-between">
+              <Typography gutterBottom variant="p1">
+                Drop or drop an image, or &nbsp;
+                <Typography
+                  variant="p1"
+                  component="span"
+                  sx={{ color: "primary.main" }}
+                >
+                  browse
+                </Typography>
+              </Typography>
+
+              <Typography variant="body1">
+                A high-quality photo or video will help tell your story and
+                build trust with donors.
+              </Typography>
+            </Stack>
+          </Box>
+        </Stack>
 
         {file && (
           <Box

@@ -1,8 +1,7 @@
 import { Icon } from "@iconify/react";
-import googleFill from "@iconify/icons-eva/google-fill";
+import tiktokFill from "@iconify/icons-ph/tiktok-logo-fill";
 import twitterFill from "@iconify/icons-eva/twitter-fill";
-import facebookFill from "@iconify/icons-eva/facebook-fill";
-import linkedinFill from "@iconify/icons-eva/linkedin-fill";
+import linkedinFill from "@iconify/icons-ph/linkedin-logo-fill";
 import instagramFilled from "@iconify/icons-ant-design/instagram-filled";
 // import { Link as ScrollLink } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
@@ -29,7 +28,7 @@ import { GohelpImgStyle } from "./MainNavbar";
 const SOCIALS = [
   { name: "Instagram", icon: instagramFilled },
   { name: "Linkedin", icon: linkedinFill },
-  { name: "Facebook", icon: facebookFill },
+  { name: "Facebook", icon: tiktokFill },
   { name: "Twitter", icon: twitterFill },
 ];
 

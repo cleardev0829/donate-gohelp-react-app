@@ -1,11 +1,12 @@
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
+import { capitalCase } from "change-case";
 import { Form, FormikProvider, useFormik } from "formik";
 import { motion } from "framer-motion";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
-
+import { Icon } from "@iconify/react";
 // material
 import { LoadingButton } from "@material-ui/lab";
 import { experimentalStyled as styled } from "@material-ui/core/styles";
@@ -16,6 +17,8 @@ import {
   Grid,
   Chip,
   Link,
+  Tabs,
+  Tab,
   Stack,
   Button,
   Switch,
@@ -37,50 +40,66 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import { ProgressItem } from "../landing/TopFundraiserCard";
+import ProgressItem from "../../../components/ProgressItem";
+import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 
 // ----------------------------------------------------------------------
 
+const TABS = [
+  {
+    value: "Donation",
+    component: <Box />,
+  },
+  {
+    value: "Team",
+    component: <Box />,
+  },
+  {
+    value: "Updates",
+    component: <Box />,
+  },
+  {
+    value: "Invite supporters",
+    component: <Box />,
+  },
+];
+
 const IMG = (index) => `/static/fundraisers/fundraiser_${index}.png`;
-
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
-const TitleStyle = styled(Link)({
-  // height: 64,
-  // overflow: "hidden",
-  // WebkitLineClamp: 2,
-  // display: "-webkit-box",
-  // WebkitBoxOrient: "vertical",
-});
-
-const CardMediaStyle = styled("div")({
-  // height: 100,
-  position: "relative",
-  paddingTop: "calc(100% * 3 / 4)",
-});
-
-const CoverImgStyle = styled("img")({
-  top: 0,
-  width: "100%",
-  height: "100%",
-  objectFit: "contain",
-  // objectFit: "cover",
-  position: "absolute",
-});
 
 const FacebookImgStyle = styled("img")({
   width: 40,
   height: 40,
 });
+
+export const ImgStyle = styled("img")(({ theme }) => ({
+  top: 0,
+  // width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  position: "absolute",
+  borderRadius: 8,
+  padding: theme.spacing(1),
+}));
+
+const TabsWrapperStyle = styled("div")(({ theme }) => ({
+  zIndex: 9,
+  width: "100%",
+  display: "flex",
+  backgroundColor: theme.palette.background.paper,
+  [theme.breakpoints.up("sm")]: {
+    justifyContent: "flex-start",
+  },
+  [theme.breakpoints.up("md")]: {
+    justifyContent: "flex-start",
+    paddingRight: theme.spacing(3),
+  },
+}));
 // ----------------------------------------------------------------------
 
 export default function FundraisingDetails() {
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
+  const [currentTab, setCurrentTab] = useState("profile");
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -88,6 +107,10 @@ export default function FundraisingDetails() {
 
   const handleClosePreview = () => {
     setOpen(false);
+  };
+
+  const handleChangeTab = (event, newValue) => {
+    setCurrentTab(newValue);
   };
 
   const NewBlogSchema = Yup.object().shape({
@@ -152,7 +175,7 @@ export default function FundraisingDetails() {
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Container sx={{ pb: 15 }}>
+          <Container>
             <Stack spacing={5}>
               <Grid container spacing={5}>
                 <Grid item xs={12} md={5}>
@@ -169,16 +192,9 @@ export default function FundraisingDetails() {
                     justifyContent="space-between"
                     sx={{ height: "100%", py: 2 }}
                   >
-                    <TitleStyle
-                      color="inherit"
-                      variant="h5"
-                      sx={{
-                        typography: "h3",
-                        height: 60,
-                      }}
-                    >
+                    <Typography variant="h3">
                       Share Support Laura swans wish to live longer
-                    </TitleStyle>
+                    </Typography>
 
                     <Stack direction="row" justifyContent="space-between">
                       <motion.div variants={varFadeInRight}>
@@ -187,6 +203,12 @@ export default function FundraisingDetails() {
                           variant="contained"
                           component={RouterLink}
                           to={PATH_PAGE.page404}
+                          startIcon={<Icon icon="akar-icons:edit" />}
+                          sx={{
+                            color: "text.primary",
+                            backgroundColor: (theme) =>
+                              theme.palette.background.paper,
+                          }}
                         >
                           Edit and settings
                         </Button>
@@ -197,6 +219,12 @@ export default function FundraisingDetails() {
                           variant="contained"
                           component={RouterLink}
                           to={PATH_PAGE.page404}
+                          startIcon={<Icon icon="akar-icons:eye" />}
+                          sx={{
+                            color: "text.primary",
+                            backgroundColor: (theme) =>
+                              theme.palette.background.paper,
+                          }}
                         >
                           View fundraiser
                         </Button>
@@ -280,13 +308,35 @@ export default function FundraisingDetails() {
 
               <Card
                 sx={{
-                  p: 3,
+                  p: 4,
                 }}
               >
+                <Grid container xs={12} sx={{ pb: 3 }}>
+                  <TabsWrapperStyle>
+                    <Tabs
+                      value={currentTab}
+                      scrollButtons="auto"
+                      variant="scrollable"
+                      allowScrollButtonsMobile
+                      onChange={handleChangeTab}
+                    >
+                      {TABS.map((tab) => (
+                        <Tab
+                          disableRipple
+                          key={tab.value}
+                          value={tab.value}
+                          label={capitalCase(tab.value)}
+                          sx={{ px: 3 }}
+                        />
+                      ))}
+                    </Tabs>
+                  </TabsWrapperStyle>
+                </Grid>
+
                 <Grid container spacing={5}>
                   <Grid item xs={12} md={3}>
                     <CardMediaStyle>
-                      <CoverImgStyle
+                      <ImgStyle
                         alt={"title"}
                         src={"/static/home/social-marketing.png"}
                       />
@@ -297,18 +347,11 @@ export default function FundraisingDetails() {
                     <Stack
                       spacing={2}
                       justifyContent="space-between"
-                      sx={{ height: "100%", py: 2 }}
+                      sx={{ height: "100%" }}
                     >
-                      <TitleStyle
-                        color="inherit"
-                        variant="h5"
-                        sx={{
-                          typography: "h3",
-                          // height: 60,
-                        }}
-                      >
+                      <Typography variant="h3">
                         Get your first donation by sharing
-                      </TitleStyle>
+                      </Typography>
 
                       <Typography
                         gutterBottom

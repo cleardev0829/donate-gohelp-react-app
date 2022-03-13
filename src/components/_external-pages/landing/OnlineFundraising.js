@@ -119,19 +119,11 @@ export default function OnlineFundraising() {
           </MotionInView>
         </ContentStyle>
 
-        {/* <InfiniteScroll
-          next={onScroll}
-          hasMore={hasMore}
-          loader={SkeletonLoad}
-          dataLength={posts.length}
-          style={{ overflow: "inherit" }}
-        > */}
         <Grid container spacing={5}>
           {posts.map((post, index) => (
             <OnlineFundraisingCard key={post.id} post={post} index={index} />
           ))}
         </Grid>
-        {/* </InfiniteScroll> */}
 
         <ContentStyle>
           <motion.div variants={varFadeInRight}>
@@ -139,8 +131,7 @@ export default function OnlineFundraising() {
               size="large"
               variant="contained"
               component={RouterLink}
-              to={PATH_PAGE.page404}
-              // startIcon={<Icon icon={flashFill} width={20} height={20} />}
+              to={PATH_PAGE.fundraising}
               sx={{ mt: 5 }}
             >
               Start a GoHelp

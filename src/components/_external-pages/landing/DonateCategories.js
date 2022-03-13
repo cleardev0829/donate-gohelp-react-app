@@ -141,19 +141,11 @@ export default function DonateCategories() {
           </MotionInView>
         </ContentStyle>
 
-        {/* <InfiniteScroll
-          next={onScroll}
-          hasMore={hasMore}
-          loader={SkeletonLoad}
-          dataLength={posts.length}
-          style={{ overflow: "inherit" }}
-        > */}
         <Grid container spacing={3}>
           {posts.map((post, index) => (
             <DonateCategoryCard key={post.id} post={post} index={index} />
           ))}
         </Grid>
-        {/* </InfiniteScroll> */}
       </Container>
     </RootStyle>
   );

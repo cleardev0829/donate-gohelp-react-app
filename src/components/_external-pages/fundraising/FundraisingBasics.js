@@ -246,14 +246,6 @@ export default function FundraisingBasics() {
                     What are you fundraising for?
                   </Typography>
 
-                  {/* <TextField
-                    fullWidth
-                    label=""
-                    {...getFieldProps("description")}
-                    error={Boolean(touched.description && errors.description)}
-                    helperText={touched.description && errors.description}
-                  /> */}
-
                   <TextField
                     fullWidth
                     label=""
@@ -268,37 +260,6 @@ export default function FundraisingBasics() {
                       </MenuItem>
                     ))}
                   </TextField>
-
-                  {/* <div>
-                    <LabelStyle>Content</LabelStyle>
-                    <QuillEditor
-                      id="post-content"
-                      value={values.content}
-                      onChange={(val) => setFieldValue("content", val)}
-                      error={Boolean(touched.content && errors.content)}
-                    />
-                    {touched.content && errors.content && (
-                      <FormHelperText error sx={{ px: 2 }}>
-                        {touched.content && errors.content}
-                      </FormHelperText>
-                    )}
-                  </div>
-
-                  <div>
-                    <LabelStyle>Cover</LabelStyle>
-                    <UploadSingleFile
-                      maxSize={3145728}
-                      accept="image/*"
-                      file={values.cover}
-                      onDrop={handleDrop}
-                      error={Boolean(touched.cover && errors.cover)}
-                    />
-                    {touched.cover && errors.cover && (
-                      <FormHelperText error sx={{ px: 2 }}>
-                        {touched.cover && errors.cover}
-                      </FormHelperText>
-                    )}
-                  </div> */}
                 </Stack>
               </Card>
             </Grid>

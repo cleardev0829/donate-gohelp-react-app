@@ -1,46 +1,12 @@
 import PropTypes from "prop-types";
-import { Icon } from "@iconify/react";
-import { motion } from "framer-motion";
-import { paramCase } from "change-case";
-import eyeFill from "@iconify/icons-eva/eye-fill";
-import { Link as RouterLink } from "react-router-dom";
-import shareFill from "@iconify/icons-eva/share-fill";
-import messageCircleFill from "@iconify/icons-eva/message-circle-fill";
-import { fPercent, fCurrency } from "../../../utils/formatNumber";
-// material
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-import {
-  Box,
-  Button,
-  Link,
-  Card,
-  Grid,
-  Stack,
-  Avatar,
-  Typography,
-  CardContent,
-} from "@material-ui/core";
-import { MLinearProgress } from "../../@material-extend";
-// routes
-import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
-// utils
-import { fDate } from "../../../utils/formatTime";
-import { fShortenNumber } from "../../../utils/formatNumber";
-//
-import SvgIconStyle from "../../SvgIconStyle";
-import {
-  varFadeIn,
-  varFadeInUp,
-  varWrapEnter,
-  varFadeInRight,
-} from "../../animate";
+import { experimentalStyled as styled } from "@material-ui/core/styles";
+import { Box, Link, Grid, Stack, Typography } from "@material-ui/core";
+import { TitleStyle, DescriptionStyle } from "./TopFundraiserCard";
+import RoundedImg from "src/components/RoundedImg";
 
 // ----------------------------------------------------------------------
 
-const CardStyle = styled("div")(({ theme }) => ({
-  // height: 350,
-  minWidth: 350,
-  minHeight: 370,
+export const CardStyle = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
@@ -48,40 +14,17 @@ const CardStyle = styled("div")(({ theme }) => ({
   textAlign: "center",
   border: "1px solid #DADADA",
   borderRadius: "12px",
-  padding: theme.spacing(5),
+  padding: theme.spacing(3),
 }));
 
-const CardContentStyle = styled("div")(({ theme }) => ({
+export const CardContentStyle = styled("div")(({ theme }) => ({
   display: "flex",
+  flexDirection: "column",
   alignItems: "center",
   justifyContent: "space-between",
-  flexDirection: "column",
   textAlign: "center",
-  height: "50%",
+  paddingTop: theme.spacing(4),
 }));
-
-const CardMediaStyle = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "row",
-  padding: theme.spacing(1.5),
-  backgroundColor: theme.palette.background.paper,
-  borderRadius: 50,
-}));
-
-const TitleStyle = styled(Link)({
-  // height: 54,
-  // overflow: "hidden",
-  // WebkitLineClamp: 2,
-  // display: "-webkit-box",
-  // WebkitBoxOrient: "vertical",
-});
-
-const CoverImgStyle = styled("img")({
-  width: 60,
-  height: 60,
-});
 
 // ----------------------------------------------------------------------
 
@@ -91,60 +34,30 @@ OnlineFundraisingCard.propTypes = {
 };
 
 export default function OnlineFundraisingCard({ post, index }) {
-  const { cover, title, view, comment, share, description, link } = post;
-  const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
-  const latestPostLarge = index === 0;
-  const latestPost = index === 1 || index === 2;
-
-  const POST_INFO = [
-    { number: comment, icon: messageCircleFill },
-    { number: view, icon: eyeFill },
-    { number: share, icon: shareFill },
-  ];
+  const { cover, title, description, link } = post;
 
   return (
-    <Grid
-      item
-      xs={12}
-      sm={latestPostLarge ? 6 : 6}
-      md={latestPostLarge ? 4 : 4}
-    >
+    <Grid item xs={12} sm={6} md={4}>
       <CardStyle sx={{ position: "relative" }}>
-        <CardMediaStyle>
-          <CoverImgStyle alt={title} src={cover} />
-        </CardMediaStyle>
+        <RoundedImg ait={title} src={cover} />
 
         <CardContentStyle>
-          <Stack spacing={2}>
-            <TitleStyle
-              // to={linkTo}
-              color="inherit"
-              variant="h4"
-              // component={RouterLink}
-              sx={{
-                ...(latestPostLarge && { typography: "h4", height: 60 }),
-                ...((latestPostLarge || latestPost) &&
-                  {
-                    // color: "common.white",
-                  }),
-              }}
-              onClick={() => {
-                // window.open(pdfUrl, "_blank");
-              }}
-            >
+          <Stack spacing={1} sx={{ my: 2 }}>
+            <TitleStyle color="inherit" variant="h5" sx={{ height: 64 }}>
               {title}
             </TitleStyle>
-
-            <Typography gutterBottom variant="p1" sx={{ display: "block" }}>
+            <DescriptionStyle color="inherit" variant="p1">
               {description}
-            </Typography>
+            </DescriptionStyle>
+          </Stack>
 
-            {link && (
+          {link && (
+            <Box sx={{ height: 40 }}>
               <Link variant="body1" underline="always">
                 {link}
               </Link>
-            )}
-          </Stack>
+            </Box>
+          )}
         </CardContentStyle>
       </CardStyle>
     </Grid>

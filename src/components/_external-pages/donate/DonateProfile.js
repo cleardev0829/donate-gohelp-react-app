@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "../../../redux/store";
+import { Icon } from "@iconify/react";
 // material
 import {
   Box,
@@ -31,23 +32,24 @@ import {
   onBackStep,
   onGotoStep,
 } from "src/redux/slices/donate";
+import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 // ----------------------------------------------------------------------
 const IMG = (index) => `/static/fundraisers/fundraiser_${index}.png`;
 
-const CardMediaStyle = styled("div")({
-  height: 100,
-  position: "relative",
-  paddingTop: "calc(100% * 3 / 4)",
-});
+// const CardMediaStyle = styled("div")({
+//   height: 100,
+//   position: "relative",
+//   paddingTop: "calc(100% * 3 / 4)",
+// });
 
-const CoverImgStyle = styled("img")({
-  top: 0,
-  width: "100%",
-  height: "100%",
-  objectFit: "contain",
-  // objectFit: "cover",
-  position: "absolute",
-});
+// const CoverImgStyle = styled("img")({
+//   top: 0,
+//   width: "100%",
+//   height: "100%",
+//   objectFit: "contain",
+//   // objectFit: "cover",
+//   position: "absolute",
+// });
 
 DonateProfile.propTypes = {
   profile: PropTypes.object,
@@ -62,7 +64,7 @@ export default function DonateProfile({ props }) {
   return (
     <Box sx={{ py: 3 }}>
       <Stack spacing={2}>
-        <Typography variant="h4">
+        <Typography variant="h3">
           Share Support Laura swans wish to live longer
         </Typography>
 
@@ -82,8 +84,10 @@ export default function DonateProfile({ props }) {
             <Button
               size="large"
               variant="outlined"
+              color="inherit"
               component={RouterLink}
               to={PATH_PAGE.page404}
+              startIcon={<Icon icon="iconoir:timer" />}
             >
               Created 2 days ago
             </Button>
@@ -92,8 +96,10 @@ export default function DonateProfile({ props }) {
             <Button
               size="large"
               variant="outlined"
+              color="inherit"
               component={RouterLink}
               to={PATH_PAGE.page404}
+              startIcon={<Icon icon="akar-icons:ribbon" />}
             >
               Funerals & Memorials
             </Button>

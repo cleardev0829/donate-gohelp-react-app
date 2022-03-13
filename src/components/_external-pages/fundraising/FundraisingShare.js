@@ -201,7 +201,7 @@ export default function FundraisingShare() {
 
                     <Button
                       size="large"
-                      variant="outlined"
+                      variant="contained"
                       // color="inherit"
                       // component={RouterLink}
                       // to={"/"}
@@ -228,7 +228,7 @@ export default function FundraisingShare() {
 
                     <Button
                       size="large"
-                      variant="outlined"
+                      variant="contained"
                       // color="inherit"
                       // component={RouterLink}
                       // to={"/"}

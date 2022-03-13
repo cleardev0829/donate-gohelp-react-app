@@ -1,11 +1,14 @@
 import { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "../../../redux/store";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Icon } from "@iconify/react";
 import { orderBy } from "lodash";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import rightArrowAlt from "@iconify/icons-bxs/right-arrow-alt";
+import arrowRightFill from "@iconify/icons-eva/arrow-right-fill";
 import {
-  Grid,
   Box,
+  Grid,
   Skeleton,
   Stack,
   Container,
@@ -103,15 +106,37 @@ export default function TopFundraisers() {
     <RootStyle>
       <Container maxWidth="lg">
         <ContentStyle>
-          <MotionInView variants={varFadeInUp}>
-            <Typography
-              component="p"
-              variant="h3"
-              sx={{ mb: 2, color: "text.primary" }}
-            >
-              Top Fundraisers
-            </Typography>
-          </MotionInView>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ mb: 3 }}
+          >
+            <MotionInView variants={varFadeInUp}>
+              <Typography
+                component="p"
+                variant="h3"
+                sx={{ color: "text.primary" }}
+              >
+                Top Fundraisers
+              </Typography>
+            </MotionInView>
+
+            <Stack direction="row" spacing={1} alignItems="center">
+              <MotionInView variants={varFadeInUp}>
+                <Typography
+                  component="p"
+                  variant="h4"
+                  color={theme.palette.primary.main}
+                >
+                  See All
+                </Typography>
+              </MotionInView>
+              <MotionInView variants={varFadeInUp}>
+                <Icon icon={rightArrowAlt} color={theme.palette.primary.main} />
+              </MotionInView>
+            </Stack>
+          </Stack>
         </ContentStyle>
 
         <InfiniteScroll

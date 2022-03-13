@@ -30,15 +30,15 @@ const menuConfig = [
     path: "/Features",
     icon: <Icon icon={featureOpenFill} {...ICON_SIZE} />,
     children: [
-      // {
-      //   subheader: "Fundraise for",
-      //   items: [
-      //     { title: "category-1", path: PATH_PAGE.page404 },
-      //     { title: "category-2", path: PATH_PAGE.page404 },
-      //     { title: "category-3", path: PATH_PAGE.page404 },
-      //     { title: "category-4", path: PATH_PAGE.page404 },
-      //   ],
-      // },
+      {
+        subheader: "Fundraise for",
+        items: [
+          { title: "category-1", path: PATH_PAGE.fundraising },
+          { title: "category-2", path: PATH_PAGE.fundraising },
+          { title: "category-3", path: PATH_PAGE.fundraising },
+          { title: "category-4", path: PATH_PAGE.fundraising },
+        ],
+      },
     ],
   },
 ];

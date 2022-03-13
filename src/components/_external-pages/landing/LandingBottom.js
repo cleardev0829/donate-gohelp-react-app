@@ -68,6 +68,7 @@ export default function LandingBottom() {
             backgroundColor: (theme) => theme.palette.background.paper,
             borderRadius: 2,
             px: 5,
+            pb: 5,
           }}
         >
           <Grid container spacing={3} justify="center" alignItems="center">
@@ -85,8 +86,7 @@ export default function LandingBottom() {
                     size="large"
                     variant="contained"
                     component={RouterLink}
-                    to={PATH_PAGE.page404}
-                    // startIcon={<Icon icon={flashFill} width={20} height={20} />}
+                    to={PATH_PAGE.fundraising}
                   >
                     Start a GoHelp
                   </Button>

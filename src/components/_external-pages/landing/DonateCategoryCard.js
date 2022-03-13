@@ -34,6 +34,7 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
+import { TitleStyle } from "./TopFundraiserCard";
 
 // ----------------------------------------------------------------------
 
@@ -53,14 +54,7 @@ const CardMediaStyle = styled("div")(({ theme }) => ({
   padding: theme.spacing(2, 2),
 }));
 
-const TitleStyle = styled(Link)({
-  overflow: "hidden",
-  WebkitLineClamp: 2,
-  display: "-webkit-box",
-  WebkitBoxOrient: "vertical",
-});
-
-const CoverImgStyle = styled("img")({
+const ImageStyle = styled("img")({
   width: 80,
   height: 80,
 });
@@ -75,16 +69,9 @@ DonateCategoryCard.propTypes = {
 export default function DonateCategoryCard({ post, index }) {
   const { cover, title } = post;
   const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
-  const latestPostLarge = index === 0;
-  const latestPost = index === 1 || index === 2;
 
   return (
-    <Grid
-      item
-      xs={12}
-      sm={latestPostLarge ? 6 : 6}
-      md={latestPostLarge ? 2 : 2}
-    >
+    <Grid item xs={12} sm={6} md={2}>
       <CardStyle sx={{ borderRadius: "8" }}>
         <CardContent
           sx={{
@@ -94,25 +81,10 @@ export default function DonateCategoryCard({ post, index }) {
           }}
         >
           <CardMediaStyle>
-            <CoverImgStyle alt={title} src={cover} />
+            <ImageStyle alt={title} src={cover} />
           </CardMediaStyle>
 
-          <TitleStyle
-            // to={linkTo}
-            color="inherit"
-            variant="h7"
-            // component={RouterLink}
-            sx={{
-              ...(latestPostLarge && { typography: "h7" }),
-              ...((latestPostLarge || latestPost) &&
-                {
-                  // color: "common.white",
-                }),
-            }}
-            onClick={() => {
-              // window.open(pdfUrl, "_blank");
-            }}
-          >
+          <TitleStyle color="inherit" variant="h7" sx={{}}>
             {title}
           </TitleStyle>
         </CardContent>
@@ -130,7 +102,7 @@ export default function DonateCategoryCard({ post, index }) {
               size="middle"
               variant="contained"
               component={RouterLink}
-              to={PATH_PAGE.page404}
+              to={PATH_PAGE.donate}
             >
               Donate
             </Button>

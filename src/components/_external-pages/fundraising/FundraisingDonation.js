@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
+import { Icon } from "@iconify/react";
 import { Form, FormikProvider, useFormik } from "formik";
 import pinFill from "@iconify/icons-eva/pin-fill";
 import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
@@ -14,7 +15,6 @@ import {
   Box,
   Card,
   Grid,
-  Icon,
   Stack,
   Button,
   Switch,
@@ -203,10 +203,16 @@ export default function FundraisingDonation() {
                     Let’s start getting donations.
                   </Typography>
 
-                  <Stack spacing={2} sx={{ p: 3 }}>
+                  <Stack spacing={2} sx={{ p: 0 }}>
                     <Stack direction="row" alignItems="center">
-                      <Icon icon={checkmarkCircle2Outline} />
-                      <Typography variant="p3">Set up your GoHelp</Typography>
+                      <Icon
+                        width={25}
+                        icon={checkmarkCircle2Outline}
+                        color={theme.palette.primary.main}
+                      />
+                      <Typography variant="p2" sx={{ ml: 1 }}>
+                        Set up your GoHelp
+                      </Typography>
                     </Stack>
                   </Stack>
 
@@ -214,7 +220,7 @@ export default function FundraisingDonation() {
                     <>
                       <Stack direction="row" alignItems="center">
                         <IconBullet type="item" />
-                        <Typography variant="p3">{description}</Typography>
+                        <Typography variant="p2">{description}</Typography>
                       </Stack>
                     </>
                   ))}

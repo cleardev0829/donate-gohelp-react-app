@@ -1,3 +1,4 @@
+import { Icon } from "@iconify/react";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
@@ -7,6 +8,7 @@ import { LoadingButton } from "@material-ui/lab";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
 
 import {
+  Box,
   Card,
   Grid,
   Chip,
@@ -161,60 +163,88 @@ export default function FundraisingGoal() {
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12}>
-              <Card
-                sx={{
-                  p: 3,
-                }}
-              >
-                <Stack spacing={3}>
-                  <Typography
-                    variant="h3"
-                    paragraph
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Add a cover photo or video
-                  </Typography>
+              <Stack spacing={5}>
+                <Card
+                  sx={{
+                    p: 3,
+                  }}
+                >
+                  <Stack spacing={3}>
+                    <Typography
+                      variant="h3"
+                      paragraph
+                      sx={{
+                        ...(!isLight && {
+                          textShadow: (theme) =>
+                            `4px 4px 16px ${alpha(
+                              theme.palette.grey[800],
+                              0.48
+                            )}`,
+                        }),
+                      }}
+                    >
+                      Add a cover photo or video
+                    </Typography>
 
-                  <Typography
-                    variant="h6"
-                    paragraph
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    We're here to guide you through your fundraising journey.
-                  </Typography>
+                    <Typography
+                      variant="h6"
+                      paragraph
+                      sx={{
+                        ...(!isLight && {
+                          textShadow: (theme) =>
+                            `4px 4px 16px ${alpha(
+                              theme.palette.grey[800],
+                              0.48
+                            )}`,
+                        }),
+                      }}
+                    >
+                      We're here to guide you through your fundraising journey.
+                    </Typography>
 
-                  <div>
-                    <UploadSingleFileOverride
-                      maxSize={3145728}
-                      accept="image/*"
-                      file={values.cover}
-                      onDrop={handleDrop}
-                      error={Boolean(touched.cover && errors.cover)}
-                    />
-                    {touched.cover && errors.cover && (
-                      <FormHelperText error sx={{ px: 2 }}>
-                        {touched.cover && errors.cover}
-                      </FormHelperText>
-                    )}
-                  </div>
-                </Stack>
-              </Card>
+                    <div>
+                      <UploadSingleFileOverride
+                        maxSize={3145728}
+                        accept="image/*"
+                        file={values.cover}
+                        onDrop={handleDrop}
+                        error={Boolean(touched.cover && errors.cover)}
+                      />
+                      {touched.cover && errors.cover && (
+                        <FormHelperText error sx={{ px: 2 }}>
+                          {touched.cover && errors.cover}
+                        </FormHelperText>
+                      )}
+                    </div>
+                  </Stack>
+                </Card>
+
+                <Box
+                  sx={{
+                    mt: 3,
+                    height: 2,
+                    backgroundColor: (theme) => theme.palette.common.white,
+                    background:
+                      "radial-gradient(50% 50% at 50% 50%, #DADADA 0%, rgba(218, 218, 218, 0) 100%)",
+
+                    transform: "matrix(-1, 0, 0, 1, 0, 0)",
+                    // transform: "matrix(1, 0, 0, -1, 0, 0)",
+                    // transform: "rotate(-180deg)",
+                  }}
+                ></Box>
+
+                <Card sx={{ px: 2, py: 3 }}>
+                  <Stack
+                    spacing={1}
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="flex-start"
+                  >
+                    <Icon icon="fluent:link-square-20-regular" />
+                    <Typography variant="p1">Add a YouTube link</Typography>
+                  </Stack>
+                </Card>
+              </Stack>
             </Grid>
           </Grid>
         </Form>
