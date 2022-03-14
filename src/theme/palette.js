@@ -122,7 +122,7 @@ const palette = {
       paper: "#fff",
       default: "#fff",
       neutral: GREY[200],
-      body: "#E5E5E5",
+      body: "#fff",
     },
     action: { active: GREY[600], ...COMMON.action },
   },

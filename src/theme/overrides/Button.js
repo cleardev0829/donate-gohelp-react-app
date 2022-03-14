@@ -6,7 +6,8 @@ export default function Button(theme) {
       styleOverrides: {
         root: {
           "&:hover": {
-            boxShadow: "none",
+            // boxShadow: 'none'
+            // boxShadow: theme.customShadows.z8,
           },
           "text-transform": "none",
         },
