@@ -112,7 +112,7 @@ const palette = {
   light: {
     ...COMMON,
     text: {
-      primary: "#000",
+      primary: "#333333",
       secondary: "#00db1a",
       scale: "#4267b2",
       grey: "#888",
@@ -122,7 +122,7 @@ const palette = {
       paper: "#fff",
       default: "#fff",
       neutral: GREY[200],
-      body: "#fff",
+      body: "#E5E5E5",
     },
     action: { active: GREY[600], ...COMMON.action },
   },

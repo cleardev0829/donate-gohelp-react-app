@@ -83,7 +83,6 @@ export default function LandingBottom() {
 
                 <motion.div variants={varFadeInRight}>
                   <Button
-                    size="large"
                     variant="contained"
                     component={RouterLink}
                     to={PATH_PAGE.fundraising}

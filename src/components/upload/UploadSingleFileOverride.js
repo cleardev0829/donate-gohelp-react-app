@@ -2,7 +2,11 @@ import { isString } from "lodash";
 import PropTypes from "prop-types";
 import { useDropzone } from "react-dropzone";
 // material
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  alpha,
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 import { Stack, Paper, Box, Typography } from "@material-ui/core";
 // utils
 import { fData } from "../../utils/formatNumber";
@@ -46,6 +50,8 @@ UploadSingleFile.propTypes = {
 };
 
 export default function UploadSingleFile({ error, file, sx, ...other }) {
+  const theme = useTheme();
+
   const {
     getRootProps,
     getInputProps,
@@ -104,12 +110,12 @@ export default function UploadSingleFile({ error, file, sx, ...other }) {
 
         {/* <UploadIllustration sx={{ width: 220 }} /> */}
 
-        <Stack spacing={2} alignItems="center">
+        <Stack spacing={theme.shape.CARD_CONTENT_SPACING} alignItems="center">
           <ImgStyle src="/static/home/paste.png" />
 
           <Box sx={{ px: 6, ml: { md: 2 }, textAlign: "center" }}>
             <Stack spacing={2} justifyContent="space-between">
-              <Typography gutterBottom variant="p1">
+              <Typography variant="p1">
                 Drop or drop an image, or &nbsp;
                 <Typography
                   variant="p1"

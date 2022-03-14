@@ -6,7 +6,10 @@ import peopleFill from "@iconify/icons-eva/people-fill";
 import roundPermMedia from "@iconify/icons-ic/round-perm-media";
 import roundAccountBox from "@iconify/icons-ic/round-account-box";
 // material
-import { experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 import {
   Grid,
   Stack,
@@ -31,12 +34,13 @@ import DonatePaymentProfile from "./DonatePaymentProfile";
 const STEPS = ["1", "2"];
 
 export default function DonatePayment() {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { user } = useAuth();
 
   return (
-    <Box sx={{ pb: 10 }}>
-      <Grid container spacing={6}>
+    <Box>
+      <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
         <Grid item xs={12} md={5}>
           <DonatePaymentProfile props={"props"} />
         </Grid>

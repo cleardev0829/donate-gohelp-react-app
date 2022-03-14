@@ -33,7 +33,7 @@ import Grid from "@material-ui/core/Grid";
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
-  paddingTop: theme.spacing(20),
+  paddingTop: theme.spacing(theme.shape.PAGE_TOP_PADDING),
   backgroundColor: theme.palette.background.body,
 }));
 
@@ -78,6 +78,7 @@ const IconStyle = styled(motion.div)(({ theme }) => ({
 
 export default function LandingHero() {
   const theme = useTheme();
+  const isLight = theme.palette.mode === "light";
 
   return (
     <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
@@ -107,7 +108,6 @@ export default function LandingHero() {
               >
                 <motion.div variants={varFadeInRight}>
                   <Button
-                    size="large"
                     variant="contained"
                     component={RouterLink}
                     to={PATH_PAGE.fundraising}
@@ -132,10 +132,10 @@ export default function LandingHero() {
                   </IconStyle>
 
                   <Link
-                    underline="always"
                     href="#"
                     target="_blank"
-                    sx={{ color: "common.white" }}
+                    underline="none"
+                    sx={{ color: "text.primary" }}
                   >
                     <Typography variant="p1">See how GoHelp work </Typography>
                   </Link>
@@ -146,7 +146,11 @@ export default function LandingHero() {
           <Grid item xs={12} sm={6} justify="center" alignItems="center">
             <HeroImgStyle
               alt="hero"
-              src="/static/home/hero.png"
+              src={
+                isLight
+                  ? "/static/home/light_hero.png"
+                  : "/static/home/hero.png"
+              }
               variants={varFadeInUp}
             />
           </Grid>

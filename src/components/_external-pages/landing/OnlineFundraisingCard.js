@@ -1,12 +1,15 @@
 import PropTypes from "prop-types";
-import { experimentalStyled as styled } from "@material-ui/core/styles";
-import { Box, Link, Grid, Stack, Typography } from "@material-ui/core";
+import {
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
+import { Box, Card, Link, Grid, Stack, Typography } from "@material-ui/core";
 import { TitleStyle, DescriptionStyle } from "./TopFundraiserCard";
 import RoundedImg from "src/components/RoundedImg";
 
 // ----------------------------------------------------------------------
 
-export const CardStyle = styled("div")(({ theme }) => ({
+export const CardStyle = styled(Card)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
@@ -14,7 +17,8 @@ export const CardStyle = styled("div")(({ theme }) => ({
   textAlign: "center",
   border: "1px solid #DADADA",
   borderRadius: "12px",
-  padding: theme.spacing(3),
+  backgroundColor: theme.palette.background.body,
+  padding: theme.spacing(theme.shape.CARD_PADDING),
 }));
 
 export const CardContentStyle = styled("div")(({ theme }) => ({
@@ -41,7 +45,7 @@ export default function OnlineFundraisingCard({ post, index }) {
       <CardStyle sx={{ position: "relative" }}>
         <RoundedImg ait={title} src={cover} />
 
-        <CardContentStyle>
+        <Stack>
           <Stack spacing={1} sx={{ my: 2 }}>
             <TitleStyle color="inherit" variant="h5" sx={{ height: 64 }}>
               {title}
@@ -58,7 +62,7 @@ export default function OnlineFundraisingCard({ post, index }) {
               </Link>
             </Box>
           )}
-        </CardContentStyle>
+        </Stack>
       </CardStyle>
     </Grid>
   );

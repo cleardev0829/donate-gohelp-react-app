@@ -135,32 +135,32 @@ export default function FundraisingShare() {
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
-              <Typography
-                variant="h3"
-                paragraph
-                sx={{
-                  ...(!isLight && {
-                    textShadow: (theme) =>
-                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                  }),
-                }}
-              >
-                Share your fundraiser
-              </Typography>
+              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    ...(!isLight && {
+                      textShadow: (theme) =>
+                        `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                    }),
+                  }}
+                >
+                  Share your fundraiser
+                </Typography>
 
-              <Typography
-                variant="h6"
-                paragraph
-                sx={{
-                  ...(!isLight && {
-                    textShadow: (theme) =>
-                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                  }),
-                }}
-              >
-                Ask 3-5 friends to help you share. Fundraisers shared on social
-                network raises up to 5x more!
-              </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    ...(!isLight && {
+                      textShadow: (theme) =>
+                        `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                    }),
+                  }}
+                >
+                  Ask 3-5 friends to help you share. Fundraisers shared on
+                  social network raises up to 5x more!
+                </Typography>
+              </Stack>
             </Grid>
 
             <Grid container sx={{ mt: 4 }}>
@@ -182,7 +182,7 @@ export default function FundraisingShare() {
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <Stack spacing={3}>
+              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <Card
                   sx={{
                     p: (theme) => theme.spacing(1.25, 3),
@@ -193,20 +193,14 @@ export default function FundraisingShare() {
 
                     <TextField
                       fullWidth
+                      size="small"
                       label="Enter mail address"
                       {...getFieldProps("title")}
                       error={Boolean(touched.title && errors.title)}
-                      helperText={touched.title && errors.title}
+                      // helperText={touched.title && errors.title}
                     />
 
-                    <Button
-                      size="large"
-                      variant="contained"
-                      // color="inherit"
-                      // component={RouterLink}
-                      // to={"/"}
-                      // startIcon={<Icon icon={plusFill} />}
-                    >
+                    <Button size="medium" variant="contained">
                       Share
                     </Button>
                   </Stack>
@@ -220,22 +214,14 @@ export default function FundraisingShare() {
                   <Stack spacing={1} direction="row" alignItems="center">
                     <TextField
                       fullWidth
+                      size="small"
                       label="Fundraiser link"
                       {...getFieldProps("title")}
                       error={Boolean(touched.title && errors.title)}
-                      helperText={touched.title && errors.title}
+                      // helperText={touched.title && errors.title}
                     />
 
-                    <Button
-                      size="large"
-                      variant="contained"
-                      // color="inherit"
-                      // component={RouterLink}
-                      // to={"/"}
-                      // startIcon={<Icon icon={plusFill} />}
-                    >
-                      Copy
-                    </Button>
+                    <Button variant="contained">Copy</Button>
                   </Stack>
                 </Card>
               </Stack>

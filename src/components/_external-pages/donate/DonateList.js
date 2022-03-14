@@ -5,7 +5,10 @@ import pinFill from "@iconify/icons-eva/pin-fill";
 import emailFill from "@iconify/icons-eva/email-fill";
 import roundBusinessCenter from "@iconify/icons-ic/round-business-center";
 // material
-import { experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 import {
   Box,
   Link,
@@ -62,33 +65,41 @@ DonateList.propTypes = {
 
 export default function DonateList({ props }) {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const { checkout } = useSelector((state) => state.donate);
   const { cart, billing, activeStep } = checkout;
   const { quote, country, email, role, company, school } = props;
 
   return (
     <Box>
-      <Stack spacing={2}>
-        <Stack spacing={2}>
+      <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+        <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
           <Card
             sx={{
-              backgroundColor: "background.default",
-              borderColor: "background.primary",
-              border: "solid 1px",
+              backgroundColor: "background.body",
+              border: "1px solid #F3F3F3",
+              p: (theme) => theme.shape.CARD_PADDING,
             }}
           >
-            <CardHeader title="A few words from Angela Yujin Lee" />
+            <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+              <Typography variant="h4">Words of support (99)</Typography>
 
-            {supports.map((support, index) => (
-              <Stack spacing={2} sx={{ p: 3 }}>
-                <Stack direction="row" spacing={1}>
+              {supports.map((support, index) => (
+                <Stack
+                  direction="row"
+                  spacing={theme.shape.CARD_CONTENT_SPACING}
+                >
                   <Avatar
                     key={support.id}
                     alt={support.id}
                     src={support.avatar}
                   />
-                  <Stack spacing={2}>
-                    <Stack direction="row" alignItems="center" spacing={4}>
+                  <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={theme.shape.MAIN_HORIZONTAL_SPACING}
+                    >
                       <Link variant="h4" sx={{ color: "text.primary" }}>
                         {support.title}
                       </Link>
@@ -115,7 +126,6 @@ export default function DonateList({ props }) {
                     {index === supports.length - 1 && (
                       <motion.div variants={varFadeInRight}>
                         <Button
-                          size="large"
                           variant="outlined"
                           component={RouterLink}
                           to={PATH_PAGE.page404}
@@ -126,13 +136,13 @@ export default function DonateList({ props }) {
                     )}
                   </Stack>
                 </Stack>
-              </Stack>
-            ))}
+              ))}
+            </Stack>
           </Card>
         </Stack>
 
-        <Stack direction="row" justifyContent="space-between" spacing={1}>
-          <Grid container spacing={2}>
+        <Stack direction="row" justifyContent="space-between">
+          <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
             <Grid item xs="12" md="6">
               <motion.div variants={varFadeInRight}>
                 <Typography component="span" variant="h7">
@@ -144,7 +154,6 @@ export default function DonateList({ props }) {
               <motion.div variants={varFadeInRight}>
                 <Button
                   fullWidth
-                  size="large"
                   variant="outlined"
                   // component={RouterLink}
                   // to={PATH_PAGE.donate_payment}

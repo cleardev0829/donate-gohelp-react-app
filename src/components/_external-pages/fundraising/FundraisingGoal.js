@@ -163,13 +163,12 @@ export default function FundraisingGoal() {
             <Grid item xs={12} md={12}>
               <Card
                 sx={{
-                  p: 3,
+                  p: theme.shape.CARD_PADDING,
                 }}
               >
-                <Stack spacing={3}>
+                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                   <Typography
                     variant="h3"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -185,7 +184,6 @@ export default function FundraisingGoal() {
 
                   <Typography
                     variant="h6"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -201,7 +199,6 @@ export default function FundraisingGoal() {
 
                   <Typography
                     variant="h5"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -217,6 +214,7 @@ export default function FundraisingGoal() {
 
                   <TextField
                     fullWidth
+                    size="small"
                     label=""
                     {...getFieldProps("title")}
                     error={Boolean(touched.title && errors.title)}
@@ -225,7 +223,6 @@ export default function FundraisingGoal() {
 
                   <Typography
                     variant="p1"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -239,37 +236,6 @@ export default function FundraisingGoal() {
                     Keep in mind that transaction fees, including credit and
                     debit charges, are deducated from each donation.
                   </Typography>
-
-                  {/* <div>
-                    <LabelStyle>Content</LabelStyle>
-                    <QuillEditor
-                      id="post-content"
-                      value={values.content}
-                      onChange={(val) => setFieldValue("content", val)}
-                      error={Boolean(touched.content && errors.content)}
-                    />
-                    {touched.content && errors.content && (
-                      <FormHelperText error sx={{ px: 2 }}>
-                        {touched.content && errors.content}
-                      </FormHelperText>
-                    )}
-                  </div>
-
-                  <div>
-                    <LabelStyle>Cover</LabelStyle>
-                    <UploadSingleFile
-                      maxSize={3145728}
-                      accept="image/*"
-                      file={values.cover}
-                      onDrop={handleDrop}
-                      error={Boolean(touched.cover && errors.cover)}
-                    />
-                    {touched.cover && errors.cover && (
-                      <FormHelperText error sx={{ px: 2 }}>
-                        {touched.cover && errors.cover}
-                      </FormHelperText>
-                    )}
-                  </div> */}
                 </Stack>
               </Card>
             </Grid>

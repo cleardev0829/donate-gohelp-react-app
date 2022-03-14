@@ -23,7 +23,7 @@ export default function HeaderStepBreadcrumbs({
   ...other
 }) {
   return (
-    <Stack sx={sx} mb={5} spacing={2}>
+    <Stack sx={sx} mb={2} spacing={2}>
       <Stack direction="row" alignItems="center">
         <Box sx={{ flexGrow: 1 }}>
           {cancelAction && <Box sx={{ flexShrink: 0 }}>{cancelAction}</Box>}

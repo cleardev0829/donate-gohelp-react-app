@@ -9,7 +9,11 @@ import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import { Icon } from "@iconify/react";
 // material
 import { LoadingButton } from "@material-ui/lab";
-import { experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  alpha,
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 import {
   Box,
   Card,
@@ -97,6 +101,8 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function FundraisingDetails() {
+  const theme = useTheme();
+  const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("profile");
@@ -176,8 +182,8 @@ export default function FundraisingDetails() {
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Container>
-            <Stack spacing={5}>
-              <Grid container spacing={5}>
+            <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
+              <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
                 <Grid item xs={12} md={5}>
                   <Card sx={{ position: "relative" }}>
                     <CardMediaStyle>
@@ -188,18 +194,28 @@ export default function FundraisingDetails() {
 
                 <Grid item xs={12} md={5}>
                   <Stack
-                    spacing={2}
+                    spacing={theme.shape.CARD_CONTENT_SPACING}
                     justifyContent="space-between"
-                    sx={{ height: "100%", py: 2 }}
+                    sx={{ height: "100%", py: 1 }}
                   >
-                    <Typography variant="h3">
+                    <Typography
+                      variant="h3"
+                      sx={{
+                        ...(!isLight && {
+                          textShadow: (theme) =>
+                            `4px 4px 16px ${alpha(
+                              theme.palette.grey[800],
+                              0.48
+                            )}`,
+                        }),
+                      }}
+                    >
                       Share Support Laura swans wish to live longer
                     </Typography>
 
                     <Stack direction="row" justifyContent="space-between">
                       <motion.div variants={varFadeInRight}>
                         <Button
-                          size="large"
                           variant="contained"
                           component={RouterLink}
                           to={PATH_PAGE.page404}
@@ -215,7 +231,6 @@ export default function FundraisingDetails() {
                       </motion.div>
                       <motion.div variants={varFadeInRight}>
                         <Button
-                          size="large"
                           variant="contained"
                           component={RouterLink}
                           to={PATH_PAGE.page404}
@@ -252,7 +267,6 @@ export default function FundraisingDetails() {
                     type="button"
                     color="inherit"
                     variant="outlined"
-                    size="large"
                     onClick={handleOpenPreview}
                     sx={{ mr: 1.5 }}
                   >
@@ -264,118 +278,110 @@ export default function FundraisingDetails() {
               <Grid container>
                 <Card
                   sx={{
+                    px: 1,
+                    py: 1.5,
                     width: "100%",
                     backgroundColor: (theme) => theme.palette.common.white,
                   }}
                 >
-                  <CardContent>
-                    <Stack
-                      direction={{ xs: "column", md: "row" }}
-                      justifyContent="space-between"
-                      alignItems="center"
-                      spacing={1}
-                    >
-                      <Stack spacing={2} direction="row" alignItems="center">
-                        <FacebookImgStyle
-                          alt="post cover"
-                          src="/static/socials/Facebook.png"
-                        />
-                        <Typography
-                          gutterBottom
-                          variant="h7"
-                          color={(theme) => theme.palette.common.black}
-                          sx={{ display: "block", mt: 2 }}
-                        >
-                          Dud you know? Sharing on Facebook can increase your
-                          donation as much as 350%
-                        </Typography>
-                      </Stack>
-
-                      <Button
-                        type="button"
-                        // color="inherit"
-                        variant="contained"
-                        size="large"
-                        // onClick={handleOpenPreview}
-                        sx={{ mr: 1.5 }}
+                  <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    <Stack spacing={2} direction="row" alignItems="center">
+                      <FacebookImgStyle
+                        alt="post cover"
+                        src="/static/socials/Facebook.png"
+                      />
+                      <Typography
+                        variant="h7"
+                        color={(theme) => theme.palette.common.black}
                       >
-                        Share on Facebook
-                      </Button>
+                        Dud you know? Sharing on Facebook can increase your
+                        donation as much as 350%
+                      </Typography>
                     </Stack>
-                  </CardContent>
+
+                    <Button type="button" variant="contained">
+                      Share on Facebook
+                    </Button>
+                  </Stack>
                 </Card>
               </Grid>
 
               <Card
                 sx={{
-                  p: 4,
+                  p: theme.shape.CARD_PADDING,
                 }}
               >
-                <Grid container xs={12} sx={{ pb: 3 }}>
-                  <TabsWrapperStyle>
-                    <Tabs
-                      value={currentTab}
-                      scrollButtons="auto"
-                      variant="scrollable"
-                      allowScrollButtonsMobile
-                      onChange={handleChangeTab}
-                    >
-                      {TABS.map((tab) => (
-                        <Tab
-                          disableRipple
-                          key={tab.value}
-                          value={tab.value}
-                          label={capitalCase(tab.value)}
-                          sx={{ px: 3 }}
-                        />
-                      ))}
-                    </Tabs>
-                  </TabsWrapperStyle>
-                </Grid>
-
-                <Grid container spacing={5}>
-                  <Grid item xs={12} md={3}>
-                    <CardMediaStyle>
-                      <ImgStyle
-                        alt={"title"}
-                        src={"/static/home/social-marketing.png"}
-                      />
-                    </CardMediaStyle>
-                  </Grid>
-
-                  <Grid item xs={12} md={9}>
-                    <Stack
-                      spacing={2}
-                      justifyContent="space-between"
-                      sx={{ height: "100%" }}
-                    >
-                      <Typography variant="h3">
-                        Get your first donation by sharing
-                      </Typography>
-
-                      <Typography
-                        gutterBottom
-                        variant="p2"
-                        sx={{ display: "block", mt: 2 }}
+                <Stack spacing={0.1}>
+                  <Grid container xs={12}>
+                    <TabsWrapperStyle>
+                      <Tabs
+                        value={currentTab}
+                        scrollButtons="auto"
+                        variant="scrollable"
+                        allowScrollButtonsMobile
+                        onChange={handleChangeTab}
                       >
-                        Share your fundraiser regularly with your social
-                        networks for the most success. Check in and personally
-                        ask friends to donate or share.
-                      </Typography>
-
-                      <motion.div variants={varFadeInRight}>
-                        <Button
-                          size="large"
-                          variant="contained"
-                          component={RouterLink}
-                          to={PATH_PAGE.page404}
-                        >
-                          Share fundraiser
-                        </Button>
-                      </motion.div>
-                    </Stack>
+                        {TABS.map((tab) => (
+                          <Tab
+                            disableRipple
+                            key={tab.value}
+                            value={tab.value}
+                            label={capitalCase(tab.value)}
+                            sx={{ px: 3 }}
+                          />
+                        ))}
+                      </Tabs>
+                    </TabsWrapperStyle>
                   </Grid>
-                </Grid>
+
+                  <Grid container spacing={5}>
+                    <Grid item xs={12} md={3}>
+                      <CardMediaStyle>
+                        <ImgStyle
+                          alt={"title"}
+                          src={"/static/home/social-marketing.png"}
+                        />
+                      </CardMediaStyle>
+                    </Grid>
+
+                    <Grid item xs={12} md={9}>
+                      <Stack
+                        spacing={2}
+                        justifyContent="space-between"
+                        sx={{ height: "100%" }}
+                      >
+                        <Typography variant="h3">
+                          Get your first donation by sharing
+                        </Typography>
+
+                        <Typography
+                          gutterBottom
+                          variant="p2"
+                          sx={{ display: "block", mt: 2 }}
+                        >
+                          Share your fundraiser regularly with your social
+                          networks for the most success. Check in and personally
+                          ask friends to donate or share.
+                        </Typography>
+
+                        <motion.div variants={varFadeInRight}>
+                          <Button
+                            variant="contained"
+                            // component={RouterLink}
+                            // to={PATH_PAGE.page404}
+                          >
+                            Share fundraiser
+                          </Button>
+                        </motion.div>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Stack>
               </Card>
             </Stack>
           </Container>

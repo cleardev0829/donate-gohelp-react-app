@@ -99,7 +99,7 @@ export default function DonateCategoryCard({ post, index }) {
         >
           <motion.div variants={varFadeInRight}>
             <Button
-              size="middle"
+              size="medium"
               variant="contained"
               component={RouterLink}
               to={PATH_PAGE.donate}

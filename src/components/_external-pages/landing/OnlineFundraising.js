@@ -128,7 +128,6 @@ export default function OnlineFundraising() {
         <ContentStyle>
           <motion.div variants={varFadeInRight}>
             <Button
-              size="large"
               variant="contained"
               component={RouterLink}
               to={PATH_PAGE.fundraising}

@@ -14,7 +14,10 @@ import {
 } from "@material-ui/core";
 // utils
 import { fNumber } from "../../../utils/formatNumber";
-import { experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 import { motion } from "framer-motion";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
@@ -62,13 +65,14 @@ DonateProfile.propTypes = {
 
 export default function DonateProfile({ props }) {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const { checkout } = useSelector((state) => state.donate);
   const { cart, billing, activeStep } = checkout;
   const { follower, following } = props;
 
   return (
     <Box sx={{ py: 3 }}>
-      <Stack spacing={2}>
+      <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
         <Box sx={{ position: "relative" }}>
           <CardMediaStyle>
             <CoverImgStyle alt={"title"} src={IMG(1)} />
@@ -84,37 +88,30 @@ export default function DonateProfile({ props }) {
           Family
         </Typography>
 
-        <Card>
-          <CardContent>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              divider={<Divider orientation="vertical" flexItem />}
-            >
+        <Card sx={{ p: theme.shape.CARD_PADDING }}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box maxWidth={125}>
               <Typography variant="h7">We protect your donation</Typography>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <ImgStyle
-                  src="/static/donate_protect/donate_protect_1.png"
-                  alt="1"
-                  // sx={{ ml: 5 }}
-                />
-                <ImgStyle
-                  src="/static/donate_protect/donate_protect_2.png"
-                  alt="2"
-                  sx={{ ml: 5 }}
-                />
-                <ImgStyle
-                  src="/static/donate_protect/donate_protect_3.png"
-                  alt="3"
-                  sx={{ ml: 5 }}
-                />
-              </Stack>
-            </Stack>
-          </CardContent>
+            </Box>
+            <Divider orientation="vertical" flexItem />
+
+            <ImgStyle
+              src="/static/donate_protect/donate_protect_1.png"
+              alt="1"
+            />
+            <ImgStyle
+              src="/static/donate_protect/donate_protect_2.png"
+              alt="2"
+            />
+            <ImgStyle
+              src="/static/donate_protect/donate_protect_3.png"
+              alt="3"
+            />
+          </Stack>
         </Card>
       </Stack>
     </Box>

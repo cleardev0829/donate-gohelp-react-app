@@ -27,8 +27,11 @@ import navConfig from "./MenuConfig";
 import { PATH_AUTH, PATH_PAGE } from "../../routes/paths";
 import { BlogPostsSearch } from "src/components/_dashboard/blog";
 
-const APP_BAR_MOBILE = 94;
-const APP_BAR_DESKTOP = 118;
+// const APP_BAR_MOBILE = 94;
+// const APP_BAR_DESKTOP = 118;
+
+const APP_BAR_MOBILE = 64;
+const APP_BAR_DESKTOP = 88;
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   height: APP_BAR_MOBILE,
@@ -96,9 +99,7 @@ export default function MainNavbar() {
               to={PATH_PAGE.page404}
               style={{ textDecoration: "none", marginRight: 10, color: "#fff" }}
             >
-              <Button size="large" variant="contained">
-                Connect your wallet
-              </Button>
+              <Button variant="contained">Connect your wallet</Button>
             </RouterLink>
           </Stack>
 

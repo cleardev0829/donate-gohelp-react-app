@@ -75,12 +75,6 @@ const TAGS_OPTION = [
   "3 Idiots",
 ];
 
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
 // ----------------------------------------------------------------------
 
 export default function FundraisingBasics() {
@@ -163,13 +157,12 @@ export default function FundraisingBasics() {
             <Grid item xs={12} md={12}>
               <Card
                 sx={{
-                  p: 3,
+                  p: theme.shape.CARD_PADDING,
                 }}
               >
-                <Stack spacing={3}>
+                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                   <Typography
                     variant="h3"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -185,7 +178,6 @@ export default function FundraisingBasics() {
 
                   <Typography
                     variant="h6"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -201,7 +193,6 @@ export default function FundraisingBasics() {
 
                   <Typography
                     variant="h5"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -217,6 +208,7 @@ export default function FundraisingBasics() {
 
                   <TextField
                     fullWidth
+                    size="small"
                     label=""
                     {...getFieldProps("title")}
                     error={Boolean(touched.title && errors.title)}
@@ -232,7 +224,6 @@ export default function FundraisingBasics() {
 
                   <Typography
                     variant="h5"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -248,6 +239,7 @@ export default function FundraisingBasics() {
 
                   <TextField
                     fullWidth
+                    size="small"
                     label=""
                     {...getFieldProps("title")}
                     error={Boolean(touched.title && errors.title)}
@@ -267,7 +259,6 @@ export default function FundraisingBasics() {
             <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
               <Typography
                 variant="p1"
-                paragraph
                 sx={{
                   ...(!isLight && {
                     textShadow: (theme) =>

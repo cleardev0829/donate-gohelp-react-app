@@ -15,6 +15,10 @@ import {
   IconButton,
   Typography,
 } from "@material-ui/core";
+import {
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 import { motion } from "framer-motion";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
@@ -35,6 +39,7 @@ import {
 // ----------------------------------------------------------------------
 
 export default function DonateToken() {
+  const theme = useTheme();
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.donate);
@@ -46,22 +51,20 @@ export default function DonateToken() {
 
   return (
     <Box sx={{ py: 3 }}>
-      <Card sx={{ p: 3 }}>
-        <CardContent>
-          <ProgressItem
-            key={" Last donation 3 min ago"}
-            progress={{ value: 78 }}
-            index={0}
-          />
-          <Typography
-            gutterBottom
-            variant="h6"
-            sx={{ display: "block", mt: 2 }}
-          >
-            7,800 token raised of 10,000 Token
-          </Typography>
+      <Card sx={{ p: theme.shape.CARD_PADDING }}>
+        <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
+          <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+            <ProgressItem
+              key={" Last donation 3 min ago"}
+              progress={{ value: 78 }}
+              index={0}
+            />
+            <Typography gutterBottom variant="h6" sx={{ display: "block" }}>
+              7,800 token raised of 10,000 Token
+            </Typography>
+          </Stack>
 
-          <Stack spacing={1}>
+          <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
             <Stack
               direction="row"
               justifyContent="space-between"
@@ -131,7 +134,6 @@ export default function DonateToken() {
             <motion.div variants={varFadeInRight}>
               <Button
                 fullWidth
-                size="large"
                 variant="outlined"
                 component={RouterLink}
                 to={PATH_PAGE.page404}
@@ -142,7 +144,6 @@ export default function DonateToken() {
             <motion.div variants={varFadeInRight}>
               <Button
                 fullWidth
-                size="large"
                 variant="contained"
                 // component={RouterLink}
                 // to={PATH_PAGE.donate_payment}
@@ -152,7 +153,7 @@ export default function DonateToken() {
               </Button>
             </motion.div>
           </Stack>
-        </CardContent>
+        </Stack>
       </Card>
     </Box>
   );

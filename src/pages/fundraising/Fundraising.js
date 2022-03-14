@@ -158,8 +158,11 @@ export default function Fundraising() {
     <Page
       title="Fundraise"
       sx={{
-        paddingTop: (theme) => theme.spacing(20),
-        paddingBottom: (theme) => theme.spacing(15),
+        height: "100vh",
+        paddingTop: (theme) => theme.spacing(theme.shape.PAGE_TOP_PADDING),
+        paddingBottom: (theme) =>
+          theme.spacing(theme.shape.PAGE_BOTTOM_PADDING),
+        backgroundColor: (theme) => theme.palette.background.body,
       }}
     >
       <Container maxWidth="lg">
@@ -206,7 +209,7 @@ export default function Fundraising() {
                 alternativeLabel
                 activeStep={activeStep}
                 connector={<QontoConnector />}
-                sx={{ mb: 6 }}
+                sx={{ mb: 4 }}
               >
                 {STEPS.map((label) => (
                   <Step key={label}>
@@ -230,9 +233,6 @@ export default function Fundraising() {
       </Container>
 
       <Container maxWidth={activeStep === 6 ? "lg" : "md"}>
-        {/* <MHidden width="lgDown">
-          <NoteStyle />
-        </MHidden> */}
         {!isComplete ? (
           <>
             {activeStep === -1 && <FundraisingType />}

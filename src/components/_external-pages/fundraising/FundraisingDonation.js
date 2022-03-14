@@ -167,13 +167,12 @@ export default function FundraisingDonation() {
             <Grid item xs={12} md={12}>
               <Card
                 sx={{
-                  p: 3,
+                  p: theme.shape.CARD_PADDING,
                 }}
               >
-                <Stack spacing={3}>
+                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                   <Typography
                     variant="h3"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -189,7 +188,6 @@ export default function FundraisingDonation() {
 
                   <Typography
                     variant="h6"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>

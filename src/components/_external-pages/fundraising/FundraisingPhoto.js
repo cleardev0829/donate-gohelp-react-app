@@ -163,16 +163,15 @@ export default function FundraisingGoal() {
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12}>
-              <Stack spacing={5}>
+              <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
                 <Card
                   sx={{
-                    p: 3,
+                    p: theme.shape.CARD_PADDING,
                   }}
                 >
-                  <Stack spacing={3}>
+                  <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                     <Typography
                       variant="h3"
-                      paragraph
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -188,7 +187,6 @@ export default function FundraisingGoal() {
 
                     <Typography
                       variant="h6"
-                      paragraph
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -221,7 +219,6 @@ export default function FundraisingGoal() {
 
                 <Box
                   sx={{
-                    mt: 3,
                     height: 2,
                     backgroundColor: (theme) => theme.palette.common.white,
                     background:
@@ -233,7 +230,7 @@ export default function FundraisingGoal() {
                   }}
                 ></Box>
 
-                <Card sx={{ px: 2, py: 3 }}>
+                <Card sx={{ px: 2, py: 2 }}>
                   <Stack
                     spacing={1}
                     direction="row"

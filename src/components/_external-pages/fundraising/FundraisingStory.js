@@ -159,17 +159,16 @@ export default function FundraisingStory() {
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
+          <Grid container>
             <Grid item xs={12} md={12}>
               <Card
                 sx={{
-                  p: 3,
+                  p: theme.shape.CARD_PADDING,
                 }}
               >
-                <Stack spacing={3}>
+                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                   <Typography
                     variant="h3"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -185,7 +184,6 @@ export default function FundraisingStory() {
 
                   <Typography
                     variant="h6"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -201,7 +199,6 @@ export default function FundraisingStory() {
 
                   <Typography
                     variant="h5"
-                    paragraph
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -217,6 +214,7 @@ export default function FundraisingStory() {
 
                   <TextField
                     fullWidth
+                    size="small"
                     label=""
                     {...getFieldProps("title")}
                     error={Boolean(touched.title && errors.title)}
@@ -243,21 +241,12 @@ export default function FundraisingStory() {
                     fullWidth
                     multiline
                     minRows={3}
-                    maxRows={5}
+                    maxRows={20}
                     label=""
                     {...getFieldProps("metaDescription")}
                   />
 
-                  <Button
-                    size="large"
-                    variant="outlined"
-                    // color="inherit"
-                    // component={RouterLink}
-                    // to={"/"}
-                    // startIcon={<Icon icon={plusFill} />}
-                  >
-                    Preview Fundraiser
-                  </Button>
+                  <Button variant="outlined">Preview Fundraiser</Button>
                 </Stack>
               </Card>
             </Grid>
