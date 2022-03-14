@@ -95,12 +95,8 @@ export default function MainNavbar() {
             <MHidden width="mdDown">
               <Search />
             </MHidden>
-            <RouterLink
-              to={PATH_PAGE.page404}
-              style={{ textDecoration: "none", marginRight: 10, color: "#fff" }}
-            >
-              <Button variant="contained">Connect your wallet</Button>
-            </RouterLink>
+
+            <Button variant="contained">Connect your wallet</Button>
           </Stack>
 
           <MHidden width="mdUp">

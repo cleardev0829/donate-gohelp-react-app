@@ -133,7 +133,12 @@ export default function TopFundraisers() {
                 </Typography>
               </MotionInView>
               <MotionInView variants={varFadeInUp}>
-                <Icon icon={rightArrowAlt} color={theme.palette.primary.main} />
+                <Icon
+                  icon={rightArrowAlt}
+                  color={theme.palette.primary.main}
+                  width={theme.shape.ICON_SIZE}
+                  height={theme.shape.ICON_SIZE}
+                />
               </MotionInView>
             </Stack>
           </Stack>

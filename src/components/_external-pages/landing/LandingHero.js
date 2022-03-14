@@ -71,8 +71,9 @@ const IconStyle = styled(motion.div)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  backgroundColor: theme.palette.common.white,
-  borderRadius: 50,
+  boxShadow: theme.customShadows.z8,
+  backgroundColor: "#ffffff",
+  borderRadius: 40,
 }));
 // ----------------------------------------------------------------------
 
@@ -128,6 +129,8 @@ export default function LandingHero() {
                     <Icon
                       icon={arrowRightFill}
                       color={theme.palette.primary.main}
+                      width={theme.shape.ICON_SIZE}
+                      height={theme.shape.ICON_SIZE}
                     />
                   </IconStyle>
 

@@ -7,7 +7,7 @@ export default function Button(theme) {
         root: {
           "&:hover": {
             // boxShadow: 'none'
-            // boxShadow: theme.customShadows.z8,
+            boxShadow: theme.customShadows.z8,
           },
           "text-transform": "none",
         },
