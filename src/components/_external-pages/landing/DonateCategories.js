@@ -68,8 +68,7 @@ const applySort = (posts, sortBy) => {
 };
 
 const RootStyle = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10),
+  paddingTop: theme.spacing(theme.shape.PARAGRAPH_SPACING),
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
@@ -141,7 +140,7 @@ export default function DonateCategories() {
           </MotionInView>
         </ContentStyle>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={theme.shape.CARD_MARGIN}>
           {posts.map((post, index) => (
             <DonateCategoryCard key={post.id} post={post} index={index} />
           ))}

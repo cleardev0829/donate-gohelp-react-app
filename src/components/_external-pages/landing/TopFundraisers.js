@@ -45,8 +45,7 @@ const applySort = (posts, sortBy) => {
 };
 
 const RootStyle = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10),
+  paddingTop: theme.spacing(theme.shape.PARAGRAPH_SPACING),
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
@@ -110,7 +109,7 @@ export default function TopFundraisers() {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ mb: 3 }}
+            sx={{ mb: theme.shape.MAIN_VERTICAL_SPACING }}
           >
             <MotionInView variants={varFadeInUp}>
               <Typography
@@ -151,7 +150,7 @@ export default function TopFundraisers() {
           dataLength={posts.length}
           style={{ overflow: "inherit" }}
         >
-          <Grid container spacing={4}>
+          <Grid container spacing={theme.shape.CARD_MARGIN}>
             {sortedPosts.splice(0, 3).map((post, index) => (
               <TopFundraiserCard key={post.id} post={post} index={index} />
             ))}

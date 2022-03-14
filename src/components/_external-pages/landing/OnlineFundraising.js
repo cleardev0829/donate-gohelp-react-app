@@ -60,8 +60,8 @@ const posts = [...Array(6)].map((_, index) => {
   };
 });
 const RootStyle = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10),
+  paddingTop: theme.spacing(theme.shape.PARAGRAPH_SPACING),
+  paddingBottom: theme.spacing(theme.shape.PARAGRAPH_SPACING),
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
@@ -119,7 +119,7 @@ export default function OnlineFundraising() {
           </MotionInView>
         </ContentStyle>
 
-        <Grid container spacing={5}>
+        <Grid container spacing={theme.shape.CARD_MARGIN}>
           {posts.map((post, index) => (
             <OnlineFundraisingCard key={post.id} post={post} index={index} />
           ))}

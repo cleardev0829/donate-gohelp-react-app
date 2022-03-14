@@ -64,15 +64,15 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   },
 }));
 
-const IconStyle = styled(motion.div)(({ theme }) => ({
-  // padding: theme.spacing(5),
+const IconStyle = styled(motion.div)(({ theme, sx }) => ({
+  ...sx,
   width: 40,
   height: 40,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   boxShadow: theme.customShadows.z8,
-  backgroundColor: "#ffffff",
+
   borderRadius: 40,
 }));
 // ----------------------------------------------------------------------
@@ -125,7 +125,13 @@ export default function LandingHero() {
                   alignItems="center"
                   justifyContent={{ xs: "center", md: "flex-start" }}
                 >
-                  <IconStyle>
+                  <IconStyle
+                    sx={{
+                      backgroundColor: isLight
+                        ? theme.palette.grey[400]
+                        : theme.palette.common.white,
+                    }}
+                  >
                     <Icon
                       icon={arrowRightFill}
                       color={theme.palette.primary.main}

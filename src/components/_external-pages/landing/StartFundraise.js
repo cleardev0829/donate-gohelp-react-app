@@ -31,8 +31,7 @@ const posts = [...Array(3)].map((_, index) => {
 });
 
 const RootStyle = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10),
+  paddingTop: theme.spacing(theme.shape.PARAGRAPH_SPACING),
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
@@ -116,7 +115,7 @@ export default function StartFundraise() {
           </MotionInView>
         </ContentStyle>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={theme.shape.CARD_MARGIN}>
           {posts.map((post, index) => (
             <StartFundraiseCard key={post.id} post={post} index={index} />
           ))}

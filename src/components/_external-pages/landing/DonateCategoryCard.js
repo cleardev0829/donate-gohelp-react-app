@@ -8,7 +8,11 @@ import shareFill from "@iconify/icons-eva/share-fill";
 import messageCircleFill from "@iconify/icons-eva/message-circle-fill";
 import { fPercent, fCurrency } from "../../../utils/formatNumber";
 // material
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  alpha,
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 import {
   Box,
   Button,
@@ -51,7 +55,6 @@ const CardMediaStyle = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
   flexDirection: "row",
-  padding: theme.spacing(2, 2),
 }));
 
 const ImageStyle = styled("img")({
@@ -67,12 +70,13 @@ DonateCategoryCard.propTypes = {
 };
 
 export default function DonateCategoryCard({ post, index }) {
+  const theme = useTheme();
   const { cover, title } = post;
   const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
 
   return (
     <Grid item xs={12} sm={6} md={2}>
-      <CardStyle sx={{ borderRadius: "8" }}>
+      <CardStyle>
         <CardContent
           sx={{
             width: "100%",
@@ -80,13 +84,15 @@ export default function DonateCategoryCard({ post, index }) {
             borderRadius: 2,
           }}
         >
-          <CardMediaStyle>
-            <ImageStyle alt={title} src={cover} />
-          </CardMediaStyle>
+          <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+            <CardMediaStyle>
+              <ImageStyle alt={title} src={cover} />
+            </CardMediaStyle>
 
-          <TitleStyle color="inherit" variant="h7" sx={{}}>
-            {title}
-          </TitleStyle>
+            <TitleStyle color="inherit" variant="h7">
+              {title}
+            </TitleStyle>
+          </Stack>
         </CardContent>
 
         <Box
@@ -94,7 +100,7 @@ export default function DonateCategoryCard({ post, index }) {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-            mt: 1.5,
+            mt: theme.shape.CARD_CONTENT_SPACING,
           }}
         >
           <motion.div variants={varFadeInRight}>

@@ -35,7 +35,7 @@ const SOCIALS = [
 const RootStyle = styled("div")(({ theme }) => ({
   position: "relative",
   backgroundColor: "#333333",
-  marginTop: 250,
+  marginTop: 170,
   padding: theme.spacing(28, 0, 12, 0),
 }));
 
