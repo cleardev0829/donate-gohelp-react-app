@@ -87,6 +87,7 @@ export default function MainNavbar() {
           </Stack>
 
           {/* <Box sx={{ flexGrow: 1 }} /> */}
+
           <MHidden width="mdDown">
             <SettingMode />
           </MHidden>
@@ -100,6 +101,10 @@ export default function MainNavbar() {
           </Stack>
 
           <MHidden width="mdUp">
+            <MHidden width="mdUp">
+              <SettingMode />
+            </MHidden>
+
             <MenuMobile
               isOffset={isOffset}
               isHome={isHome}
