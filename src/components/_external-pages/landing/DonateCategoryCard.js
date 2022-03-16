@@ -58,8 +58,8 @@ const CardMediaStyle = styled("div")(({ theme }) => ({
 }));
 
 const ImageStyle = styled("img")({
-  width: 80,
-  height: 80,
+  width: "80px",
+  height: "80px",
 });
 
 // ----------------------------------------------------------------------
@@ -79,7 +79,8 @@ export default function DonateCategoryCard({ post, index }) {
       <CardStyle>
         <CardContent
           sx={{
-            width: "100%",
+            width: "168px",
+            height: "168px",
             backgroundColor: "rgba(62, 180, 137, 0.04)",
             borderRadius: 2,
           }}
@@ -100,12 +101,12 @@ export default function DonateCategoryCard({ post, index }) {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-            mt: theme.shape.CARD_CONTENT_SPACING,
+            mt: 1,
           }}
         >
           <motion.div variants={varFadeInRight}>
             <Button
-              size="medium"
+              size="small"
               variant="contained"
               component={RouterLink}
               to={PATH_PAGE.donate}

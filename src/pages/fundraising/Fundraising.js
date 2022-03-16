@@ -158,7 +158,7 @@ export default function Fundraising() {
     <Page
       title="Fundraise"
       sx={{
-        height: "100vh",
+        // height: "100vh",
         paddingTop: (theme) => theme.spacing(theme.shape.PAGE_TOP_PADDING),
         paddingBottom: (theme) =>
           theme.spacing(theme.shape.PAGE_BOTTOM_PADDING),
@@ -178,7 +178,12 @@ export default function Fundraising() {
           ]}
           cancelAction={
             activeStep === -1 ? (
-              <Button variant="outlined" component={RouterLink} to={"/"}>
+              <Button
+                variant="outlined"
+                color="inherit"
+                component={RouterLink}
+                to={"/"}
+              >
                 Cancel
               </Button>
             ) : (

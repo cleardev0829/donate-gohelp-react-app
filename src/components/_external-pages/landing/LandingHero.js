@@ -71,8 +71,8 @@ const IconStyle = styled(motion.div)(({ theme, sx }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  boxShadow: theme.customShadows.z8,
-
+  backgroundColor: theme.palette.common.white,
+  boxShadow: "0px 2px 32px rgba(68, 68, 68, 0.12)",
   borderRadius: 40,
 }));
 // ----------------------------------------------------------------------
@@ -125,13 +125,7 @@ export default function LandingHero() {
                   alignItems="center"
                   justifyContent={{ xs: "center", md: "flex-start" }}
                 >
-                  <IconStyle
-                    sx={{
-                      backgroundColor: isLight
-                        ? theme.palette.grey[400]
-                        : theme.palette.common.white,
-                    }}
-                  >
+                  <IconStyle>
                     <Icon
                       icon={arrowRightFill}
                       color={theme.palette.primary.main}

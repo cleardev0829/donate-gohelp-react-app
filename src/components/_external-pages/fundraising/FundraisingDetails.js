@@ -217,6 +217,7 @@ export default function FundraisingDetails() {
                       <motion.div variants={varFadeInRight}>
                         <Button
                           variant="contained"
+                          color="inherit"
                           component={RouterLink}
                           to={PATH_PAGE.page404}
                           startIcon={<Icon icon="akar-icons:edit" />}
@@ -232,6 +233,7 @@ export default function FundraisingDetails() {
                       <motion.div variants={varFadeInRight}>
                         <Button
                           variant="contained"
+                          color="inherit"
                           component={RouterLink}
                           to={PATH_PAGE.page404}
                           startIcon={<Icon icon="akar-icons:eye" />}
@@ -264,11 +266,15 @@ export default function FundraisingDetails() {
                 <Grid item xs={12} md={2}>
                   <Button
                     fullWidth
-                    type="button"
+                    variant="contained"
                     color="inherit"
-                    variant="outlined"
                     onClick={handleOpenPreview}
-                    sx={{ mr: 1.5 }}
+                    sx={{
+                      mr: 1.5,
+                      color: "text.primary",
+                      backgroundColor: (theme) =>
+                        theme.palette.background.paper,
+                    }}
                   >
                     Update
                   </Button>
@@ -304,9 +310,7 @@ export default function FundraisingDetails() {
                       </Typography>
                     </Stack>
 
-                    <Button type="button" variant="contained">
-                      Share on Facebook
-                    </Button>
+                    <Button variant="contained">Share on Facebook</Button>
                   </Stack>
                 </Card>
               </Grid>

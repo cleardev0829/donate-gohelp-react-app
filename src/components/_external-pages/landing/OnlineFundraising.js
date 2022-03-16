@@ -131,7 +131,7 @@ export default function OnlineFundraising() {
               variant="contained"
               component={RouterLink}
               to={PATH_PAGE.fundraising}
-              sx={{ mt: 5 }}
+              sx={{ mt: theme.shape.MAIN_VERTICAL_SPACING }}
             >
               Start a GoHelp
             </Button>
