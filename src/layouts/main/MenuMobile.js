@@ -55,7 +55,17 @@ function MenuMobileItem({ item, isOpen, isActive, onOpen }) {
   if (children) {
     return (
       <div key={title}>
-        <ListItemStyle button onClick={onOpen}>
+        <ListItemStyle
+          button
+          onClick={onOpen}
+          sx={{
+            color: "text.primary",
+            ...(isActive && {
+              color: "primary.main",
+              fontWeight: "fontWeightMedium",
+            }),
+          }}
+        >
           <ListItemIcon>{icon}</ListItemIcon>
           <ListItemText disableTypography primary={title} />
           <Box
@@ -125,6 +135,7 @@ function MenuMobileItem({ item, isOpen, isActive, onOpen }) {
       to={path}
       component={RouterLink}
       sx={{
+        color: "text.primary",
         ...(isActive && {
           color: "primary.main",
           fontWeight: "fontWeightMedium",
@@ -177,8 +188,7 @@ export default function MenuMobile({ isOffset, isHome }) {
         onClick={handleDrawerOpen}
         sx={{
           ml: 1,
-          ...(isHome && { color: "common.white" }),
-          ...(isOffset && { color: "text.primary" }),
+          color: "text.primary",
         }}
       >
         <Icon icon={menu2Fill} />
