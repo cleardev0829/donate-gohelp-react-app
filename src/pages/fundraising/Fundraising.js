@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
 import { Link as RouterLink } from "react-router-dom";
@@ -27,6 +27,8 @@ import {
   onNextStep,
   onBackStep,
   onGotoStep,
+  applyCheckout,
+  addFundraise,
 } from "../../redux/slices/fundraise";
 // routes
 import { PATH_DASHBOARD, PATH_PAGE } from "../../routes/paths";
@@ -128,6 +130,9 @@ export default function Fundraising() {
   const isMountedRef = useIsMountedRef();
   const { checkout } = useSelector((state) => state.fundraise);
   const { cart, billing, activeStep } = checkout;
+  const [basic, setBasic] = useState({
+    ...checkout.basic,
+  });
   const isComplete = activeStep === STEPS.length + 2;
 
   useEffect(() => {
@@ -152,6 +157,15 @@ export default function Fundraising() {
 
   const handleGotoStep = (step) => {
     dispatch(onGotoStep(step));
+  };
+
+  const handleCheckout = ({ id, name, value }) => {
+    dispatch(
+      applyCheckout({
+        name,
+        value,
+      })
+    );
   };
 
   return (
@@ -198,7 +212,13 @@ export default function Fundraising() {
                 Share
               </Button>
             ) : (
-              <Button variant="contained" onClick={handleNextStep}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  activeStep === 5 && dispatch(addFundraise(checkout));
+                  handleNextStep();
+                }}
+              >
                 Continue
               </Button>
             )
@@ -241,12 +261,42 @@ export default function Fundraising() {
         {!isComplete ? (
           <>
             {activeStep === -1 && <FundraisingType />}
-            {activeStep === 0 && <FundraisingBasics />}
-            {activeStep === 1 && <FundraisingGoal />}
-            {activeStep === 2 && <FundraisingPhoto />}
-            {activeStep === 3 && <FundraisingStory />}
+            {activeStep === 0 && (
+              <FundraisingBasics
+                id="basics"
+                activeStep={activeStep}
+                handleCheckout={handleCheckout}
+              />
+            )}
+            {activeStep === 1 && (
+              <FundraisingGoal
+                id="goal"
+                activeStep={activeStep}
+                handleCheckout={handleCheckout}
+              />
+            )}
+            {activeStep === 2 && (
+              <FundraisingPhoto
+                id="photo"
+                activeStep={activeStep}
+                handleCheckout={handleCheckout}
+              />
+            )}
+            {activeStep === 3 && (
+              <FundraisingStory
+                id="story"
+                activeStep={activeStep}
+                handleCheckout={handleCheckout}
+              />
+            )}
             {activeStep === 4 && <FundraisingDonation />}
-            {activeStep === 5 && <FundraisingShare />}
+            {activeStep === 5 && (
+              <FundraisingShare
+                id="share"
+                activeStep={activeStep}
+                handleCheckout={handleCheckout}
+              />
+            )}
             {activeStep === 6 && <FundraisingDetails />}
           </>
         ) : (

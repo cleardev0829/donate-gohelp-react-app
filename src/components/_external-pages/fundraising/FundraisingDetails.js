@@ -181,7 +181,7 @@ export default function FundraisingDetails() {
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Container>
+          <Container sx={{ pt: 10 }}>
             <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
               <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
                 <Grid item xs={12} md={5}>
@@ -213,7 +213,7 @@ export default function FundraisingDetails() {
                       Share Support Laura swans wish to live longer
                     </Typography>
 
-                    <Stack direction="row" justifyContent="space-between">
+                    {/* <Stack direction="row" justifyContent="space-between">
                       <motion.div variants={varFadeInRight}>
                         <Button
                           variant="contained"
@@ -246,7 +246,7 @@ export default function FundraisingDetails() {
                           View fundraiser
                         </Button>
                       </motion.div>
-                    </Stack>
+                    </Stack> */}
 
                     <ProgressItem
                       key={" Last donation 3 min ago"}
@@ -263,7 +263,7 @@ export default function FundraisingDetails() {
                     </Typography>
                   </Stack>
                 </Grid>
-                <Grid item xs={12} md={2}>
+                {/* <Grid item xs={12} md={2}>
                   <Button
                     fullWidth
                     variant="contained"
@@ -278,7 +278,7 @@ export default function FundraisingDetails() {
                   >
                     Update
                   </Button>
-                </Grid>
+                </Grid> */}
               </Grid>
 
               <Grid container>
@@ -315,7 +315,7 @@ export default function FundraisingDetails() {
                 </Card>
               </Grid>
 
-              <Card
+              {/* <Card
                 sx={{
                   p: theme.shape.CARD_PADDING,
                 }}
@@ -386,7 +386,7 @@ export default function FundraisingDetails() {
                     </Grid>
                   </Grid>
                 </Stack>
-              </Card>
+              </Card> */}
             </Stack>
           </Container>
         </Form>

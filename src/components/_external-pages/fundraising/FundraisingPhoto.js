@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
@@ -29,64 +30,23 @@ import fakeRequest from "../../../utils/fakeRequest";
 //
 import { QuillEditor } from "../../editor";
 import { UploadSingleFileOverride } from "../../upload";
-//
+import { useDispatch, useSelector } from "../../../redux/store";
+
 // import BlogNewPostPreview from "./BlogNewPostPreview";
 
 // ----------------------------------------------------------------------
 
-const COUNTRIES = [
-  { id: "Canada", value: "Canada" },
-  { id: "France", value: "France" },
-  { id: "Japan", value: "Japan" },
-];
-
-const TYPES = [
-  "Medical",
-  "Memorial",
-  "Emergency",
-  "Nonprofit",
-  "Education",
-  "Animals",
-  "Environment",
-  "Business",
-  "Community",
-  "Competition",
-  "Creative",
-  "Event",
-  "Faith",
-  "Family",
-  "Sports",
-  "Travel",
-  "Volunteer",
-  "Wishes",
-];
-
-const TAGS_OPTION = [
-  "Toy Story 3",
-  "Logan",
-  "Full Metal Jacket",
-  "Dangal",
-  "The Sting",
-  "2001: A Space Odyssey",
-  "Singin' in the Rain",
-  "Toy Story",
-  "Bicycle Thieves",
-  "The Kid",
-  "Inglourious Basterds",
-  "Snatch",
-  "3 Idiots",
-];
-
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
 // ----------------------------------------------------------------------
 
-export default function FundraisingGoal() {
+FundraisingPhoto.propTypes = {
+  id: PropTypes.string,
+  activeStep: PropTypes.number,
+  handleCheckout: PropTypes.func,
+};
+
+export default function FundraisingPhoto({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
+  const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -100,7 +60,7 @@ export default function FundraisingGoal() {
   };
 
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
+    file: Yup.string().required("This is required"),
     description: Yup.string().required("Description is required"),
     content: Yup.string().min(1000).required("Content is required"),
     cover: Yup.mixed().required("Cover is required"),
@@ -108,10 +68,15 @@ export default function FundraisingGoal() {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
+      file: checkout.file,
       description: "",
       content: "",
-      cover: null,
+      cover: checkout.file
+        ? {
+            ...checkout.file,
+            preview: URL.createObjectURL(checkout.file),
+          }
+        : null,
       tags: ["Logan"],
       publish: true,
       comments: true,
@@ -147,6 +112,7 @@ export default function FundraisingGoal() {
   const handleDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
+
       if (file) {
         setFieldValue("cover", {
           ...file,
@@ -205,7 +171,10 @@ export default function FundraisingGoal() {
                         maxSize={3145728}
                         accept="image/*"
                         file={values.cover}
-                        onDrop={handleDrop}
+                        onDrop={(e) => {
+                          handleCheckout({ id, name: "file", value: e[0] });
+                          handleDrop(e);
+                        }}
                         error={Boolean(touched.cover && errors.cover)}
                       />
                       {touched.cover && errors.cover && (

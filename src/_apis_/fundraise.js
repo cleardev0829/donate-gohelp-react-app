@@ -6,6 +6,10 @@ import { mockImgProduct } from "../utils/mockImages";
 //
 import mock from "./mock";
 
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
 // ----------------------------------------------------------------------
 
 const PRODUCT_NAME = [
@@ -163,6 +167,26 @@ mock.onGet("/api/products/product").reply((config) => {
     }
 
     return [200, { product }];
+  } catch (error) {
+    console.error(error);
+    return [500, { message: "Internal server error" }];
+  }
+});
+
+mock.onPost("/api/fundraise/add").reply(async (request) => {
+  try {
+    const fundraise = JSON.parse(request.data);
+
+    const response = firebase
+      .firestore()
+      .collection("fundraise")
+      .add({
+        ...fundraise,
+      });
+
+    console.log("====================FIRebase", response);
+
+    return [200, { response }];
   } catch (error) {
     console.error(error);
     return [500, { message: "Internal server error" }];

@@ -28,6 +28,15 @@ const initialState = {
     billing: null,
 
     type: null,
+    live: "",
+    category: "",
+    goal: 0,
+    file: null,
+    youTubeLink: "",
+    title: "",
+    description: "",
+    email: "",
+    link: "Fundraiser link: https://www.gohelp.com/f/....",
   },
 };
 
@@ -133,6 +142,17 @@ const slice = createSlice({
       state.checkout.discount = 0;
       state.checkout.shipping = 0;
       state.checkout.billing = null;
+
+      state.checkout.type = null;
+      state.checkout.live = "";
+      state.checkout.category = "";
+      state.checkout.goal = 0;
+      state.checkout.file = null;
+      state.checkout.youTubeLink = "";
+      state.checkout.title = "";
+      state.checkout.description = "";
+      state.checkout.email = "";
+      state.checkout.link = "Fundraiser link: https://www.gohelp.com/f/....";
     },
 
     onBackStep(state) {
@@ -199,6 +219,16 @@ const slice = createSlice({
       const type = action.payload;
       state.checkout.type = type;
     },
+
+    applyBasic(state, action) {
+      const { live, category } = action.payload;
+      state.checkout.basic = { live, category };
+    },
+
+    applyCheckout(state, action) {
+      const { name, value } = action.payload;
+      state.checkout = { ...state.checkout, [name]: value };
+    },
   },
 });
 
@@ -224,6 +254,8 @@ export const {
   decreaseQuantity,
 
   applyType,
+  applyBasic,
+  applyCheckout,
 } = slice.actions;
 
 // ----------------------------------------------------------------------
@@ -249,6 +281,19 @@ export function getFundraise(name) {
       const response = await axios.get("/api/fundraises/fundraise", {
         params: { name },
       });
+      dispatch(slice.actions.getFundraiseSuccess(response.data.fundraise));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function addFundraise(fundraise) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post("/api/fundraise/add", { ...fundraise });
       dispatch(slice.actions.getFundraiseSuccess(response.data.fundraise));
     } catch (error) {
       console.error(error);

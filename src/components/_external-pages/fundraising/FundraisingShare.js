@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { Icon } from "@iconify/react";
 import { useSnackbar } from "notistack";
@@ -31,8 +32,9 @@ import fakeRequest from "../../../utils/fakeRequest";
 import { QuillEditor } from "../../editor";
 import { UploadSingleFile } from "../../upload";
 import clockFill from "@iconify/icons-eva/clock-fill";
-//
+import CopyClipboard from "../../../components/CopyClipboard";
 // import BlogNewPostPreview from "./BlogNewPostPreview";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
 const IMG = (index) => `/static/socials_by_number/social_${index}.png`;
@@ -57,11 +59,23 @@ const CoverImgStyle = styled("img")({
 
 // ----------------------------------------------------------------------
 
-export default function FundraisingShare() {
+FundraisingShare.propTypes = {
+  id: PropTypes.string,
+  activeStep: PropTypes.number,
+  handleCheckout: PropTypes.func,
+};
+
+export default function FundraisingShare({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
-  const isLight = theme.palette.mode === "light";
+  const { checkout } = useSelector((state) => state.fundraise);
+
   const { enqueueSnackbar } = useSnackbar();
+  const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
+  const [state, setState] = useState({
+    value: "",
+    copied: false,
+  });
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -72,16 +86,18 @@ export default function FundraisingShare() {
   };
 
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    description: Yup.string().required("Description is required"),
+    email: Yup.string()
+      .email("Email must be a valid email address")
+      .required("Email is required"),
+    link: Yup.string().required("Link is required"),
     content: Yup.string().min(1000).required("Content is required"),
     cover: Yup.mixed().required("Cover is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
+      email: checkout.email,
+      link: checkout.link,
       content: "",
       cover: null,
       tags: ["Logan"],
@@ -114,6 +130,7 @@ export default function FundraisingShare() {
     isSubmitting,
     setFieldValue,
     getFieldProps,
+    handleChange,
   } = formik;
 
   const handleDrop = useCallback(
@@ -128,6 +145,15 @@ export default function FundraisingShare() {
     },
     [setFieldValue]
   );
+
+  const onCopy = () => {
+    setState({ ...state, copied: true });
+    if (state.value) {
+      enqueueSnackbar("Copied", { variant: "success" });
+    }
+  };
+
+  const handleShare = () => {};
 
   return (
     <Box sx={{ maxWidth: 480, margin: "auto", textAlign: "center" }}>
@@ -195,12 +221,24 @@ export default function FundraisingShare() {
                       fullWidth
                       size="small"
                       label="Enter mail address"
-                      {...getFieldProps("title")}
-                      error={Boolean(touched.title && errors.title)}
-                      // helperText={touched.title && errors.title}
+                      {...getFieldProps("email")}
+                      error={Boolean(touched.email && errors.email)}
+                      helperText={touched.email && errors.email}
+                      onChange={(e) => {
+                        handleCheckout({
+                          id,
+                          name: e.target.name,
+                          value: e.target.value,
+                        });
+                        handleChange(e);
+                      }}
                     />
 
-                    <Button size="medium" variant="contained">
+                    <Button
+                      size="medium"
+                      variant="contained"
+                      onClick={handleShare}
+                    >
                       Share
                     </Button>
                   </Stack>
@@ -212,16 +250,18 @@ export default function FundraisingShare() {
                   }}
                 >
                   <Stack spacing={1} direction="row" alignItems="center">
-                    <TextField
+                    <CopyClipboard
                       fullWidth
                       size="small"
                       label="Fundraiser link"
-                      {...getFieldProps("title")}
-                      error={Boolean(touched.title && errors.title)}
-                      // helperText={touched.title && errors.title}
+                      {...getFieldProps("link")}
+                      error={Boolean(touched.link && errors.link)}
+                      helperText={touched.link && errors.link}
+                      value="https://www.npmjs.com/package/react-copy-to-clipboard"
                     />
-
-                    <Button variant="contained">Copy</Button>
+                    {/* <Button variant="contained" onClick={onCopy}>
+                      Copy
+                    </Button> */}
                   </Stack>
                 </Card>
               </Stack>

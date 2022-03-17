@@ -16,7 +16,7 @@ import {
 import { useDispatch } from "../../../redux/store";
 import { resetCart } from "../../../redux/slices/fundraise";
 // routes
-import { PATH_DASHBOARD } from "../../../routes/paths";
+import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 //
 import { DialogAnimate } from "../../animate";
 import { OrderCompleteIllustration } from "../../../assets";
@@ -41,7 +41,7 @@ export default function CheckoutOrderComplete({ ...other }) {
 
   const handleResetStep = () => {
     dispatch(resetCart());
-    navigate(PATH_DASHBOARD.eCommerce.shop);
+    navigate("/");
   };
 
   return (
@@ -49,7 +49,7 @@ export default function CheckoutOrderComplete({ ...other }) {
       <Box sx={{ p: 4, maxWidth: 480, margin: "auto" }}>
         <Box sx={{ textAlign: "center" }}>
           <Typography variant="h4" paragraph>
-            Thank you for your working!
+            Completed successfully
           </Typography>
 
           {/* <OrderCompleteIllustration sx={{ height: 260, my: 10 }} />

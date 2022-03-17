@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
@@ -27,64 +28,23 @@ import fakeRequest from "../../../utils/fakeRequest";
 //
 import { QuillEditor } from "../../editor";
 import { UploadSingleFile } from "../../upload";
-//
+import { useDispatch, useSelector } from "../../../redux/store";
+
 // import BlogNewPostPreview from "./BlogNewPostPreview";
 
 // ----------------------------------------------------------------------
 
-const COUNTRIES = [
-  { id: "Canada", value: "Canada" },
-  { id: "France", value: "France" },
-  { id: "Japan", value: "Japan" },
-];
-
-const TYPES = [
-  "Medical",
-  "Memorial",
-  "Emergency",
-  "Nonprofit",
-  "Education",
-  "Animals",
-  "Environment",
-  "Business",
-  "Community",
-  "Competition",
-  "Creative",
-  "Event",
-  "Faith",
-  "Family",
-  "Sports",
-  "Travel",
-  "Volunteer",
-  "Wishes",
-];
-
-const TAGS_OPTION = [
-  "Toy Story 3",
-  "Logan",
-  "Full Metal Jacket",
-  "Dangal",
-  "The Sting",
-  "2001: A Space Odyssey",
-  "Singin' in the Rain",
-  "Toy Story",
-  "Bicycle Thieves",
-  "The Kid",
-  "Inglourious Basterds",
-  "Snatch",
-  "3 Idiots",
-];
-
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
 // ----------------------------------------------------------------------
 
-export default function FundraisingStory() {
+FundraisingStory.propTypes = {
+  id: PropTypes.string,
+  activeStep: PropTypes.number,
+  handleCheckout: PropTypes.func,
+};
+
+export default function FundraisingStory({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
+  const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -100,22 +60,12 @@ export default function FundraisingStory() {
   const NewBlogSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
-    content: Yup.string().min(1000).required("Content is required"),
-    cover: Yup.mixed().required("Cover is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
-      content: "",
-      cover: null,
-      tags: ["Logan"],
-      publish: true,
-      comments: true,
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: ["Logan"],
+      title: checkout.title,
+      description: checkout.description,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -140,6 +90,7 @@ export default function FundraisingStory() {
     isSubmitting,
     setFieldValue,
     getFieldProps,
+    handleChange,
   } = formik;
 
   const handleDrop = useCallback(
@@ -219,6 +170,14 @@ export default function FundraisingStory() {
                     {...getFieldProps("title")}
                     error={Boolean(touched.title && errors.title)}
                     helperText={touched.title && errors.title}
+                    onChange={(e) => {
+                      handleCheckout({
+                        id,
+                        name: e.target.name,
+                        value: e.target.value,
+                      });
+                      handleChange(e);
+                    }}
                   />
 
                   <Typography
@@ -243,7 +202,15 @@ export default function FundraisingStory() {
                     minRows={3}
                     maxRows={20}
                     label=""
-                    {...getFieldProps("metaDescription")}
+                    {...getFieldProps("description")}
+                    onChange={(e) => {
+                      handleCheckout({
+                        id,
+                        name: e.target.name,
+                        value: e.target.value,
+                      });
+                      handleChange(e);
+                    }}
                   />
 
                   <Button variant="outlined">Preview Fundraiser</Button>

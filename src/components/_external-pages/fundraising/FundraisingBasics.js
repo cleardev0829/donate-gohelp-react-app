@@ -1,6 +1,7 @@
+import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
 // material
 import { LoadingButton } from "@material-ui/lab";
@@ -27,6 +28,15 @@ import fakeRequest from "../../../utils/fakeRequest";
 //
 import { QuillEditor } from "../../editor";
 import { UploadSingleFile } from "../../upload";
+import { useDispatch, useSelector } from "../../../redux/store";
+import {
+  deleteCart,
+  onNextStep,
+  applyDiscount,
+  increaseQuantity,
+  decreaseQuantity,
+  applyBasic,
+} from "../../../redux/slices/fundraise";
 //
 // import BlogNewPostPreview from "./BlogNewPostPreview";
 
@@ -59,57 +69,37 @@ const TYPES = [
   "Wishes",
 ];
 
-const TAGS_OPTION = [
-  "Toy Story 3",
-  "Logan",
-  "Full Metal Jacket",
-  "Dangal",
-  "The Sting",
-  "2001: A Space Odyssey",
-  "Singin' in the Rain",
-  "Toy Story",
-  "Bicycle Thieves",
-  "The Kid",
-  "Inglourious Basterds",
-  "Snatch",
-  "3 Idiots",
-];
-
 // ----------------------------------------------------------------------
 
-export default function FundraisingBasics() {
+FundraisingBasics.propTypes = {
+  id: PropTypes.string,
+  activeStep: PropTypes.number,
+  handleCheckout: PropTypes.func,
+};
+
+export default function FundraisingBasics({ id, activeStep, handleCheckout }) {
+  const dispatch = useDispatch();
   const theme = useTheme();
+  const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
-
-  const handleOpenPreview = () => {
-    setOpen(true);
-  };
 
   const handleClosePreview = () => {
     setOpen(false);
   };
 
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    description: Yup.string().required("Description is required"),
-    content: Yup.string().min(1000).required("Content is required"),
-    cover: Yup.mixed().required("Cover is required"),
+    live: Yup.string().required("this is required"),
+    category: Yup.string().required("this is required"),
+    // content: Yup.string().min(1000).required("Content is required"),
+    // cover: Yup.mixed().required("Cover is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
-      content: "",
-      cover: null,
-      tags: ["Logan"],
-      publish: true,
-      comments: true,
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: ["Logan"],
+      live: checkout.live,
+      category: checkout.category,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -134,6 +124,7 @@ export default function FundraisingBasics() {
     isSubmitting,
     setFieldValue,
     getFieldProps,
+    handleChange,
   } = formik;
 
   const handleDrop = useCallback(
@@ -150,131 +141,126 @@ export default function FundraisingBasics() {
   );
 
   return (
-    <>
-      <FormikProvider value={formik}>
-        <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12}>
-              <Card
-                sx={{
-                  p: theme.shape.CARD_PADDING,
-                }}
-              >
-                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Let’s start with the basic
-                  </Typography>
+    <Grid container spacing={3}>
+      <Grid item xs={12} md={12}>
+        <Card
+          sx={{
+            p: theme.shape.CARD_PADDING,
+          }}
+        >
+          <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+            <Typography
+              variant="h3"
+              sx={{
+                ...(!isLight && {
+                  textShadow: (theme) =>
+                    `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                }),
+              }}
+            >
+              Let’s start with the basic
+            </Typography>
 
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    We're here to guide you through your fundraising journey.
-                  </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                ...(!isLight && {
+                  textShadow: (theme) =>
+                    `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                }),
+              }}
+            >
+              We're here to guide you through your fundraising journey.
+            </Typography>
 
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Where do you live?
-                  </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                ...(!isLight && {
+                  textShadow: (theme) =>
+                    `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                }),
+              }}
+            >
+              Where do you live?
+            </Typography>
 
-                  <TextField
-                    fullWidth
-                    size="small"
-                    label=""
-                    {...getFieldProps("title")}
-                    error={Boolean(touched.title && errors.title)}
-                    helperText={touched.title && errors.title}
-                    select
-                  >
-                    {COUNTRIES.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.value}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+            <TextField
+              fullWidth
+              size="small"
+              label=""
+              {...getFieldProps("live")}
+              error={Boolean(touched.live && errors.live)}
+              helperText={touched.live && errors.live}
+              select
+              onChange={(e) => {
+                handleCheckout({
+                  id,
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+                handleChange(e);
+              }}
+            >
+              {COUNTRIES.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.value}
+                </MenuItem>
+              ))}
+            </TextField>
 
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    What are you fundraising for?
-                  </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                ...(!isLight && {
+                  textShadow: (theme) =>
+                    `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                }),
+              }}
+            >
+              What are you fundraising for?
+            </Typography>
 
-                  <TextField
-                    fullWidth
-                    size="small"
-                    label=""
-                    {...getFieldProps("title")}
-                    error={Boolean(touched.title && errors.title)}
-                    helperText={touched.title && errors.title}
-                    select
-                  >
-                    {TYPES.map((option) => (
-                      <MenuItem key={option} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Stack>
-              </Card>
-            </Grid>
+            <TextField
+              fullWidth
+              size="small"
+              label=""
+              {...getFieldProps("category")}
+              error={Boolean(touched.category && errors.category)}
+              helperText={touched.category && errors.category}
+              select
+              onChange={(e) => {
+                handleCheckout({
+                  id,
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+                handleChange(e);
+              }}
+            >
+              {TYPES.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Stack>
+        </Card>
+      </Grid>
 
-            <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
-              <Typography
-                variant="p1"
-                sx={{
-                  ...(!isLight && {
-                    textShadow: (theme) =>
-                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                  }),
-                }}
-              >
-                By continuing, you agree to the GoFundMe terms and privacy
-                policy.
-              </Typography>
-            </Grid>
-          </Grid>
-        </Form>
-      </FormikProvider>
-
-      {/* <BlogNewPostPreview formik={formik} openPreview={open} onClosePreview={handleClosePreview} /> */}
-    </>
+      <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
+        <Typography
+          variant="p1"
+          sx={{
+            ...(!isLight && {
+              textShadow: (theme) =>
+                `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+            }),
+          }}
+        >
+          By continuing, you agree to the GoFundMe terms and privacy policy.
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }

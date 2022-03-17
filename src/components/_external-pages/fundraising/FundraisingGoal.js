@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
@@ -27,64 +28,21 @@ import fakeRequest from "../../../utils/fakeRequest";
 //
 import { QuillEditor } from "../../editor";
 import { UploadSingleFile } from "../../upload";
-//
+import { useDispatch, useSelector } from "../../../redux/store";
+
 // import BlogNewPostPreview from "./BlogNewPostPreview";
 
 // ----------------------------------------------------------------------
 
-const COUNTRIES = [
-  { id: "Canada", value: "Canada" },
-  { id: "France", value: "France" },
-  { id: "Japan", value: "Japan" },
-];
+FundraisingGoal.propTypes = {
+  id: PropTypes.string,
+  activeStep: PropTypes.number,
+  handleCheckout: PropTypes.func,
+};
 
-const TYPES = [
-  "Medical",
-  "Memorial",
-  "Emergency",
-  "Nonprofit",
-  "Education",
-  "Animals",
-  "Environment",
-  "Business",
-  "Community",
-  "Competition",
-  "Creative",
-  "Event",
-  "Faith",
-  "Family",
-  "Sports",
-  "Travel",
-  "Volunteer",
-  "Wishes",
-];
-
-const TAGS_OPTION = [
-  "Toy Story 3",
-  "Logan",
-  "Full Metal Jacket",
-  "Dangal",
-  "The Sting",
-  "2001: A Space Odyssey",
-  "Singin' in the Rain",
-  "Toy Story",
-  "Bicycle Thieves",
-  "The Kid",
-  "Inglourious Basterds",
-  "Snatch",
-  "3 Idiots",
-];
-
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
-// ----------------------------------------------------------------------
-
-export default function FundraisingGoal() {
+export default function FundraisingGoal({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
+  const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -100,22 +58,13 @@ export default function FundraisingGoal() {
   const NewBlogSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
-    content: Yup.string().min(1000).required("Content is required"),
+    goal: Yup.string().min(1000).required("This is required"),
     cover: Yup.mixed().required("Cover is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
-      content: "",
-      cover: null,
-      tags: ["Logan"],
-      publish: true,
-      comments: true,
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: ["Logan"],
+      goal: checkout.goal,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -140,6 +89,7 @@ export default function FundraisingGoal() {
     isSubmitting,
     setFieldValue,
     getFieldProps,
+    handleChange,
   } = formik;
 
   const handleDrop = useCallback(
@@ -216,9 +166,17 @@ export default function FundraisingGoal() {
                     fullWidth
                     size="small"
                     label=""
-                    {...getFieldProps("title")}
-                    error={Boolean(touched.title && errors.title)}
-                    helperText={touched.title && errors.title}
+                    {...getFieldProps("goal")}
+                    error={Boolean(touched.goal && errors.goal)}
+                    helperText={touched.goal && errors.goal}
+                    onChange={(e) => {
+                      handleCheckout({
+                        id,
+                        name: e.target.name,
+                        value: e.target.value,
+                      });
+                      handleChange(e);
+                    }}
                   />
 
                   <Typography
