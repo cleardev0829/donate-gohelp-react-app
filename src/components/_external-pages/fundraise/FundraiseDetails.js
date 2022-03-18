@@ -35,16 +35,17 @@ import {
 } from "@material-ui/core";
 // utils
 import fakeRequest from "../../../utils/fakeRequest";
-//
-import { QuillEditor } from "../../editor";
-import { UploadSingleFile } from "../../upload";
+
 import {
   varFadeIn,
   varFadeInUp,
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import ProgressItem from "../../../components/ProgressItem";
+import ProgressItem from "../../ProgressItem";
+import { useDispatch, useSelector } from "../../../redux/store";
+import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import { FundraiseHeader } from ".";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 
 // ----------------------------------------------------------------------
@@ -100,8 +101,9 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
 }));
 // ----------------------------------------------------------------------
 
-export default function FundraisingDetails() {
+export default function FundraiseDetails() {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -117,6 +119,14 @@ export default function FundraisingDetails() {
 
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
+  };
+
+  const handleBackStep = () => {
+    dispatch(onBackStep());
+  };
+
+  const handleNextStep = () => {
+    dispatch(onNextStep());
   };
 
   const NewBlogSchema = Yup.object().shape({
@@ -164,24 +174,17 @@ export default function FundraisingDetails() {
     getFieldProps,
   } = formik;
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      if (file) {
-        setFieldValue("cover", {
-          ...file,
-          preview: URL.createObjectURL(file),
-        });
-      }
-    },
-    [setFieldValue]
-  );
-
   return (
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Container sx={{ pt: 10 }}>
+          <FundraiseHeader
+            continueTitle="Share"
+            cancelAction={handleBackStep}
+            continueAction={handleNextStep}
+          />
+
+          <Container maxWidth="lg" sx={{ pt: 10 }}>
             <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
               <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
                 <Grid item xs={12} md={5}>

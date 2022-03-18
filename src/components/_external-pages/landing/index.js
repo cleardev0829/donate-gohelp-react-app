@@ -9,9 +9,9 @@ export { default as TopFundraisers } from "./TopFundraisers";
 export { default as StartFundraise } from "./StartFundraise";
 export { default as DonateCategories } from "./DonateCategories";
 export { default as LandingHugePackElements } from "./LandingHugePackElements";
-export { default as OnlineFundraising } from "./OnlineFundraising";
+export { default as OnlineFundraise } from "./OnlineFundraise";
 
 export { default as DonateCategoryCard } from "./DonateCategoryCard";
 export { default as TopFundraiserCard } from "./TopFundraiserCard";
 export { default as StartFundraiseCard } from "./StartFundraiseCard";
-export { default as OnlineFundraisingCard } from "./OnlineFundraisingCard";
+export { default as OnlineFundraiseCard } from "./OnlineFundraiseCard";

@@ -149,6 +149,16 @@ const products = [...Array(24)].map((_, index) => {
   };
 });
 
+const getFileBlob = (url, cb) => {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", url);
+  xhr.responseType = "blob";
+  xhr.addEventListener("load", function () {
+    cb(xhr.response);
+  });
+  xhr.send();
+};
+
 // ----------------------------------------------------------------------
 
 mock.onGet("/api/products").reply(200, { products });
@@ -175,18 +185,36 @@ mock.onGet("/api/products/product").reply((config) => {
 
 mock.onPost("/api/fundraise/add").reply(async (request) => {
   try {
-    const fundraise = JSON.parse(request.data);
+    const data = JSON.parse(request.data);
 
-    const response = firebase
-      .firestore()
-      .collection("fundraise")
-      .add({
-        ...fundraise,
+    if (data.cover && data.cover.preview) {
+      await getFileBlob(data.cover.preview, (blob) => {
+        firebase
+          .storage()
+          .ref(`/photo/${faker.datatype.uuid()}-${data.cover.path}`)
+          .put(blob)
+          .then((snapshot) => {
+            snapshot.ref.getDownloadURL().then(async (url) => {
+              await firebase
+                .firestore()
+                .collection("fundraise")
+                .add({
+                  ...data,
+                  coverUrl: url,
+                });
+            });
+          });
       });
+    } else {
+      await firebase
+        .firestore()
+        .collection("fundraise")
+        .add({
+          ...data,
+        });
+    }
 
-    console.log("====================FIRebase", response);
-
-    return [200, { response }];
+    return [200, { data }];
   } catch (error) {
     console.error(error);
     return [500, { message: "Internal server error" }];

@@ -15,18 +15,18 @@ import {
 //
 import { varFadeInUp, MotionInView } from "../../animate";
 import { StartFundraiseCard } from "../landing";
+import { FUNDRAISE_TYPES } from "src/utils/constants";
 
-const IMG = (index) =>
-  `/static/start_fundraising/start_fundraising_${index}.png`;
+// ----------------------------------------------------------------------
 
-const TITLES = ["For yourself", "For a friend", "For a charity"];
+const IMG = (index) => `/static/start_fundraise/start_fundraise_${index}.png`;
 
 const posts = [...Array(3)].map((_, index) => {
   const setIndex = index + 1;
   return {
-    id: `0feb2990-4210-4170-93a4-37e8f5958a18-${setIndex}`,
+    id: index,
     cover: IMG(setIndex),
-    title: TITLES[index],
+    title: FUNDRAISE_TYPES[index],
   };
 });
 
@@ -45,23 +45,6 @@ const ContentStyle = styled("div")(({ theme }) => ({
   },
 }));
 
-const SkeletonLoad = (
-  <Grid container spacing={3} sx={{ mt: 2 }}>
-    {[...Array(4)].map((_, index) => (
-      <Grid item xs={12} md={3} key={index}>
-        <Skeleton
-          variant="rectangular"
-          width="100%"
-          sx={{ height: 200, borderRadius: 2 }}
-        />
-        <Box sx={{ display: "flex", mt: 1.5 }}>
-          <Skeleton variant="circular" sx={{ width: 40, height: 40 }} />
-          <Skeleton variant="text" sx={{ mx: 1, flexGrow: 1 }} />
-        </Box>
-      </Grid>
-    ))}
-  </Grid>
-);
 // ----------------------------------------------------------------------
 
 export default function StartFundraise() {
@@ -84,7 +67,7 @@ export default function StartFundraise() {
                 }),
               }}
             >
-              Start Fundraising Today
+              Start Fundraise Today
             </Typography>
           </MotionInView>
 
@@ -116,8 +99,8 @@ export default function StartFundraise() {
         </ContentStyle>
 
         <Grid container spacing={theme.shape.CARD_MARGIN}>
-          {posts.map((post, index) => (
-            <StartFundraiseCard key={post.id} post={post} index={index} />
+          {posts.map((post) => (
+            <StartFundraiseCard key={post.id} post={post} />
           ))}
         </Grid>
       </Container>

@@ -7,8 +7,11 @@ import {
   TopFundraisers,
   StartFundraise,
   DonateCategories,
-  OnlineFundraising,
+  OnlineFundraise,
 } from "../components/_external-pages/landing";
+import { useDispatch, useSelector } from "../redux/store";
+import { resetCart } from "../redux/slices/fundraise";
+
 import MainFooter from "src/layouts/main/MainFooter";
 
 // ----------------------------------------------------------------------
@@ -24,6 +27,9 @@ const ContentStyle = styled("div")(({ theme }) => ({
 }));
 
 export default function LandingPage() {
+  const dispatch = useDispatch();
+  dispatch(resetCart());
+
   return (
     <RootStyle title="Go Help Website" id="move_top">
       <LandingHero />
@@ -31,7 +37,7 @@ export default function LandingPage() {
         <TopFundraisers />
         <StartFundraise />
         <DonateCategories />
-        <OnlineFundraising />
+        <OnlineFundraise />
         <LandingBottom />
         <MainFooter />
       </ContentStyle>

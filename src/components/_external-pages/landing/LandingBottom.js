@@ -77,7 +77,7 @@ export default function LandingBottom() {
                 <motion.div variants={varFadeInRight}>
                   <Typography variant="h1" sx={{ color: "text.primary" }}>
                     Are you ready to <br />
-                    fundraising
+                    fundraise
                   </Typography>
                 </motion.div>
 
@@ -85,7 +85,7 @@ export default function LandingBottom() {
                   <Button
                     variant="contained"
                     component={RouterLink}
-                    to={PATH_PAGE.fundraising}
+                    to={PATH_PAGE.fundraise}
                   >
                     Start a GoHelp
                   </Button>

@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 // utils
-import axios from '../../utils/axios';
+import axios from "../../utils/axios";
 
 // ----------------------------------------------------------------------
 
@@ -12,11 +12,11 @@ const initialState = {
   recentPosts: [],
   hasMore: true,
   index: 0,
-  step: 11
+  step: 3,
 };
 
 const slice = createSlice({
-  name: 'blog',
+  name: "blog",
   initialState,
   reducers: {
     // START LOADING
@@ -61,8 +61,8 @@ const slice = createSlice({
     getRecentPostsSuccess(state, action) {
       state.isLoading = false;
       state.recentPosts = action.payload;
-    }
-  }
+    },
+  },
 });
 
 // Reducer
@@ -77,7 +77,7 @@ export function getAllPosts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/blog/posts/all');
+      const response = await axios.get("/api/blog/posts/all");
       dispatch(slice.actions.getPostsSuccess(response.data.posts));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -91,8 +91,8 @@ export function getPostsInitial(index, step) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/blog/posts', {
-        params: { index, step }
+      const response = await axios.get("/api/blog/posts", {
+        params: { index, step },
       });
       const results = response.data.results.length;
       const { maxLength } = response.data;
@@ -114,8 +114,8 @@ export function getPost(title) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title }
+      const response = await axios.get("/api/blog/post", {
+        params: { title },
       });
       dispatch(slice.actions.getPostSuccess(response.data.post));
     } catch (error) {
@@ -131,8 +131,8 @@ export function getRecentPosts(title) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title }
+      const response = await axios.get("/api/blog/posts/recent", {
+        params: { title },
       });
 
       dispatch(slice.actions.getRecentPostsSuccess(response.data.recentPosts));

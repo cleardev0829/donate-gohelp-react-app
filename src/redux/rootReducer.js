@@ -9,7 +9,7 @@ import userReducer from "./slices/user";
 import productReducer from "./slices/product";
 import calendarReducer from "./slices/calendar";
 import kanbanReducer from "./slices/kanban";
-import fundraiserReducer from "./slices/fundraiser";
+import postReducer from "./slices/post";
 import donateReducer from "./slices/donate";
 import fundraiseReducer from "./slices/fundraise";
 
@@ -43,7 +43,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   calendar: calendarReducer,
   kanban: kanbanReducer,
-  fundraiser: fundraiserReducer,
+  postReducer: postReducer,
   product: persistReducer(productPersistConfig, productReducer),
   // donate: persistReducer(donatePersistConfig, donateReducer),
   donate: donateReducer,

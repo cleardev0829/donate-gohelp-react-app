@@ -5,11 +5,13 @@ import { Stack, Typography } from "@material-ui/core";
 const COLORS = ["primary", "info", "warning"];
 
 ProgressItem.propTypes = {
+  key: PropTypes.string,
+  text: PropTypes.string,
   progress: PropTypes.object,
   index: PropTypes.number,
 };
 
-export default function ProgressItem({ progress, index }) {
+export default function ProgressItem({ key, text, progress, index }) {
   return (
     <Stack spacing={0}>
       <Stack direction="row" justifyContent="space-between" sx={{ width: 1 }}>
@@ -19,10 +21,10 @@ export default function ProgressItem({ progress, index }) {
           color="primary"
           sx={{ display: "block" }}
         >
-          Last donation 3 min ago
+          {text}
         </Typography>
         <Typography gutterBottom variant="h7" sx={{ display: "block" }}>
-          78%
+          {progress.value}
         </Typography>
       </Stack>
 

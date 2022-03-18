@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 // material
-import { Box, Grid, Card, Button, Typography, Stack } from '@material-ui/core';
+import { Box, Grid, Card, Button, Typography, Stack } from "@material-ui/core";
 // redux
-import { useSelector, useDispatch } from '../../../../redux/store';
+import { useSelector, useDispatch } from "../../../../redux/store";
 import {
   getCards,
   getNotifications,
   getCustomers,
   getPlans,
-  getSubscription
-} from '../../../../redux/slices/user';
+  getSubscription,
+} from "../../../../redux/slices/user";
 //hooks
 import useAuth from "../../../../hooks/useAuth";
-
-import AccountBillingPaymentMethod from './AccountBillingPaymentMethod';
-
-import AccountPlansDialog from './AccountPlans';
-
-import { stripe_CancelSubscription } from '../../../../utils/stripeRequest';
+import AccountBillingPaymentMethod from "./AccountBillingPaymentMethod";
+import AccountPlansDialog from "./AccountPlans";
+import { stripe_CancelSubscription } from "../../../../utils/stripeRequest";
 import { fb_DeleteSubscription } from "../../../../utils/firebaseRequest";
 // ----------------------------------------------------------------------
 
@@ -32,11 +29,11 @@ export default function AccountBillingForOnly() {
 
   useEffect(() => {
     dispatch(getPlans());
-    dispatch(getSubscription(user.id))
+    dispatch(getSubscription(user.id));
     dispatch(getCards(user.id));
     dispatch(getCustomers(user.id));
     dispatch(getNotifications(user.id));
-  }, [dispatch])
+  }, [dispatch]);
 
   const flag = Object.entries(subscription).length === 0;
 
@@ -72,85 +69,85 @@ export default function AccountBillingForOnly() {
   let month_plans = [
     {
       id: mo_basic ? mo_basic.id : "basic",
-      subscription: 'basic',
+      subscription: "basic",
       price: mo_basic ? mo_basic.amount / 100 : 10,
       lists: [
-        { text: '3 prototypes' },
-        { text: '3 boards' },
-        { text: 'Up to 5 team members' },
-        { text: 'Advanced security' },
-        { text: 'Permissions & workflows' }
+        { text: "3 prototypes" },
+        { text: "3 boards" },
+        { text: "Up to 5 team members" },
+        { text: "Advanced security" },
+        { text: "Permissions & workflows" },
       ],
-      labelAction: 'choose basic'
+      labelAction: "choose basic",
     },
     {
       id: mo_starter ? mo_starter.id : "starter",
-      subscription: 'starter',
+      subscription: "starter",
       price: mo_starter ? mo_starter.amount / 100 : 20,
       lists: [
-        { text: '3 prototypes' },
-        { text: '3 boards' },
-        { text: 'Up to 5 team members' },
-        { text: 'Advanced security' },
-        { text: 'Permissions & workflows' }
+        { text: "3 prototypes" },
+        { text: "3 boards" },
+        { text: "Up to 5 team members" },
+        { text: "Advanced security" },
+        { text: "Permissions & workflows" },
       ],
-      labelAction: 'choose starter'
+      labelAction: "choose starter",
     },
     {
       id: mo_premium ? mo_premium.id : "starter",
-      subscription: 'premium',
+      subscription: "premium",
       price: mo_premium ? mo_premium.amount / 100 : 30,
       lists: [
-        { text: '3 prototypes' },
-        { text: '3 boards' },
-        { text: 'Up to 5 team members' },
-        { text: 'Advanced security' },
-        { text: 'Permissions & workflows' }
+        { text: "3 prototypes" },
+        { text: "3 boards" },
+        { text: "Up to 5 team members" },
+        { text: "Advanced security" },
+        { text: "Permissions & workflows" },
       ],
-      labelAction: 'choose premium'
-    }
+      labelAction: "choose premium",
+    },
   ];
 
   let year_plans = [
     {
       id: year_basic ? year_basic.id : "basic",
-      subscription: 'basic',
+      subscription: "basic",
       price: year_basic ? year_basic.amount / 100 : 10,
       lists: [
-        { text: '3 prototypes' },
-        { text: '3 boards' },
-        { text: 'Up to 5 team members' },
-        { text: 'Advanced security' },
-        { text: 'Permissions & workflows' }
+        { text: "3 prototypes" },
+        { text: "3 boards" },
+        { text: "Up to 5 team members" },
+        { text: "Advanced security" },
+        { text: "Permissions & workflows" },
       ],
-      labelAction: 'choose basic'
+      labelAction: "choose basic",
     },
     {
       id: year_starter ? year_starter.id : "starter",
-      subscription: 'starter',
+      subscription: "starter",
       price: year_starter ? year_starter.amount / 100 : 20,
       lists: [
-        { text: '3 prototypes' },
-        { text: '3 boards' },
-        { text: 'Up to 5 team members' },
-        { text: 'Advanced security' },
-        { text: 'Permissions & workflows' }
+        { text: "3 prototypes" },
+        { text: "3 boards" },
+        { text: "Up to 5 team members" },
+        { text: "Advanced security" },
+        { text: "Permissions & workflows" },
       ],
-      labelAction: 'choose starter'
+      labelAction: "choose starter",
     },
     {
       id: year_premium ? year_premium.id : "starter",
-      subscription: 'premium',
+      subscription: "premium",
       price: year_premium ? year_premium.amount / 100 : 30,
       lists: [
-        { text: '3 prototypes' },
-        { text: '3 boards' },
-        { text: 'Up to 5 team members' },
-        { text: 'Advanced security' },
-        { text: 'Permissions & workflows' }
+        { text: "3 prototypes" },
+        { text: "3 boards" },
+        { text: "Up to 5 team members" },
+        { text: "Advanced security" },
+        { text: "Permissions & workflows" },
       ],
-      labelAction: 'choose premium'
-    }
+      labelAction: "choose premium",
+    },
   ];
 
   const handleOpenAddCard = () => {
@@ -163,7 +160,7 @@ export default function AccountBillingForOnly() {
 
   const handlPlanOpen = () => {
     setOpenPlans(true);
-  }
+  };
 
   const handlPlanClose = () => {
     setOpenPlans(false);
@@ -174,38 +171,62 @@ export default function AccountBillingForOnly() {
     await fb_DeleteSubscription(user.id);
     dispatch(getSubscription(user.id));
     enqueueSnackbar("Canceld Subscription", { variant: "success" });
-  }
+  };
 
   return (
     <Grid container spacing={5}>
       <Grid item xs={12}>
         <Stack spacing={3}>
-          {Object.entries(card).length > 0 &&
+          {Object.entries(card).length > 0 && (
             <Card sx={{ p: 3 }}>
-              <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
+              <Typography
+                variant="overline"
+                sx={{ mb: 3, display: "block", color: "text.secondary" }}
+              >
                 Your Plan
               </Typography>
-              <Typography variant="h4" color={flag && 'red'}>{flag ? `No subscription` : subscription.plan.nickname}</Typography>
+              <Typography variant="h4" color={flag && "red"}>
+                {flag ? `No subscription` : subscription.plan.nickname}
+              </Typography>
               <Box
                 sx={{
                   mt: { xs: 2, sm: 0 },
-                  position: { sm: 'absolute' },
+                  position: { sm: "absolute" },
                   top: { sm: 24 },
-                  right: { sm: 24 }
+                  right: { sm: 24 },
                 }}
               >
-                {flag ? <Button size="small" onClick={handlPlanOpen} variant="outlined">
-                  Join now
-                </Button> : <><Button size="small" onClick={handlePlanCancel} color="inherit" variant="outlined" sx={{ mr: 1 }}>
-                  Cancel plan
-                </Button>
-                  <Button size="small" onClick={handlPlanOpen} variant="outlined">
-                    Upgrade plan
-                  </Button></>}
-
+                {flag ? (
+                  <Button
+                    size="small"
+                    onClick={handlPlanOpen}
+                    variant="outlined"
+                  >
+                    Join now
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      size="small"
+                      onClick={handlePlanCancel}
+                      color="inherit"
+                      variant="outlined"
+                      sx={{ mr: 1 }}
+                    >
+                      Cancel plan
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={handlPlanOpen}
+                      variant="outlined"
+                    >
+                      Upgrade plan
+                    </Button>
+                  </>
+                )}
               </Box>
             </Card>
-          }
+          )}
           <AccountBillingPaymentMethod
             isOpen={open}
             onCancel={handleCancel}

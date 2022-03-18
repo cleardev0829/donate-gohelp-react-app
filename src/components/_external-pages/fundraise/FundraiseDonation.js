@@ -9,33 +9,25 @@ import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outli
 import radioButtonOffOutline from "@iconify/icons-eva/radio-button-off-outline";
 // material
 import { LoadingButton } from "@material-ui/lab";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  alpha,
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 
 import {
   Box,
   Card,
   Grid,
   Stack,
-  Button,
-  Switch,
-  Select,
-  Checkbox,
-  TextField,
-  MenuItem,
+  Container,
   Typography,
-  Autocomplete,
-  FormHelperText,
-  FormControlLabel,
-  useTheme,
 } from "@material-ui/core";
 // utils
 import fakeRequest from "../../../utils/fakeRequest";
-//
-import { QuillEditor } from "../../editor";
-import { UploadSingleFile } from "../../upload";
-import { MRadio } from "src/components/@material-extend";
-//
-// import BlogNewPostPreview from "./BlogNewPostPreview";
+import { useDispatch, useSelector } from "../../../redux/store";
+import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import { FundraiseHeader } from ".";
 
 // ----------------------------------------------------------------------
 
@@ -44,20 +36,6 @@ const DESCRIPTIONS = [
   "Post to at least 1 social network",
   "Send reminder to your friends",
 ];
-
-const IconStyle = styled(Icon)(({ theme }) => ({
-  width: 20,
-  height: 20,
-  marginTop: 1,
-  flexShrink: 0,
-  marginRight: theme.spacing(2),
-}));
-
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
 
 IconBullet.propTypes = {
   type: PropTypes.oneOf(["subheader", "item"]),
@@ -87,8 +65,9 @@ function IconBullet({ type = "item" }) {
 }
 // ----------------------------------------------------------------------
 
-export default function FundraisingDonation() {
+export default function FundraiseDonation() {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -99,6 +78,14 @@ export default function FundraisingDonation() {
 
   const handleClosePreview = () => {
     setOpen(false);
+  };
+
+  const handleBackStep = () => {
+    dispatch(onBackStep());
+  };
+
+  const handleNextStep = () => {
+    dispatch(onNextStep());
   };
 
   const NewBlogSchema = Yup.object().shape({
@@ -163,69 +150,82 @@ export default function FundraisingDonation() {
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12}>
-              <Card
-                sx={{
-                  p: theme.shape.CARD_PADDING,
-                }}
-              >
-                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Your fundraiser is ready.
-                  </Typography>
+          <FundraiseHeader
+            cancelAction={handleBackStep}
+            continueAction={handleNextStep}
+          />
 
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Let’s start getting donations.
-                  </Typography>
+          <Container maxWidth="md">
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <Card
+                  sx={{
+                    p: theme.shape.CARD_PADDING,
+                  }}
+                >
+                  <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                    <Typography
+                      variant="h3"
+                      sx={{
+                        ...(!isLight && {
+                          textShadow: (theme) =>
+                            `4px 4px 16px ${alpha(
+                              theme.palette.grey[800],
+                              0.48
+                            )}`,
+                        }),
+                      }}
+                    >
+                      Your fundraiser is ready.
+                    </Typography>
 
-                  <Stack spacing={2} sx={{ p: 0 }}>
-                    <Stack direction="row" alignItems="center">
-                      <Icon
-                        width={25}
-                        icon={checkmarkCircle2Outline}
-                        color={theme.palette.primary.main}
-                      />
-                      <Typography variant="p2" sx={{ ml: 1 }}>
-                        Set up your GoHelp
-                      </Typography>
-                    </Stack>
-                  </Stack>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        ...(!isLight && {
+                          textShadow: (theme) =>
+                            `4px 4px 16px ${alpha(
+                              theme.palette.grey[800],
+                              0.48
+                            )}`,
+                        }),
+                      }}
+                    >
+                      Let’s start getting donations.
+                    </Typography>
 
-                  {DESCRIPTIONS.map((description) => (
-                    <>
+                    <Stack spacing={2} sx={{ p: 0 }}>
                       <Stack direction="row" alignItems="center">
-                        <IconBullet type="item" />
-                        <Typography variant="p2">{description}</Typography>
+                        <Icon
+                          width={25}
+                          icon={checkmarkCircle2Outline}
+                          color={theme.palette.primary.main}
+                        />
+                        <Typography variant="p2" sx={{ ml: 1 }}>
+                          Set up your GoHelp
+                        </Typography>
                       </Stack>
-                    </>
-                  ))}
-                </Stack>
-              </Card>
+                    </Stack>
+
+                    {DESCRIPTIONS.map((description, index) => (
+                      <>
+                        <Stack
+                          key={`Stack-${index}`}
+                          direction="row"
+                          alignItems="center"
+                        >
+                          <IconBullet key={`IconBullet-${index}`} type="item" />
+                          <Typography key={`Typography-${index}`} variant="p2">
+                            {description}
+                          </Typography>
+                        </Stack>
+                      </>
+                    ))}
+                  </Stack>
+                </Card>
+              </Grid>
             </Grid>
-          </Grid>
+          </Container>
         </Form>
       </FormikProvider>
 

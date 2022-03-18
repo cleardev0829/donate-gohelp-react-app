@@ -2,39 +2,35 @@ import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { Icon } from "@iconify/react";
 import { useSnackbar } from "notistack";
+import moment from "moment";
 import { useCallback, useState } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
-// material
+
 import { LoadingButton } from "@material-ui/lab";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-import roundVerified from "@iconify/icons-ic/round-verified";
-import roundVerifiedUser from "@iconify/icons-ic/round-verified-user";
+
 import {
   Box,
   Card,
   Grid,
-  Chip,
   Stack,
   Button,
-  Switch,
-  Select,
   TextField,
-  MenuItem,
+  Container,
   Typography,
-  Autocomplete,
-  FormHelperText,
-  FormControlLabel,
   useTheme,
 } from "@material-ui/core";
 // utils
 import fakeRequest from "../../../utils/fakeRequest";
 //
-import { QuillEditor } from "../../editor";
-import { UploadSingleFile } from "../../upload";
-import clockFill from "@iconify/icons-eva/clock-fill";
-import CopyClipboard from "../../../components/CopyClipboard";
-// import BlogNewPostPreview from "./BlogNewPostPreview";
 import { useDispatch, useSelector } from "../../../redux/store";
+import {
+  onBackStep,
+  onNextStep,
+  addPost,
+} from "../../../redux/slices/fundraise";
+import { FundraiseHeader } from ".";
+import CopyClipboard from "../../CopyClipboard";
 
 // ----------------------------------------------------------------------
 const IMG = (index) => `/static/socials_by_number/social_${index}.png`;
@@ -59,14 +55,15 @@ const CoverImgStyle = styled("img")({
 
 // ----------------------------------------------------------------------
 
-FundraisingShare.propTypes = {
+FundraiseShare.propTypes = {
   id: PropTypes.string,
   activeStep: PropTypes.number,
   handleCheckout: PropTypes.func,
 };
 
-export default function FundraisingShare({ id, activeStep, handleCheckout }) {
+export default function FundraiseShare({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.fundraise);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -85,27 +82,26 @@ export default function FundraisingShare({ id, activeStep, handleCheckout }) {
     setOpen(false);
   };
 
+  const handleBackStep = () => {
+    dispatch(onBackStep());
+  };
+
+  const handleNextStep = () => {
+    dispatch(addPost({ ...checkout, createdAt: moment() }));
+    dispatch(onNextStep());
+  };
+
   const NewBlogSchema = Yup.object().shape({
     email: Yup.string()
       .email("Email must be a valid email address")
       .required("Email is required"),
-    link: Yup.string().required("Link is required"),
-    content: Yup.string().min(1000).required("Content is required"),
-    cover: Yup.mixed().required("Cover is required"),
+    // link: Yup.string().required("Link is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       email: checkout.email,
       link: checkout.link,
-      content: "",
-      cover: null,
-      tags: ["Logan"],
-      publish: true,
-      comments: true,
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: ["Logan"],
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -114,7 +110,8 @@ export default function FundraisingShare({ id, activeStep, handleCheckout }) {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
-        enqueueSnackbar("Post success", { variant: "success" });
+        enqueueSnackbar("Save success", { variant: "success" });
+        handleNextStep();
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -133,19 +130,6 @@ export default function FundraisingShare({ id, activeStep, handleCheckout }) {
     handleChange,
   } = formik;
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      if (file) {
-        setFieldValue("cover", {
-          ...file,
-          preview: URL.createObjectURL(file),
-        });
-      }
-    },
-    [setFieldValue]
-  );
-
   const onCopy = () => {
     setState({ ...state, copied: true });
     if (state.value) {
@@ -156,9 +140,14 @@ export default function FundraisingShare({ id, activeStep, handleCheckout }) {
   const handleShare = () => {};
 
   return (
-    <Box sx={{ maxWidth: 480, margin: "auto", textAlign: "center" }}>
-      <FormikProvider value={formik}>
-        <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+    <FormikProvider value={formik}>
+      <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <FundraiseHeader
+          cancelAction={handleBackStep}
+          continueAction={handleSubmit}
+        />
+
+        <Box sx={{ maxWidth: 480, margin: "auto", textAlign: "center" }}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
@@ -267,8 +256,8 @@ export default function FundraisingShare({ id, activeStep, handleCheckout }) {
               </Stack>
             </Grid>
           </Grid>
-        </Form>
-      </FormikProvider>
-    </Box>
+        </Box>
+      </Form>
+    </FormikProvider>
   );
 }

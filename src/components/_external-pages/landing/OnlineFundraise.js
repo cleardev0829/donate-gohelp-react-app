@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from "../blog";
-import { OnlineFundraisingCard } from ".";
+import { OnlineFundraiseCard } from ".";
 import { getPostsInitial, getMorePosts } from "../../../redux/slices/blog";
 import {
   varFadeIn,
@@ -29,8 +29,7 @@ import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 
 // ----------------------------------------------------------------------
 
-const IMG = (index) =>
-  `/static/online_fundraising/online_fundraising_${index}.png`;
+const IMG = (index) => `/static/online_fundraise/online_fundraise_${index}.png`;
 
 const TITLES = [
   "Donor protection guarantee",
@@ -94,7 +93,7 @@ const SkeletonLoad = (
 );
 // ----------------------------------------------------------------------
 
-export default function OnlineFundraising() {
+export default function OnlineFundraise() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const isLight = theme.palette.mode === "light";
@@ -114,14 +113,14 @@ export default function OnlineFundraising() {
                 }),
               }}
             >
-              The leader in online fundraising
+              The leader in online fundraise
             </Typography>
           </MotionInView>
         </ContentStyle>
 
         <Grid container spacing={theme.shape.CARD_MARGIN}>
           {posts.map((post, index) => (
-            <OnlineFundraisingCard key={post.id} post={post} index={index} />
+            <OnlineFundraiseCard key={post.id} post={post} index={index} />
           ))}
         </Grid>
 
@@ -130,7 +129,7 @@ export default function OnlineFundraising() {
             <Button
               variant="contained"
               component={RouterLink}
-              to={PATH_PAGE.fundraising}
+              to={PATH_PAGE.fundraise}
               sx={{ mt: theme.shape.MAIN_VERTICAL_SPACING }}
             >
               Start a GoHelp

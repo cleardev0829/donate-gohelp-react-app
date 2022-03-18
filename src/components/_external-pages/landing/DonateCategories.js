@@ -17,38 +17,19 @@ import { varFadeInUp, MotionInView } from "../../animate";
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from "../blog";
 import { DonateCategoryCard } from "../landing";
 import { getPostsInitial, getMorePosts } from "../../../redux/slices/blog";
+import { CATEGORIES } from "src/utils/constants";
+
 // ----------------------------------------------------------------------
 
 const IMG = (index) =>
   `/static/donate_categories/donate_categories_${index}.png`;
 
-const TITLES = [
-  "Medical",
-  "Memorial",
-  "Emergency",
-  "Nonprofit",
-  "Education",
-  "Animals",
-  "Environment",
-  "Business",
-  "Community",
-  "Competition",
-  "Creative",
-  "Event",
-  "Faith",
-  "Family",
-  "Sports",
-  "Travel",
-  "Volunteer",
-  "Wishes",
-];
-
 const posts = [...Array(18)].map((_, index) => {
   const setIndex = index + 1;
   return {
-    id: `0feb2990-4210-4170-93a4-37e8f5958a18-${setIndex}`,
+    id: index,
     cover: IMG(setIndex),
-    title: TITLES[index],
+    category: CATEGORIES[index],
   };
 });
 
@@ -82,42 +63,11 @@ const ContentStyle = styled("div")(({ theme }) => ({
   marginBottom: theme.spacing(5),
 }));
 
-const SkeletonLoad = (
-  <Grid container spacing={3} sx={{ mt: 2 }}>
-    {[...Array(4)].map((_, index) => (
-      <Grid item xs={12} md={3} key={index}>
-        <Skeleton
-          variant="rectangular"
-          width="100%"
-          sx={{ height: 200, borderRadius: 2 }}
-        />
-        <Box sx={{ display: "flex", mt: 1.5 }}>
-          <Skeleton variant="circular" sx={{ width: 40, height: 40 }} />
-          <Skeleton variant="text" sx={{ mx: 1, flexGrow: 1 }} />
-        </Box>
-      </Grid>
-    ))}
-  </Grid>
-);
 // ----------------------------------------------------------------------
 
 export default function DonateCategories() {
-  const dispatch = useDispatch();
-  // const [filters, setFilters] = useState("latest");
-  // const { posts, hasMore, index, step } = useSelector((state) => state.blog);
-
-  // const sortedPosts = applySort(posts, filters);
-  // const onScroll = useCallback(() => dispatch(getMorePosts()), [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getPostsInitial(index, step));
-  // }, [dispatch, index, step]);
-
-  // const handleChangeSort = (event) => {
-  //   setFilters(event.target.value);
-  // };
-
   const theme = useTheme();
+  const dispatch = useDispatch();
   const isLight = theme.palette.mode === "light";
 
   return (
@@ -141,8 +91,8 @@ export default function DonateCategories() {
         </ContentStyle>
 
         <Grid container spacing={theme.shape.CARD_MARGIN}>
-          {posts.map((post, index) => (
-            <DonateCategoryCard key={post.id} post={post} index={index} />
+          {posts.map((post) => (
+            <DonateCategoryCard key={post.id} post={post} />
           ))}
         </Grid>
       </Container>

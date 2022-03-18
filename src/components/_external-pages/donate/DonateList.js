@@ -60,15 +60,15 @@ const supports = [...Array(5)].map((_, index) => ({
 }));
 
 DonateList.propTypes = {
-  profile: PropTypes.object,
+  post: PropTypes.object,
 };
 
-export default function DonateList({ props }) {
+export default function DonateList({ post }) {
   const dispatch = useDispatch();
   const theme = useTheme();
   const { checkout } = useSelector((state) => state.donate);
   const { cart, billing, activeStep } = checkout;
-  const { quote, country, email, role, company, school } = props;
+  const { quote, country, email, role, company, school } = post;
 
   return (
     <Box>

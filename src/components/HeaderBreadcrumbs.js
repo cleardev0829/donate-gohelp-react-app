@@ -1,9 +1,9 @@
-import { isString } from 'lodash';
-import PropTypes from 'prop-types';
+import { isString } from "lodash";
+import PropTypes from "prop-types";
 // material
-import { Box, Typography, Link, Stack } from '@material-ui/core';
+import { Box, Typography, Link, Stack } from "@material-ui/core";
 //
-import { MBreadcrumbs } from './@material-extend';
+import { MBreadcrumbs } from "./@material-extend";
 
 // ----------------------------------------------------------------------
 
@@ -12,10 +12,17 @@ HeaderBreadcrumbs.propTypes = {
   action: PropTypes.node,
   heading: PropTypes.string.isRequired,
   moreLink: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  sx: PropTypes.object
+  sx: PropTypes.object,
 };
 
-export default function HeaderBreadcrumbs({ links, action, heading, moreLink = '' || [], sx, ...other }) {
+export default function HeaderBreadcrumbs({
+  links,
+  action,
+  heading,
+  moreLink = "" || [],
+  sx,
+  ...other
+}) {
   return (
     <Stack sx={sx} mb={5} spacing={2}>
       <Stack direction="row" alignItems="center">
@@ -35,7 +42,14 @@ export default function HeaderBreadcrumbs({ links, action, heading, moreLink = '
         </Link>
       ) : (
         moreLink.map((href) => (
-          <Link noWrap key={href} href={href} variant="body2" target="_blank" sx={{ display: 'flex' }}>
+          <Link
+            noWrap
+            key={href}
+            href={href}
+            variant="body2"
+            target="_blank"
+            sx={{ display: "flex" }}
+          >
             {href}
           </Link>
         ))

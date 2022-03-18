@@ -1,10 +1,4 @@
-import { Icon } from "@iconify/react";
-import { capitalCase } from "change-case";
-import { useEffect, useState } from "react";
-import heartFill from "@iconify/icons-eva/heart-fill";
-import peopleFill from "@iconify/icons-eva/people-fill";
-import roundPermMedia from "@iconify/icons-ic/round-perm-media";
-import roundAccountBox from "@iconify/icons-ic/round-account-box";
+import PropTypes from "prop-types";
 // material
 import {
   experimentalStyled as styled,
@@ -33,12 +27,13 @@ import DonateToken from "./DonateToken";
 import DonateProfile from "./DonateProfile";
 // ----------------------------------------------------------------------
 
-const STEPS = ["1", "2"];
+DonateMain.propTypes = {
+  post: PropTypes.object.isRequired,
+};
 
-export default function UserProfile() {
+export default function DonateMain({ post }) {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const { user } = useAuth();
 
   return (
     <Box>
@@ -46,18 +41,18 @@ export default function UserProfile() {
         <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
           <Grid item xs={12} md={7}>
             <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-              <DonateProfile props={"props"} />
-              <DonateList props={"props"} />
+              <DonateProfile post={post} />
+              <DonateList post={post} />
             </Stack>
           </Grid>
 
           <Grid item xs={12} md={5}>
-            <DonateToken props={"props"} />
+            <DonateToken post={post} />
           </Grid>
         </Grid>
       </Box>
 
-      <DonateSupports props={"props"} />
+      <DonateSupports post={post} />
     </Box>
   );
 }

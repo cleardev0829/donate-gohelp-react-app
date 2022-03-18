@@ -4,7 +4,7 @@ import flashFill from "@iconify/icons-eva/flash-fill";
 import { Link as RouterLink } from "react-router-dom";
 import trash2Fill from "@iconify/icons-eva/trash-2-fill";
 import arrowRightFill from "@iconify/icons-eva/arrow-right-fill";
-
+import { paramCase } from "change-case";
 // material
 import {
   experimentalStyled as styled,
@@ -89,7 +89,7 @@ export default function LandingHero() {
             <ContentStyle>
               <motion.div variants={varFadeInRight}>
                 <Typography variant="h1" sx={{ color: "text.primary" }}>
-                  Trusted fundraising <br />
+                  Trusted fundraise <br />
                   for all of life’s
                   <br /> moments
                 </Typography>
@@ -111,7 +111,7 @@ export default function LandingHero() {
                   <Button
                     variant="contained"
                     component={RouterLink}
-                    to={PATH_PAGE.fundraising}
+                    to={PATH_PAGE.fundraise}
                   >
                     Start a GoHelp
                   </Button>

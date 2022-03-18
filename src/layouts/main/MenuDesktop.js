@@ -18,6 +18,8 @@ import {
   ListSubheader,
   CardActionArea,
 } from "@material-ui/core";
+import { useSelector, useDispatch } from "../../redux/store";
+import { applyCheckout, onGotoStep } from "../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -82,6 +84,7 @@ function MenuDesktopItem({
   onOpen,
   onClose,
 }) {
+  const dispatch = useDispatch();
   const { title, path, children } = item;
   const isActive = pathname === path;
   const [anchorEl, setAnchorEl] = useState(null);
@@ -170,6 +173,20 @@ function MenuDesktopItem({
                             typography: "subtitle2",
                             color: "text.primary",
                           }),
+                        }}
+                        onClick={() => {
+                          dispatch(
+                            applyCheckout({
+                              name: "type",
+                              value: parseInt(item.type),
+                            })
+                          );
+                          dispatch(
+                            applyCheckout({
+                              name: "category",
+                              value: item.category,
+                            })
+                          );
                         }}
                       >
                         {item.title === "Dashboard" ? (

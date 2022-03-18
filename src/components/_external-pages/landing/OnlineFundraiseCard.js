@@ -32,12 +32,12 @@ export const CardContentStyle = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-OnlineFundraisingCard.propTypes = {
+OnlineFundraiseCard.propTypes = {
   post: PropTypes.object.isRequired,
   index: PropTypes.number,
 };
 
-export default function OnlineFundraisingCard({ post, index }) {
+export default function OnlineFundraiseCard({ post, index }) {
   const { cover, title, description, link } = post;
 
   return (

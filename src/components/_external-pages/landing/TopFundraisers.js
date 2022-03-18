@@ -16,11 +16,10 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { varFadeInUp, MotionInView } from "../../animate";
-import {
-  getPostsInitial,
-  getMorePosts,
-} from "../../../redux/slices/fundraiser";
+import { getPostsInitial, getMorePosts } from "../../../redux/slices/blog";
+import { getPosts } from "../../../redux/slices/fundraise";
 import { TopFundraiserCard } from "../landing";
+
 // ----------------------------------------------------------------------
 
 const SORT_OPTIONS = [
@@ -28,8 +27,6 @@ const SORT_OPTIONS = [
   { value: "popular", label: "Popular" },
   { value: "oldest", label: "Oldest" },
 ];
-
-// ----------------------------------------------------------------------
 
 const applySort = (posts, sortBy) => {
   if (sortBy === "latest") {
@@ -49,13 +46,11 @@ const RootStyle = styled("div")(({ theme }) => ({
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
-  // maxWidth: 520,
   margin: "auto",
   textAlign: "center",
   [theme.breakpoints.up("md")]: {
     zIndex: 11,
     textAlign: "left",
-    // position: "absolute",
   },
 }));
 
@@ -80,12 +75,12 @@ const SkeletonLoad = (
 
 export default function TopFundraisers() {
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const { posts, hasMore, index, step } = useSelector((state) => state.blog);
   const [filters, setFilters] = useState("latest");
-  const { posts, hasMore, index, step } = useSelector(
-    (state) => state.fundraiser
-  );
+  const [data, setData] = useState(posts);
+  const isLight = theme.palette.mode === "light";
 
-  const sortedPosts = applySort(posts, filters);
   const onScroll = useCallback(() => {
     dispatch(getMorePosts());
   }, [dispatch]);
@@ -94,12 +89,22 @@ export default function TopFundraisers() {
     dispatch(getPostsInitial(index, step));
   }, [dispatch, index, step]);
 
+  // useEffect(() => {
+  //   dispatch(getPosts(""));
+  // }, [dispatch]);
+
+  useEffect(() => {
+    const sortedPosts = applySort(posts, filters);
+    setData(sortedPosts);
+  }, [posts]);
+
   const handleChangeSort = (event) => {
     setFilters(event.target.value);
   };
 
-  const theme = useTheme();
-  const isLight = theme.palette.mode === "light";
+  const handleGetMorePost = () => {
+    dispatch(getMorePosts());
+  };
 
   return (
     <RootStyle>
@@ -121,25 +126,33 @@ export default function TopFundraisers() {
               </Typography>
             </MotionInView>
 
-            <Stack direction="row" spacing={1} alignItems="center">
-              <MotionInView variants={varFadeInUp}>
-                <Typography
-                  component="p"
-                  variant="h4"
-                  color={theme.palette.primary.main}
-                >
-                  See All
-                </Typography>
-              </MotionInView>
-              <MotionInView variants={varFadeInUp}>
-                <Icon
-                  icon={rightArrowAlt}
-                  color={theme.palette.primary.main}
-                  width={theme.shape.ICON_SIZE}
-                  height={theme.shape.ICON_SIZE}
-                />
-              </MotionInView>
-            </Stack>
+            {hasMore && (
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                onClick={handleGetMorePost}
+                sx={{ cursor: "pointer" }}
+              >
+                <MotionInView variants={varFadeInUp}>
+                  <Typography
+                    component="p"
+                    variant="h4"
+                    color={theme.palette.primary.main}
+                  >
+                    More
+                  </Typography>
+                </MotionInView>
+                <MotionInView variants={varFadeInUp}>
+                  <Icon
+                    icon={rightArrowAlt}
+                    color={theme.palette.primary.main}
+                    width={theme.shape.ICON_SIZE}
+                    height={theme.shape.ICON_SIZE}
+                  />
+                </MotionInView>
+              </Stack>
+            )}
           </Stack>
         </ContentStyle>
 
@@ -151,9 +164,14 @@ export default function TopFundraisers() {
           style={{ overflow: "inherit" }}
         >
           <Grid container spacing={theme.shape.CARD_MARGIN}>
-            {sortedPosts.splice(0, 3).map((post, index) => (
+            {/* {sortedPosts.splice(0, 3).map((post, index) => (
               <TopFundraiserCard key={post.id} post={post} index={index} />
-            ))}
+            ))} */}
+
+            {data.length > 0 &&
+              data.map((post, index) => (
+                <TopFundraiserCard key={post.id} post={post} />
+              ))}
           </Grid>
         </InfiniteScroll>
       </Container>

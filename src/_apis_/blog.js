@@ -1,39 +1,45 @@
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-useless-escape */
-import faker from 'faker';
-import { paramCase } from 'change-case';
+import faker from "faker";
+import { paramCase } from "change-case";
 // utils
-import { mockImgCover } from '../utils/mockImages';
+import { mockImgCover } from "../utils/mockImages";
 //
-import mock from './mock';
+import mock from "./mock";
+
+// firebase
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
 
 // ----------------------------------------------------------------------
 
 const POST_TITLES = [
-  'Whiteboard Templates By Industry Leaders',
-  'Tesla Cybertruck-inspired camper trailer for Tesla fans who can’t just wait for the truck!',
-  'Designify Agency Landing Page Design',
-  '✨What is Done is Done ✨',
-  'Fresh Prince',
-  'Six Socks Studio',
-  'vincenzo de cotiis’ crossing over showcases a research on contamination',
-  'Simple, Great Looking Animations in Your Project | Video Tutorial',
-  '40 Free Serif Fonts for Digital Designers',
-  'Examining the Evolution of the Typical Web Design Client',
-  'Katie Griffin loves making that homey art',
-  'The American Dream retold through mid-century railroad graphics',
-  'Illustration System Design',
-  'CarZio-Delivery Driver App SignIn/SignUp',
-  'How to create a client-serverless Jamstack app using Netlify, Gatsby and Fauna',
-  'Tylko Organise effortlessly -3D & Motion Design',
-  'RAYO ?? A expanded visual arts festival identity',
-  'Anthony Burrill and Wired mag’s Andrew Diprose discuss how they made January’s Change Everything cover',
-  'Inside the Mind of Samuel Day',
-  'Portfolio Review: Is This Portfolio Too Creative?',
-  'Akkers van Margraten',
-  'Gradient Ticket icon',
-  'Here’s a Dyson motorcycle concept that doesn’t ‘suck’!',
-  'How to Animate a SVG with border-image'
+  "Whiteboard Templates By Industry Leaders",
+  "Tesla Cybertruck-inspired camper trailer for Tesla fans who can’t just wait for the truck!",
+  "Designify Agency Landing Page Design",
+  "✨What is Done is Done ✨",
+  "Fresh Prince",
+  "Six Socks Studio",
+  "vincenzo de cotiis’ crossing over showcases a research on contamination",
+  "Simple, Great Looking Animations in Your Project | Video Tutorial",
+  "40 Free Serif Fonts for Digital Designers",
+  "Examining the Evolution of the Typical Web Design Client",
+  "Katie Griffin loves making that homey art",
+  "The American Dream retold through mid-century railroad graphics",
+  "Illustration System Design",
+  "CarZio-Delivery Driver App SignIn/SignUp",
+  "How to create a client-serverless Jamstack app using Netlify, Gatsby and Fauna",
+  "Tylko Organise effortlessly -3D & Motion Design",
+  "RAYO ?? A expanded visual arts festival identity",
+  "Anthony Burrill and Wired mag’s Andrew Diprose discuss how they made January’s Change Everything cover",
+  "Inside the Mind of Samuel Day",
+  "Portfolio Review: Is This Portfolio Too Creative?",
+  "Akkers van Margraten",
+  "Gradient Ticket icon",
+  "Here’s a Dyson motorcycle concept that doesn’t ‘suck’!",
+  "How to Animate a SVG with border-image",
 ];
 
 // Made with React Quill
@@ -129,7 +135,7 @@ const users = [...Array(12)].map((_, index) => {
   return {
     id: `31a6d8e0-12d4-4aef-88c3-39229ea852f7-${setIndex}`,
     name: faker.name.findName(),
-    avatarUrl: `/static/mock-images/avatars/avatar_${setIndex}.jpg`
+    avatarUrl: `/static/mock-images/avatars/avatar_${setIndex}.jpg`,
   };
 });
 
@@ -146,22 +152,22 @@ const POST_COMMENTS = [
         id: faker.datatype.uuid(),
         userId: users[1].id,
         message: faker.lorem.lines(),
-        postedAt: faker.date.past()
+        postedAt: faker.date.past(),
       },
       {
         id: faker.datatype.uuid(),
         userId: users[0].id,
         message: faker.lorem.lines(),
         tagUser: users[1].name,
-        postedAt: faker.date.past()
+        postedAt: faker.date.past(),
       },
       {
         id: faker.datatype.uuid(),
         userId: users[2].id,
         message: faker.lorem.lines(),
-        postedAt: faker.date.past()
-      }
-    ]
+        postedAt: faker.date.past(),
+      },
+    ],
   },
   {
     id: faker.datatype.uuid(),
@@ -175,21 +181,21 @@ const POST_COMMENTS = [
         id: faker.datatype.uuid(),
         userId: users[5].id,
         message: faker.lorem.lines(),
-        postedAt: faker.date.past()
+        postedAt: faker.date.past(),
       },
       {
         id: faker.datatype.uuid(),
         userId: users[6].id,
         message: faker.lorem.lines(),
-        postedAt: faker.date.past()
+        postedAt: faker.date.past(),
       },
       {
         id: faker.datatype.uuid(),
         userId: users[7].id,
         message: faker.lorem.lines(),
-        postedAt: faker.date.past()
-      }
-    ]
+        postedAt: faker.date.past(),
+      },
+    ],
   },
   {
     id: faker.datatype.uuid(),
@@ -198,7 +204,7 @@ const POST_COMMENTS = [
     message: faker.lorem.lines(),
     postedAt: faker.date.past(),
     users: [],
-    replyComment: []
+    replyComment: [],
   },
   {
     id: faker.datatype.uuid(),
@@ -207,8 +213,8 @@ const POST_COMMENTS = [
     message: faker.lorem.lines(),
     postedAt: faker.date.past(),
     users: [],
-    replyComment: []
-  }
+    replyComment: [],
+  },
 ];
 
 let posts = [...Array(23)].map((_, index) => {
@@ -225,85 +231,103 @@ let posts = [...Array(23)].map((_, index) => {
     favorite: faker.datatype.number(),
     author: {
       name: faker.name.findName(),
-      avatarUrl: `/static/mock-images/avatars/avatar_${setIndex}.jpg`
+      avatarUrl: `/static/mock-images/avatars/avatar_${setIndex}.jpg`,
     },
-    tags: ['Lamp', 'A man', 'Human', 'Lantern', 'Festival'],
+    tags: ["Lamp", "A man", "Human", "Lantern", "Festival"],
     body: POST_BODY,
     favoritePerson: [...Array(50)].map((_, index) => {
       return {
         name: faker.name.findName(),
-        avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`
+        avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
       };
     }),
-    comments: POST_COMMENTS
+    comments: POST_COMMENTS,
   };
 });
 
 // ----------------------------------------------------------------------
 
-mock.onGet('/api/blog/posts/all').reply(200, { posts });
+mock.onGet("/api/blog/posts/all").reply(200, { posts });
 
 // ----------------------------------------------------------------------
 
-mock.onGet('/api/blog/posts').reply((config) => {
+mock.onGet("/api/blog/posts").reply(async (config) => {
   try {
     const { index, step } = config.params;
-    const maxLength = posts.length;
     const loadMore = index + step;
 
+    let posts = [];
+
+    await firebase
+      .firestore()
+      .collection("fundraise")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.docs.map((doc) => {
+          posts.push({ ...doc.data(), id: doc.id });
+        });
+      });
+
+    const maxLength = posts.length;
     const sortPosts = [...posts].sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
     const results = sortPosts.slice(0, loadMore);
 
+    if (!results) {
+      return [404, { message: "data not found" }];
+    }
+
     return [200, { results, maxLength }];
   } catch (error) {
     console.error(error);
-    return [500, { message: 'Internal server error' }];
+    return [500, { message: "Internal server error" }];
   }
 });
 
 // ----------------------------------------------------------------------
 
-mock.onGet('/api/blog/post').reply((config) => {
+mock.onGet("/api/blog/post").reply((config) => {
   try {
     const { title } = config.params;
     const post = posts.find((_post) => paramCase(_post.title) === title);
 
     if (!post) {
-      return [404, { message: 'Post not found' }];
+      return [404, { message: "Post not found" }];
     }
 
     return [200, { post }];
   } catch (error) {
     console.error(error);
-    return [500, { message: 'Internal server error' }];
+    return [500, { message: "Internal server error" }];
   }
 });
 
 // ----------------------------------------------------------------------
 
-mock.onGet('/api/blog/posts/recent').reply((config) => {
+mock.onGet("/api/blog/posts/recent").reply((config) => {
   try {
     const { title } = config.params;
 
-    const recentPosts = posts.filter((_post) => paramCase(_post.title) !== title).slice(posts.length - 5, posts.length);
+    const recentPosts = posts
+      .filter((_post) => paramCase(_post.title) !== title)
+      .slice(posts.length - 5, posts.length);
 
     if (!recentPosts) {
-      return [404, { message: 'Post not found' }];
+      return [404, { message: "Post not found" }];
     }
 
     return [200, { recentPosts }];
   } catch (error) {
     console.error(error);
-    return [500, { message: 'Internal server error' }];
+    return [500, { message: "Internal server error" }];
   }
 });
 
 // ----------------------------------------------------------------------
 
-mock.onGet('/api/blog/posts/search').reply((config) => {
+mock.onGet("/api/blog/posts/search").reply((config) => {
   try {
     const { query } = config.params;
     const cleanQuery = query.toLowerCase().trim();
@@ -322,6 +346,6 @@ mock.onGet('/api/blog/posts/search').reply((config) => {
     return [200, { results }];
   } catch (error) {
     console.error(error);
-    return [500, { message: 'Internal server error' }];
+    return [500, { message: "Internal server error" }];
   }
 });

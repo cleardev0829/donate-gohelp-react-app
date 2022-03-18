@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { paramCase } from "change-case";
 import eyeFill from "@iconify/icons-eva/eye-fill";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { fPercent, fCurrency } from "../../../utils/formatNumber";
+import moment from "moment";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
 import {
   Box,
@@ -27,6 +27,8 @@ import {
   varFadeInRight,
 } from "../../animate";
 import ProgressItem from "../../ProgressItem";
+import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
+import { diff } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -79,13 +81,20 @@ const CountryStyle = styled(Box)(({ theme }) => ({
 
 TopFundraiserCard.propTypes = {
   post: PropTypes.object.isRequired,
-  index: PropTypes.number,
 };
 
-export default function TopFundraiserCard({ post, index }) {
+export default function TopFundraiserCard({ post }) {
   const navigate = useNavigate();
-  const { cover, title, description, country } = post;
-  const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
+  const {
+    id,
+    live,
+    goal,
+    title,
+    total,
+    coverUrl,
+    createdAt,
+    description,
+  } = post;
 
   return (
     <Grid item xs={12} sm={6} md={4}>
@@ -93,7 +102,7 @@ export default function TopFundraiserCard({ post, index }) {
         <CardContentStyle>
           <Box
             sx={{ cursor: "pointer" }}
-            onClick={() => navigate(PATH_PAGE.fundraising)}
+            onClick={() => navigate(`${PATH_PAGE.donate}/${post.id}`)}
           >
             <Stack>
               <CardMediaStyle>
@@ -105,10 +114,10 @@ export default function TopFundraiserCard({ post, index }) {
                       color: (theme) => theme.palette.common.white,
                     }}
                   >
-                    {country}
+                    {live}
                   </Typography>
                 </CountryStyle>
-                <CoverImgStyle alt={title} src={cover} />
+                <CoverImgStyle alt={title} src={coverUrl} />
               </CardMediaStyle>
 
               <Stack spacing={1} sx={{ my: 2 }}>
@@ -122,8 +131,9 @@ export default function TopFundraiserCard({ post, index }) {
               </Stack>
 
               <ProgressItem
-                key={" Last donation 3 min ago"}
-                progress={{ value: 78 }}
+                key={id}
+                text={`Last donation ${diff(moment(), moment(createdAt))} `}
+                progress={{ value: fPercent((total * 100) / goal) }}
                 index={0}
               />
 
@@ -132,7 +142,7 @@ export default function TopFundraiserCard({ post, index }) {
                 variant="p1"
                 sx={{ display: "block", mt: 2 }}
               >
-                7,800 token raised of 10,000 Token
+                {`${fNumber(total)} token raised of ${fNumber(goal)} Token`}
               </Typography>
             </Stack>
           </Box>

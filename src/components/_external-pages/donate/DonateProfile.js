@@ -36,37 +36,32 @@ import {
   onGotoStep,
 } from "src/redux/slices/donate";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
+
 // ----------------------------------------------------------------------
-const IMG = (index) => `/static/fundraisers/fundraiser_${index}.png`;
 
 DonateProfile.propTypes = {
-  profile: PropTypes.object,
+  post: PropTypes.object,
 };
 
-export default function DonateProfile({ props }) {
+export default function DonateProfile({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.donate);
-  const { cart, billing, activeStep } = checkout;
-  const { follower, following } = props;
 
+  const { id, coverUrl, title, description } = post;
+  console.log("===", post);
   return (
     <Box sx={{ py: 3 }}>
       <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-        <Typography variant="h3">
-          Share Support Laura swans wish to live longer
-        </Typography>
+        <Typography variant="h3">{title}</Typography>
 
         <Box sx={{ position: "relative" }}>
           <CardMediaStyle>
-            <CoverImgStyle alt={"title"} src={IMG(1)} />
+            <CoverImgStyle alt="cover" src={coverUrl} />
           </CardMediaStyle>
         </Box>
 
-        <Typography variant="body2">
-          ***Angela Yujin Lee on behalf of The Lee Family is organizing this
-          fundraiser.
-        </Typography>
+        <Typography variant="body2">{"description"}</Typography>
 
         <Stack direction="row" spacing={theme.shape.CARD_CONTENT_SPACING}>
           <motion.div variants={varFadeInRight}>

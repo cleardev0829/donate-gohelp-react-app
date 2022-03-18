@@ -15,14 +15,14 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
-import { OnlineFundraisingCard } from "../landing";
+import { OnlineFundraiseCard } from "../landing";
 
 // ----------------------------------------------------------------------
 
 const IMG = (index) => `/static/donate_supports/donate_support_${index}.png`;
 
 const TITLES = [
-  "Number 1 fundraising platform",
+  "Number 1 fundraise platform",
   "GoHelp Guarantee",
   "Expert advice",
 ];
@@ -51,7 +51,7 @@ const posts = [...Array(3)].map((_, index) => {
 });
 // ----------------------------------------------------------------------
 
-export default function OnlineFundraising() {
+export default function OnlineFundraise() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const isLight = theme.palette.mode === "light";
@@ -60,7 +60,7 @@ export default function OnlineFundraising() {
     <Box sx={{ py: 12 }}>
       <Grid container spacing={5}>
         {posts.map((post, index) => (
-          <OnlineFundraisingCard key={post.id} post={post} index={index} />
+          <OnlineFundraiseCard key={post.id} post={post} index={index} />
         ))}
       </Grid>
     </Box>

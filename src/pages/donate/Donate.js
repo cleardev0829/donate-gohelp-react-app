@@ -1,6 +1,8 @@
 import { Icon } from "@iconify/react";
 import { capitalCase } from "change-case";
 import { useEffect, useState } from "react";
+import { Link as RouterLink, useParams } from "react-router-dom";
+import _ from "lodash";
 import heartFill from "@iconify/icons-eva/heart-fill";
 import peopleFill from "@iconify/icons-eva/people-fill";
 import roundPermMedia from "@iconify/icons-ic/round-perm-media";
@@ -52,29 +54,28 @@ import {
   onBackStep,
   onGotoStep,
 } from "../../redux/slices/donate";
+
 // ----------------------------------------------------------------------
 
 const STEPS = ["1", "2"];
 
 export default function UserProfile() {
   const dispatch = useDispatch();
-
+  const params = useParams();
   const { user } = useAuth();
-
   const isMountedRef = useIsMountedRef();
   const { checkout } = useSelector((state) => state.donate);
-  const { cart, billing, activeStep } = checkout;
+  const { posts } = useSelector((state) => state.blog);
+  const { cart, activeStep } = checkout;
   const isComplete = activeStep === STEPS.length;
-
-  const { myProfile, posts, followers, friends, gallery } = useSelector(
-    (state) => state.user
-  );
+  const [data, setData] = useState({});
 
   useEffect(() => {
-    if (isMountedRef.current) {
-      dispatch(getCart(cart));
-    }
-  }, [dispatch, isMountedRef, cart]);
+    const { id } = params;
+    const post = _.filter(posts, (item) => item.id === id);
+
+    setData(post[0]);
+  }, [posts]);
 
   useEffect(() => {
     if (activeStep === 1) {
@@ -94,7 +95,7 @@ export default function UserProfile() {
     dispatch(onGotoStep(step));
   };
 
-  if (!myProfile) {
+  if (_.isEmpty(data)) {
     return null;
   }
 
@@ -137,9 +138,9 @@ export default function UserProfile() {
       <Container>
         {!isComplete ? (
           <>
-            {activeStep === -1 && <DonateMain />}
-            {activeStep === 0 && <DonatePayment />}
-            {activeStep === 1 && <DonatePayment />}
+            {activeStep === -1 && <DonateMain post={data} />}
+            {activeStep === 0 && <DonatePayment post={data} />}
+            {activeStep === 1 && <DonatePayment post={data} />}
           </>
         ) : (
           <DonateComplete open={isComplete} />

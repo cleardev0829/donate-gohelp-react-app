@@ -4,6 +4,7 @@ import fileFill from "@iconify/icons-eva/file-fill";
 import roundGrain from "@iconify/icons-ic/round-grain";
 import bookOpenFill from "@iconify/icons-eva/book-open-fill";
 import featureOpenFill from "@iconify/icons-eva/file-add-outline";
+import { paramCase } from "change-case";
 // routes
 import {
   PATH_AUTH,
@@ -11,6 +12,7 @@ import {
   PATH_PAGE,
   PATH_DASHBOARD,
 } from "../../routes/paths";
+import { CATEGORIES } from "../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +20,16 @@ const ICON_SIZE = {
   width: 22,
   height: 22,
 };
+
+let categories = [];
+CATEGORIES.map((category) =>
+  categories.push({
+    title: category,
+    path: PATH_PAGE.fundraise,
+    type: 0,
+    category: category,
+  })
+);
 
 const menuConfig = [
   {
@@ -32,12 +44,7 @@ const menuConfig = [
     children: [
       {
         subheader: "Fundraise for",
-        items: [
-          { title: "category-1", path: PATH_PAGE.fundraising },
-          { title: "category-2", path: PATH_PAGE.fundraising },
-          { title: "category-3", path: PATH_PAGE.fundraising },
-          { title: "category-4", path: PATH_PAGE.fundraising },
-        ],
+        items: categories,
       },
     ],
   },

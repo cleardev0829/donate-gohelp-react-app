@@ -30,8 +30,8 @@ const initialState = {
     type: null,
     live: "",
     category: "",
-    goal: 0,
-    file: null,
+    goal: null,
+    cover: null,
     youTubeLink: "",
     title: "",
     description: "",
@@ -56,13 +56,13 @@ const slice = createSlice({
     },
 
     // GET FUNDRAISES
-    getFundraisesSuccess(state, action) {
+    getPostsSuccess(state, action) {
       state.isLoading = false;
       state.fundraises = action.payload;
     },
 
     // GET FUNDRAISE
-    getFundraiseSuccess(state, action) {
+    getPostSuccess(state, action) {
       state.isLoading = false;
       state.fundraise = action.payload;
     },
@@ -146,8 +146,8 @@ const slice = createSlice({
       state.checkout.type = null;
       state.checkout.live = "";
       state.checkout.category = "";
-      state.checkout.goal = 0;
-      state.checkout.file = null;
+      state.checkout.goal = null;
+      state.checkout.cover = null;
       state.checkout.youTubeLink = "";
       state.checkout.title = "";
       state.checkout.description = "";
@@ -260,28 +260,29 @@ export const {
 
 // ----------------------------------------------------------------------
 
-export function getFundraises() {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get("/api/fundraises");
-      dispatch(slice.actions.getFundraisesSuccess(response.data.fundraises));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
+// export function getFundraises() {
+//   return async (dispatch) => {
+//     dispatch(slice.actions.startLoading());
+//     try {
+//       const response = await axios.get("/api/fundraises");
+//       dispatch(slice.actions.getPostsSuccess(response.data.fundraises));
+//     } catch (error) {
+//       dispatch(slice.actions.hasError(error));
+//     }
+//   };
+// }
 
 // ----------------------------------------------------------------------
 
-export function getFundraise(name) {
+export function getPosts(name) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/fundraises/fundraise", {
+      const response = await axios.get("/api/fundraise/get", {
         params: { name },
       });
-      dispatch(slice.actions.getFundraiseSuccess(response.data.fundraise));
+
+      dispatch(slice.actions.getPostsSuccess(response.data));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
@@ -289,12 +290,15 @@ export function getFundraise(name) {
   };
 }
 
-export function addFundraise(fundraise) {
+export function addPost(fundraise) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post("/api/fundraise/add", { ...fundraise });
-      dispatch(slice.actions.getFundraiseSuccess(response.data.fundraise));
+      const response = await axios.post("/api/fundraise/add", {
+        ...fundraise,
+      });
+
+      dispatch(slice.actions.getPostSuccess(response.data.fundraise));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));

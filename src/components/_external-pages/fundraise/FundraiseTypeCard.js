@@ -6,16 +6,16 @@ import {
 import { Grid, Typography } from "@material-ui/core";
 import RoundedImg from "../../RoundedImg";
 import { TitleStyle, DescriptionStyle } from "../landing/TopFundraiserCard";
-import { CardStyle, CardContentStyle } from "../landing/OnlineFundraisingCard";
+import { CardStyle, CardContentStyle } from "../landing/OnlineFundraiseCard";
 
-FundraisingTypeCard.propTypes = {
+FundraiseTypeCard.propTypes = {
   post: PropTypes.object.isRequired,
   index: PropTypes.number,
   onClick: PropTypes.node,
   type: PropTypes.number,
 };
 
-export default function FundraisingTypeCard({ post, index, type, onClick }) {
+export default function FundraiseTypeCard({ post, index, type, onClick }) {
   const { cover, title, description } = post;
   const theme = useTheme();
 

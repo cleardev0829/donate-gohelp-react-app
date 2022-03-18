@@ -36,23 +36,32 @@ import {
   CoverImgStyle,
   TitleStyle,
 } from "./TopFundraiserCard";
+import { applyCheckout, onGotoStep } from "../../../redux/slices/fundraise";
+import { useSelector, useDispatch } from "../../../redux/store";
 
 StartFundraiseCard.propTypes = {
   post: PropTypes.object.isRequired,
-  index: PropTypes.number,
 };
 
-export default function StartFundraiseCard({ post, index }) {
+export default function StartFundraiseCard({ post }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cover, title } = post;
-  const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
+  const { id, cover, title } = post;
+
+  const handleNavigate = () => {
+    dispatch(
+      applyCheckout({
+        name: "type",
+        value: id < 2 ? 0 : 1,
+      })
+    );
+    dispatch(onGotoStep(0));
+    navigate(PATH_PAGE.fundraise);
+  };
 
   return (
     <Grid item xs={12} sm={6} md={4}>
-      <Box
-        sx={{ cursor: "pointer" }}
-        onClick={() => navigate(PATH_PAGE.fundraising)}
-      >
+      <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
         <Card sx={{ position: "relative" }}>
           <CardContentStyle>
             <CardMediaStyle>

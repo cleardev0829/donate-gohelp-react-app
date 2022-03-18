@@ -1,36 +1,12 @@
-import { sum } from "lodash";
-import { Icon } from "@iconify/react";
-import { Link as RouterLink } from "react-router-dom";
-import { useFormik, Form, FormikProvider } from "formik";
-import arrowIosBackFill from "@iconify/icons-eva/arrow-ios-back-fill";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-
-// material
-import {
-  Container,
-  Grid,
-  Card,
-  Button,
-  CardHeader,
-  Typography,
-  useTheme,
-} from "@material-ui/core";
-// redux
 import { useDispatch, useSelector } from "../../../redux/store";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import {
-  deleteCart,
-  onNextStep,
-  applyDiscount,
-  increaseQuantity,
-  decreaseQuantity,
-  applyType,
-} from "../../../redux/slices/fundraise";
-// routes
-import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
-//
-import Scrollbar from "../../Scrollbar";
-import EmptyContent from "../../EmptyContent";
-
+  alpha,
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
+import { Container, Grid, Typography } from "@material-ui/core";
 import {
   varFadeIn,
   varFadeInUp,
@@ -39,11 +15,11 @@ import {
   MotionInView,
 } from "../../animate";
 import { motion } from "framer-motion";
-import { FundraisingTypeCard } from ".";
+import { onNextStep, applyCheckout } from "../../../redux/slices/fundraise";
+import { FundraiseTypeCard, FundraiseHeader } from ".";
 // ----------------------------------------------------------------------
 
-const IMG = (index) =>
-  `/static/select_fundraising/select_fundraising_${index}.png`;
+const IMG = (index) => `/static/select_fundraise/select_fundraise_${index}.png`;
 
 const TITLES = ["Yourself or someone else", "A charity"];
 
@@ -62,11 +38,6 @@ const posts = [...Array(2)].map((_, index) => {
   };
 });
 
-const RootStyle = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(5),
-  paddingBottom: theme.spacing(10),
-}));
-
 const ContentStyle = styled("div")(({ theme }) => ({
   maxWidth: 620,
   margin: "auto",
@@ -79,21 +50,47 @@ const ContentStyle = styled("div")(({ theme }) => ({
   padding: 0,
 }));
 
-export default function FundraisingType() {
+export default function FundraiseType() {
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.fundraise);
-  const { cart, total, discount, subtotal, type } = checkout;
-  const isEmptyCart = cart.length === 0;
+  const navigate = useNavigate();
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
+  const { checkout } = useSelector((state) => state.fundraise);
+  const { type } = checkout;
   const isLight = theme.palette.mode === "light";
 
-  const handleApplyType = (index) => {
-    dispatch(applyType(index));
+  const handleType = (type) => {
+    dispatch(
+      applyCheckout({
+        name: "type",
+        value: type,
+      })
+    );
+  };
+
+  const handleBackStep = () => {
+    navigate("/");
+  };
+
+  const handleNextStep = () => {
+    if (checkout.type === null) {
+      enqueueSnackbar("Please select who you fundraise for", {
+        variant: "error",
+      });
+      return;
+    }
+
+    dispatch(onNextStep());
   };
 
   return (
-    <RootStyle>
-      <Container>
+    <>
+      <FundraiseHeader
+        cancelTitle="Cancel"
+        cancelAction={handleBackStep}
+        continueAction={handleNextStep}
+      />
+      <Container maxWidth={"md"}>
         <ContentStyle>
           <MotionInView variants={varFadeInUp}>
             <Typography
@@ -106,23 +103,23 @@ export default function FundraisingType() {
                 }),
               }}
             >
-              Hi there, Who are you fundraising for?
+              Hi there, Who are you fundraise for?
             </Typography>
           </MotionInView>
         </ContentStyle>
 
         <Grid container spacing={5}>
           {posts.map((post, index) => (
-            <FundraisingTypeCard
+            <FundraiseTypeCard
               key={post.id}
               post={post}
               index={index}
               type={type}
-              onClick={handleApplyType}
+              onClick={() => handleType(index)}
             />
           ))}
         </Grid>
       </Container>
-    </RootStyle>
+    </>
   );
 }
