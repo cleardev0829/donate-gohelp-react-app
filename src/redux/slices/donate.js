@@ -27,7 +27,9 @@ const initialState = {
     shipping: 0,
     billing: null,
 
-    type: null,
+    amount: null,
+    tipAmount: null,
+    message: "",
   },
 };
 
@@ -133,6 +135,10 @@ const slice = createSlice({
       state.checkout.discount = 0;
       state.checkout.shipping = 0;
       state.checkout.billing = null;
+
+      state.checkout.amount = null;
+      state.checkout.tipAmount = null;
+      state.checkout.message = null;
     },
 
     onBackStep(state) {
@@ -195,9 +201,9 @@ const slice = createSlice({
         state.checkout.subtotal - state.checkout.discount + shipping;
     },
 
-    applyType(state, action) {
-      const type = action.payload;
-      state.checkout.type = type;
+    applyCheckout(state, action) {
+      const { name, value } = action.payload;
+      state.checkout = { ...state.checkout, [name]: value };
     },
   },
 });
@@ -223,8 +229,26 @@ export const {
   increaseQuantity,
   decreaseQuantity,
 
-  applyType,
+  applyCheckout,
 } = slice.actions;
+
+// ----------------------------------------------------------------------
+
+export function addDonate(donate) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post("/api/donate/add", {
+        ...donate,
+      });
+
+      dispatch(slice.actions.getDonateSuccess(response.data.donate));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
 
 // ----------------------------------------------------------------------
 

@@ -6,6 +6,5 @@ import "./account";
 import "./calendar";
 import "./products";
 import "./kanban";
-import "./fundraiser";
 import "./fundraise";
 import "./donate";

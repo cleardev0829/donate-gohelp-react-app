@@ -30,6 +30,7 @@ const initialState = {
     type: null,
     live: "",
     category: "",
+    cryptoType: "",
     goal: null,
     cover: null,
     youTubeLink: "",
@@ -146,6 +147,7 @@ const slice = createSlice({
       state.checkout.type = null;
       state.checkout.live = "";
       state.checkout.category = "";
+      state.checkout.cryptoType = "";
       state.checkout.goal = null;
       state.checkout.cover = null;
       state.checkout.youTubeLink = "";
@@ -215,16 +217,6 @@ const slice = createSlice({
         state.checkout.subtotal - state.checkout.discount + shipping;
     },
 
-    applyType(state, action) {
-      const type = action.payload;
-      state.checkout.type = type;
-    },
-
-    applyBasic(state, action) {
-      const { live, category } = action.payload;
-      state.checkout.basic = { live, category };
-    },
-
     applyCheckout(state, action) {
       const { name, value } = action.payload;
       state.checkout = { ...state.checkout, [name]: value };
@@ -253,42 +245,10 @@ export const {
   increaseQuantity,
   decreaseQuantity,
 
-  applyType,
-  applyBasic,
   applyCheckout,
 } = slice.actions;
 
 // ----------------------------------------------------------------------
-
-// export function getFundraises() {
-//   return async (dispatch) => {
-//     dispatch(slice.actions.startLoading());
-//     try {
-//       const response = await axios.get("/api/fundraises");
-//       dispatch(slice.actions.getPostsSuccess(response.data.fundraises));
-//     } catch (error) {
-//       dispatch(slice.actions.hasError(error));
-//     }
-//   };
-// }
-
-// ----------------------------------------------------------------------
-
-export function getPosts(name) {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get("/api/fundraise/get", {
-        params: { name },
-      });
-
-      dispatch(slice.actions.getPostsSuccess(response.data));
-    } catch (error) {
-      console.error(error);
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
 
 export function addPost(fundraise) {
   return async (dispatch) => {
@@ -305,3 +265,5 @@ export function addPost(fundraise) {
     }
   };
 }
+
+// ----------------------------------------------------------------------

@@ -36,7 +36,7 @@ export default function DonateMain({ post }) {
   const theme = useTheme();
 
   return (
-    <Box>
+    <Container>
       <Box>
         <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
           <Grid item xs={12} md={7}>
@@ -53,6 +53,6 @@ export default function DonateMain({ post }) {
       </Box>
 
       <DonateSupports post={post} />
-    </Box>
+    </Container>
   );
 }

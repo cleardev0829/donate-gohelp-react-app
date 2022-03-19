@@ -15,7 +15,11 @@ import {
   MotionInView,
 } from "../../animate";
 import { motion } from "framer-motion";
-import { onNextStep, applyCheckout } from "../../../redux/slices/fundraise";
+import {
+  onNextStep,
+  onGotoStep,
+  applyCheckout,
+} from "../../../redux/slices/fundraise";
 import { FundraiseTypeCard, FundraiseHeader } from ".";
 // ----------------------------------------------------------------------
 
@@ -81,6 +85,7 @@ export default function FundraiseType() {
     }
 
     dispatch(onNextStep());
+    // dispatch(onGotoStep(4));
   };
 
   return (

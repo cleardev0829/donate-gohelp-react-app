@@ -35,13 +35,13 @@ const DialogStyle = styled(DialogAnimate)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function CheckoutOrderComplete({ ...other }) {
+export default function DonateComplete({ ...other }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleResetStep = () => {
     dispatch(resetCart());
-    navigate(PATH_DASHBOARD.eCommerce.shop);
+    navigate("/");
   };
 
   return (

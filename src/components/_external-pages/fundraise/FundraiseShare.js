@@ -31,17 +31,51 @@ import {
 } from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
 import CopyClipboard from "../../CopyClipboard";
+import {
+  FacebookShareButton,
+  FacebookMessengerShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  InstapaperShareButton,
+  EmailShareButton,
+  TelegramShareButton,
+  LinkedinShareButton,
+  MailruShareButton,
+  FacebookIcon,
+  TelegramIcon,
+  EmailIcon,
+  InstapaperIcon,
+  MailruIcon,
+} from "react-share";
 
 // ----------------------------------------------------------------------
-const IMG = (index) => `/static/socials_by_number/social_${index}.png`;
+const FACEBOOK_IMG_URL = `/static/socials/facebook.png`;
+const TWITTER_IMG_URL = `/static/socials/twitter.png`;
+const WHATSAPP_IMG_URL = `/static/socials/whatsapp.png`;
+const INSTAGRAM_IMG_URL = `/static/socials/instagram.png`;
+const LINKEDIN_IMG_URL = `/static/socials/linkedin.png`;
+const TIKTOK_IMG_URL = `/static/socials/tiktok.png`;
+const FACEBOOK_MESSENGER_IMG_URL = `/static/socials/facebook_messenger.png`;
 
+const ShareButtonWrapper = ({ children }) => (
+  <Grid item xs={12} md={3}>
+    <Box
+      sx={{
+        mx: "auto",
+        textAlign: "center",
+      }}
+    >
+      {children}
+    </Box>
+  </Grid>
+);
 const IconWrapperStyle = styled("div")(({ theme }) => ({
   margin: "auto",
   display: "flex",
   borderRadius: "50%",
   alignItems: "center",
-  width: theme.spacing(8),
   justifyContent: "center",
+  width: theme.spacing(8),
   height: theme.spacing(8),
   marginBottom: theme.spacing(3),
   color: theme.palette.primary.main,
@@ -65,7 +99,6 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.fundraise);
-
   const { enqueueSnackbar } = useSnackbar();
   const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
@@ -73,6 +106,8 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
     value: "",
     copied: false,
   });
+  const [shareUrl, setShareUrl] = useState("#");
+  const [title, setTitle] = useState("This is title");
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -87,14 +122,14 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
   };
 
   const handleNextStep = () => {
-    dispatch(addPost({ ...checkout, createdAt: moment() }));
+    // dispatch(addPost({ ...checkout, createdAt: moment() }));
     dispatch(onNextStep());
   };
 
   const NewBlogSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
+    // email: Yup.string()
+    //   .email("Email must be a valid email address")
+    //   .required("Email is required"),
     // link: Yup.string().required("Link is required"),
   });
 
@@ -110,7 +145,7 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
-        enqueueSnackbar("Save success", { variant: "success" });
+        // enqueueSnackbar("Save success", { variant: "success" });
         handleNextStep();
       } catch (error) {
         console.error(error);
@@ -147,8 +182,14 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
           continueAction={handleSubmit}
         />
 
-        <Box sx={{ maxWidth: 480, margin: "auto", textAlign: "center" }}>
-          <Grid container spacing={3}>
+        <Box
+          sx={{
+            maxWidth: 480,
+            margin: "auto",
+            textAlign: "center",
+          }}
+        >
+          <Grid container>
             <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <Typography
@@ -179,21 +220,72 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
             </Grid>
 
             <Grid container sx={{ mt: 4 }}>
-              {[...Array(8)].map((item, index) => (
-                <Grid item xs={12} md={3} key={index}>
-                  <Box
-                    sx={{
-                      mx: "auto",
-                      maxWidth: 280,
-                      textAlign: "center",
-                    }}
-                  >
-                    <IconWrapperStyle>
-                      <CoverImgStyle alt="post cover" src={IMG(index + 1)} />
-                    </IconWrapperStyle>
-                  </Box>
-                </Grid>
-              ))}
+              <ShareButtonWrapper>
+                <FacebookShareButton url={shareUrl}>
+                  <IconWrapperStyle>
+                    <CoverImgStyle alt="post cover" src={FACEBOOK_IMG_URL} />
+                  </IconWrapperStyle>
+                </FacebookShareButton>
+              </ShareButtonWrapper>
+
+              <ShareButtonWrapper>
+                <FacebookMessengerShareButton url={shareUrl}>
+                  <IconWrapperStyle>
+                    <CoverImgStyle
+                      alt="post cover"
+                      src={FACEBOOK_MESSENGER_IMG_URL}
+                    />
+                  </IconWrapperStyle>
+                </FacebookMessengerShareButton>
+              </ShareButtonWrapper>
+
+              <ShareButtonWrapper>
+                <TwitterShareButton url={shareUrl} title={title}>
+                  <IconWrapperStyle>
+                    <CoverImgStyle alt="post cover" src={TWITTER_IMG_URL} />
+                  </IconWrapperStyle>
+                </TwitterShareButton>
+              </ShareButtonWrapper>
+
+              <ShareButtonWrapper>
+                <WhatsappShareButton url={shareUrl} title={title}>
+                  <IconWrapperStyle>
+                    <CoverImgStyle alt="post cover" src={WHATSAPP_IMG_URL} />
+                  </IconWrapperStyle>
+                </WhatsappShareButton>
+              </ShareButtonWrapper>
+
+              <ShareButtonWrapper>
+                <InstapaperShareButton url={shareUrl} title={title}>
+                  <IconWrapperStyle>
+                    <InstapaperIcon size={32} round />
+                  </IconWrapperStyle>
+                </InstapaperShareButton>
+              </ShareButtonWrapper>
+
+              <ShareButtonWrapper>
+                <TelegramShareButton url={shareUrl} title={title}>
+                  <IconWrapperStyle>
+                    <TelegramIcon size={32} round />
+                  </IconWrapperStyle>
+                </TelegramShareButton>
+              </ShareButtonWrapper>
+
+              <ShareButtonWrapper>
+                <LinkedinShareButton url={shareUrl} title={title}>
+                  <IconWrapperStyle>
+                    <CoverImgStyle alt="post cover" src={LINKEDIN_IMG_URL} />
+                  </IconWrapperStyle>
+                </LinkedinShareButton>
+              </ShareButtonWrapper>
+
+              <ShareButtonWrapper>
+                <MailruShareButton url={shareUrl} title={title}>
+                  <IconWrapperStyle>
+                    <MailruIcon size={32} round />
+                  </IconWrapperStyle>
+                </MailruShareButton>
+              </ShareButtonWrapper>
             </Grid>
 
             <Grid item xs={12} md={12}>
@@ -223,13 +315,21 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
                       }}
                     />
 
-                    <Button
-                      size="medium"
-                      variant="contained"
-                      onClick={handleShare}
-                    >
-                      Share
-                    </Button>
+                    <ShareButtonWrapper>
+                      <EmailShareButton
+                        url={values.email}
+                        subject={title}
+                        body="body"
+                      >
+                        <Button
+                          size="medium"
+                          variant="contained"
+                          onClick={handleShare}
+                        >
+                          Share
+                        </Button>
+                      </EmailShareButton>
+                    </ShareButtonWrapper>
                   </Stack>
                 </Card>
 

@@ -15,33 +15,6 @@ import "firebase/storage";
 
 // ----------------------------------------------------------------------
 
-const POST_TITLES = [
-  "Whiteboard Templates By Industry Leaders",
-  "Tesla Cybertruck-inspired camper trailer for Tesla fans who can’t just wait for the truck!",
-  "Designify Agency Landing Page Design",
-  "✨What is Done is Done ✨",
-  "Fresh Prince",
-  "Six Socks Studio",
-  "vincenzo de cotiis’ crossing over showcases a research on contamination",
-  "Simple, Great Looking Animations in Your Project | Video Tutorial",
-  "40 Free Serif Fonts for Digital Designers",
-  "Examining the Evolution of the Typical Web Design Client",
-  "Katie Griffin loves making that homey art",
-  "The American Dream retold through mid-century railroad graphics",
-  "Illustration System Design",
-  "CarZio-Delivery Driver App SignIn/SignUp",
-  "How to create a client-serverless Jamstack app using Netlify, Gatsby and Fauna",
-  "Tylko Organise effortlessly -3D & Motion Design",
-  "RAYO ?? A expanded visual arts festival identity",
-  "Anthony Burrill and Wired mag’s Andrew Diprose discuss how they made January’s Change Everything cover",
-  "Inside the Mind of Samuel Day",
-  "Portfolio Review: Is This Portfolio Too Creative?",
-  "Akkers van Margraten",
-  "Gradient Ticket icon",
-  "Here’s a Dyson motorcycle concept that doesn’t ‘suck’!",
-  "How to Animate a SVG with border-image",
-];
-
 // Made with React Quill
 const POST_BODY = `
 
@@ -169,52 +142,6 @@ const POST_COMMENTS = [
       },
     ],
   },
-  {
-    id: faker.datatype.uuid(),
-    name: users[4].name,
-    avatarUrl: users[4].avatarUrl,
-    message: faker.lorem.lines(),
-    postedAt: faker.date.past(),
-    users: [users[5], users[6], users[7]],
-    replyComment: [
-      {
-        id: faker.datatype.uuid(),
-        userId: users[5].id,
-        message: faker.lorem.lines(),
-        postedAt: faker.date.past(),
-      },
-      {
-        id: faker.datatype.uuid(),
-        userId: users[6].id,
-        message: faker.lorem.lines(),
-        postedAt: faker.date.past(),
-      },
-      {
-        id: faker.datatype.uuid(),
-        userId: users[7].id,
-        message: faker.lorem.lines(),
-        postedAt: faker.date.past(),
-      },
-    ],
-  },
-  {
-    id: faker.datatype.uuid(),
-    name: users[8].name,
-    avatarUrl: users[8].avatarUrl,
-    message: faker.lorem.lines(),
-    postedAt: faker.date.past(),
-    users: [],
-    replyComment: [],
-  },
-  {
-    id: faker.datatype.uuid(),
-    name: users[9].name,
-    avatarUrl: users[9].avatarUrl,
-    message: faker.lorem.lines(),
-    postedAt: faker.date.past(),
-    users: [],
-    replyComment: [],
-  },
 ];
 
 let posts = [...Array(23)].map((_, index) => {
@@ -222,7 +149,7 @@ let posts = [...Array(23)].map((_, index) => {
   return {
     id: `0feb2990-4210-4170-93a4-37e8f5958a18-${setIndex}`,
     cover: mockImgCover(setIndex),
-    title: POST_TITLES[setIndex],
+    // title: POST_TITLES[setIndex],
     description: faker.lorem.paragraph(),
     createdAt: faker.date.past(),
     view: faker.datatype.number(),
@@ -247,7 +174,79 @@ let posts = [...Array(23)].map((_, index) => {
 
 // ----------------------------------------------------------------------
 
-mock.onGet("/api/blog/posts/all").reply(200, { posts });
+mock.onPost("/api/blog/add").reply(async (request) => {
+  try {
+    const data = JSON.parse(request.data);
+
+    if (data.cover && data.cover.preview) {
+      await getFileBlob(data.cover.preview, (blob) => {
+        firebase
+          .storage()
+          .ref(`/photo/${faker.datatype.uuid()}-${data.cover.path}`)
+          .put(blob)
+          .then((snapshot) => {
+            snapshot.ref.getDownloadURL().then(async (url) => {
+              await firebase
+                .firestore()
+                .collection("fundraise")
+                .add({
+                  ...data,
+                  coverUrl: url,
+                });
+            });
+          });
+      });
+    } else {
+      await firebase
+        .firestore()
+        .collection("fundraise")
+        .add({
+          ...data,
+        });
+    }
+
+    return [200, { data }];
+  } catch (error) {
+    console.error(error);
+    return [500, { message: "Internal server error" }];
+  }
+});
+
+// ----------------------------------------------------------------------
+
+mock.onGet("/api/blog/posts/all").reply(async () => {
+  try {
+    const { index, step } = config.params;
+    const loadMore = index + step;
+
+    let posts = [];
+
+    await firebase
+      .firestore()
+      .collection("fundraise")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.docs.map((doc) => {
+          posts.push({ ...doc.data(), id: doc.id });
+        });
+      });
+
+    const sortPosts = [...posts].sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    const results = sortPosts;
+
+    if (!results) {
+      return [404, { message: "data not found" }];
+    }
+
+    return [200, { results }];
+  } catch (error) {
+    console.error(error);
+    return [500, { message: "Internal server error" }];
+  }
+});
 
 // ----------------------------------------------------------------------
 
@@ -288,10 +287,17 @@ mock.onGet("/api/blog/posts").reply(async (config) => {
 
 // ----------------------------------------------------------------------
 
-mock.onGet("/api/blog/post").reply((config) => {
+mock.onGet("/api/blog/post").reply(async (config) => {
   try {
-    const { title } = config.params;
-    const post = posts.find((_post) => paramCase(_post.title) === title);
+    const { id } = config.params;
+
+    const docRef = await firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .get();
+
+    const port = docRef.data();
 
     if (!post) {
       return [404, { message: "Post not found" }];

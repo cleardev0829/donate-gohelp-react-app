@@ -1,3 +1,13 @@
+export const getFileBlob = (url, cb) => {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", url);
+  xhr.responseType = "blob";
+  xhr.addEventListener("load", function () {
+    cb(xhr.response);
+  });
+  xhr.send();
+};
+
 export const diff = (m1, m2) => {
   let diff = "";
 
@@ -21,6 +31,8 @@ export const COUNTRIES = [
   { id: "France", value: "France" },
   { id: "Japan", value: "Japan" },
 ];
+
+export const CRYPTO_TYPES = ["BTC", "ETH"];
 
 export const CATEGORIES = [
   "Medical",

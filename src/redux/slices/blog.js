@@ -77,7 +77,7 @@ export function getAllPosts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/blog/posts/all");
+      const response = await axios.get("/api/fundraise/posts/all");
       dispatch(slice.actions.getPostsSuccess(response.data.posts));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -91,7 +91,7 @@ export function getPostsInitial(index, step) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/blog/posts", {
+      const response = await axios.get("/api/fundraise/posts", {
         params: { index, step },
       });
       const results = response.data.results.length;
@@ -110,12 +110,12 @@ export function getPostsInitial(index, step) {
 
 // ----------------------------------------------------------------------
 
-export function getPost(title) {
+export function getPost(uid) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/blog/post", {
-        params: { title },
+      const response = await axios.get("/api/fundraise/post", {
+        params: { uid },
       });
       dispatch(slice.actions.getPostSuccess(response.data.post));
     } catch (error) {
@@ -131,7 +131,7 @@ export function getRecentPosts(title) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/blog/posts/recent", {
+      const response = await axios.get("/api/fundraise/posts/recent", {
         params: { title },
       });
 

@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { useSnackbar } from "notistack";
+import moment from "moment";
 import { useCallback, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Form, FormikProvider, useFormik } from "formik";
@@ -26,7 +27,11 @@ import {
 // utils
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import {
+  onBackStep,
+  onNextStep,
+  addPost,
+} from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
 
 // ----------------------------------------------------------------------
@@ -68,6 +73,7 @@ function IconBullet({ type = "item" }) {
 export default function FundraiseDonation() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -85,28 +91,21 @@ export default function FundraiseDonation() {
   };
 
   const handleNextStep = () => {
+    dispatch(addPost({ ...checkout, createdAt: moment() }));
     dispatch(onNextStep());
   };
 
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    description: Yup.string().required("Description is required"),
-    content: Yup.string().min(1000).required("Content is required"),
-    cover: Yup.mixed().required("Cover is required"),
+    // title: Yup.string().required("Title is required"),
+    // description: Yup.string().required("Description is required"),
+    // content: Yup.string().min(1000).required("Content is required"),
+    // cover: Yup.mixed().required("Cover is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
-      content: "",
-      cover: null,
-      tags: ["Logan"],
-      publish: true,
-      comments: true,
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: ["Logan"],
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -115,7 +114,8 @@ export default function FundraiseDonation() {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
-        enqueueSnackbar("Post success", { variant: "success" });
+        enqueueSnackbar("Save success", { variant: "success" });
+        handleNextStep();
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -152,7 +152,7 @@ export default function FundraiseDonation() {
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <FundraiseHeader
             cancelAction={handleBackStep}
-            continueAction={handleNextStep}
+            continueAction={handleSubmit}
           />
 
           <Container maxWidth="md">

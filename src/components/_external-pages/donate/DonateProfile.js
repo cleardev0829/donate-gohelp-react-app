@@ -49,7 +49,7 @@ export default function DonateProfile({ post }) {
   const { checkout } = useSelector((state) => state.donate);
 
   const { id, coverUrl, title, description } = post;
-  console.log("===", post);
+
   return (
     <Box sx={{ py: 3 }}>
       <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>

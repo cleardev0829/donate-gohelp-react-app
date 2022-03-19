@@ -29,6 +29,7 @@ import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
+import { CRYPTO_TYPES } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -64,11 +65,13 @@ export default function FundraiseGoal({ id, activeStep, handleCheckout }) {
   };
 
   const Schema = Yup.object().shape({
+    cryptoType: Yup.string().required("This is required"),
     goal: Yup.number().required("This is required"),
   });
 
   const formik = useFormik({
     initialValues: {
+      cryptoType: checkout.cryptoType,
       goal: checkout.goal,
     },
     validationSchema: Schema,
@@ -145,37 +148,78 @@ export default function FundraiseGoal({ id, activeStep, handleCheckout }) {
                       We're here to guide you through your fundraise journey.
                     </Typography>
 
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      How much would you like to raise?
-                    </Typography>
+                    <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          ...(!isLight && {
+                            textShadow: (theme) =>
+                              `4px 4px 16px ${alpha(
+                                theme.palette.grey[800],
+                                0.48
+                              )}`,
+                          }),
+                        }}
+                      >
+                        Select crypto type.
+                      </Typography>
 
-                    <TextField
-                      fullWidth
-                      size="small"
-                      label=""
-                      {...getFieldProps("goal")}
-                      error={Boolean(touched.goal && errors.goal)}
-                      helperText={touched.goal && errors.goal}
-                      onChange={(e) => {
-                        handleCheckout({
-                          id,
-                          name: e.target.name,
-                          value: e.target.value,
-                        });
-                        handleChange(e);
-                      }}
-                    />
+                      <TextField
+                        fullWidth
+                        size="small"
+                        label=""
+                        {...getFieldProps("cryptoType")}
+                        error={Boolean(touched.cryptoType && errors.cryptoType)}
+                        helperText={touched.cryptoType && errors.cryptoType}
+                        select
+                        onChange={(e) => {
+                          handleCheckout({
+                            id,
+                            name: e.target.name,
+                            value: e.target.value,
+                          });
+                          handleChange(e);
+                        }}
+                      >
+                        {CRYPTO_TYPES.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          ...(!isLight && {
+                            textShadow: (theme) =>
+                              `4px 4px 16px ${alpha(
+                                theme.palette.grey[800],
+                                0.48
+                              )}`,
+                          }),
+                        }}
+                      >
+                        How much would you like to raise?
+                      </Typography>
+
+                      <TextField
+                        fullWidth
+                        size="small"
+                        label=""
+                        {...getFieldProps("goal")}
+                        error={Boolean(touched.goal && errors.goal)}
+                        helperText={touched.goal && errors.goal}
+                        onChange={(e) => {
+                          handleCheckout({
+                            id,
+                            name: e.target.name,
+                            value: e.target.value,
+                          });
+                          handleChange(e);
+                        }}
+                      />
+                    </Stack>
 
                     <Typography
                       variant="p1"

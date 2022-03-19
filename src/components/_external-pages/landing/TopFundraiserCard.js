@@ -159,7 +159,7 @@ export default function TopFundraiserCard({ post }) {
               <Button
                 variant="contained"
                 component={RouterLink}
-                to={PATH_PAGE.donate}
+                to={`${PATH_PAGE.donate}/${post.id}`}
               >
                 Donate
               </Button>
