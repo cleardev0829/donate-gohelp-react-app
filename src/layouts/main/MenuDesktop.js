@@ -19,7 +19,7 @@ import {
   CardActionArea,
 } from "@material-ui/core";
 import { useSelector, useDispatch } from "../../redux/store";
-import { setCheckout, onGotoStep } from "../../redux/slices/blog";
+import { setCheckout, onGotoStep } from "../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 

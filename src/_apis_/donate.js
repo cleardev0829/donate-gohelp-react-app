@@ -44,6 +44,48 @@ mock.onPost("/api/donate/add").reply(async (request) => {
 
 // ----------------------------------------------------------------------
 
+mock.onGet("/api/donate/posts").reply(async (config) => {
+  try {
+    const { id, index, step } = config.params;
+    const loadMore = index + step;
+
+    let posts = [];
+
+    await firebase
+      .firestore()
+      .collection("fundraise")
+      .doc(id)
+      .collection("donate")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.docs.map(async (doc) => {
+          posts.push({
+            ...doc.data(),
+            id: doc.id,
+          });
+        });
+      });
+
+    const maxLength = posts.length;
+    const sortPosts = await [...posts].sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    const results = await sortPosts.slice(0, loadMore);
+
+    if (!results) {
+      return [404, { message: "data not found" }];
+    }
+
+    return [200, { results, maxLength }];
+  } catch (error) {
+    console.error(error);
+    return [500, { message: "Internal server error" }];
+  }
+});
+
+// ----------------------------------------------------------------------
+
 mock.onGet("/api/donates").reply(async (config) => {
   try {
     const { index, step } = config.params;

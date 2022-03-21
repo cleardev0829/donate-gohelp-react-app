@@ -25,9 +25,10 @@ import {
 
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { onBackStep, onNextStep } from "../../../redux/slices/blog";
+import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
-import { CATEGORIES, COUNTRIES } from "../../../utils/constants";
+import { CATEGORIES } from "../../../utils/constants";
+import countries from "./countries";
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +41,7 @@ FundraiseBasics.propTypes = {
 export default function FundraiseBasics({ id, activeStep, handleCheckout }) {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const { checkout } = useSelector((state) => state.blog);
+  const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -177,9 +178,9 @@ export default function FundraiseBasics({ id, activeStep, handleCheckout }) {
                         handleChange(e);
                       }}
                     >
-                      {COUNTRIES.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.value}
+                      {countries.map((option) => (
+                        <MenuItem key={option.code} value={option.label}>
+                          {option.label}
                         </MenuItem>
                       ))}
                     </TextField>

@@ -19,7 +19,7 @@ import {
   onNextStep,
   onGotoStep,
   setCheckout,
-} from "../../../redux/slices/blog";
+} from "../../../redux/slices/fundraise";
 import { FundraiseTypeCard, FundraiseHeader } from ".";
 // ----------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ export default function FundraiseType() {
   const navigate = useNavigate();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
-  const { checkout } = useSelector((state) => state.blog);
+  const { checkout } = useSelector((state) => state.fundraise);
   const { type } = checkout;
   const isLight = theme.palette.mode === "light";
 

@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 // redux
 import { useDispatch } from "../../../redux/store";
-import { resetCheckout } from "../../../redux/slices/blog";
+import { resetCheckout } from "../../../redux/slices/fundraise";
 // routes
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 //

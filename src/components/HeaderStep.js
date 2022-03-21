@@ -78,7 +78,7 @@ HeaderStep.propTypes = {
 };
 
 export default function HeaderStep() {
-  const { checkout } = useSelector((state) => state.blog);
+  const { checkout } = useSelector((state) => state.fundraise);
   const { activeStep } = checkout;
   const isComplete = activeStep === STEPS.length + 2;
 

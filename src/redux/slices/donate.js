@@ -12,16 +12,13 @@ const initialState = {
   error: false,
   donates: [],
   donate: null,
-  sortBy: null,
-  filters: [],
+  recentDonates: [],
+  hasMore: true,
+  index: 0,
+  step: 3,
+
   checkout: {
     activeStep: -1,
-    cart: [],
-    subtotal: 0,
-    total: 0,
-    discount: 0,
-    shipping: 0,
-    billing: null,
 
     amount: null,
     defaultTip: 10,
@@ -51,109 +48,40 @@ const slice = createSlice({
       state.donates = action.payload;
     },
 
+    // GET DONATE INFINITE
+    getDonatesInitial(state, action) {
+      state.isLoading = false;
+      state.donates = action.payload;
+    },
+
+    getMoreDonates(state) {
+      const setIndex = state.index + state.step;
+      state.index = setIndex;
+    },
+
+    noHasMore(state) {
+      state.hasMore = false;
+    },
+
     // GET DONATE
     getDonateSuccess(state, action) {
       state.isLoading = false;
       state.donate = action.payload;
     },
 
-    // DELETE DONATE
-    deleteDonate(state, action) {
-      state.donates = reject(state.donates, { id: action.payload });
+    // GET RECENT DONATE
+    getRecentDonatesSuccess(state, action) {
+      state.isLoading = false;
+      state.recentPosts = action.payload;
     },
 
-    //  SORT & FILTER DONATES
-    sortByDonates(state, action) {
-      state.sortBy = action.payload;
+    setCheckout(state, action) {
+      const { name, value } = action.payload;
+      state.checkout = { ...state.checkout, [name]: value };
     },
 
-    filterDonates(state, action) {
-      const donates = action.payload;
-
-      if (donates.length === 0) {
-        filters;
-      }
-      state.filters.count = donates.length;
-      state.filters.recentTimeAgo = _.minBy(
-        donates,
-        (item) => item.createdAt
-      ).amount;
-      state.filters.recentAmount = _.maxBy(
-        donates,
-        (item) => item.createdAt
-      ).amount;
-      state.filters.maxAmount = _.maxBy(donates, (item) =>
-        parseFloat(item.amount)
-      ).amount;
-      state.filters.minAmount = _.minBy(donates, (item) =>
-        parseFloat(item.amount)
-      ).amount;
-      state.filters.totalAmount = _.sumBy(donates, (item) =>
-        parseFloat(item.amount)
-      );
-      state.filters.recentTimeAgo = diff(
-        moment(),
-        _.maxBy(donates, (item) => item.createdAt).createdAt
-      );
-    },
-
-    // CHECKOUT
-    getCart(state, action) {
-      const cart = action.payload;
-
-      const subtotal = sum(
-        cart.map((donate) => donate.price * donate.quantity)
-      );
-      const discount = cart.length === 0 ? 0 : state.checkout.discount;
-      const shipping = cart.length === 0 ? 0 : state.checkout.shipping;
-      const billing = cart.length === 0 ? null : state.checkout.billing;
-
-      state.checkout.cart = cart;
-      state.checkout.discount = discount;
-      state.checkout.shipping = shipping;
-      state.checkout.billing = billing;
-      state.checkout.subtotal = subtotal;
-      state.checkout.total = subtotal - discount;
-    },
-
-    addCart(state, action) {
-      const donate = action.payload;
-      const isEmptyCart = state.checkout.cart.length === 0;
-
-      if (isEmptyCart) {
-        state.checkout.cart = [...state.checkout.cart, donate];
-      } else {
-        state.checkout.cart = map(state.checkout.cart, (_donate) => {
-          const isExisted = _donate.id === donate.id;
-          if (isExisted) {
-            return {
-              ..._donate,
-              quantity: _donate.quantity + 1,
-            };
-          }
-          return _donate;
-        });
-      }
-      state.checkout.cart = uniqBy([...state.checkout.cart, donate], "id");
-    },
-
-    deleteCart(state, action) {
-      const updateCart = filter(
-        state.checkout.cart,
-        (item) => item.id !== action.payload
-      );
-
-      state.checkout.cart = updateCart;
-    },
-
-    resetCart(state) {
+    resetCheckout(state) {
       state.checkout.activeStep = -1;
-      state.checkout.cart = [];
-      state.checkout.total = 0;
-      state.checkout.subtotal = 0;
-      state.checkout.discount = 0;
-      state.checkout.shipping = 0;
-      state.checkout.billing = null;
 
       state.checkout.amount = null;
       state.checkout.tipAmount = null;
@@ -172,58 +100,6 @@ const slice = createSlice({
       const goToStep = action.payload;
       state.checkout.activeStep = goToStep;
     },
-
-    increaseQuantity(state, action) {
-      const donateId = action.payload;
-      const updateCart = map(state.checkout.cart, (donate) => {
-        if (donate.id === donateId) {
-          return {
-            ...donate,
-            quantity: donate.quantity + 1,
-          };
-        }
-        return donate;
-      });
-
-      state.checkout.cart = updateCart;
-    },
-
-    decreaseQuantity(state, action) {
-      const donateId = action.payload;
-      const updateCart = map(state.checkout.cart, (donate) => {
-        if (donate.id === donateId) {
-          return {
-            ...donate,
-            quantity: donate.quantity - 1,
-          };
-        }
-        return donate;
-      });
-
-      state.checkout.cart = updateCart;
-    },
-
-    createBilling(state, action) {
-      state.checkout.billing = action.payload;
-    },
-
-    applyDiscount(state, action) {
-      const discount = action.payload;
-      state.checkout.discount = discount;
-      state.checkout.total = state.checkout.subtotal - discount;
-    },
-
-    applyShipping(state, action) {
-      const shipping = action.payload;
-      state.checkout.shipping = shipping;
-      state.checkout.total =
-        state.checkout.subtotal - state.checkout.discount + shipping;
-    },
-
-    applyCheckout(state, action) {
-      const { name, value } = action.payload;
-      state.checkout = { ...state.checkout, [name]: value };
-    },
   },
 });
 
@@ -232,23 +108,12 @@ export default slice.reducer;
 
 // Actions
 export const {
-  getCart,
-  addCart,
-  resetCart,
+  getMoreDonates,
+  setCheckout,
+  resetCheckout,
   onGotoStep,
   onBackStep,
   onNextStep,
-  deleteCart,
-  deleteDonate,
-  createBilling,
-  applyShipping,
-  applyDiscount,
-  filterDonates,
-  sortByDonates,
-  increaseQuantity,
-  decreaseQuantity,
-
-  applyCheckout,
 } = slice.actions;
 
 // ----------------------------------------------------------------------
@@ -277,6 +142,29 @@ export function getDonates() {
     try {
       const response = await axios.get("/api/donates");
       dispatch(slice.actions.getDonatesSuccess(response.data.results));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getDonatesInitial(id, index, step) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get("/api/donate/posts", {
+        params: { id, index, step },
+      });
+      const results = response.data.results.length;
+      const { maxLength } = response.data;
+
+      dispatch(slice.actions.getDonatesInitial(response.data.results));
+
+      if (results >= maxLength) {
+        dispatch(slice.actions.noHasMore());
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

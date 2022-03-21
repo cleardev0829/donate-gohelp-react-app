@@ -1,4 +1,5 @@
-import { sum, map, filter, uniqBy, reject } from "lodash";
+import { sum, map, filter, uniqBy, reject, sumBy, maxBy, MinBy } from "lodash";
+import moment from "moment";
 import { createSlice } from "@reduxjs/toolkit";
 // utils
 import axios from "../../utils/axios";
@@ -8,25 +9,17 @@ import axios from "../../utils/axios";
 const initialState = {
   isLoading: false,
   error: false,
-  fundraises: [],
-  fundraise: null,
-  sortBy: null,
-  filters: {
-    gender: [],
-    category: "All",
-    colors: [],
-    priceRange: "",
-    rating: "",
-  },
+  posts: [],
+  post: null,
+  recentPosts: [],
+  hasMore: true,
+  index: 0,
+  step: 3,
+
   checkout: {
     activeStep: -1,
-    cart: [],
-    subtotal: 0,
-    total: 0,
-    discount: 0,
-    shipping: 0,
-    billing: null,
 
+    uid: null,
     type: null,
     live: "",
     category: "",
@@ -37,7 +30,9 @@ const initialState = {
     title: "",
     description: "",
     email: "",
-    link: "Fundraiser link: https://www.gohelp.com/f/....",
+    link: "",
+
+    total: 0,
   },
 };
 
@@ -56,94 +51,48 @@ const slice = createSlice({
       state.error = action.payload;
     },
 
-    // GET FUNDRAISES
+    // GET POSTS
     getPostsSuccess(state, action) {
       state.isLoading = false;
-      state.fundraises = action.payload;
+      state.posts = action.payload;
     },
 
-    // GET FUNDRAISE
+    // GET POST INFINITE
+    getPostsInitial(state, action) {
+      state.isLoading = false;
+      state.posts = action.payload;
+    },
+
+    getMorePosts(state) {
+      const setIndex = state.index + state.step;
+      state.index = setIndex;
+    },
+
+    noHasMore(state) {
+      state.hasMore = false;
+    },
+
+    // GET POST
     getPostSuccess(state, action) {
       state.isLoading = false;
-      state.fundraise = action.payload;
+      state.post = action.payload;
     },
 
-    // DELETE FUNDRAISE
-    deleteFundraise(state, action) {
-      state.fundraises = reject(state.fundraises, { id: action.payload });
+    // GET RECENT POST
+    getRecentPostsSuccess(state, action) {
+      state.isLoading = false;
+      state.recentPosts = action.payload;
     },
 
-    //  SORT & FILTER FUNDRAISES
-    sortByFundraises(state, action) {
-      state.sortBy = action.payload;
+    setCheckout(state, action) {
+      const { name, value } = action.payload;
+      state.checkout = { ...state.checkout, [name]: value };
     },
 
-    filterFundraises(state, action) {
-      state.filters.gender = action.payload.gender;
-      state.filters.category = action.payload.category;
-      state.filters.colors = action.payload.colors;
-      state.filters.priceRange = action.payload.priceRange;
-      state.filters.rating = action.payload.rating;
-    },
-
-    // CHECKOUT
-    getCart(state, action) {
-      const cart = action.payload;
-
-      const subtotal = sum(
-        cart.map((fundraise) => fundraise.price * fundraise.quantity)
-      );
-      const discount = cart.length === 0 ? 0 : state.checkout.discount;
-      const shipping = cart.length === 0 ? 0 : state.checkout.shipping;
-      const billing = cart.length === 0 ? null : state.checkout.billing;
-
-      state.checkout.cart = cart;
-      state.checkout.discount = discount;
-      state.checkout.shipping = shipping;
-      state.checkout.billing = billing;
-      state.checkout.subtotal = subtotal;
-      state.checkout.total = subtotal - discount;
-    },
-
-    addCart(state, action) {
-      const fundraise = action.payload;
-      const isEmptyCart = state.checkout.cart.length === 0;
-
-      if (isEmptyCart) {
-        state.checkout.cart = [...state.checkout.cart, fundraise];
-      } else {
-        state.checkout.cart = map(state.checkout.cart, (_fundraise) => {
-          const isExisted = _fundraise.id === fundraise.id;
-          if (isExisted) {
-            return {
-              ..._fundraise,
-              quantity: _fundraise.quantity + 1,
-            };
-          }
-          return _fundraise;
-        });
-      }
-      state.checkout.cart = uniqBy([...state.checkout.cart, fundraise], "id");
-    },
-
-    deleteCart(state, action) {
-      const updateCart = filter(
-        state.checkout.cart,
-        (item) => item.id !== action.payload
-      );
-
-      state.checkout.cart = updateCart;
-    },
-
-    resetCart(state) {
+    resetCheckout(state) {
       state.checkout.activeStep = -1;
-      state.checkout.cart = [];
-      state.checkout.total = 0;
-      state.checkout.subtotal = 0;
-      state.checkout.discount = 0;
-      state.checkout.shipping = 0;
-      state.checkout.billing = null;
 
+      state.checkout.uid = null;
       state.checkout.type = null;
       state.checkout.live = "";
       state.checkout.category = "";
@@ -154,7 +103,8 @@ const slice = createSlice({
       state.checkout.title = "";
       state.checkout.description = "";
       state.checkout.email = "";
-      state.checkout.link = "Fundraiser link: https://www.gohelp.com/f/....";
+      state.checkout.link = "";
+      state.checkout.total = 0;
     },
 
     onBackStep(state) {
@@ -169,58 +119,6 @@ const slice = createSlice({
       const goToStep = action.payload;
       state.checkout.activeStep = goToStep;
     },
-
-    increaseQuantity(state, action) {
-      const fundraiseId = action.payload;
-      const updateCart = map(state.checkout.cart, (fundraise) => {
-        if (fundraise.id === fundraiseId) {
-          return {
-            ...fundraise,
-            quantity: fundraise.quantity + 1,
-          };
-        }
-        return fundraise;
-      });
-
-      state.checkout.cart = updateCart;
-    },
-
-    decreaseQuantity(state, action) {
-      const fundraiseId = action.payload;
-      const updateCart = map(state.checkout.cart, (fundraise) => {
-        if (fundraise.id === fundraiseId) {
-          return {
-            ...fundraise,
-            quantity: fundraise.quantity - 1,
-          };
-        }
-        return fundraise;
-      });
-
-      state.checkout.cart = updateCart;
-    },
-
-    createBilling(state, action) {
-      state.checkout.billing = action.payload;
-    },
-
-    applyDiscount(state, action) {
-      const discount = action.payload;
-      state.checkout.discount = discount;
-      state.checkout.total = state.checkout.subtotal - discount;
-    },
-
-    applyShipping(state, action) {
-      const shipping = action.payload;
-      state.checkout.shipping = shipping;
-      state.checkout.total =
-        state.checkout.subtotal - state.checkout.discount + shipping;
-    },
-
-    applyCheckout(state, action) {
-      const { name, value } = action.payload;
-      state.checkout = { ...state.checkout, [name]: value };
-    },
   },
 });
 
@@ -229,36 +127,25 @@ export default slice.reducer;
 
 // Actions
 export const {
-  getCart,
-  addCart,
-  resetCart,
+  getMorePosts,
+  setCheckout,
+  resetCheckout,
   onGotoStep,
   onBackStep,
   onNextStep,
-  deleteCart,
-  deleteFundraise,
-  createBilling,
-  applyShipping,
-  applyDiscount,
-  filterFundraises,
-  sortByFundraises,
-  increaseQuantity,
-  decreaseQuantity,
-
-  applyCheckout,
 } = slice.actions;
 
 // ----------------------------------------------------------------------
 
-export function addPost(fundraise) {
+export function addPost(post) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post("/api/fundraise/add", {
-        ...fundraise,
+        ...post,
       });
 
-      dispatch(slice.actions.getPostSuccess(response.data.fundraise));
+      dispatch(slice.actions.getPostSuccess(response.data.results));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
@@ -267,3 +154,73 @@ export function addPost(fundraise) {
 }
 
 // ----------------------------------------------------------------------
+
+export function getAllPosts() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get("/api/fundraise/posts/all");
+      dispatch(slice.actions.getPostsSuccess(response.data.posts));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getPostsInitial(index, step) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get("/api/fundraise/posts", {
+        params: { index, step },
+      });
+      const results = response.data.results.length;
+      const { maxLength } = response.data;
+
+      dispatch(slice.actions.getPostsInitial(response.data.results));
+
+      if (results >= maxLength) {
+        dispatch(slice.actions.noHasMore());
+      }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getPost(uid) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get("/api/fundraise/post", {
+        params: { uid },
+      });
+      dispatch(slice.actions.getPostSuccess(response.data.post));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError());
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getRecentPosts(title) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get("/api/fundraise/posts/recent", {
+        params: { title },
+      });
+
+      dispatch(slice.actions.getRecentPostsSuccess(response.data.recentPosts));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError());
+    }
+  };
+}

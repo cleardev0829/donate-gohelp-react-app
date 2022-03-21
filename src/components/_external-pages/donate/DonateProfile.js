@@ -28,13 +28,7 @@ import {
   varFadeInRight,
 } from "../../animate";
 import { ProgressItem } from "../landing/TopFundraiserCard";
-import {
-  getCart,
-  createBilling,
-  onNextStep,
-  onBackStep,
-  onGotoStep,
-} from "src/redux/slices/donate";
+import { onNextStep } from "src/redux/slices/donate";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 
 // ----------------------------------------------------------------------

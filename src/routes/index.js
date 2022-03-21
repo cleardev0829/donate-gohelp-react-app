@@ -194,4 +194,3 @@ const Billing = Loadable(
 
 const Fundraise = Loadable(lazy(() => import("../pages/fundraise/Fundraise")));
 const Donate = Loadable(lazy(() => import("../pages/donate/Donate")));
-const DonatePayment = Loadable();

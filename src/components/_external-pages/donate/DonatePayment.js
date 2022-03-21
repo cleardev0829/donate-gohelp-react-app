@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { Link as RouterLink, useParams, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Form, FormikProvider, useFormik } from "formik";
 import moment from "moment";
@@ -32,7 +32,7 @@ import { FundraiseHeader } from "../fundraise";
 import {
   onBackStep,
   onNextStep,
-  applyCheckout,
+  setCheckout,
   addDonate,
 } from "../../../redux/slices/donate";
 import { fPercent } from "src/utils/formatNumber";
@@ -82,6 +82,7 @@ DonatePayment.propTypes = {
 export default function DonatePayment({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams();
   const { id } = params;
   const { user } = useAuth();
@@ -103,7 +104,7 @@ export default function DonatePayment({ post }) {
 
   const handleCheckout = ({ name, value }) => {
     dispatch(
-      applyCheckout({
+      setCheckout({
         name,
         value,
       })
@@ -143,7 +144,7 @@ export default function DonatePayment({ post }) {
             addDonate({ ...checkout, fundraiseId: id, createdAt: moment() })
           );
           enqueueSnackbar("Save success", { variant: "success" });
-          handleNextStep();
+          navigate("/");
         }
       } catch (error) {
         console.error(error);

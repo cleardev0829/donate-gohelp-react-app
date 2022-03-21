@@ -26,7 +26,7 @@ import {
   FundraiseDetails,
   FundraiseComplete,
 } from "../../components/_external-pages/fundraise";
-import { setCheckout } from "../../redux/slices/blog";
+import { setCheckout } from "../../redux/slices/fundraise";
 import { useDispatch, useSelector } from "../../redux/store";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../routes/paths";
 import Page from "../../components/Page";
@@ -44,7 +44,7 @@ export const NoteStyle = styled("div")({
 
 export default function Fundraise() {
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.blog);
+  const { checkout } = useSelector((state) => state.fundraise);
   const { activeStep } = checkout;
   const isComplete = activeStep === STEPS.length + 2;
 

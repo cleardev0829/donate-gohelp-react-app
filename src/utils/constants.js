@@ -55,15 +55,10 @@ export const filters = (donates) => {
 
 export const STEPS = ["Basics", "Goal", "Photo", "Story", "Donation"];
 
-export const COUNTRIES = [
-  { id: "Canada", value: "Canada" },
-  { id: "France", value: "France" },
-  { id: "Japan", value: "Japan" },
-];
-
 export const CRYPTO_TYPES = ["BTC", "ETH", "SOL"];
 
 export const CATEGORIES = [
+  "",
   "Medical",
   "Memorial",
   "Emergency",

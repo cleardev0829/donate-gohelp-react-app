@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "../../../redux/store";
 import PropTypes from "prop-types";
+import { orderBy } from "lodash";
 import { Icon } from "@iconify/react";
 import lodash from "lodash";
 import pinFill from "@iconify/icons-eva/pin-fill";
@@ -23,7 +24,7 @@ import {
 } from "@material-ui/core";
 import { motion } from "framer-motion";
 import moment from "moment";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import {
   varFadeIn,
@@ -33,34 +34,35 @@ import {
 } from "../../animate";
 import { IconBullet } from "src/layouts/dashboard/MenuDesktop";
 import {
-  getCart,
-  createBilling,
   onNextStep,
-  onBackStep,
-  onGotoStep,
-} from "src/redux/slices/donate";
+  getDonatesInitial,
+  getMoreDonates,
+} from "../../../redux/slices/donate";
 import { diff } from "../../../utils/constants";
+import { useEffect, useState } from "react";
 
 // ----------------------------------------------------------------------
 
-const IconStyle = styled(Icon)(({ theme }) => ({
-  width: 20,
-  height: 20,
-  marginTop: 1,
-  flexShrink: 0,
-  marginRight: theme.spacing(2),
-}));
+const SORT_OPTIONS = [
+  { value: "latest", label: "Latest" },
+  { value: "popular", label: "Popular" },
+  { value: "oldest", label: "Oldest" },
+];
+
+const applySort = (posts, sortBy) => {
+  if (sortBy === "latest") {
+    return orderBy(posts, ["createdAt"], ["desc"]);
+  }
+  if (sortBy === "oldest") {
+    return orderBy(posts, ["createdAt"], ["asc"]);
+  }
+  if (sortBy === "popular") {
+    return orderBy(posts, ["view"], ["desc"]);
+  }
+  return posts;
+};
 
 // ----------------------------------------------------------------------
-
-const supports = [...Array(5)].map((_, index) => ({
-  id: index,
-  avatar: "/static/avatars/avatar_man.png",
-  title: "Emily Taing donated 100Token",
-  description:
-    "I am just a stranger but I think of Christina often. I live a few blocks away in Lower Manhattan and as an Asian American woman, also in the creative field, I see myself in her. May she rest peacefully knowing her legacy will live on... inspiring others to give & love as fiercely as she did.",
-  time: index + 1,
-}));
 
 DonateList.propTypes = {
   post: PropTypes.object,
@@ -68,9 +70,27 @@ DonateList.propTypes = {
 
 export default function DonateList({ post }) {
   const dispatch = useDispatch();
+  const params = useParams();
+  const { id } = params;
   const theme = useTheme();
-  const { checkout } = useSelector((state) => state.donate);
-  const { donates } = post;
+  const { donates, hasMore, index, step } = useSelector(
+    (state) => state.donate
+  );
+  const [filters, setFilters] = useState("latest");
+  const [data, setData] = useState(donates);
+
+  useEffect(() => {
+    dispatch(getDonatesInitial(id, index, step));
+  }, [dispatch, index, step]);
+
+  useEffect(() => {
+    const sortedPosts = applySort(donates, filters);
+    setData(sortedPosts);
+  }, [donates]);
+
+  const handleGetMoreDonates = () => {
+    dispatch(getMoreDonates());
+  };
 
   return (
     <Box>
@@ -84,9 +104,9 @@ export default function DonateList({ post }) {
             }}
           >
             <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-              <Typography variant="h4">{`Words of support (${donates.length})`}</Typography>
+              <Typography variant="h4">{`Words of support (${data.length})`}</Typography>
 
-              {donates.map((donate, index) => (
+              {data.map((donate, index) => (
                 <Stack
                   direction="row"
                   spacing={theme.shape.CARD_CONTENT_SPACING}
@@ -125,12 +145,11 @@ export default function DonateList({ post }) {
                       {donate.message}
                     </Typography>
 
-                    {index === donates.length - 1 && (
+                    {index === donates.length - 1 && hasMore && (
                       <motion.div variants={varFadeInRight}>
                         <Button
                           variant="outlined"
-                          // component={RouterLink}
-                          // to={PATH_PAGE.page404}
+                          onClick={handleGetMoreDonates}
                         >
                           Show more
                         </Button>

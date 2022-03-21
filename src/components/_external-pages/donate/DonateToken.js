@@ -27,15 +27,9 @@ import {
   varFadeInRight,
 } from "../../animate";
 import ProgressItem from "../../../components/ProgressItem";
-import {
-  getCart,
-  createBilling,
-  onNextStep,
-  onBackStep,
-  onGotoStep,
-} from "src/redux/slices/donate";
+import { onNextStep } from "src/redux/slices/donate";
 import { fPercent } from "src/utils/formatNumber";
-import { diff, filters } from "src/utils/constants";
+import { filters } from "src/utils/constants";
 // ----------------------------------------------------------------------
 
 DonateToken.propTypes = {
@@ -125,7 +119,11 @@ export default function DonateToken({ post }) {
                   {`${filter.count} people donated`}
                 </Typography>
               </Stack>
-              <Link variant="body2" underline="always">
+              <Link
+                variant="body2"
+                underline="always"
+                sx={{ cursor: "pointer" }}
+              >
                 See All
               </Link>
             </Stack>

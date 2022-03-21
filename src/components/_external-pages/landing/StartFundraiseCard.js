@@ -36,7 +36,7 @@ import {
   CoverImgStyle,
   TitleStyle,
 } from "./TopFundraiserCard";
-import { setCheckout, onGotoStep } from "../../../redux/slices/blog";
+import { setCheckout, onGotoStep } from "../../../redux/slices/fundraise";
 import { useSelector, useDispatch } from "../../../redux/store";
 
 StartFundraiseCard.propTypes = {

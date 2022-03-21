@@ -31,7 +31,11 @@ import {
 import fakeRequest from "../../../utils/fakeRequest";
 //
 import { useDispatch, useSelector } from "../../../redux/store";
-import { onBackStep, onNextStep, addPost } from "../../../redux/slices/blog";
+import {
+  onBackStep,
+  onNextStep,
+  addPost,
+} from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
 import CopyClipboard from "../../CopyClipboard";
 import {
@@ -102,7 +106,7 @@ FundraiseShare.propTypes = {
 export default function FundraiseShare({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.blog);
+  const { checkout } = useSelector((state) => state.fundraise);
   const { enqueueSnackbar } = useSnackbar();
   const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);

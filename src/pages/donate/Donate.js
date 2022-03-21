@@ -10,15 +10,8 @@ import {
   DonateMain,
   DonatePayment,
 } from "../../components/_external-pages/donate";
-import {
-  getCart,
-  createBilling,
-  onNextStep,
-  onBackStep,
-  onGotoStep,
-  getDonatesById,
-} from "../../redux/slices/donate";
-import { getPost } from "../../redux/slices/blog";
+
+import { getPost } from "../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +22,7 @@ export default function Donate() {
   const params = useParams();
   const { id } = params;
   const { checkout } = useSelector((state) => state.donate);
-  const { post } = useSelector((state) => state.blog);
+  const { post } = useSelector((state) => state.fundraise);
   const { activeStep } = checkout;
   const [data, setData] = useState({});
   const isComplete = activeStep === STEPS.length;

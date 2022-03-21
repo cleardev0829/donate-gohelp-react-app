@@ -16,7 +16,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { varFadeInUp, MotionInView } from "../../animate";
-import { getPostsInitial, getMorePosts } from "../../../redux/slices/blog";
+import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 import { TopFundraiserCard } from "../landing";
 
 // ----------------------------------------------------------------------
@@ -75,7 +75,9 @@ const SkeletonLoad = (
 export default function TopFundraisers() {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const { posts, hasMore, index, step } = useSelector((state) => state.blog);
+  const { posts, hasMore, index, step } = useSelector(
+    (state) => state.fundraise
+  );
   const [filters, setFilters] = useState("latest");
   const [data, setData] = useState(posts);
   const isLight = theme.palette.mode === "light";

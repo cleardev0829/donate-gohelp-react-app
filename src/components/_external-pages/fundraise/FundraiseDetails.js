@@ -46,7 +46,11 @@ import {
 } from "../../animate";
 import ProgressItem from "../../ProgressItem";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { onBackStep, onNextStep, getPost } from "../../../redux/slices/blog";
+import {
+  onBackStep,
+  onNextStep,
+  getPost,
+} from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
@@ -108,7 +112,7 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
 export default function FundraiseDetails() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { checkout, post } = useSelector((state) => state.blog);
+  const { checkout, post } = useSelector((state) => state.fundraise);
   const { uid } = checkout;
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();

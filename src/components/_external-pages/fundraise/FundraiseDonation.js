@@ -31,7 +31,7 @@ import {
   onNextStep,
   addPost,
   setCheckout,
-} from "../../../redux/slices/blog";
+} from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
 
 // ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ function IconBullet({ type = "item" }) {
 export default function FundraiseDonation() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.blog);
+  const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);

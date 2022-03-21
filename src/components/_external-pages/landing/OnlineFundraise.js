@@ -17,7 +17,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from "../blog";
 import { OnlineFundraiseCard } from ".";
-import { getPostsInitial, getMorePosts } from "../../../redux/slices/blog";
+import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 import {
   varFadeIn,
   varFadeInUp,

@@ -10,6 +10,4 @@ export { default as ProfileSocialInfo } from "./ProfileSocialInfo";
 export { default as DonateToken } from "./DonateToken";
 export { default as DonateMain } from "./DonateMain";
 export { default as DonatePayment } from "./DonatePayment";
-export { default as DonatePaymentProfile } from "./DonatePaymentProfile";
-export { default as DonatePaymentToken } from "./DonatePaymentToken";
 export { default as DonateComplete } from "./DonateComplete";

@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 // redux
 import { useDispatch } from "../../../redux/store";
-import { resetCart } from "../../../redux/slices/donate";
+import { resetCheckout } from "../../../redux/slices/donate";
 // routes
 import { PATH_DASHBOARD } from "../../../routes/paths";
 //
@@ -40,7 +40,7 @@ export default function DonateComplete({ ...other }) {
   const dispatch = useDispatch();
 
   const handleResetStep = () => {
-    dispatch(resetCart());
+    dispatch(resetCheckout());
     navigate("/");
   };
 
