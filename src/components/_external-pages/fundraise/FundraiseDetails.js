@@ -254,9 +254,9 @@ export default function FundraiseDetails() {
                         <Button
                           variant="contained"
                           color="inherit"
-                          component={RouterLink}
+                          // component={RouterLink}
                           // to={PATH_PAGE.page404}
-                          // startIcon={<Icon icon="akar-icons:eye" />}
+                          startIcon={<Icon icon="akar-icons:eye" />}
                           sx={{
                             color: "text.primary",
                             backgroundColor: (theme) =>
