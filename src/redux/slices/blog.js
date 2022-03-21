@@ -1,3 +1,5 @@
+import { sum, map, filter, uniqBy, reject, sumBy, maxBy, MinBy } from "lodash";
+import moment from "moment";
 import { createSlice } from "@reduxjs/toolkit";
 // utils
 import axios from "../../utils/axios";
@@ -13,6 +15,25 @@ const initialState = {
   hasMore: true,
   index: 0,
   step: 3,
+
+  checkout: {
+    activeStep: -1,
+
+    uid: null,
+    type: null,
+    live: "",
+    category: "",
+    cryptoType: "",
+    goal: null,
+    cover: null,
+    youTubeLink: "",
+    title: "",
+    description: "",
+    email: "",
+    link: "",
+
+    total: 0,
+  },
 };
 
 const slice = createSlice({
@@ -62,6 +83,42 @@ const slice = createSlice({
       state.isLoading = false;
       state.recentPosts = action.payload;
     },
+
+    setCheckout(state, action) {
+      const { name, value } = action.payload;
+      state.checkout = { ...state.checkout, [name]: value };
+    },
+
+    resetCheckout(state) {
+      state.checkout.activeStep = -1;
+
+      state.checkout.uid = null;
+      state.checkout.type = null;
+      state.checkout.live = "";
+      state.checkout.category = "";
+      state.checkout.cryptoType = "";
+      state.checkout.goal = null;
+      state.checkout.cover = null;
+      state.checkout.youTubeLink = "";
+      state.checkout.title = "";
+      state.checkout.description = "";
+      state.checkout.email = "";
+      state.checkout.link = "";
+      state.checkout.total = 0;
+    },
+
+    onBackStep(state) {
+      state.checkout.activeStep -= 1;
+    },
+
+    onNextStep(state) {
+      state.checkout.activeStep += 1;
+    },
+
+    onGotoStep(state, action) {
+      const goToStep = action.payload;
+      state.checkout.activeStep = goToStep;
+    },
   },
 });
 
@@ -69,7 +126,14 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { getMorePosts } = slice.actions;
+export const {
+  getMorePosts,
+  setCheckout,
+  resetCheckout,
+  onGotoStep,
+  onBackStep,
+  onNextStep,
+} = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -86,6 +150,22 @@ export function getAllPosts() {
 }
 
 // ----------------------------------------------------------------------
+
+export function addPost(post) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post("/api/fundraise/add", {
+        ...post,
+      });
+
+      dispatch(slice.actions.getPostSuccess(response.data.results));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
 
 export function getPostsInitial(index, step) {
   return async (dispatch) => {

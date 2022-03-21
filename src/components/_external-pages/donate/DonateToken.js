@@ -1,8 +1,6 @@
 import { useRef } from "react";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { Icon } from "@iconify/react";
-import attach2Fill from "@iconify/icons-eva/attach-2-fill";
-import roundAddPhotoAlternate from "@iconify/icons-ic/round-add-photo-alternate";
+import PropTypes from "prop-types";
 // material
 import {
   Box,
@@ -36,18 +34,18 @@ import {
   onBackStep,
   onGotoStep,
 } from "src/redux/slices/donate";
+import { fPercent } from "src/utils/formatNumber";
+import { diff, filters } from "src/utils/constants";
 // ----------------------------------------------------------------------
 
-export default function DonateToken() {
-  const theme = useTheme();
-  const fileInputRef = useRef(null);
-  const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.donate);
-  const { cart, billing, activeStep } = checkout;
+DonateToken.propTypes = {
+  post: PropTypes.object,
+};
 
-  const handleAttach = () => {
-    fileInputRef.current.click();
-  };
+export default function DonateToken({ post }) {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const filter = filters(post.donates);
 
   return (
     <Box sx={{ py: 3 }}>
@@ -55,12 +53,15 @@ export default function DonateToken() {
         <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
           <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
             <ProgressItem
-              key={" Last donation 3 min ago"}
-              progress={{ value: 78 }}
-              index={0}
+              text={`Last donation ${filter.recentTimeAgo}`}
+              progress={{
+                value: fPercent(
+                  (filter.totalAmount * 100) / parseFloat(post.goal)
+                ),
+              }}
             />
             <Typography gutterBottom variant="h6" sx={{ display: "block" }}>
-              7,800 token raised of 10,000 Token
+              {`${filter.totalAmount} token raised of ${post.goal} Token`}
             </Typography>
           </Stack>
 
@@ -77,7 +78,7 @@ export default function DonateToken() {
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">
-                5350 Token
+                {filter.maxAmount}
               </Typography>
             </Stack>
 
@@ -93,7 +94,7 @@ export default function DonateToken() {
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">
-                550 Token
+                {filter.recentAmount}
               </Typography>
             </Stack>
 
@@ -109,7 +110,7 @@ export default function DonateToken() {
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">
-                50 Token
+                {filter.firstAmount}
               </Typography>
             </Stack>
 
@@ -121,7 +122,7 @@ export default function DonateToken() {
               <Stack>
                 <Typography variant="h7">Total donation</Typography>
                 <Typography gutterBottom variant="p1">
-                  Tom smith
+                  {`${filter.count} people donated`}
                 </Typography>
               </Stack>
               <Link variant="body2" underline="always">
@@ -135,8 +136,8 @@ export default function DonateToken() {
               <Button
                 fullWidth
                 variant="outlined"
-                component={RouterLink}
-                to={PATH_PAGE.page404}
+                // component={RouterLink}
+                // to={PATH_PAGE.page404}
               >
                 Share
               </Button>

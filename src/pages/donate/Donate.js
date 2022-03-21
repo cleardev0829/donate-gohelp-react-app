@@ -16,6 +16,7 @@ import {
   onNextStep,
   onBackStep,
   onGotoStep,
+  getDonatesById,
 } from "../../redux/slices/donate";
 import { getPost } from "../../redux/slices/blog";
 

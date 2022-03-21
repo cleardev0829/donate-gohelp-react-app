@@ -58,7 +58,7 @@ export default function DonateToken() {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.donate);
-  const { cart, billing, activeStep } = checkout;
+  const { donates } = post;
 
   const handleChangeToken = (value) => {};
 

@@ -1,3 +1,10 @@
+import {
+  Link as RouterLink,
+  useParams,
+  useRoutes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { Icon } from "@iconify/react";
@@ -24,11 +31,7 @@ import {
 import fakeRequest from "../../../utils/fakeRequest";
 //
 import { useDispatch, useSelector } from "../../../redux/store";
-import {
-  onBackStep,
-  onNextStep,
-  addPost,
-} from "../../../redux/slices/fundraise";
+import { onBackStep, onNextStep, addPost } from "../../../redux/slices/blog";
 import { FundraiseHeader } from ".";
 import CopyClipboard from "../../CopyClipboard";
 import {
@@ -49,6 +52,7 @@ import {
 } from "react-share";
 
 // ----------------------------------------------------------------------
+
 const FACEBOOK_IMG_URL = `/static/socials/facebook.png`;
 const TWITTER_IMG_URL = `/static/socials/twitter.png`;
 const WHATSAPP_IMG_URL = `/static/socials/whatsapp.png`;
@@ -98,7 +102,7 @@ FundraiseShare.propTypes = {
 export default function FundraiseShare({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.fundraise);
+  const { checkout } = useSelector((state) => state.blog);
   const { enqueueSnackbar } = useSnackbar();
   const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
@@ -346,7 +350,6 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
                       {...getFieldProps("link")}
                       error={Boolean(touched.link && errors.link)}
                       helperText={touched.link && errors.link}
-                      value="https://www.npmjs.com/package/react-copy-to-clipboard"
                     />
                     {/* <Button variant="contained" onClick={onCopy}>
                       Copy

@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "../../../redux/store";
 import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
+import lodash from "lodash";
 import pinFill from "@iconify/icons-eva/pin-fill";
 import emailFill from "@iconify/icons-eva/email-fill";
 import roundBusinessCenter from "@iconify/icons-ic/round-business-center";
@@ -21,6 +22,7 @@ import {
   Stack,
 } from "@material-ui/core";
 import { motion } from "framer-motion";
+import moment from "moment";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import {
@@ -37,6 +39,7 @@ import {
   onBackStep,
   onGotoStep,
 } from "src/redux/slices/donate";
+import { diff } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -67,8 +70,7 @@ export default function DonateList({ post }) {
   const dispatch = useDispatch();
   const theme = useTheme();
   const { checkout } = useSelector((state) => state.donate);
-  const { cart, billing, activeStep } = checkout;
-  const { quote, country, email, role, company, school } = post;
+  const { donates } = post;
 
   return (
     <Box>
@@ -82,17 +84,17 @@ export default function DonateList({ post }) {
             }}
           >
             <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-              <Typography variant="h4">Words of support (99)</Typography>
+              <Typography variant="h4">{`Words of support (${donates.length})`}</Typography>
 
-              {supports.map((support, index) => (
+              {donates.map((donate, index) => (
                 <Stack
                   direction="row"
                   spacing={theme.shape.CARD_CONTENT_SPACING}
                 >
                   <Avatar
-                    key={support.id}
-                    alt={support.id}
-                    src={support.avatar}
+                    key={donate.id}
+                    alt={donate.id}
+                    src={" /static/avatars/avatar_man.png"}
                   />
                   <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                     <Stack
@@ -101,7 +103,7 @@ export default function DonateList({ post }) {
                       spacing={theme.shape.MAIN_HORIZONTAL_SPACING}
                     >
                       <Link variant="h4" sx={{ color: "text.primary" }}>
-                        {support.title}
+                        {"Name"}
                       </Link>
                       <Stack direction="row" alignItems="center">
                         <IconBullet />
@@ -110,7 +112,7 @@ export default function DonateList({ post }) {
                           variant="p1"
                           color="text.primary"
                         >
-                          {`${support.time} hr ago`}
+                          {diff(moment(), moment(donate.createdAt))}
                         </Typography>
                       </Stack>
                     </Stack>
@@ -120,15 +122,15 @@ export default function DonateList({ post }) {
                       variant="p1"
                       color="text.primary"
                     >
-                      {support.description}
+                      {donate.message}
                     </Typography>
 
-                    {index === supports.length - 1 && (
+                    {index === donates.length - 1 && (
                       <motion.div variants={varFadeInRight}>
                         <Button
                           variant="outlined"
-                          component={RouterLink}
-                          to={PATH_PAGE.page404}
+                          // component={RouterLink}
+                          // to={PATH_PAGE.page404}
                         >
                           Show more
                         </Button>

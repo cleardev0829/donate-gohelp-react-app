@@ -21,7 +21,7 @@ import {
   FormHelperText,
 } from "@material-ui/core";
 import fakeRequest from "../../../utils/fakeRequest";
-import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import { onBackStep, onNextStep } from "../../../redux/slices/blog";
 import { UploadSingleFileOverride } from "../../upload";
 import { FundraiseHeader } from ".";
 
@@ -36,7 +36,7 @@ FundraisePhoto.propTypes = {
 export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.fundraise);
+  const { checkout } = useSelector((state) => state.blog);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);

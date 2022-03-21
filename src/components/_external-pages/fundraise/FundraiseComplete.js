@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 // redux
 import { useDispatch } from "../../../redux/store";
-import { resetCart } from "../../../redux/slices/fundraise";
+import { resetCheckout } from "../../../redux/slices/blog";
 // routes
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 //
@@ -40,7 +40,7 @@ export default function CheckoutOrderComplete({ ...other }) {
   const dispatch = useDispatch();
 
   const handleResetStep = () => {
-    dispatch(resetCart());
+    dispatch(resetCheckout());
     navigate("/");
   };
 

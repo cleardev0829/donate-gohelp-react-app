@@ -1,7 +1,9 @@
-import { sum, map, filter, uniqBy, reject } from "lodash";
+import { sum, map, filter, uniqBy, reject, maxBy, sumBy, minBy } from "lodash";
+import moment from "moment";
 import { createSlice } from "@reduxjs/toolkit";
 // utils
 import axios from "../../utils/axios";
+import { diff } from "src/utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -11,13 +13,7 @@ const initialState = {
   donates: [],
   donate: null,
   sortBy: null,
-  filters: {
-    gender: [],
-    category: "All",
-    colors: [],
-    priceRange: "",
-    rating: "",
-  },
+  filters: [],
   checkout: {
     activeStep: -1,
     cart: [],
@@ -28,6 +24,7 @@ const initialState = {
     billing: null,
 
     amount: null,
+    defaultTip: 10,
     tipAmount: null,
     message: "",
   },
@@ -71,11 +68,33 @@ const slice = createSlice({
     },
 
     filterDonates(state, action) {
-      state.filters.gender = action.payload.gender;
-      state.filters.category = action.payload.category;
-      state.filters.colors = action.payload.colors;
-      state.filters.priceRange = action.payload.priceRange;
-      state.filters.rating = action.payload.rating;
+      const donates = action.payload;
+
+      if (donates.length === 0) {
+        filters;
+      }
+      state.filters.count = donates.length;
+      state.filters.recentTimeAgo = _.minBy(
+        donates,
+        (item) => item.createdAt
+      ).amount;
+      state.filters.recentAmount = _.maxBy(
+        donates,
+        (item) => item.createdAt
+      ).amount;
+      state.filters.maxAmount = _.maxBy(donates, (item) =>
+        parseFloat(item.amount)
+      ).amount;
+      state.filters.minAmount = _.minBy(donates, (item) =>
+        parseFloat(item.amount)
+      ).amount;
+      state.filters.totalAmount = _.sumBy(donates, (item) =>
+        parseFloat(item.amount)
+      );
+      state.filters.recentTimeAgo = diff(
+        moment(),
+        _.maxBy(donates, (item) => item.createdAt).createdAt
+      );
     },
 
     // CHECKOUT
@@ -257,7 +276,23 @@ export function getDonates() {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get("/api/donates");
-      dispatch(slice.actions.getDonatesSuccess(response.data.donates));
+      dispatch(slice.actions.getDonatesSuccess(response.data.results));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getDonatesById(id) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get("/api/donates/getDonatesById", {
+        params: { id },
+      });
+      dispatch(slice.actions.filterDonates(response.data.results));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

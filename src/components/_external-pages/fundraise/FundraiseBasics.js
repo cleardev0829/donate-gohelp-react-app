@@ -25,7 +25,7 @@ import {
 
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import { onBackStep, onNextStep } from "../../../redux/slices/blog";
 import { FundraiseHeader } from ".";
 import { CATEGORIES, COUNTRIES } from "../../../utils/constants";
 
@@ -40,7 +40,7 @@ FundraiseBasics.propTypes = {
 export default function FundraiseBasics({ id, activeStep, handleCheckout }) {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const { checkout } = useSelector((state) => state.fundraise);
+  const { checkout } = useSelector((state) => state.blog);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);

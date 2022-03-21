@@ -1,13 +1,12 @@
 import * as Yup from "yup";
 import PropTypes from "prop-types";
+import faker from "faker";
 import { useSnackbar } from "notistack";
 import moment from "moment";
 import { useCallback, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Form, FormikProvider, useFormik } from "formik";
-import pinFill from "@iconify/icons-eva/pin-fill";
 import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
-import radioButtonOffOutline from "@iconify/icons-eva/radio-button-off-outline";
 // material
 import { LoadingButton } from "@material-ui/lab";
 import {
@@ -31,7 +30,8 @@ import {
   onBackStep,
   onNextStep,
   addPost,
-} from "../../../redux/slices/fundraise";
+  setCheckout,
+} from "../../../redux/slices/blog";
 import { FundraiseHeader } from ".";
 
 // ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ function IconBullet({ type = "item" }) {
 export default function FundraiseDonation() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.fundraise);
+  const { checkout } = useSelector((state) => state.blog);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -91,7 +91,19 @@ export default function FundraiseDonation() {
   };
 
   const handleNextStep = () => {
-    dispatch(addPost({ ...checkout, createdAt: moment() }));
+    const uid = faker.datatype.uuid();
+    const link = `${window.location.origin}/donate/${uid}`;
+    dispatch(setCheckout({ name: "uid", value: uid }));
+    dispatch(setCheckout({ name: "link", value: link }));
+    dispatch(
+      addPost({
+        ...checkout,
+        uid,
+        link,
+        createdAt: moment(),
+      })
+    );
+    enqueueSnackbar("Save success", { variant: "success" });
     dispatch(onNextStep());
   };
 
@@ -114,7 +126,6 @@ export default function FundraiseDonation() {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
-        enqueueSnackbar("Save success", { variant: "success" });
         handleNextStep();
       } catch (error) {
         console.error(error);

@@ -10,7 +10,7 @@ import {
   OnlineFundraise,
 } from "../components/_external-pages/landing";
 import { useDispatch, useSelector } from "../redux/store";
-import { resetCart } from "../redux/slices/fundraise";
+import { resetCheckout } from "../redux/slices/blog";
 import { resetCart as resetDonate } from "../redux/slices/donate";
 
 import MainFooter from "src/layouts/main/MainFooter";
@@ -29,7 +29,7 @@ const ContentStyle = styled("div")(({ theme }) => ({
 
 export default function LandingPage() {
   const dispatch = useDispatch();
-  dispatch(resetCart());
+  dispatch(resetCheckout());
   dispatch(resetDonate());
 
   return (

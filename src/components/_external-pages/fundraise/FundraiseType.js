@@ -18,8 +18,8 @@ import { motion } from "framer-motion";
 import {
   onNextStep,
   onGotoStep,
-  applyCheckout,
-} from "../../../redux/slices/fundraise";
+  setCheckout,
+} from "../../../redux/slices/blog";
 import { FundraiseTypeCard, FundraiseHeader } from ".";
 // ----------------------------------------------------------------------
 
@@ -59,13 +59,13 @@ export default function FundraiseType() {
   const navigate = useNavigate();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
-  const { checkout } = useSelector((state) => state.fundraise);
+  const { checkout } = useSelector((state) => state.blog);
   const { type } = checkout;
   const isLight = theme.palette.mode === "light";
 
   const handleType = (type) => {
     dispatch(
-      applyCheckout({
+      setCheckout({
         name: "type",
         value: type,
       })
@@ -85,7 +85,7 @@ export default function FundraiseType() {
     }
 
     dispatch(onNextStep());
-    // dispatch(onGotoStep(4));
+    // dispatch(onGotoStep(3));
   };
 
   return (

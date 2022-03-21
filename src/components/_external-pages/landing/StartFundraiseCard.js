@@ -36,7 +36,7 @@ import {
   CoverImgStyle,
   TitleStyle,
 } from "./TopFundraiserCard";
-import { applyCheckout, onGotoStep } from "../../../redux/slices/fundraise";
+import { setCheckout, onGotoStep } from "../../../redux/slices/blog";
 import { useSelector, useDispatch } from "../../../redux/store";
 
 StartFundraiseCard.propTypes = {
@@ -50,7 +50,7 @@ export default function StartFundraiseCard({ post }) {
 
   const handleNavigate = () => {
     dispatch(
-      applyCheckout({
+      setCheckout({
         name: "type",
         value: id < 2 ? 0 : 1,
       })

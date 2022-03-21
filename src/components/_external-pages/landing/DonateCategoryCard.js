@@ -39,7 +39,7 @@ import {
   varFadeInRight,
 } from "../../animate";
 import { TitleStyle } from "./TopFundraiserCard";
-import { applyCheckout, onGotoStep } from "../../../redux/slices/fundraise";
+import { setCheckout, onGotoStep } from "../../../redux/slices/blog";
 import { useSelector, useDispatch } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
@@ -78,13 +78,13 @@ export default function DonateCategoryCard({ post }) {
 
   const handleNavigate = () => {
     dispatch(
-      applyCheckout({
+      setCheckout({
         name: "type",
         value: 0,
       })
     );
     dispatch(
-      applyCheckout({
+      setCheckout({
         name: "category",
         value: category,
       })

@@ -19,7 +19,7 @@ import {
   CardActionArea,
 } from "@material-ui/core";
 import { useSelector, useDispatch } from "../../redux/store";
-import { applyCheckout, onGotoStep } from "../../redux/slices/fundraise";
+import { setCheckout, onGotoStep } from "../../redux/slices/blog";
 
 // ----------------------------------------------------------------------
 
@@ -176,13 +176,13 @@ function MenuDesktopItem({
                         }}
                         onClick={() => {
                           dispatch(
-                            applyCheckout({
+                            setCheckout({
                               name: "type",
                               value: parseInt(item.type),
                             })
                           );
                           dispatch(
-                            applyCheckout({
+                            setCheckout({
                               name: "category",
                               value: item.category,
                             })

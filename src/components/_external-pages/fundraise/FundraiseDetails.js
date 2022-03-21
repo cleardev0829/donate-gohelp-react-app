@@ -1,9 +1,11 @@
+import _ from "lodash";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { capitalCase } from "change-case";
 import { Form, FormikProvider, useFormik } from "formik";
 import { motion } from "framer-motion";
+import moment from "moment";
 import { Link as RouterLink } from "react-router-dom";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import { Icon } from "@iconify/react";
@@ -44,9 +46,11 @@ import {
 } from "../../animate";
 import ProgressItem from "../../ProgressItem";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import { onBackStep, onNextStep, getPost } from "../../../redux/slices/blog";
 import { FundraiseHeader } from ".";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
+import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
+import { diff } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -104,10 +108,21 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
 export default function FundraiseDetails() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const { checkout, post } = useSelector((state) => state.blog);
+  const { uid } = checkout;
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("profile");
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    dispatch(getPost(uid));
+  }, [dispatch]);
+
+  useEffect(() => {
+    setData(post);
+  }, [post]);
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -138,16 +153,10 @@ export default function FundraiseDetails() {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
+      title: checkout.title,
+      description: checkout.description,
       content: "",
-      cover: null,
-      tags: ["Logan"],
-      publish: true,
-      comments: true,
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: ["Logan"],
+      cover: checkout.cover,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -174,6 +183,10 @@ export default function FundraiseDetails() {
     getFieldProps,
   } = formik;
 
+  if (_.isEmpty(data)) {
+    return null;
+  }
+
   return (
     <>
       <FormikProvider value={formik}>
@@ -190,7 +203,7 @@ export default function FundraiseDetails() {
                 <Grid item xs={12} md={5}>
                   <Card sx={{ position: "relative" }}>
                     <CardMediaStyle>
-                      <CoverImgStyle alt={"title"} src={IMG(1)} />
+                      <CoverImgStyle alt={"cover"} src={data.coverUrl} />
                     </CardMediaStyle>
                   </Card>
                 </Grid>
@@ -213,16 +226,16 @@ export default function FundraiseDetails() {
                         }),
                       }}
                     >
-                      Share Support Laura swans wish to live longer
+                      {data.title}
                     </Typography>
 
-                    {/* <Stack direction="row" justifyContent="space-between">
+                    <Stack direction="row" justifyContent="space-between">
                       <motion.div variants={varFadeInRight}>
                         <Button
                           variant="contained"
                           color="inherit"
-                          component={RouterLink}
-                          to={PATH_PAGE.page404}
+                          // component={RouterLink}
+                          // to={PATH_PAGE.page404}
                           startIcon={<Icon icon="akar-icons:edit" />}
                           sx={{
                             color: "text.primary",
@@ -238,8 +251,8 @@ export default function FundraiseDetails() {
                           variant="contained"
                           color="inherit"
                           component={RouterLink}
-                          to={PATH_PAGE.page404}
-                          startIcon={<Icon icon="akar-icons:eye" />}
+                          // to={PATH_PAGE.page404}
+                          // startIcon={<Icon icon="akar-icons:eye" />}
                           sx={{
                             color: "text.primary",
                             backgroundColor: (theme) =>
@@ -249,12 +262,16 @@ export default function FundraiseDetails() {
                           View fundraiser
                         </Button>
                       </motion.div>
-                    </Stack> */}
+                    </Stack>
 
                     <ProgressItem
-                      key={" Last donation 3 min ago"}
-                      progress={{ value: 78 }}
-                      index={0}
+                      text={`Last donation ${diff(
+                        moment(),
+                        moment(data.createdAt)
+                      )} `}
+                      progress={{
+                        value: fPercent((data.total * 100) / data.goal),
+                      }}
                     />
 
                     <Typography
@@ -262,7 +279,9 @@ export default function FundraiseDetails() {
                       variant="h6"
                       sx={{ display: "block", mt: 2 }}
                     >
-                      7,800 token raised of 10,000 Token
+                      {`${fNumber(data.total)} token raised of ${fNumber(
+                        data.goal
+                      )} Token`}
                     </Typography>
                   </Stack>
                 </Grid>

@@ -1,6 +1,8 @@
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-useless-escape */
 import faker from "faker";
+import lodash from "lodash";
+import moment from "moment";
 import { paramCase } from "change-case";
 // utils
 import { mockImgCover } from "../utils/mockImages";
@@ -13,7 +15,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-import { getFileBlob } from "src/utils/constants";
+import { diff, getFileBlob } from "src/utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -184,14 +186,15 @@ mock.onPost("/api/fundraise/add").reply(async (request) => {
       await getFileBlob(data.cover.preview, (blob) => {
         firebase
           .storage()
-          .ref(`/photo/${faker.datatype.uuid()}-${data.cover.path}`)
+          .ref(`/photo/${data.uid}-${data.cover.path}`)
           .put(blob)
           .then((snapshot) => {
             snapshot.ref.getDownloadURL().then(async (url) => {
               await firebase
                 .firestore()
                 .collection("fundraise")
-                .add({
+                .doc(data.uid)
+                .set({
                   ...data,
                   coverUrl: url,
                 });
@@ -202,12 +205,13 @@ mock.onPost("/api/fundraise/add").reply(async (request) => {
       await firebase
         .firestore()
         .collection("fundraise")
-        .add({
+        .doc(data.uid)
+        .set({
           ...data,
         });
     }
 
-    return [200, { data }];
+    return [200, { results: data }];
   } catch (error) {
     console.error(error);
     return [500, { message: "Internal server error" }];
@@ -264,17 +268,48 @@ mock.onGet("/api/fundraise/posts").reply(async (config) => {
       .collection("fundraise")
       .get()
       .then((querySnapshot) => {
-        querySnapshot.docs.map((doc) => {
-          posts.push({ ...doc.data(), id: doc.id });
+        querySnapshot.docs.map(async (doc) => {
+          posts.push({
+            ...doc.data(),
+            id: doc.id,
+          });
         });
       });
 
-    const maxLength = posts.length;
-    const sortPosts = [...posts].sort((a, b) => {
+    let promise = [];
+    let postsWithDonates = [];
+
+    posts.map((post) => {
+      promise.push(
+        new Promise((resolve, reject) => {
+          const donates = [];
+          firebase
+            .firestore()
+            .collection("fundraise")
+            .doc(post.id)
+            .collection("donate")
+            .get()
+            .then((snapshot) => {
+              snapshot.docs.map((doc) => {
+                donates.push({ ...doc.data(), id: doc.id });
+              });
+
+              postsWithDonates.push({ ...post, donates });
+
+              resolve(postsWithDonates);
+            });
+        })
+      );
+    });
+
+    await Promise.all(promise);
+
+    const maxLength = postsWithDonates.length;
+    const sortPosts = await [...postsWithDonates].sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
-    const results = sortPosts.slice(0, loadMore);
+    const results = await sortPosts.slice(0, loadMore);
 
     if (!results) {
       return [404, { message: "data not found" }];
@@ -301,11 +336,29 @@ mock.onGet("/api/fundraise/post").reply(async (config) => {
 
     const post = docRef.data();
 
-    if (!post) {
+    const donates = [];
+    await firebase
+      .firestore()
+      .collection("fundraise")
+      .doc(uid)
+      .collection("donate")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.docs.map((doc) => {
+          donates.push({ ...doc.data(), id: doc.id });
+        });
+      });
+
+    const postWithDonates = {
+      ...post,
+      donates,
+    };
+
+    if (!postWithDonates) {
       return [404, { message: "Post not found" }];
     }
 
-    return [200, { post }];
+    return [200, { post: postWithDonates }];
   } catch (error) {
     console.error(error);
     return [500, { message: "Internal server error" }];

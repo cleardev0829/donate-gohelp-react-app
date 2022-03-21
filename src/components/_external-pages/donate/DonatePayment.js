@@ -2,9 +2,10 @@ import * as Yup from "yup";
 import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
-
+import PropTypes from "prop-types";
 import { Form, FormikProvider, useFormik } from "formik";
 import moment from "moment";
+import lodash from "lodash";
 // material
 import {
   experimentalStyled as styled,
@@ -34,6 +35,8 @@ import {
   applyCheckout,
   addDonate,
 } from "../../../redux/slices/donate";
+import { fPercent } from "src/utils/formatNumber";
+import { filters } from "src/utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +75,11 @@ const ImgStyle = styled("img")({
   objectFit: "contain",
 });
 
-export default function DonatePayment() {
+DonatePayment.propTypes = {
+  post: PropTypes.object,
+};
+
+export default function DonatePayment({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const params = useParams();
@@ -82,6 +89,7 @@ export default function DonatePayment() {
   const { checkout } = useSelector((state) => state.donate);
   const { activeStep } = checkout;
   const [open, setOpen] = useState(false);
+  const filter = filters(post.donates);
 
   const handleChangeToken = (value) => {};
 
@@ -260,7 +268,10 @@ export default function DonatePayment() {
                         min={1}
                         step={10}
                         max={100}
-                        defaultValue={30}
+                        defaultValue={0}
+                        value={
+                          (filter.totalAmount * 100) / parseFloat(post.goal)
+                        }
                         getAriaValueText={valuetext}
                         valueLabelDisplay="auto"
                         onChange={handleChangeToken}
@@ -305,7 +316,7 @@ export default function DonatePayment() {
                         >
                           <Typography variant="h7">Top donation</Typography>
                           <Typography gutterBottom variant="p1">
-                            0.00 Token
+                            {filter.maxAmount}
                           </Typography>
                         </Stack>
 
@@ -316,7 +327,7 @@ export default function DonatePayment() {
                         >
                           <Typography variant="h7">GoHelp tip</Typography>
                           <Typography gutterBottom variant="p1">
-                            0.00 Token
+                            {checkout.defaultTip}
                           </Typography>
                         </Stack>
 
@@ -327,11 +338,9 @@ export default function DonatePayment() {
                           justifyContent="space-between"
                           alignItems="center"
                         >
-                          <Typography variant="h7">
-                            Total due 0.00 token
-                          </Typography>
+                          <Typography variant="h7">Total due</Typography>
                           <Typography gutterBottom variant="p1">
-                            0.00 Token
+                            {filter.totalAmount}
                           </Typography>
                         </Stack>
                       </Stack>

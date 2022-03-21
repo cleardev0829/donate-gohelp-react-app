@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const getFileBlob = (url, cb) => {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", url);
@@ -24,6 +26,33 @@ export const diff = (m1, m2) => {
   return diff;
 };
 
+export const filters = (donates) => {
+  if (donates.length === 0) {
+    return {
+      recentTimeAgo: null,
+      recentAmount: 0,
+      firstAmount: 0,
+      totalAmount: 0,
+      maxAmount: 0,
+      minAmount: 0,
+      counts: 0,
+    };
+  } else {
+    return {
+      count: donates.length,
+      recentAmount: _.maxBy(donates, (item) => item.createdAt).amount,
+      totalAmount: _.sumBy(donates, (item) => parseFloat(item.amount)),
+      firstAmount: _.minBy(donates, (item) => item.createdAt).amount,
+      maxAmount: _.maxBy(donates, (item) => parseFloat(item.amount)).amount,
+      minAmount: _.minBy(donates, (item) => parseFloat(item.amount)).amount,
+      recentTimeAgo: diff(
+        moment(),
+        _.maxBy(donates, (item) => item.createdAt).createdAt
+      ),
+    };
+  }
+};
+
 export const STEPS = ["Basics", "Goal", "Photo", "Story", "Donation"];
 
 export const COUNTRIES = [
@@ -32,7 +61,7 @@ export const COUNTRIES = [
   { id: "Japan", value: "Japan" },
 ];
 
-export const CRYPTO_TYPES = ["BTC", "ETH"];
+export const CRYPTO_TYPES = ["BTC", "ETH", "SOL"];
 
 export const CATEGORIES = [
   "Medical",

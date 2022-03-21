@@ -17,7 +17,6 @@ import {
 } from "@material-ui/core";
 import { varFadeInUp, MotionInView } from "../../animate";
 import { getPostsInitial, getMorePosts } from "../../../redux/slices/blog";
-import { getPosts } from "../../../redux/slices/fundraise";
 import { TopFundraiserCard } from "../landing";
 
 // ----------------------------------------------------------------------
@@ -88,10 +87,6 @@ export default function TopFundraisers() {
   useEffect(() => {
     dispatch(getPostsInitial(index, step));
   }, [dispatch, index, step]);
-
-  // useEffect(() => {
-  //   dispatch(getPosts(""));
-  // }, [dispatch]);
 
   useEffect(() => {
     const sortedPosts = applySort(posts, filters);

@@ -17,6 +17,7 @@ import {
   CardContent,
 } from "@material-ui/core";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
+import { useDispatch, useSelector } from "../../../redux/store";
 import { fDate } from "../../../utils/formatTime";
 import { fShortenNumber } from "../../../utils/formatNumber";
 import SvgIconStyle from "../../SvgIconStyle";
@@ -28,7 +29,9 @@ import {
 } from "../../animate";
 import ProgressItem from "../../ProgressItem";
 import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
-import { diff } from "../../../utils/constants";
+import { filters } from "../../../utils/constants";
+import { useEffect, useState } from "react";
+import { getDonate, getDonatesById } from "src/redux/slices/donate";
 
 // ----------------------------------------------------------------------
 
@@ -85,16 +88,7 @@ TopFundraiserCard.propTypes = {
 
 export default function TopFundraiserCard({ post }) {
   const navigate = useNavigate();
-  const {
-    id,
-    live,
-    goal,
-    title,
-    total,
-    coverUrl,
-    createdAt,
-    description,
-  } = post;
+  const filter = filters(post.donates);
 
   return (
     <Grid item xs={12} sm={6} md={4}>
@@ -114,27 +108,27 @@ export default function TopFundraiserCard({ post }) {
                       color: (theme) => theme.palette.common.white,
                     }}
                   >
-                    {live}
+                    {post.live}
                   </Typography>
                 </CountryStyle>
-                <CoverImgStyle alt={title} src={coverUrl} />
+                <CoverImgStyle alt={"cover"} src={post.coverUrl} />
               </CardMediaStyle>
 
               <Stack spacing={1} sx={{ my: 2 }}>
                 <TitleStyle color="inherit" variant="h5" sx={{ height: 64 }}>
-                  {title}
+                  {post.title}
                 </TitleStyle>
 
                 <DescriptionStyle color="inherit" variant="p1">
-                  {description}
+                  {post.description}
                 </DescriptionStyle>
               </Stack>
 
               <ProgressItem
-                key={id}
-                text={`Last donation ${diff(moment(), moment(createdAt))} `}
-                progress={{ value: fPercent((total * 100) / goal) }}
-                index={0}
+                text={`Last donation ${filter.recentTimeAgo} `}
+                progress={{
+                  value: fPercent((filter.totalAmount * 100) / post.goal),
+                }}
               />
 
               <Typography
@@ -142,7 +136,9 @@ export default function TopFundraiserCard({ post }) {
                 variant="p1"
                 sx={{ display: "block", mt: 2 }}
               >
-                {`${fNumber(total)} token raised of ${fNumber(goal)} Token`}
+                {`${fNumber(filter.totalAmount)} token raised of ${fNumber(
+                  post.goal
+                )} Token`}
               </Typography>
             </Stack>
           </Box>

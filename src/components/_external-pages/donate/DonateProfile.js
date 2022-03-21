@@ -48,7 +48,7 @@ export default function DonateProfile({ post }) {
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.donate);
 
-  const { id, coverUrl, title, description } = post;
+  const { id, coverUrl, title, description, donates } = post;
 
   return (
     <Box sx={{ py: 3 }}>
@@ -61,15 +61,15 @@ export default function DonateProfile({ post }) {
           </CardMediaStyle>
         </Box>
 
-        <Typography variant="body2">{"description"}</Typography>
+        <Typography variant="body2">{description}</Typography>
 
         <Stack direction="row" spacing={theme.shape.CARD_CONTENT_SPACING}>
           <motion.div variants={varFadeInRight}>
             <Button
               variant="outlined"
               color="inherit"
-              component={RouterLink}
-              to={PATH_PAGE.page404}
+              // component={RouterLink}
+              // to={PATH_PAGE.page404}
               startIcon={<Icon icon="iconoir:timer" />}
             >
               Created 2 days ago
@@ -79,8 +79,8 @@ export default function DonateProfile({ post }) {
             <Button
               variant="outlined"
               color="inherit"
-              component={RouterLink}
-              to={PATH_PAGE.page404}
+              // component={RouterLink}
+              // to={PATH_PAGE.page404}
               startIcon={<Icon icon="akar-icons:ribbon" />}
             >
               Funerals & Memorials

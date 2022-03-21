@@ -26,7 +26,7 @@ export default function Logo({ sx, type = "default" }) {
           width="39px"
           height="39px"
           viewBox="0 0 39 39"
-          enable-background="new 0 0 39 39"
+          enableBackground="new 0 0 39 39"
           // xml:space="preserve"
         >
           <image
@@ -91,7 +91,7 @@ AABJRU5ErkJggg=="
           width="39px"
           height="39px"
           viewBox="0 0 39 39"
-          enable-background="new 0 0 39 39"
+          enableBackground="new 0 0 39 39"
         >
           <image
             id="image0"
