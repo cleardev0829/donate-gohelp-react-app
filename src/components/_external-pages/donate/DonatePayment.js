@@ -90,6 +90,7 @@ export default function DonatePayment({ post }) {
   const { checkout } = useSelector((state) => state.donate);
   const { activeStep } = checkout;
   const [open, setOpen] = useState(false);
+  const [isHidden, setHidden] = useState(true);
   const filter = filters(post.donates);
 
   const handleChangeToken = (value) => {};
@@ -109,6 +110,10 @@ export default function DonatePayment({ post }) {
         value,
       })
     );
+  };
+
+  const handleCustomTip = () => {
+    setHidden(!isHidden);
   };
 
   const handleBackStep = () => {
@@ -138,14 +143,12 @@ export default function DonatePayment({ post }) {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
-        if (activeStep === 0) handleNextStep();
-        else if (activeStep === 1) {
-          dispatch(
-            addDonate({ ...checkout, fundraiseId: id, createdAt: moment() })
-          );
-          enqueueSnackbar("Save success", { variant: "success" });
-          navigate("/");
-        }
+
+        dispatch(
+          addDonate({ ...checkout, fundraiseId: id, createdAt: moment() })
+        );
+        enqueueSnackbar("Save success", { variant: "success" });
+        navigate("/");
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -279,7 +282,7 @@ export default function DonatePayment({ post }) {
                       />
                     )}
 
-                    {activeStep === 1 && (
+                    {!isHidden && (
                       <TextField
                         fullWidth
                         size="small"
@@ -297,7 +300,12 @@ export default function DonatePayment({ post }) {
                       />
                     )}
 
-                    <Link variant="body2" underline="always">
+                    <Link
+                      variant="body2"
+                      underline="always"
+                      sx={{ cursor: "pointer" }}
+                      onClick={handleCustomTip}
+                    >
                       Enter custom tip
                     </Link>
 

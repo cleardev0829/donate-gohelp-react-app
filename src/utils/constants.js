@@ -16,6 +16,7 @@ export const diff = (m1, m2) => {
   const min = m1.diff(m2, "minutes");
   const hour = m1.diff(m2, "hours");
   const day = m1.diff(m2, "days");
+
   if (min < 2) diff = "a few seconds";
   else if (min < 60) diff = `${min} mins ago`;
   else if (hour < 2) diff = `${hour} hour ago`;
@@ -29,7 +30,7 @@ export const diff = (m1, m2) => {
 export const filters = (donates) => {
   if (donates.length === 0) {
     return {
-      recentTimeAgo: null,
+      recentTimeAgo: "",
       recentAmount: 0,
       firstAmount: 0,
       totalAmount: 0,

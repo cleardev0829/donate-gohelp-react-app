@@ -54,7 +54,6 @@ export default function Donate() {
           <>
             {activeStep === -1 && <DonateMain post={data} />}
             {activeStep === 0 && <DonatePayment post={data} />}
-            {activeStep === 1 && <DonatePayment post={data} />}
           </>
         ) : (
           <DonateComplete open={isComplete} />

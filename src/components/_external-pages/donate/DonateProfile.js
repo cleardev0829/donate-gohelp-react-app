@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { Icon } from "@iconify/react";
+import moment from "moment";
 // material
 import {
   Box,
@@ -30,6 +31,7 @@ import {
 import { ProgressItem } from "../landing/TopFundraiserCard";
 import { onNextStep } from "src/redux/slices/donate";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
+import { diff } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -40,9 +42,8 @@ DonateProfile.propTypes = {
 export default function DonateProfile({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { checkout } = useSelector((state) => state.donate);
 
-  const { id, coverUrl, title, description, donates } = post;
+  const { coverUrl, title, description, createdAt } = post;
 
   return (
     <Box sx={{ py: 3 }}>
@@ -55,7 +56,7 @@ export default function DonateProfile({ post }) {
           </CardMediaStyle>
         </Box>
 
-        <Typography variant="body2">{description}</Typography>
+        {/* <Typography variant="body2">{description}</Typography> */}
 
         <Stack direction="row" spacing={theme.shape.CARD_CONTENT_SPACING}>
           <motion.div variants={varFadeInRight}>
@@ -66,7 +67,7 @@ export default function DonateProfile({ post }) {
               // to={PATH_PAGE.page404}
               startIcon={<Icon icon="iconoir:timer" />}
             >
-              Created 2 days ago
+              {`Created ${diff(moment(), moment(createdAt))}`}
             </Button>
           </motion.div>
           <motion.div variants={varFadeInRight}>
@@ -96,22 +97,7 @@ export default function DonateProfile({ post }) {
                   A few words from Angela Yujin Lee
                 </Typography>
 
-                <Typography variant="body2">
-                  Thank you so much for your generous contributions. Thanks to
-                  you, we have surpassed our initial goal in less than 24 hours.
-                  We are setting a new goal of $300,000 to establish the
-                  Christina Yuna Lee Memorial Fund, to support these
-                  organizations and others in the future. ***THANK YOU*** On
-                  February 13, 2022, our daughter, sister, and friend Christina
-                  Yuna Lee was taken from us in a senseless act of violence.
-                  Christina was coming home from a night out with her friends.
-                  She walked up the stairs to her apartment and was fatally met
-                  by a man with ill intent. Her death is part of an alarming
-                  pattern of unchecked, hateful violence against women, namely
-                  women of Asian descent and women of color that can no longer
-                  stand without consequence. Thank you, Christina's family and
-                  friends
-                </Typography>
+                <Typography variant="body2">{description}</Typography>
               </Stack>
             </Card>
           </Stack>
