@@ -11,8 +11,8 @@ import { CardStyle, CardContentStyle } from "../landing/OnlineFundraiseCard";
 FundraiseTypeCard.propTypes = {
   post: PropTypes.object.isRequired,
   index: PropTypes.number,
-  onClick: PropTypes.node,
   type: PropTypes.number,
+  onClick: PropTypes.func,
 };
 
 export default function FundraiseTypeCard({ post, index, type, onClick }) {

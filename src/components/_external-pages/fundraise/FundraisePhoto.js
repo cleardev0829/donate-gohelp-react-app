@@ -63,15 +63,7 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
 
   const formik = useFormik({
     initialValues: {
-      description: "",
-      content: "",
       cover: checkout.cover,
-      tags: ["Logan"],
-      publish: true,
-      comments: true,
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: ["Logan"],
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {

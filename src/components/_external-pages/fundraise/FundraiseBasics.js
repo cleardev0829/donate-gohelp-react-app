@@ -33,12 +33,10 @@ import countries from "./countries";
 // ----------------------------------------------------------------------
 
 FundraiseBasics.propTypes = {
-  id: PropTypes.string,
-  activeStep: PropTypes.number,
   handleCheckout: PropTypes.func,
 };
 
-export default function FundraiseBasics({ id, activeStep, handleCheckout }) {
+export default function FundraiseBasics({ handleCheckout }) {
   const dispatch = useDispatch();
   const theme = useTheme();
   const { checkout } = useSelector((state) => state.fundraise);
@@ -171,7 +169,6 @@ export default function FundraiseBasics({ id, activeStep, handleCheckout }) {
                       select
                       onChange={(e) => {
                         handleCheckout({
-                          id,
                           name: e.target.name,
                           value: e.target.value,
                         });
@@ -210,7 +207,6 @@ export default function FundraiseBasics({ id, activeStep, handleCheckout }) {
                       select
                       onChange={(e) => {
                         handleCheckout({
-                          id,
                           name: e.target.name,
                           value: e.target.value,
                         });
@@ -242,13 +238,6 @@ export default function FundraiseBasics({ id, activeStep, handleCheckout }) {
                 </Typography>
               </Grid>
             </Grid>
-            {/* {errors.category && (
-              <FormHelperText error>
-                <Box component="span" sx={{ px: 2 }}>
-                  {touched.category && errors.category}
-                </Box>
-              </FormHelperText>
-            )} */}
           </Container>
         </Form>
       </FormikProvider>

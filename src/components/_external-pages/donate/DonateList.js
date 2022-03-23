@@ -123,7 +123,7 @@ export default function DonateList({ post }) {
                       spacing={theme.shape.MAIN_HORIZONTAL_SPACING}
                     >
                       <Link variant="h4" sx={{ color: "text.primary" }}>
-                        {"Name"}
+                        {`Support ${index + 1}`}
                       </Link>
                       <Stack direction="row" alignItems="center">
                         <IconBullet />

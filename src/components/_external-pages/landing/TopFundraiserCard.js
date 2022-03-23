@@ -126,9 +126,7 @@ export default function TopFundraiserCard({ post }) {
 
               <ProgressItem
                 text={`Last donation ${filter.recentTimeAgo} `}
-                progress={{
-                  value: fPercent((filter.totalAmount * 100) / post.goal),
-                }}
+                progress={fPercent((filter.totalAmount * 100) / post.goal)}
               />
 
               <Typography

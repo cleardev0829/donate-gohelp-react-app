@@ -43,7 +43,7 @@ export default function DonateProfile({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { coverUrl, title, description, createdAt } = post;
+  const { coverUrl, title, description, createdAt, cover } = post;
 
   return (
     <Box sx={{ py: 3 }}>
@@ -94,7 +94,7 @@ export default function DonateProfile({ post }) {
             >
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <Typography variant="h4">
-                  A few words from Angela Yujin Lee
+                  A few words from Fundraiser
                 </Typography>
 
                 <Typography variant="body2">{description}</Typography>
@@ -127,8 +127,8 @@ export default function DonateProfile({ post }) {
                 <Button
                   fullWidth
                   variant="outlined"
-                  component={RouterLink}
-                  to={PATH_PAGE.page404}
+                  // component={RouterLink}
+                  // to={PATH_PAGE.page404}
                 >
                   Share
                 </Button>

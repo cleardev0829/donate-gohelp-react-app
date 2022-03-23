@@ -24,7 +24,8 @@ import {
 // utils
 import fakeRequest from "../../../utils/fakeRequest";
 import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
-import { FundraiseHeader } from ".";
+import { FundraiseHeader } from "../fundraise";
+import FundraiseNewPostPreview from "../fundraise/FundraiseNewPostPreview";
 
 // ----------------------------------------------------------------------
 
@@ -67,6 +68,7 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
     initialValues: {
       title: checkout.title,
       description: checkout.description,
+      cover: checkout.cover,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -223,7 +225,13 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
                       }}
                     />
 
-                    <Button variant="outlined">Preview Fundraiser</Button>
+                    <Button
+                      // type="buttton"
+                      variant="outlined"
+                      onClick={handleOpenPreview}
+                    >
+                      Preview Fundraiser
+                    </Button>
                   </Stack>
                 </Card>
               </Grid>
@@ -232,7 +240,11 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
         </Form>
       </FormikProvider>
 
-      {/* <BlogNewPostPreview formik={formik} openPreview={open} onClosePreview={handleClosePreview} /> */}
+      <FundraiseNewPostPreview
+        formik={formik}
+        openPreview={open}
+        onClosePreview={handleClosePreview}
+      />
     </>
   );
 }

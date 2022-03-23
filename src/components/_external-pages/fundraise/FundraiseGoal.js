@@ -34,13 +34,10 @@ import { CRYPTO_TYPES } from "../../../utils/constants";
 // ----------------------------------------------------------------------
 
 FundraiseGoal.propTypes = {
-  id: PropTypes.string,
-  activeStep: PropTypes.number,
   handleCheckout: PropTypes.func,
-  testFunc: PropTypes.func,
 };
 
-export default function FundraiseGoal({ id, activeStep, handleCheckout }) {
+export default function FundraiseGoal({ handleCheckout }) {
   const dispatch = useDispatch();
   const theme = useTheme();
   const { checkout } = useSelector((state) => state.fundraise);
@@ -65,13 +62,13 @@ export default function FundraiseGoal({ id, activeStep, handleCheckout }) {
   };
 
   const Schema = Yup.object().shape({
-    cryptoType: Yup.string().required("This is required"),
+    // cryptoType: Yup.string().required("This is required"),
     goal: Yup.number().required("This is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      cryptoType: checkout.cryptoType,
+      // cryptoType: checkout.cryptoType,
       goal: checkout.goal,
     },
     validationSchema: Schema,
@@ -149,7 +146,7 @@ export default function FundraiseGoal({ id, activeStep, handleCheckout }) {
                     </Typography>
 
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                      <Typography
+                      {/* <Typography
                         variant="h5"
                         sx={{
                           ...(!isLight && {
@@ -186,7 +183,7 @@ export default function FundraiseGoal({ id, activeStep, handleCheckout }) {
                             {option}
                           </MenuItem>
                         ))}
-                      </TextField>
+                      </TextField> */}
 
                       <Typography
                         variant="h5"
@@ -210,9 +207,11 @@ export default function FundraiseGoal({ id, activeStep, handleCheckout }) {
                         {...getFieldProps("goal")}
                         error={Boolean(touched.goal && errors.goal)}
                         helperText={touched.goal && errors.goal}
+                        onFocus={(e) => {
+                          e.target.select();
+                        }}
                         onChange={(e) => {
                           handleCheckout({
-                            id,
                             name: e.target.name,
                             value: e.target.value,
                           });

@@ -144,19 +144,6 @@ export default function FundraiseDonation() {
     getFieldProps,
   } = formik;
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      if (file) {
-        setFieldValue("cover", {
-          ...file,
-          preview: URL.createObjectURL(file),
-        });
-      }
-    },
-    [setFieldValue]
-  );
-
   return (
     <>
       <FormikProvider value={formik}>
@@ -219,18 +206,16 @@ export default function FundraiseDonation() {
                     </Stack>
 
                     {DESCRIPTIONS.map((description, index) => (
-                      <>
-                        <Stack
-                          key={`Stack-${index}`}
-                          direction="row"
-                          alignItems="center"
-                        >
-                          <IconBullet key={`IconBullet-${index}`} type="item" />
-                          <Typography key={`Typography-${index}`} variant="p2">
-                            {description}
-                          </Typography>
-                        </Stack>
-                      </>
+                      <Stack
+                        key={`Stack-${index}`}
+                        direction="row"
+                        alignItems="center"
+                      >
+                        <IconBullet key={`IconBullet-${index}`} type="item" />
+                        <Typography key={`Typography-${index}`} variant="p2">
+                          {description}
+                        </Typography>
+                      </Stack>
                     ))}
                   </Stack>
                 </Card>

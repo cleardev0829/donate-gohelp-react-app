@@ -48,11 +48,9 @@ export default function DonateToken({ post }) {
           <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
             <ProgressItem
               text={`Last donation ${filter.recentTimeAgo}`}
-              progress={{
-                value: fPercent(
-                  (filter.totalAmount * 100) / parseFloat(post.goal)
-                ),
-              }}
+              progress={fPercent(
+                (parseFloat(filter.totalAmount) * 100) / parseFloat(post.goal)
+              )}
             />
             <Typography gutterBottom variant="h6" sx={{ display: "block" }}>
               {`${filter.totalAmount} token raised of ${post.goal} Token`}

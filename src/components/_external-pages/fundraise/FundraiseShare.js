@@ -180,8 +180,6 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
     }
   };
 
-  const handleShare = () => {};
-
   return (
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -329,11 +327,7 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
                         subject={title}
                         body="body"
                       >
-                        <Button
-                          size="medium"
-                          variant="contained"
-                          onClick={handleShare}
-                        >
+                        <Button size="medium" variant="contained">
                           Share
                         </Button>
                       </EmailShareButton>

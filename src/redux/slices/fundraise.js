@@ -24,15 +24,13 @@ const initialState = {
     live: "",
     category: "",
     cryptoType: "",
-    goal: null,
+    goal: 0,
     cover: null,
     youTubeLink: "",
     title: "",
     description: "",
     email: "",
     link: "",
-
-    total: 0,
   },
 };
 
@@ -97,14 +95,13 @@ const slice = createSlice({
       state.checkout.live = "";
       state.checkout.category = "";
       state.checkout.cryptoType = "";
-      state.checkout.goal = null;
+      state.checkout.goal = 0;
       state.checkout.cover = null;
       state.checkout.youTubeLink = "";
       state.checkout.title = "";
       state.checkout.description = "";
       state.checkout.email = "";
       state.checkout.link = "";
-      state.checkout.total = 0;
     },
 
     onBackStep(state) {

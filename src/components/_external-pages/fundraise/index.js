@@ -9,3 +9,4 @@ export { default as FundraiseShare } from "./FundraiseShare";
 export { default as FundraiseDetails } from "./FundraiseDetails";
 export { default as FundraiseComplete } from "./FundraiseComplete";
 export { default as FundraiseHeader } from "./FundraiseHeader";
+// export { default as FundraiseNewPostPreview } from "./FundraiseNewPostPreview";

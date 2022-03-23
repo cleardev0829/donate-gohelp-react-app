@@ -32,7 +32,6 @@ DonateMain.propTypes = {
 };
 
 export default function DonateMain({ post }) {
-  const dispatch = useDispatch();
   const theme = useTheme();
 
   return (

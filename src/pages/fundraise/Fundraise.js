@@ -48,7 +48,7 @@ export default function Fundraise() {
   const { activeStep } = checkout;
   const isComplete = activeStep === STEPS.length + 2;
 
-  const handleCheckout = ({ id, name, value }) => {
+  const handleCheckout = ({ name, value }) => {
     dispatch(
       setCheckout({
         name,

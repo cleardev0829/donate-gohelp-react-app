@@ -54,7 +54,7 @@ import {
 import { FundraiseHeader } from ".";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
-import { diff } from "../../../utils/constants";
+import { diff, filters } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -119,6 +119,7 @@ export default function FundraiseDetails() {
   const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("profile");
   const [data, setData] = useState({});
+  const filter = filters([]);
 
   useEffect(() => {
     dispatch(getPost(uid));
@@ -201,7 +202,7 @@ export default function FundraiseDetails() {
             continueAction={handleNextStep}
           />
 
-          <Container maxWidth="lg" sx={{ pt: 10 }}>
+          <Container maxWidth="lg">
             <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
               <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
                 <Grid item xs={12} md={5}>
@@ -233,7 +234,7 @@ export default function FundraiseDetails() {
                       {data.title}
                     </Typography>
 
-                    <Stack direction="row" justifyContent="space-between">
+                    {/* <Stack direction="row" justifyContent="space-between">
                       <motion.div variants={varFadeInRight}>
                         <Button
                           variant="contained"
@@ -266,16 +267,16 @@ export default function FundraiseDetails() {
                           View fundraiser
                         </Button>
                       </motion.div>
-                    </Stack>
+                    </Stack> */}
 
                     <ProgressItem
                       text={`Last donation ${diff(
                         moment(),
                         moment(data.createdAt)
-                      )} `}
-                      progress={{
-                        value: fPercent((data.total * 100) / data.goal),
-                      }}
+                      )}`}
+                      progress={fPercent(
+                        (filter.totalAmount * 100) / data.goal
+                      )}
                     />
 
                     <Typography
@@ -283,9 +284,9 @@ export default function FundraiseDetails() {
                       variant="h6"
                       sx={{ display: "block", mt: 2 }}
                     >
-                      {`${fNumber(data.total)} token raised of ${fNumber(
-                        data.goal
-                      )} Token`}
+                      {`${fNumber(
+                        filter.totalAmount
+                      )} token raised of ${fNumber(data.goal)} Token`}
                     </Typography>
                   </Stack>
                 </Grid>

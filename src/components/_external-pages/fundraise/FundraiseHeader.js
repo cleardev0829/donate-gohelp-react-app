@@ -7,9 +7,9 @@ import HeaderStepBreadcrumbs from "../../HeaderStepBreadcrumbs";
 import HeaderStep from "../../HeaderStep";
 
 HeaderStepBreadcrumbs.propTypes = {
-  cancelAction: PropTypes.node,
-  continueAction: PropTypes.node,
-  sx: PropTypes.object,
+  cancelAction: PropTypes.func,
+  continueAction: PropTypes.func,
+  // sx: PropTypes.object,
   activeStep: PropTypes.number,
   isComplete: PropTypes.bool,
 };

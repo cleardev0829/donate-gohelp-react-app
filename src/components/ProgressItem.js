@@ -6,10 +6,10 @@ const COLORS = ["primary", "info", "warning"];
 
 ProgressItem.propTypes = {
   text: PropTypes.string,
-  progress: PropTypes.object,
+  progress: PropTypes.number,
 };
 
-export default function ProgressItem({ text, progress, index = 0 }) {
+export default function ProgressItem({ text, progress }) {
   return (
     <Stack spacing={0}>
       <Stack direction="row" justifyContent="space-between" sx={{ width: 1 }}>
@@ -22,14 +22,14 @@ export default function ProgressItem({ text, progress, index = 0 }) {
           {text}
         </Typography>
         <Typography gutterBottom variant="h7" sx={{ display: "block" }}>
-          {progress.value}
+          {progress}
         </Typography>
       </Stack>
 
       <MLinearProgress
         variant="determinate"
-        value={progress.value}
-        color={COLORS[index]}
+        value={progress}
+        color={COLORS[0]}
       />
     </Stack>
   );
