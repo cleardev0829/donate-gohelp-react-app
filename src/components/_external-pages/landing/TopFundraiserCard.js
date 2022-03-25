@@ -32,8 +32,46 @@ import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
 import { filters } from "../../../utils/constants";
 import { useEffect, useState } from "react";
 import { getDonate, getDonatesById } from "src/redux/slices/donate";
+import ReactQuill from "react-quill";
 
 // ----------------------------------------------------------------------
+
+const modules = {
+  toolbar: false,
+  history: {
+    delay: 500,
+    maxStack: 100,
+    userOnly: true,
+  },
+  syntax: true,
+  clipboard: {
+    matchVisual: false,
+  },
+};
+
+const QuillWrapperStyle = styled("div")(({ theme }) => ({
+  borderRadius: theme.shape.borderRadius,
+  border: `solid 0px ${theme.palette.grey[500_32]}`,
+  height: 70,
+  "& .ql-container.ql-snow": {
+    borderColor: "transparent",
+    ...theme.typography.body1,
+    fontFamily: theme.typography.fontFamily,
+  },
+  "& .ql-editor": {
+    height: 70,
+    "&.ql-blank::before": {
+      fontStyle: "normal",
+      color: theme.palette.text.disabled,
+    },
+    "& pre.ql-syntax": {
+      ...theme.typography.body2,
+      // padding: theme.spacing(2),
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: theme.palette.grey[900],
+    },
+  },
+}));
 
 export const CARD_BRODER_RADIUS = 2;
 
@@ -44,16 +82,18 @@ export const CardContentStyle = styled(CardContent)(({ theme }) => ({
 export const CardMediaStyle = styled("div")({
   position: "relative",
   paddingTop: "calc(100% * 3 / 4)",
+  overflow: "hidden",
 });
 
-export const CoverImgStyle = styled("img")({
+export const CoverImgStyle = styled("img")(({ sx }) => ({
   top: 0,
   width: "100%",
   height: "100%",
   objectFit: "cover",
   position: "absolute",
   borderRadius: 8,
-});
+  ...sx,
+}));
 
 export const TitleStyle = styled(Typography)({
   overflow: "hidden",
@@ -111,7 +151,15 @@ export default function TopFundraiserCard({ post }) {
                     {post.live}
                   </Typography>
                 </CountryStyle>
-                <CoverImgStyle alt={"cover"} src={post.coverUrl} />
+                <CoverImgStyle
+                  alt={"cover"}
+                  src={post.coverUrl}
+                  sx={{
+                    transform: `rotate(${
+                      ((-1 * post.rotate) % 4) * 90
+                    }deg) scale(${1 + post.scale / 100})`,
+                  }}
+                />
               </CardMediaStyle>
 
               <Stack spacing={1} sx={{ my: 2 }}>
@@ -120,8 +168,20 @@ export default function TopFundraiserCard({ post }) {
                 </TitleStyle>
 
                 <DescriptionStyle color="inherit" variant="p1">
-                  {post.description}
+                  {post.descriptionText}
                 </DescriptionStyle>
+
+                {/* <QuillWrapperStyle>
+                  <ReactQuill
+                    readOnly
+                    value={post.description}
+                    modules={modules}
+                    style={{
+                      border: "0px solid black",
+                      margin: 0,
+                    }}
+                  />
+                </QuillWrapperStyle> */}
               </Stack>
 
               <ProgressItem
@@ -134,9 +194,9 @@ export default function TopFundraiserCard({ post }) {
                 variant="p1"
                 sx={{ display: "block", mt: 2 }}
               >
-                {`${fNumber(filter.totalAmount)} token raised of ${fNumber(
+                {`${fNumber(filter.totalAmount)} $ raised of ${fNumber(
                   post.goal
-                )} Token`}
+                )} $`}
               </Typography>
             </Stack>
           </Box>

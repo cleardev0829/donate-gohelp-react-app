@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "../../../redux/store";
 import PropTypes from "prop-types";
 // material
@@ -40,6 +40,7 @@ export default function DonateToken({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const filter = filters(post.donates);
+  const [isHidden, setHidden] = useState(true);
 
   return (
     <Box sx={{ py: 3 }}>
@@ -53,7 +54,7 @@ export default function DonateToken({ post }) {
               )}
             />
             <Typography gutterBottom variant="h6" sx={{ display: "block" }}>
-              {`${filter.totalAmount} token raised of ${post.goal} Token`}
+              {`${filter.totalAmount} $ raised of ${post.goal} $`}
             </Typography>
           </Stack>
 
@@ -121,10 +122,41 @@ export default function DonateToken({ post }) {
                 variant="body2"
                 underline="always"
                 sx={{ cursor: "pointer" }}
+                onClick={() => setHidden(!isHidden)}
               >
                 See All
               </Link>
             </Stack>
+
+            {!isHidden && (
+              <Stack spacing={1}>
+                {post.donates.map((donate, index) => (
+                  <Stack
+                    key={`up-stack-${index}`}
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Stack key={`down-stack-${index}`}>
+                      <Typography
+                        key={`tp-wallet-${index}`}
+                        gutterBottom
+                        variant="p1"
+                      >
+                        wallet adress
+                      </Typography>
+                    </Stack>
+                    <Typography
+                      key={`tp-amount-${index}`}
+                      gutterBottom
+                      variant="p1"
+                    >
+                      {`${donate.amount} ${donate.cryptoType}`}
+                    </Typography>
+                  </Stack>
+                ))}
+              </Stack>
+            )}
           </Stack>
 
           <Stack spacing={2}>

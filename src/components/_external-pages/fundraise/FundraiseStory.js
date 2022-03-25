@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
+import moment from "moment";
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { Form, FormikProvider, useFormik } from "formik";
@@ -23,10 +24,16 @@ import {
 } from "@material-ui/core";
 // utils
 import fakeRequest from "../../../utils/fakeRequest";
-import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import { QuillEditor, DraftEditor } from "../../editor";
+import {
+  onBackStep,
+  onNextStep,
+  addPost,
+  setCheckout,
+} from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from "../fundraise";
 import FundraiseNewPostPreview from "../fundraise/FundraiseNewPostPreview";
-
+import { Quill } from "react-quill";
 // ----------------------------------------------------------------------
 
 FundraiseStory.propTypes = {
@@ -42,6 +49,7 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
+  const [text3, setText3] = useState("");
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -56,6 +64,17 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
   };
 
   const handleNextStep = () => {
+    if (!checkout.isSave) {
+      dispatch(
+        addPost({
+          ...checkout,
+          createdAt: moment(),
+        })
+      );
+      enqueueSnackbar("Save success", { variant: "success" });
+      dispatch(setCheckout({ name: "isSave", value: true }));
+    }
+
     dispatch(onNextStep());
   };
 
@@ -77,7 +96,6 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
-        // enqueueSnackbar("Post success", { variant: "success" });
         handleNextStep();
       } catch (error) {
         console.error(error);
@@ -96,19 +114,6 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
     getFieldProps,
     handleChange,
   } = formik;
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      if (file) {
-        setFieldValue("cover", {
-          ...file,
-          preview: URL.createObjectURL(file),
-        });
-      }
-    },
-    [setFieldValue]
-  );
 
   return (
     <>
@@ -206,7 +211,7 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
                       Why are you fundraise?
                     </Typography>
 
-                    <TextField
+                    {/* <TextField
                       fullWidth
                       multiline
                       minRows={3}
@@ -223,7 +228,37 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
                         });
                         handleChange(e);
                       }}
+                    /> */}
+
+                    {/* <DraftEditor
+                      editorState={text3}
+                      onEditorStateChange={(value) => setText3(value)}
+                    /> */}
+
+                    <QuillEditor
+                      id="product-description"
+                      simple
+                      value={values.description}
+                      onChange={(content, delta, source, editor) => {
+                        const text = editor.getText(content);
+
+                        setFieldValue("description", content);
+                        handleCheckout({
+                          name: "description",
+                          value: content,
+                        });
+                        handleCheckout({
+                          name: "descriptionText",
+                          value: text,
+                        });
+                      }}
+                      error={Boolean(touched.description && errors.description)}
                     />
+                    {touched.description && errors.description && (
+                      <FormHelperText error sx={{ px: 2 }}>
+                        {touched.description && errors.description}
+                      </FormHelperText>
+                    )}
 
                     <Button
                       // type="buttton"

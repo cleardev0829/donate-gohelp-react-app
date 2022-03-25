@@ -114,8 +114,8 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
     value: "",
     copied: false,
   });
-  const [shareUrl, setShareUrl] = useState("#");
-  const [title, setTitle] = useState("This is title");
+  const [shareUrl, setShareUrl] = useState(checkout.link);
+  const [title, setTitle] = useState(checkout.title);
 
   const handleOpenPreview = () => {
     setOpen(true);

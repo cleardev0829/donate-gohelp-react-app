@@ -16,6 +16,7 @@ import {
   Card,
   Grid,
   Stack,
+  Button,
   Container,
   Typography,
   FormHelperText,
@@ -24,6 +25,7 @@ import fakeRequest from "../../../utils/fakeRequest";
 import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
 import { UploadSingleFileOverride } from "../../upload";
 import { FundraiseHeader } from ".";
+import FundraisePhotoEditor from "./FundraisePhotoEditor";
 
 // ----------------------------------------------------------------------
 
@@ -105,6 +107,18 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
     [setFieldValue]
   );
 
+  const handleDelete = () => {
+    setFieldValue("cover", null);
+    handleCheckout({
+      name: "cover",
+      value: null,
+    });
+  };
+
+  const handleEdit = () => {
+    handleOpenPreview();
+  };
+
   return (
     <>
       <FormikProvider value={formik}>
@@ -159,17 +173,18 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
                           maxSize={3145728}
                           accept="image/*"
                           file={values.cover}
+                          rotate={checkout.rotate}
+                          scale={checkout.scale}
                           onDrop={(acceptedFiles) => {
                             const cover = acceptedFiles[0];
-
                             handleCheckout({
-                              id,
                               name: "cover",
                               value: {
                                 ...cover,
                                 preview: URL.createObjectURL(cover),
                               },
                             });
+                            handleOpenPreview();
                             handleDrop(acceptedFiles);
                           }}
                           error={Boolean(touched.cover && errors.cover)}
@@ -180,19 +195,37 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
                           </FormHelperText>
                         )}
                       </div>
+
+                      <Stack direction="row" justifyContent="space-between">
+                        <Button
+                          size="small"
+                          type="button"
+                          variant="outlined"
+                          startIcon={<Icon icon="akar-icons:edit" />}
+                          onClick={handleEdit}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="small"
+                          type="button"
+                          variant="outlined"
+                          startIcon={<Icon icon="bx:trash-alt" />}
+                          onClick={handleDelete}
+                        >
+                          Delete
+                        </Button>
+                      </Stack>
                     </Stack>
                   </Card>
 
-                  <Box
+                  {/* <Box
                     sx={{
                       height: 2,
                       backgroundColor: (theme) => theme.palette.common.white,
                       background:
                         "radial-gradient(50% 50% at 50% 50%, #DADADA 0%, rgba(218, 218, 218, 0) 100%)",
-
                       transform: "matrix(-1, 0, 0, 1, 0, 0)",
-                      // transform: "matrix(1, 0, 0, -1, 0, 0)",
-                      // transform: "rotate(-180deg)",
                     }}
                   ></Box>
 
@@ -206,14 +239,19 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
                       <Icon icon="fluent:link-square-20-regular" />
                       <Typography variant="p1">Add a YouTube link</Typography>
                     </Stack>
-                  </Card>
+                  </Card> */}
                 </Stack>
               </Grid>
             </Grid>
           </Container>
         </Form>
       </FormikProvider>
-      {/* <BlogNewPostPreview formik={formik} openPreview={open} onClosePreview={handleClosePreview} /> */}
+      <FundraisePhotoEditor
+        file={checkout.cover}
+        formik={formik}
+        openPreview={open}
+        onClosePreview={handleClosePreview}
+      />
     </>
   );
 }

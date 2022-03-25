@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "../../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import faker from "faker";
 import {
   alpha,
   experimentalStyled as styled,
@@ -21,9 +22,8 @@ import {
   setCheckout,
 } from "../../../redux/slices/fundraise";
 import { FundraiseTypeCard, FundraiseHeader } from ".";
+import { useEffect } from "react";
 // ----------------------------------------------------------------------
-
-const IMG = (index) => `/static/select_fundraise/select_fundraise_${index}.png`;
 
 const TITLES = ["Yourself or someone else", "A charity"];
 
@@ -36,7 +36,7 @@ const posts = [...Array(2)].map((_, index) => {
   const setIndex = index + 1;
   return {
     id: `0feb2990-4210-4170-93a4-37e8f5958a18-${setIndex}`,
-    cover: IMG(setIndex),
+    cover: `/static/select_fundraise/select_fundraise_${setIndex}.png`,
     title: TITLES[index],
     description: DESCRIPTIONS[index],
   };
@@ -62,6 +62,14 @@ export default function FundraiseType() {
   const { checkout } = useSelector((state) => state.fundraise);
   const { type } = checkout;
   const isLight = theme.palette.mode === "light";
+
+  const uid = faker.datatype.uuid();
+  const link = `${window.location.origin}/donate/${uid}`;
+
+  useEffect(() => {
+    dispatch(setCheckout({ name: "uid", value: uid }));
+    dispatch(setCheckout({ name: "link", value: link }));
+  }, [dispatch]);
 
   const handleType = (type) => {
     dispatch(

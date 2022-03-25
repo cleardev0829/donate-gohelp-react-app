@@ -5,6 +5,7 @@ import roundGrain from "@iconify/icons-ic/round-grain";
 import bookOpenFill from "@iconify/icons-eva/book-open-fill";
 import featureOpenFill from "@iconify/icons-eva/file-add-outline";
 import { paramCase } from "change-case";
+import _ from "lodash";
 // routes
 import {
   PATH_AUTH,
@@ -22,7 +23,7 @@ const ICON_SIZE = {
 };
 
 let categories = [];
-CATEGORIES.map((category) =>
+_.orderBy(CATEGORIES, [(item) => item.toLowerCase()], ["asc"]).map((category) =>
   categories.push({
     title: category,
     path: PATH_PAGE.fundraise,

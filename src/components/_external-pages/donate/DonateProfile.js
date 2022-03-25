@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { Icon } from "@iconify/react";
+import ReactQuill from "react-quill";
 import moment from "moment";
 // material
 import {
@@ -35,6 +36,29 @@ import { diff } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
+const QuillWrapperStyle = styled("div")(({ theme }) => ({
+  borderRadius: theme.shape.borderRadius,
+  border: `solid 1px ${theme.palette.grey[500_32]}`,
+  "& .ql-container.ql-snow": {
+    borderColor: "transparent",
+    ...theme.typography.body1,
+    fontFamily: theme.typography.fontFamily,
+  },
+  "& .ql-editor": {
+    minHeight: 200,
+    "&.ql-blank::before": {
+      fontStyle: "normal",
+      color: theme.palette.text.disabled,
+    },
+    "& pre.ql-syntax": {
+      ...theme.typography.body2,
+      padding: theme.spacing(2),
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: theme.palette.grey[900],
+    },
+  },
+}));
+
 DonateProfile.propTypes = {
   post: PropTypes.object,
 };
@@ -43,7 +67,20 @@ export default function DonateProfile({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { coverUrl, title, description, createdAt, cover } = post;
+  const { coverUrl, title, description, createdAt, rotate, scale } = post;
+
+  const modules = {
+    toolbar: false,
+    history: {
+      delay: 500,
+      maxStack: 100,
+      userOnly: true,
+    },
+    syntax: true,
+    clipboard: {
+      matchVisual: false,
+    },
+  };
 
   return (
     <Box sx={{ py: 3 }}>
@@ -52,7 +89,15 @@ export default function DonateProfile({ post }) {
 
         <Box sx={{ position: "relative" }}>
           <CardMediaStyle>
-            <CoverImgStyle alt="cover" src={coverUrl} />
+            <CoverImgStyle
+              alt="cover"
+              src={coverUrl}
+              sx={{
+                transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
+                  1 + scale / 100
+                })`,
+              }}
+            />
           </CardMediaStyle>
         </Box>
 
@@ -97,7 +142,19 @@ export default function DonateProfile({ post }) {
                   A few words from Fundraiser
                 </Typography>
 
-                <Typography variant="body2">{description}</Typography>
+                <QuillWrapperStyle>
+                  <ReactQuill
+                    readOnly
+                    value={description}
+                    modules={modules}
+                    style={{
+                      border: "0px solid black",
+                      margin: 0,
+                    }}
+                  />
+                </QuillWrapperStyle>
+
+                {/* <Typography variant="body2">{description}</Typography> */}
               </Stack>
             </Card>
           </Stack>

@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
+import _ from "lodash";
 // material
 import { LoadingButton } from "@material-ui/lab";
 import {
@@ -29,6 +30,8 @@ import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
 import { CATEGORIES } from "../../../utils/constants";
 import countries from "./countries";
+import ReactFlagsSelect from "react-flags-select";
+import ReactCountryFlag from "react-country-flag";
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +46,7 @@ export default function FundraiseBasics({ handleCheckout }) {
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("");
 
   useEffect(() => {
     setFieldValue("category", checkout.category);
@@ -177,6 +181,15 @@ export default function FundraiseBasics({ handleCheckout }) {
                     >
                       {countries.map((option) => (
                         <MenuItem key={option.code} value={option.label}>
+                          <ReactCountryFlag
+                            countryCode={option.code}
+                            svg
+                            style={{
+                              // width: "2em",
+                              // height: "2em",
+                              marginRight: 10,
+                            }}
+                          />
                           {option.label}
                         </MenuItem>
                       ))}
@@ -213,7 +226,11 @@ export default function FundraiseBasics({ handleCheckout }) {
                         handleChange(e);
                       }}
                     >
-                      {CATEGORIES.map((option) => (
+                      {_.orderBy(
+                        CATEGORIES,
+                        [(item) => item.toLowerCase()],
+                        ["asc"]
+                      ).map((option) => (
                         <MenuItem key={option} value={option}>
                           {option}
                         </MenuItem>

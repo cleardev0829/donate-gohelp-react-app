@@ -208,7 +208,15 @@ export default function FundraiseDetails() {
                 <Grid item xs={12} md={5}>
                   <Card sx={{ position: "relative" }}>
                     <CardMediaStyle>
-                      <CoverImgStyle alt={"cover"} src={data.coverUrl} />
+                      <CoverImgStyle
+                        alt={"cover"}
+                        src={data.coverUrl}
+                        sx={{
+                          transform: `rotate(${
+                            ((-1 * data.rotate) % 4) * 90
+                          }deg) scale(${1 + data.scale / 100})`,
+                        }}
+                      />
                     </CardMediaStyle>
                   </Card>
                 </Grid>
@@ -284,9 +292,9 @@ export default function FundraiseDetails() {
                       variant="h6"
                       sx={{ display: "block", mt: 2 }}
                     >
-                      {`${fNumber(
-                        filter.totalAmount
-                      )} token raised of ${fNumber(data.goal)} Token`}
+                      {`${fNumber(filter.totalAmount)} $ raised of ${fNumber(
+                        data.goal
+                      )} $`}
                     </Typography>
                   </Stack>
                 </Grid>

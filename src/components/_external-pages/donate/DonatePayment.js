@@ -8,6 +8,7 @@ import moment from "moment";
 import lodash from "lodash";
 // material
 import {
+  alpha,
   experimentalStyled as styled,
   useTheme,
 } from "@material-ui/core/styles";
@@ -20,6 +21,7 @@ import {
   Button,
   Divider,
   Slider,
+  MenuItem,
   TextField,
   Container,
   Typography,
@@ -36,11 +38,10 @@ import {
   addDonate,
 } from "../../../redux/slices/donate";
 import { fPercent } from "src/utils/formatNumber";
-import { filters } from "src/utils/constants";
+import { filters, CRYPTO_TYPES } from "src/utils/constants";
+import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 
 // ----------------------------------------------------------------------
-
-const IMG = (index) => `/static/fundraisers/fundraiser_${index}.png`;
 
 const marks = [
   {
@@ -53,21 +54,6 @@ const marks = [
     label: "100%",
   },
 ];
-
-const CardMediaStyle = styled("div")({
-  // height: 100,
-  position: "relative",
-  paddingTop: "calc(100% * 3 / 4)",
-});
-
-const CoverImgStyle = styled("img")({
-  top: 0,
-  width: "100%",
-  height: "100%",
-  objectFit: "contain",
-  // objectFit: "cover",
-  position: "absolute",
-});
 
 const ImgStyle = styled("img")({
   // width: 40,
@@ -84,6 +70,7 @@ export default function DonatePayment({ post }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
+  const isLight = theme.palette.mode === "light";
   const { id } = params;
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -96,7 +83,7 @@ export default function DonatePayment({ post }) {
   const handleChangeToken = (value) => {};
 
   function valuetext(value) {
-    return `0 Token ${value}%`;
+    return `0 $ ${value}%`;
   }
 
   const handleClosePreview = () => {
@@ -125,13 +112,14 @@ export default function DonatePayment({ post }) {
   };
 
   const Schema = Yup.object().shape({
+    cryptoType: Yup.string().required("This is required"),
     amount: Yup.number().required("This is required"),
-    // tipAmount: Yup.number().required("This is required"),
     // message: Yup.string().required("This is required"),
   });
 
   const formik = useFormik({
     initialValues: {
+      cryptoType: checkout.cryptoType,
       amount: checkout.amount,
       tipAmount: checkout.tipAmount,
       message: checkout.message,
@@ -181,7 +169,15 @@ export default function DonatePayment({ post }) {
                 <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
                   <Box sx={{ position: "relative" }}>
                     <CardMediaStyle>
-                      <CoverImgStyle alt={"title"} src={IMG(1)} />
+                      <CoverImgStyle
+                        alt={"title"}
+                        src={post.coverUrl}
+                        sx={{
+                          transform: `rotate(${
+                            ((-1 * post.rotate) % 4) * 90
+                          }deg) scale(${1 + post.scale / 100})`,
+                        }}
+                      />
                     </CardMediaStyle>
                   </Box>
 
@@ -237,7 +233,42 @@ export default function DonatePayment({ post }) {
                 <Card sx={{ p: theme.shape.CARD_PADDING }}>
                   <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                      <Typography variant="h4">Enter your donation</Typography>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          ...(!isLight && {
+                            textShadow: (theme) =>
+                              `4px 4px 16px ${alpha(
+                                theme.palette.grey[800],
+                                0.48
+                              )}`,
+                          }),
+                        }}
+                      >
+                        Enter your donation
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        size="small"
+                        label="Select type of token"
+                        {...getFieldProps("cryptoType")}
+                        error={Boolean(touched.cryptoType && errors.cryptoType)}
+                        helperText={touched.cryptoType && errors.cryptoType}
+                        select
+                        onChange={(e) => {
+                          handleCheckout({
+                            name: e.target.name,
+                            value: e.target.value,
+                          });
+                          handleChange(e);
+                        }}
+                      >
+                        {CRYPTO_TYPES.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </TextField>
                       <TextField
                         fullWidth
                         size="small"
@@ -269,8 +300,8 @@ export default function DonatePayment({ post }) {
                     {activeStep === 0 && (
                       <Slider
                         marks={marks}
-                        min={1}
-                        step={10}
+                        min={0}
+                        // step={10}
                         max={100}
                         defaultValue={0}
                         value={
@@ -359,6 +390,9 @@ export default function DonatePayment({ post }) {
                       <Typography variant="h4">Leave a message</Typography>
                       <TextField
                         fullWidth
+                        multiline
+                        minRows={3}
+                        maxRows={20}
                         size="small"
                         label="Enter your message"
                         {...getFieldProps("message")}

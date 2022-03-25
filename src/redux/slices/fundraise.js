@@ -18,6 +18,7 @@ const initialState = {
 
   checkout: {
     activeStep: -1,
+    isSave: false,
 
     uid: null,
     type: null,
@@ -29,8 +30,11 @@ const initialState = {
     youTubeLink: "",
     title: "",
     description: "",
+    descriptionText: "",
     email: "",
     link: "",
+    rotate: 0,
+    scale: 0,
   },
 };
 
@@ -89,6 +93,7 @@ const slice = createSlice({
 
     resetCheckout(state) {
       state.checkout.activeStep = -1;
+      state.checkout.isSave = false;
 
       state.checkout.uid = null;
       state.checkout.type = null;
@@ -100,8 +105,11 @@ const slice = createSlice({
       state.checkout.youTubeLink = "";
       state.checkout.title = "";
       state.checkout.description = "";
+      state.checkout.descriptionText = "";
       state.checkout.email = "";
       state.checkout.link = "";
+      state.checkout.rotate = 0;
+      state.checkout.scale = 0;
     },
 
     onBackStep(state) {

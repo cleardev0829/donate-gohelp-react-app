@@ -49,7 +49,14 @@ UploadSingleFile.propTypes = {
   sx: PropTypes.object,
 };
 
-export default function UploadSingleFile({ error, file, sx, ...other }) {
+export default function UploadSingleFile({
+  error,
+  file,
+  rotate = 0,
+  scale = 0,
+  sx,
+  ...other
+}) {
   const theme = useTheme();
 
   const {
@@ -146,6 +153,9 @@ export default function UploadSingleFile({ error, file, sx, ...other }) {
               position: "absolute",
               width: "calc(100% - 16px)",
               height: "calc(100% - 16px)",
+              transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
+                1 + scale / 100
+              })`,
             }}
           />
         )}

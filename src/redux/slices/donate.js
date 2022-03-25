@@ -21,6 +21,7 @@ const initialState = {
     activeStep: -1,
 
     amount: null,
+    cryptoType: "",
     defaultTip: 10,
     tipAmount: null,
     message: "",
@@ -84,6 +85,7 @@ const slice = createSlice({
       state.checkout.activeStep = -1;
 
       state.checkout.amount = null;
+      state.checkout.cryptoType = "";
       state.checkout.tipAmount = null;
       state.checkout.message = null;
     },

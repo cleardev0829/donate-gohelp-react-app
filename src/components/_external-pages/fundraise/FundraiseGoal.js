@@ -20,6 +20,7 @@ import {
   MenuItem,
   Typography,
   Autocomplete,
+  InputAdornment,
   FormHelperText,
   FormControlLabel,
   useTheme,
@@ -217,6 +218,27 @@ export default function FundraiseGoal({ handleCheckout }) {
                           });
                           handleChange(e);
                         }}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="start">
+                              <Typography
+                                variant="h5"
+                                // sx={{
+                                //   ...(!isLight && {
+                                //     textShadow: (theme) =>
+                                //       `4px 4px 16px ${alpha(
+                                //         theme.palette.grey[800],
+                                //         0.48
+                                //       )}`,
+                                //   }),
+                                // }}
+                              >
+                                $
+                              </Typography>
+                            </InputAdornment>
+                          ),
+                        }}
+                        varia
                       />
                     </Stack>
 

@@ -18,22 +18,22 @@ mock.onPost("/api/donate/add").reply(async (request) => {
   try {
     const data = JSON.parse(request.data);
 
+    // await firebase
+    //   .firestore()
+    //   .collection("donate")
+    //   .add({
+    //     ...data,
+    //   })
+    //   .then(() =>
     await firebase
       .firestore()
+      .collection("fundraise")
+      .doc(data.fundraiseId)
       .collection("donate")
       .add({
         ...data,
-      })
-      .then(() =>
-        firebase
-          .firestore()
-          .collection("fundraise")
-          .doc(data.fundraiseId)
-          .collection("donate")
-          .add({
-            ...data,
-          })
-      );
+      });
+    // );
 
     return [200, { data }];
   } catch (error) {

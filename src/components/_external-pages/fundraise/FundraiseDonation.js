@@ -91,19 +91,13 @@ export default function FundraiseDonation() {
   };
 
   const handleNextStep = () => {
-    const uid = faker.datatype.uuid();
-    const link = `${window.location.origin}/donate/${uid}`;
-    dispatch(setCheckout({ name: "uid", value: uid }));
-    dispatch(setCheckout({ name: "link", value: link }));
-    dispatch(
-      addPost({
-        ...checkout,
-        uid,
-        link,
-        createdAt: moment(),
-      })
-    );
-    enqueueSnackbar("Save success", { variant: "success" });
+    // dispatch(
+    //   addPost({
+    //     ...checkout,
+    //     createdAt: moment(),
+    //   })
+    // );
+    // enqueueSnackbar("Save success", { variant: "success" });
     dispatch(onNextStep());
   };
 
