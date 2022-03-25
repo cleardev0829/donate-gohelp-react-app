@@ -38,7 +38,7 @@ import { diff } from "../../../utils/constants";
 
 const QuillWrapperStyle = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
-  border: `solid 1px ${theme.palette.grey[500_32]}`,
+  border: `solid 0px ${theme.palette.grey[500_32]}`,
   "& .ql-container.ql-snow": {
     borderColor: "transparent",
     ...theme.typography.body1,
@@ -148,7 +148,6 @@ export default function DonateProfile({ post }) {
                     value={description}
                     modules={modules}
                     style={{
-                      border: "0px solid black",
                       margin: 0,
                     }}
                   />

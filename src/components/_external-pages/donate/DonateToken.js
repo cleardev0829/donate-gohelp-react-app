@@ -67,7 +67,7 @@ export default function DonateToken({ post }) {
               <Stack>
                 <Typography variant="h7">Top donation</Typography>
                 <Typography gutterBottom variant="p1">
-                  Tom smith
+                  address
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">
@@ -83,7 +83,7 @@ export default function DonateToken({ post }) {
               <Stack>
                 <Typography variant="h7">Recent donation</Typography>
                 <Typography gutterBottom variant="p1">
-                  Tom smith
+                  address
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">
@@ -99,7 +99,7 @@ export default function DonateToken({ post }) {
               <Stack>
                 <Typography variant="h7">First donation</Typography>
                 <Typography gutterBottom variant="p1">
-                  Tom smith
+                  address
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">

@@ -1,5 +1,15 @@
 import moment from "moment";
 
+export const CRYPTO_PRICE = {
+  BTC: 43602.25,
+  ETH: 3098.56,
+  SOL: 102.84,
+};
+
+export const CRYPTO_TO_USD = (val, type) => {
+  return CRYPTO_PRICE[type] * parseFloat(val);
+};
+
 export const getFileBlob = (url, cb) => {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", url);

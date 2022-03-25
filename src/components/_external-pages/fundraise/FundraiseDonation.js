@@ -87,17 +87,10 @@ export default function FundraiseDonation() {
   };
 
   const handleBackStep = () => {
-    dispatch(onBackStep());
+    // dispatch(onBackStep());
   };
 
   const handleNextStep = () => {
-    // dispatch(
-    //   addPost({
-    //     ...checkout,
-    //     createdAt: moment(),
-    //   })
-    // );
-    // enqueueSnackbar("Save success", { variant: "success" });
     dispatch(onNextStep());
   };
 
