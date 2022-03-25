@@ -118,14 +118,16 @@ export default function DonateToken({ post }) {
                   {`${filter.count} people donated`}
                 </Typography>
               </Stack>
-              <Link
-                variant="body2"
-                underline="always"
-                sx={{ cursor: "pointer" }}
-                onClick={() => setHidden(!isHidden)}
-              >
-                See All
-              </Link>
+              {isHidden && (
+                <Link
+                  variant="body2"
+                  underline="always"
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => setHidden(!isHidden)}
+                >
+                  See All
+                </Link>
+              )}
             </Stack>
 
             {!isHidden && (
