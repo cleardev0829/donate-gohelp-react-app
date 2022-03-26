@@ -6,17 +6,18 @@ import { Container } from "@material-ui/core";
 import HeaderStepBreadcrumbs from "../../HeaderStepBreadcrumbs";
 import HeaderStep from "../../HeaderStep";
 
-HeaderStepBreadcrumbs.propTypes = {
+FundraiseHeader.propTypes = {
+  cancelTitle: PropTypes.string,
+  continueTitle: PropTypes.string,
+  cancelButton: PropTypes.bool,
   cancelAction: PropTypes.func,
   continueAction: PropTypes.func,
-  // sx: PropTypes.object,
-  activeStep: PropTypes.number,
-  isComplete: PropTypes.bool,
 };
 
 export default function FundraiseHeader({
-  cancelTitle,
-  continueTitle,
+  cancelTitle = "Back",
+  continueTitle = "Continue",
+  cancelButton = true,
   cancelAction,
   continueAction,
 
@@ -28,6 +29,7 @@ export default function FundraiseHeader({
         <HeaderStepBreadcrumbs
           cancelTitle={cancelTitle}
           continueTitle={continueTitle}
+          cancelButton={cancelButton}
           cancelAction={cancelAction}
           continueAction={continueAction}
           sx={sx}

@@ -22,10 +22,9 @@ const initialState = {
 
     uid: null,
     type: null,
-    live: "",
+    live: {},
     category: "",
-    cryptoType: "",
-    goal: 0,
+    goal: 1000,
     cover: null,
     youTubeLink: "",
     title: "",
@@ -97,10 +96,9 @@ const slice = createSlice({
 
       state.checkout.uid = null;
       state.checkout.type = null;
-      state.checkout.live = "";
+      state.checkout.live = {};
       state.checkout.category = "";
-      state.checkout.cryptoType = "";
-      state.checkout.goal = 0;
+      state.checkout.goal = 1000;
       state.checkout.cover = null;
       state.checkout.youTubeLink = "";
       state.checkout.title = "";

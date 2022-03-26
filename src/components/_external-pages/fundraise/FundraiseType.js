@@ -23,6 +23,7 @@ import {
 } from "../../../redux/slices/fundraise";
 import { FundraiseTypeCard, FundraiseHeader } from ".";
 import { useEffect } from "react";
+import { makePageLink } from "src/utils/constants";
 // ----------------------------------------------------------------------
 
 const TITLES = ["Yourself or someone else", "A charity"];
@@ -64,7 +65,7 @@ export default function FundraiseType() {
   const isLight = theme.palette.mode === "light";
 
   const uid = faker.datatype.uuid();
-  const link = `${window.location.origin}/donate/${uid}`;
+  const link = makePageLink(uid);
 
   useEffect(() => {
     dispatch(setCheckout({ name: "uid", value: uid }));
@@ -93,7 +94,7 @@ export default function FundraiseType() {
     }
 
     dispatch(onNextStep());
-    // dispatch(onGotoStep(3));
+    // dispatch(onGotoStep(4));
   };
 
   return (

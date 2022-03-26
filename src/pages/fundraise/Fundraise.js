@@ -102,11 +102,12 @@ export default function Fundraise() {
           {activeStep === 5 && (
             <FundraiseShare
               id="share"
+              uid={checkout.uid}
               activeStep={activeStep}
               handleCheckout={handleCheckout}
             />
           )}
-          {activeStep === 6 && <FundraiseDetails />}
+          {activeStep === 6 && <FundraiseDetails uid={checkout.uid} />}
         </>
       ) : (
         <FundraiseComplete open={isComplete} />

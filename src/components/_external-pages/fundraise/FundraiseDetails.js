@@ -1,6 +1,7 @@
 import _ from "lodash";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
+import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { capitalCase } from "change-case";
 import { Form, FormikProvider, useFormik } from "formik";
@@ -44,7 +45,7 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import ProgressItem from "../../ProgressItem";
+import DonateProgress from "../../DonateProgress";
 import { useDispatch, useSelector } from "../../../redux/store";
 import {
   onBackStep,
@@ -55,6 +56,7 @@ import { FundraiseHeader } from ".";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
 import { diff, filters } from "../../../utils/constants";
+import FundraiseShareDialog from "./FundraiseShareDialog";
 
 // ----------------------------------------------------------------------
 
@@ -107,13 +109,17 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
     paddingRight: theme.spacing(3),
   },
 }));
+
 // ----------------------------------------------------------------------
 
-export default function FundraiseDetails() {
+FundraiseDetails.propTypes = {
+  uid: PropTypes.string,
+};
+
+export default function FundraiseDetails({ uid }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { checkout, post } = useSelector((state) => state.fundraise);
-  const { uid } = checkout;
+  const { post } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
@@ -158,10 +164,10 @@ export default function FundraiseDetails() {
 
   const formik = useFormik({
     initialValues: {
-      title: checkout.title,
-      description: checkout.description,
+      title: post.title,
+      description: post.description,
       content: "",
-      cover: checkout.cover,
+      cover: post.cover,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -199,7 +205,7 @@ export default function FundraiseDetails() {
           <FundraiseHeader
             continueTitle="Share"
             cancelAction={handleBackStep}
-            continueAction={handleNextStep}
+            continueAction={handleOpenPreview}
           />
 
           <Container maxWidth="lg">
@@ -242,7 +248,7 @@ export default function FundraiseDetails() {
                       {data.title}
                     </Typography>
 
-                    {/* <Stack direction="row" justifyContent="space-between">
+                    <Stack direction="row" justifyContent="space-between">
                       <motion.div variants={varFadeInRight}>
                         <Button
                           variant="contained"
@@ -263,8 +269,8 @@ export default function FundraiseDetails() {
                         <Button
                           variant="contained"
                           color="inherit"
-                          // component={RouterLink}
-                          // to={PATH_PAGE.page404}
+                          component={RouterLink}
+                          to={`${PATH_PAGE.donate}/${uid}`}
                           startIcon={<Icon icon="akar-icons:eye" />}
                           sx={{
                             color: "text.primary",
@@ -275,30 +281,16 @@ export default function FundraiseDetails() {
                           View fundraiser
                         </Button>
                       </motion.div>
-                    </Stack> */}
+                    </Stack>
 
-                    <ProgressItem
-                      text={`Last donation ${diff(
-                        moment(),
-                        moment(data.createdAt)
-                      )}`}
-                      progress={fPercent(
-                        (filter.totalAmount * 100) / data.goal
-                      )}
+                    <DonateProgress
+                      time={diff(moment(), moment(data.createdAt))}
+                      total={filter.totalAmount}
+                      goal={data.goal}
                     />
-
-                    <Typography
-                      gutterBottom
-                      variant="h6"
-                      sx={{ display: "block", mt: 2 }}
-                    >
-                      {`${fNumber(filter.totalAmount)} $ raised of ${fNumber(
-                        data.goal
-                      )} $`}
-                    </Typography>
                   </Stack>
                 </Grid>
-                {/* <Grid item xs={12} md={2}>
+                <Grid item xs={12} md={2}>
                   <Button
                     fullWidth
                     variant="contained"
@@ -313,7 +305,7 @@ export default function FundraiseDetails() {
                   >
                     Update
                   </Button>
-                </Grid> */}
+                </Grid>
               </Grid>
 
               <Grid container>
@@ -427,7 +419,12 @@ export default function FundraiseDetails() {
         </Form>
       </FormikProvider>
 
-      {/* <BlogNewPostPreview formik={formik} openPreview={open} onClosePreview={handleClosePreview} /> */}
+      <FundraiseShareDialog
+        uid={uid}
+        formik={formik}
+        openPreview={open}
+        onClosePreview={handleClosePreview}
+      />
     </>
   );
 }

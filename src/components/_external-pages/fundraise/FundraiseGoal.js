@@ -64,7 +64,7 @@ export default function FundraiseGoal({ handleCheckout }) {
 
   const Schema = Yup.object().shape({
     // cryptoType: Yup.string().required("This is required"),
-    goal: Yup.number().min(1).required("This is required"),
+    goal: Yup.number().min(1000).required("This is required"),
   });
 
   const formik = useFormik({

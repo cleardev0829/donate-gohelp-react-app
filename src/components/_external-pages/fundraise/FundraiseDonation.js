@@ -87,7 +87,7 @@ export default function FundraiseDonation() {
   };
 
   const handleBackStep = () => {
-    // dispatch(onBackStep());
+    dispatch(onBackStep());
   };
 
   const handleNextStep = () => {
@@ -136,6 +136,7 @@ export default function FundraiseDonation() {
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <FundraiseHeader
+            cancelButton={false}
             cancelAction={handleBackStep}
             continueAction={handleSubmit}
           />

@@ -65,7 +65,7 @@ export default function FundraiseBasics({ handleCheckout }) {
   };
 
   const NewBlogSchema = Yup.object().shape({
-    live: Yup.string().required("This is required"),
+    live: Yup.mixed().required("This is required"),
     category: Yup.string().required("This is required"),
   });
 
@@ -180,7 +180,7 @@ export default function FundraiseBasics({ handleCheckout }) {
                       }}
                     >
                       {countries.map((option) => (
-                        <MenuItem key={option.code} value={option.label}>
+                        <MenuItem key={option.code} value={option}>
                           <ReactCountryFlag
                             countryCode={option.code}
                             svg

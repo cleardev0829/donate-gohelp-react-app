@@ -13,7 +13,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-import { getFileBlob } from "src/utils/constants";
+import { getFileBlob, cryptoToUSD } from "src/utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +72,10 @@ mock.onGet("/api/fundraise/posts/all").reply(async () => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.docs.map((doc) => {
-          posts.push({ ...doc.data(), id: doc.id });
+          posts.push({
+            ...doc.data(),
+            id: doc.id,
+          });
         });
       });
 
@@ -130,7 +133,14 @@ mock.onGet("/api/fundraise/posts").reply(async (config) => {
             .get()
             .then((snapshot) => {
               snapshot.docs.map((doc) => {
-                donates.push({ ...doc.data(), id: doc.id });
+                donates.push({
+                  ...doc.data(),
+                  crypto: {
+                    ...doc.data().crypto,
+                    amount: cryptoToUSD(doc.data().crypto),
+                  },
+                  id: doc.id,
+                });
               });
 
               postsWithDonates.push({ ...post, donates });
@@ -184,7 +194,14 @@ mock.onGet("/api/fundraise/post").reply(async (config) => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.docs.map((doc) => {
-          donates.push({ ...doc.data(), id: doc.id });
+          donates.push({
+            ...doc.data(),
+            crypto: {
+              ...doc.data().crypto,
+              amount: cryptoToUSD(doc.data().crypto),
+            },
+            id: doc.id,
+          });
         });
       });
 

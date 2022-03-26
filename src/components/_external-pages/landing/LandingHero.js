@@ -117,32 +117,32 @@ export default function LandingHero() {
                   </Button>
                 </motion.div>
 
-                <Stack
-                  component={motion.div}
-                  variants={varFadeInRight}
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                  justifyContent={{ xs: "center", md: "flex-start" }}
+                <Link
+                  href="#"
+                  target="_blank"
+                  underline="none"
+                  sx={{ color: "text.primary" }}
                 >
-                  <IconStyle>
-                    <Icon
-                      icon={arrowRightFill}
-                      color={theme.palette.primary.main}
-                      width={theme.shape.ICON_SIZE}
-                      height={theme.shape.ICON_SIZE}
-                    />
-                  </IconStyle>
-
-                  <Link
-                    href="#"
-                    target="_blank"
-                    underline="none"
-                    sx={{ color: "text.primary" }}
+                  <Stack
+                    component={motion.div}
+                    variants={varFadeInRight}
+                    direction="row"
+                    spacing={1}
+                    alignItems="center"
+                    justifyContent={{ xs: "center", md: "flex-start" }}
                   >
+                    <IconStyle>
+                      <Icon
+                        icon={arrowRightFill}
+                        color={theme.palette.primary.main}
+                        width={theme.shape.ICON_SIZE}
+                        height={theme.shape.ICON_SIZE}
+                      />
+                    </IconStyle>
+
                     <Typography variant="p1">See how GoHelp work </Typography>
-                  </Link>
-                </Stack>
+                  </Stack>
+                </Link>
               </Stack>
             </ContentStyle>
           </Grid>

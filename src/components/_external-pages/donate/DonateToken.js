@@ -27,8 +27,9 @@ import {
   varFadeInRight,
 } from "../../animate";
 import ProgressItem from "../../../components/ProgressItem";
+import DonateProgress from "../../../components/DonateProgress";
 import { onNextStep } from "src/redux/slices/donate";
-import { fPercent } from "src/utils/formatNumber";
+import { fCurrency, fPercent } from "src/utils/formatNumber";
 import { filters } from "src/utils/constants";
 // ----------------------------------------------------------------------
 
@@ -46,17 +47,11 @@ export default function DonateToken({ post }) {
     <Box sx={{ py: 3 }}>
       <Card sx={{ p: theme.shape.CARD_PADDING }}>
         <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-          <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-            <ProgressItem
-              text={`Last donation ${filter.recentTimeAgo}`}
-              progress={fPercent(
-                (parseFloat(filter.totalAmount) * 100) / parseFloat(post.goal)
-              )}
-            />
-            <Typography gutterBottom variant="h6" sx={{ display: "block" }}>
-              {`${filter.totalAmount} $ raised of ${post.goal} $`}
-            </Typography>
-          </Stack>
+          <DonateProgress
+            time={filter.recentTimeAgo}
+            total={filter.totalAmount}
+            goal={post.goal}
+          />
 
           <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
             <Stack
@@ -71,7 +66,7 @@ export default function DonateToken({ post }) {
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">
-                {filter.maxAmount}
+                {`${fCurrency(filter.maxAmount)}`}
               </Typography>
             </Stack>
 
@@ -87,7 +82,7 @@ export default function DonateToken({ post }) {
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">
-                {filter.recentAmount}
+                {`${fCurrency(filter.recentAmount)}`}
               </Typography>
             </Stack>
 
@@ -103,7 +98,7 @@ export default function DonateToken({ post }) {
                 </Typography>
               </Stack>
               <Typography gutterBottom variant="p1">
-                {filter.firstAmount}
+                {`${fCurrency(filter.firstAmount)}`}
               </Typography>
             </Stack>
 
@@ -153,7 +148,9 @@ export default function DonateToken({ post }) {
                       gutterBottom
                       variant="p1"
                     >
-                      {`${donate.amount} ${donate.cryptoType}`}
+                      {`${fCurrency(donate.crypto.amount)} (${
+                        donate.crypto.count
+                      } ${donate.crypto.type})`}
                     </Typography>
                   </Stack>
                 ))}

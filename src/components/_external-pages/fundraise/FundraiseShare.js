@@ -54,6 +54,7 @@ import {
   InstapaperIcon,
   MailruIcon,
 } from "react-share";
+import { makePageLink } from "src/utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -99,11 +100,17 @@ const CoverImgStyle = styled("img")({
 
 FundraiseShare.propTypes = {
   id: PropTypes.string,
+  uid: PropTypes.string,
   activeStep: PropTypes.number,
   handleCheckout: PropTypes.func,
 };
 
-export default function FundraiseShare({ id, activeStep, handleCheckout }) {
+export default function FundraiseShare({
+  id,
+  uid,
+  activeStep,
+  handleCheckout,
+}) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.fundraise);
@@ -144,7 +151,7 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
   const formik = useFormik({
     initialValues: {
       email: checkout.email,
-      link: checkout.link,
+      link: makePageLink(uid),
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -184,6 +191,7 @@ export default function FundraiseShare({ id, activeStep, handleCheckout }) {
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
         <FundraiseHeader
+          cancelButton={false}
           cancelAction={handleBackStep}
           continueAction={handleSubmit}
         />

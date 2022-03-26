@@ -25,6 +25,7 @@ import {
   TextField,
   Container,
   Typography,
+  InputAdornment,
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { PATH_DASHBOARD } from "../../../routes/paths";
@@ -37,23 +38,11 @@ import {
   setCheckout,
   addDonate,
 } from "../../../redux/slices/donate";
-import { fPercent } from "src/utils/formatNumber";
-import { filters, CRYPTO_TYPES } from "src/utils/constants";
+import { fCurrency, fPercent } from "src/utils/formatNumber";
+import { filters, CRYPTO_TYPES, cryptoToUSD } from "src/utils/constants";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 
 // ----------------------------------------------------------------------
-
-const marks = [
-  {
-    value: 0,
-    label: "0%",
-  },
-
-  {
-    value: 100,
-    label: "100%",
-  },
-];
 
 const ImgStyle = styled("img")({
   // width: 40,
@@ -72,7 +61,6 @@ export default function DonatePayment({ post }) {
   const params = useParams();
   const isLight = theme.palette.mode === "light";
   const { id } = params;
-  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const { checkout } = useSelector((state) => state.donate);
   const { activeStep } = checkout;
@@ -90,16 +78,7 @@ export default function DonatePayment({ post }) {
     setOpen(false);
   };
 
-  const handleCheckout = ({ name, value }) => {
-    dispatch(
-      setCheckout({
-        name,
-        value,
-      })
-    );
-  };
-
-  const handleCustomTip = () => {
+  const handleTip = () => {
     setHidden(!isHidden);
   };
 
@@ -113,16 +92,16 @@ export default function DonatePayment({ post }) {
 
   const Schema = Yup.object().shape({
     cryptoType: Yup.string().required("This is required"),
-    amount: Yup.number().required("This is required"),
-    // message: Yup.string().required("This is required"),
+    cryptoCount: Yup.number().min(0.0000001).required("This is required"),
+    tip: Yup.number(),
   });
 
   const formik = useFormik({
     initialValues: {
-      cryptoType: checkout.cryptoType,
-      amount: checkout.amount,
-      tipAmount: checkout.tipAmount,
-      message: checkout.message,
+      cryptoType: "",
+      cryptoCount: 0,
+      tip: 0,
+      message: "",
     },
     validationSchema: Schema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -133,7 +112,13 @@ export default function DonatePayment({ post }) {
         setSubmitting(false);
 
         dispatch(
-          addDonate({ ...checkout, fundraiseId: id, createdAt: moment() })
+          addDonate({
+            fundraiseId: id,
+            crypto: { type: values.cryptoType, count: values.cryptoCount },
+            tip: values.tip,
+            message: values.message,
+            createdAt: moment(),
+          })
         );
         enqueueSnackbar("Save success", { variant: "success" });
         navigate("/");
@@ -256,10 +241,6 @@ export default function DonatePayment({ post }) {
                         helperText={touched.cryptoType && errors.cryptoType}
                         select
                         onChange={(e) => {
-                          handleCheckout({
-                            name: e.target.name,
-                            value: e.target.value,
-                          });
                           handleChange(e);
                         }}
                       >
@@ -273,14 +254,15 @@ export default function DonatePayment({ post }) {
                         fullWidth
                         size="small"
                         label="Enter number of token"
-                        {...getFieldProps("amount")}
-                        error={Boolean(touched.amount && errors.amount)}
-                        helperText={touched.amount && errors.amount}
+                        {...getFieldProps("cryptoCount")}
+                        error={Boolean(
+                          touched.cryptoCount && errors.cryptoCount
+                        )}
+                        helperText={touched.cryptoCount && errors.cryptoCount}
+                        onFocus={(e) => {
+                          e.target.select();
+                        }}
                         onChange={(e) => {
-                          handleCheckout({
-                            name: e.target.name,
-                            value: e.target.value,
-                          });
                           handleChange(e);
                         }}
                       />
@@ -299,14 +281,22 @@ export default function DonatePayment({ post }) {
 
                     {activeStep === 0 && (
                       <Slider
-                        marks={marks}
+                        marks={[
+                          {
+                            value: 0,
+                            label: "0%",
+                          },
+
+                          {
+                            value: 100,
+                            label: "100%",
+                          },
+                        ]}
                         min={0}
                         // step={10}
                         max={100}
                         defaultValue={0}
-                        value={
-                          (filter.totalAmount * 100) / parseFloat(post.goal)
-                        }
+                        value={values.tip}
                         getAriaValueText={valuetext}
                         valueLabelDisplay="auto"
                         onChange={handleChangeToken}
@@ -318,15 +308,34 @@ export default function DonatePayment({ post }) {
                         fullWidth
                         size="small"
                         label="Enter Tip amount"
-                        {...getFieldProps("tipAmount")}
-                        error={Boolean(touched.tipAmount && errors.tipAmount)}
-                        helperText={touched.tipAmount && errors.tipAmount}
+                        {...getFieldProps("tip")}
+                        error={Boolean(touched.tip && errors.tip)}
+                        helperText={touched.tip && errors.tip}
+                        onFocus={(e) => {
+                          e.target.select();
+                        }}
                         onChange={(e) => {
-                          handleCheckout({
-                            name: e.target.name,
-                            value: e.target.value,
-                          });
                           handleChange(e);
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Typography
+                                variant="h5"
+                                // sx={{
+                                //   ...(!isLight && {
+                                //     textShadow: (theme) =>
+                                //       `4px 4px 16px ${alpha(
+                                //         theme.palette.grey[800],
+                                //         0.48
+                                //       )}`,
+                                //   }),
+                                // }}
+                              >
+                                %
+                              </Typography>
+                            </InputAdornment>
+                          ),
                         }}
                       />
                     )}
@@ -335,7 +344,7 @@ export default function DonatePayment({ post }) {
                       variant="body2"
                       underline="always"
                       sx={{ cursor: "pointer" }}
-                      onClick={handleCustomTip}
+                      onClick={handleTip}
                     >
                       Enter custom tip
                     </Link>
@@ -356,7 +365,7 @@ export default function DonatePayment({ post }) {
                         >
                           <Typography variant="h7">Top donation</Typography>
                           <Typography gutterBottom variant="p1">
-                            {filter.maxAmount}
+                            {`${fCurrency(filter.maxAmount)}`}
                           </Typography>
                         </Stack>
 
@@ -366,9 +375,19 @@ export default function DonatePayment({ post }) {
                           alignItems="center"
                         >
                           <Typography variant="h7">GoHelp tip</Typography>
-                          <Typography gutterBottom variant="p1">
-                            {checkout.defaultTip}
-                          </Typography>
+                          {values.tip > 0 && (
+                            <Typography gutterBottom variant="p1">
+                              {`${fCurrency(
+                                cryptoToUSD({
+                                  count:
+                                    (values.cryptoCount * values.tip) / 100,
+                                  type: values.cryptoType,
+                                })
+                              )}(${(values.cryptoCount * values.tip) / 100} ${
+                                values.cryptoType
+                              })`}
+                            </Typography>
+                          )}
                         </Stack>
 
                         <Divider flexItem />
@@ -379,9 +398,21 @@ export default function DonatePayment({ post }) {
                           alignItems="center"
                         >
                           <Typography variant="h7">Total due</Typography>
-                          <Typography gutterBottom variant="p1">
-                            {filter.totalAmount}
-                          </Typography>
+                          {values.cryptoCount > 0 && (
+                            <Typography gutterBottom variant="p1">
+                              {`${fCurrency(
+                                cryptoToUSD({
+                                  count:
+                                    parseFloat(values.cryptoCount) +
+                                    (values.cryptoCount * values.tip) / 100,
+                                  type: values.cryptoType,
+                                })
+                              )}(${
+                                parseFloat(values.cryptoCount) +
+                                (values.cryptoCount * values.tip) / 100
+                              } ${values.cryptoType})`}
+                            </Typography>
+                          )}
                         </Stack>
                       </Stack>
                     </Box>
@@ -399,10 +430,6 @@ export default function DonatePayment({ post }) {
                         error={Boolean(touched.message && errors.message)}
                         helperText={touched.message && errors.message}
                         onChange={(e) => {
-                          handleCheckout({
-                            name: e.target.name,
-                            value: e.target.value,
-                          });
                           handleChange(e);
                         }}
                       />

@@ -20,10 +20,8 @@ const initialState = {
   checkout: {
     activeStep: -1,
 
-    amount: null,
-    cryptoType: "",
-    defaultTip: 10,
-    tipAmount: null,
+    crypto: { type: "", count: 0 },
+    tip: 0,
     message: "",
   },
 };
@@ -84,10 +82,9 @@ const slice = createSlice({
     resetCheckout(state) {
       state.checkout.activeStep = -1;
 
-      state.checkout.amount = null;
-      state.checkout.cryptoType = "";
-      state.checkout.tipAmount = null;
-      state.checkout.message = null;
+      state.checkout.crypto = { type: "", count: 0 };
+      state.checkout.tip = 0;
+      state.checkout.message = "";
     },
 
     onBackStep(state) {

@@ -7,6 +7,7 @@ HeaderStepBreadcrumbs.propTypes = {
   type: PropTypes.string,
   cancelTitle: PropTypes.string,
   continueTitle: PropTypes.string,
+  cancelButton: PropTypes.bool,
   cancelAction: PropTypes.node,
   continueAction: PropTypes.node,
   sx: PropTypes.object,
@@ -16,6 +17,7 @@ export default function HeaderStepBreadcrumbs({
   type,
   cancelTitle,
   continueTitle,
+  cancelButton,
   cancelAction,
   continueAction,
   sx,
@@ -25,9 +27,11 @@ export default function HeaderStepBreadcrumbs({
       <Stack direction="row" alignItems="center">
         <Box sx={{ flexGrow: 1 }}>
           <Box sx={{ flexShrink: 0 }}>
-            <Button variant="outlined" color="inherit" onClick={cancelAction}>
-              {cancelTitle ? cancelTitle : "Back"}
-            </Button>
+            {cancelButton && (
+              <Button variant="outlined" color="inherit" onClick={cancelAction}>
+                {cancelTitle ? cancelTitle : "Back"}
+              </Button>
+            )}
           </Box>
         </Box>
 

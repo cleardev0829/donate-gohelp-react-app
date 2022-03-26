@@ -12,6 +12,8 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
+import { cryptoToUSD } from "src/utils/constants";
+
 // ----------------------------------------------------------------------
 
 mock.onPost("/api/donate/add").reply(async (request) => {
@@ -61,6 +63,10 @@ mock.onGet("/api/donate/posts").reply(async (config) => {
         querySnapshot.docs.map(async (doc) => {
           posts.push({
             ...doc.data(),
+            crypto: {
+              ...doc.data().crypto,
+              amount: cryptoToUSD(doc.data().crypto),
+            },
             id: doc.id,
           });
         });

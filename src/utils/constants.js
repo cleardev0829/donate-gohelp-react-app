@@ -6,8 +6,13 @@ export const CRYPTO_PRICE = {
   SOL: 102.84,
 };
 
-export const CRYPTO_TO_USD = (val, type) => {
-  return CRYPTO_PRICE[type] * parseFloat(val);
+export const cryptoToUSD = ({ type, count }) => {
+  if (!type) return 0;
+  return CRYPTO_PRICE[type] * parseFloat(count);
+};
+
+export const makePageLink = (uid) => {
+  return `${window.location.origin}/donate/${uid}`;
 };
 
 export const getFileBlob = (url, cb) => {
@@ -51,11 +56,13 @@ export const filters = (donates) => {
   } else {
     return {
       count: donates.length,
-      recentAmount: _.maxBy(donates, (item) => item.createdAt).amount,
-      totalAmount: _.sumBy(donates, (item) => parseFloat(item.amount)),
-      firstAmount: _.minBy(donates, (item) => item.createdAt).amount,
-      maxAmount: _.maxBy(donates, (item) => parseFloat(item.amount)).amount,
-      minAmount: _.minBy(donates, (item) => parseFloat(item.amount)).amount,
+      recentAmount: _.maxBy(donates, (item) => item.createdAt).crypto.amount,
+      totalAmount: _.sumBy(donates, (item) => parseFloat(item.crypto.amount)),
+      firstAmount: _.minBy(donates, (item) => item.createdAt).crypto.amount,
+      maxAmount: _.maxBy(donates, (item) => parseFloat(item.crypto.amount))
+        .crypto.amount,
+      minAmount: _.minBy(donates, (item) => parseFloat(item.crypto.amount))
+        .crypto.amount,
       recentTimeAgo: diff(
         moment(),
         _.maxBy(donates, (item) => item.createdAt).createdAt

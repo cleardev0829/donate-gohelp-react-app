@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { paramCase } from "change-case";
 import eyeFill from "@iconify/icons-eva/eye-fill";
+import _ from "lodash";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
@@ -27,12 +28,13 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import ProgressItem from "../../ProgressItem";
+import DonateProgress from "../../DonateProgress";
 import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
 import { filters } from "../../../utils/constants";
 import { useEffect, useState } from "react";
 import { getDonate, getDonatesById } from "src/redux/slices/donate";
 import ReactQuill from "react-quill";
+import ReactCountryFlag from "react-country-flag";
 
 // ----------------------------------------------------------------------
 
@@ -113,11 +115,15 @@ export const DescriptionStyle = styled(Typography)({
 const CountryStyle = styled(Box)(({ theme }) => ({
   zIndex: 9,
   position: "absolute",
-  left: theme.spacing(3),
+  left: theme.spacing(2),
   bottom: theme.spacing(2),
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItems: "center",
   backgroundColor: "#333333",
   borderRadius: 8,
-  padding: theme.spacing(0.75, 3),
+  padding: theme.spacing(0.75, 2),
 }));
 
 // ----------------------------------------------------------------------
@@ -140,17 +146,28 @@ export default function TopFundraiserCard({ post }) {
           >
             <Stack>
               <CardMediaStyle>
-                <CountryStyle>
-                  <Typography
-                    variant="p1"
-                    sx={{
-                      display: "block",
-                      color: (theme) => theme.palette.common.white,
-                    }}
-                  >
-                    {post.live}
-                  </Typography>
-                </CountryStyle>
+                {!_.isEmpty(post.live) && (
+                  <CountryStyle>
+                    <ReactCountryFlag
+                      countryCode={post.live.code}
+                      svg
+                      style={{
+                        // width: "2em",
+                        // height: "2em",
+                        marginRight: 10,
+                      }}
+                    />
+                    <Typography
+                      variant="p1"
+                      sx={{
+                        display: "block",
+                        color: (theme) => theme.palette.common.white,
+                      }}
+                    >
+                      {post.live.label}
+                    </Typography>
+                  </CountryStyle>
+                )}
                 <CoverImgStyle
                   alt={"cover"}
                   src={post.coverUrl}
@@ -184,20 +201,11 @@ export default function TopFundraiserCard({ post }) {
                 </QuillWrapperStyle> */}
               </Stack>
 
-              <ProgressItem
-                text={`Last donation ${filter.recentTimeAgo} `}
-                progress={fPercent((filter.totalAmount * 100) / post.goal)}
+              <DonateProgress
+                time={filter.recentTimeAgo}
+                total={filter.totalAmount}
+                goal={post.goal}
               />
-
-              <Typography
-                gutterBottom
-                variant="p1"
-                sx={{ display: "block", mt: 2 }}
-              >
-                {`${fNumber(filter.totalAmount)} $ raised of ${fNumber(
-                  post.goal
-                )} $`}
-              </Typography>
             </Stack>
           </Box>
 
