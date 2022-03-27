@@ -33,6 +33,8 @@ import { ProgressItem } from "../landing/TopFundraiserCard";
 import { onNextStep } from "src/redux/slices/donate";
 import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 import { diff } from "../../../utils/constants";
+import { useState } from "react";
+import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 
 // ----------------------------------------------------------------------
 
@@ -66,7 +68,7 @@ DonateProfile.propTypes = {
 export default function DonateProfile({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-
+  const [open, setOpen] = useState(false);
   const { cover, title, description, createdAt, rotate, scale } = post;
 
   const modules = {
@@ -82,117 +84,139 @@ export default function DonateProfile({ post }) {
     },
   };
 
+  const handleOpenPreview = () => {
+    setOpen(true);
+  };
+
+  const handleClosePreview = () => {
+    setOpen(false);
+  };
+
+  const handleShare = () => {
+    handleOpenPreview();
+  };
+
   return (
-    <Box sx={{ py: 3 }}>
-      <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-        <Typography variant="h3">{title}</Typography>
+    <>
+      <Box sx={{ py: 3 }}>
+        <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+          <Typography variant="h3">{title}</Typography>
 
-        <Box sx={{ position: "relative" }}>
-          <CardMediaStyle>
-            <CoverImgStyle
-              alt="cover"
-              src={cover.preview}
-              sx={{
-                transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
-                  1 + scale / 100
-                })`,
-              }}
-            />
-          </CardMediaStyle>
-        </Box>
+          <Box sx={{ position: "relative" }}>
+            <CardMediaStyle>
+              <CoverImgStyle
+                alt="cover"
+                src={cover.preview}
+                sx={{
+                  transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
+                    1 + scale / 100
+                  })`,
+                }}
+              />
+            </CardMediaStyle>
+          </Box>
 
-        {/* <Typography variant="body2">{description}</Typography> */}
+          {/* <Typography variant="body2">{description}</Typography> */}
 
-        <Stack direction="row" spacing={theme.shape.CARD_CONTENT_SPACING}>
-          <motion.div variants={varFadeInRight}>
-            <Button
-              variant="outlined"
-              color="inherit"
-              // component={RouterLink}
-              // to={PATH_PAGE.page404}
-              startIcon={<Icon icon="iconoir:timer" />}
-            >
-              {`Created ${diff(moment(), moment(createdAt))}`}
-            </Button>
-          </motion.div>
-          <motion.div variants={varFadeInRight}>
-            <Button
-              variant="outlined"
-              color="inherit"
-              // component={RouterLink}
-              // to={PATH_PAGE.page404}
-              startIcon={<Icon icon="akar-icons:ribbon" />}
-            >
-              Funerals & Memorials
-            </Button>
-          </motion.div>
-        </Stack>
-
-        <Box>
-          <Stack>
-            <Card
-              sx={{
-                backgroundColor: "background.body",
-                border: "1px solid #F3F3F3",
-                p: (theme) => theme.shape.CARD_PADDING,
-              }}
-            >
-              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                <Typography variant="h4">
-                  A few words from Fundraiser
-                </Typography>
-
-                <QuillWrapperStyle>
-                  <ReactQuill
-                    readOnly
-                    value={description}
-                    modules={modules}
-                    style={{
-                      margin: 0,
-                    }}
-                  />
-                </QuillWrapperStyle>
-
-                {/* <Typography variant="body2">{description}</Typography> */}
-              </Stack>
-            </Card>
+          <Stack direction="row" spacing={theme.shape.CARD_CONTENT_SPACING}>
+            <motion.div variants={varFadeInRight}>
+              <Button
+                variant="outlined"
+                color="inherit"
+                // component={RouterLink}
+                // to={PATH_PAGE.page404}
+                startIcon={<Icon icon="iconoir:timer" />}
+              >
+                {`Created ${diff(moment(), moment(createdAt))}`}
+              </Button>
+            </motion.div>
+            <motion.div variants={varFadeInRight}>
+              <Button
+                variant="outlined"
+                color="inherit"
+                // component={RouterLink}
+                // to={PATH_PAGE.page404}
+                startIcon={<Icon icon="akar-icons:ribbon" />}
+              >
+                Funerals & Memorials
+              </Button>
+            </motion.div>
           </Stack>
-        </Box>
 
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          spacing={theme.shape.CARD_CONTENT_SPACING}
-        >
-          <Grid container spacing={theme.shape.CARD_CONTENT_SPACING}>
-            <Grid item xs="12" md="6">
-              <motion.div variants={varFadeInRight}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  // component={RouterLink}
-                  // to={PATH_PAGE.donate_payment}
-                  onClick={() => dispatch(onNextStep())}
-                >
-                  Donate Now
-                </Button>
-              </motion.div>
+          <Box>
+            <Stack>
+              <Card
+                sx={{
+                  backgroundColor: "background.body",
+                  border: "1px solid #F3F3F3",
+                  p: (theme) => theme.shape.CARD_PADDING,
+                }}
+              >
+                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                  <Typography variant="h4">
+                    A few words from Fundraiser
+                  </Typography>
+
+                  <QuillWrapperStyle>
+                    <ReactQuill
+                      readOnly
+                      value={description}
+                      modules={modules}
+                      style={{
+                        margin: 0,
+                      }}
+                    />
+                  </QuillWrapperStyle>
+
+                  {/* <Typography variant="body2">{description}</Typography> */}
+                </Stack>
+              </Card>
+            </Stack>
+          </Box>
+
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            spacing={theme.shape.CARD_CONTENT_SPACING}
+          >
+            <Grid container spacing={theme.shape.CARD_CONTENT_SPACING}>
+              <Grid item xs="12" md="6">
+                <motion.div variants={varFadeInRight}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    // component={RouterLink}
+                    // to={PATH_PAGE.donate_payment}
+                    onClick={() => dispatch(onNextStep())}
+                  >
+                    Donate Now
+                  </Button>
+                </motion.div>
+              </Grid>
+              <Grid item xs="12" md="6">
+                <motion.div variants={varFadeInRight}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    // component={RouterLink}
+                    // to={PATH_PAGE.page404}
+                    onClick={handleShare}
+                  >
+                    Share
+                  </Button>
+                </motion.div>
+              </Grid>
             </Grid>
-            <Grid item xs="12" md="6">
-              <motion.div variants={varFadeInRight}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  // component={RouterLink}
-                  // to={PATH_PAGE.page404}
-                >
-                  Share
-                </Button>
-              </motion.div>
-            </Grid>
-          </Grid>
+          </Stack>
         </Stack>
-      </Stack>
-    </Box>
+      </Box>
+
+      <FundraiseShareDialog
+        uid={post.uid}
+        title={post.title}
+        openPreview={open}
+        onClosePreview={handleClosePreview}
+      />
+    </>
   );
 }
