@@ -38,33 +38,6 @@ const HeroStyle = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-PreviewHero.propTypes = {
-  title: PropTypes.string,
-  cover: PropTypes.string,
-};
-
-function PreviewHero({ title, cover }) {
-  return (
-    <HeroStyle>
-      <Container
-        sx={{
-          top: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          position: "absolute",
-          pt: { xs: 3, lg: 10 },
-          color: "common.white",
-        }}
-      >
-        <Typography variant="h2" component="h1">
-          {title}
-        </Typography>
-      </Container>
-    </HeroStyle>
-  );
-}
-
 FundraiseNewPostPreview.propTypes = {
   formik: PropTypes.object.isRequired,
   openPreview: PropTypes.bool,
@@ -80,7 +53,6 @@ export default function FundraiseNewPostPreview({
   const { title, description, content } = values;
   const cover = isString(values.cover) ? values.cover : values.cover?.preview;
   const hasContent = title || description || content || cover;
-  const hasHero = title || cover;
   const { checkout } = useSelector((state) => state.fundraise);
 
   return (
@@ -106,19 +78,9 @@ export default function FundraiseNewPostPreview({
           <DonateMain
             post={{
               ...checkout,
-              coverUrl: checkout.cover.preview,
               donates: [],
             }}
           />
-          {/* {hasHero && <PreviewHero title={title} cover={cover} />}
-          <Container>
-            <Box sx={{ mt: 5, mb: 10 }}>
-              <Typography variant="h6" sx={{ mb: 5 }}>
-                {description}
-              </Typography>
-              <Markdown children={content} />
-            </Box>
-          </Container> */}
         </Scrollbar>
       ) : (
         <EmptyContent title="Empty content" />

@@ -1,16 +1,7 @@
-import PropTypes from "prop-types";
 import * as Yup from "yup";
-import { useSnackbar } from "notistack";
-import { useCallback, useEffect, useState } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
 import _ from "lodash";
-// material
-import { LoadingButton } from "@material-ui/lab";
-import {
-  alpha,
-  experimentalStyled as styled,
-  useTheme,
-} from "@material-ui/core/styles";
+import { alpha, useTheme } from "@material-ui/core/styles";
 
 import {
   Box,
@@ -21,40 +12,27 @@ import {
   TextField,
   MenuItem,
   Typography,
-  FormHelperText,
 } from "@material-ui/core";
 
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import {
+  onBackStep,
+  onNextStep,
+  setCheckout,
+} from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
 import { CATEGORIES } from "../../../utils/constants";
 import countries from "./countries";
-import ReactFlagsSelect from "react-flags-select";
 import ReactCountryFlag from "react-country-flag";
 
 // ----------------------------------------------------------------------
 
-FundraiseBasics.propTypes = {
-  handleCheckout: PropTypes.func,
-};
-
-export default function FundraiseBasics({ handleCheckout }) {
-  const dispatch = useDispatch();
+export default function FundraiseBasics() {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
-  const { enqueueSnackbar } = useSnackbar();
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState("");
-
-  useEffect(() => {
-    setFieldValue("category", checkout.category);
-  }, [checkout]);
-
-  const handleClosePreview = () => {
-    setOpen(false);
-  };
 
   const handleBackStep = () => {
     dispatch(onBackStep());
@@ -79,9 +57,19 @@ export default function FundraiseBasics({ handleCheckout }) {
       try {
         await fakeRequest(500);
         resetForm();
-        handleClosePreview();
         setSubmitting(false);
-        // enqueueSnackbar("success", { variant: "success" });
+        dispatch(
+          setCheckout({
+            name: "live",
+            value: values.live,
+          })
+        );
+        dispatch(
+          setCheckout({
+            name: "category",
+            value: values.category,
+          })
+        );
         handleNextStep();
       } catch (error) {
         console.error(error);
@@ -172,10 +160,6 @@ export default function FundraiseBasics({ handleCheckout }) {
                       helperText={touched.live && errors.live}
                       select
                       onChange={(e) => {
-                        handleCheckout({
-                          name: e.target.name,
-                          value: e.target.value,
-                        });
                         handleChange(e);
                       }}
                     >
@@ -219,10 +203,6 @@ export default function FundraiseBasics({ handleCheckout }) {
                       helperText={touched.category && errors.category}
                       select
                       onChange={(e) => {
-                        handleCheckout({
-                          name: e.target.name,
-                          value: e.target.value,
-                        });
                         handleChange(e);
                       }}
                     >

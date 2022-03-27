@@ -7,7 +7,7 @@ import { capitalCase } from "change-case";
 import { Form, FormikProvider, useFormik } from "formik";
 import { motion } from "framer-motion";
 import moment from "moment";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import { Icon } from "@iconify/react";
 // material
@@ -112,12 +112,10 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-FundraiseDetails.propTypes = {
-  uid: PropTypes.string,
-};
-
-export default function FundraiseDetails({ uid }) {
+export default function FundraiseDetails() {
   const theme = useTheme();
+  const params = useParams();
+  const { uid } = params;
   const dispatch = useDispatch();
   const { post } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
@@ -166,7 +164,6 @@ export default function FundraiseDetails({ uid }) {
     initialValues: {
       title: post.title,
       description: post.description,
-      content: "",
       cover: post.cover,
     },
     validationSchema: NewBlogSchema,
@@ -204,6 +201,7 @@ export default function FundraiseDetails({ uid }) {
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <FundraiseHeader
             continueTitle="Share"
+            // cancelButton={false}
             cancelAction={handleBackStep}
             continueAction={handleOpenPreview}
           />
@@ -216,11 +214,11 @@ export default function FundraiseDetails({ uid }) {
                     <CardMediaStyle>
                       <CoverImgStyle
                         alt={"cover"}
-                        src={data.coverUrl}
+                        src={data.cover.preview}
                         sx={{
                           transform: `rotate(${
-                            ((-1 * data.rotate) % 4) * 90
-                          }deg) scale(${1 + data.scale / 100})`,
+                            ((-1 * data.cover.rotate) % 4) * 90
+                          }deg) scale(${1 + data.cover.scale / 100})`,
                         }}
                       />
                     </CardMediaStyle>
@@ -421,6 +419,7 @@ export default function FundraiseDetails({ uid }) {
 
       <FundraiseShareDialog
         uid={uid}
+        title={post.title}
         formik={formik}
         openPreview={open}
         onClosePreview={handleClosePreview}

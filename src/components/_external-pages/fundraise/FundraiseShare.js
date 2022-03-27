@@ -55,6 +55,7 @@ import {
   MailruIcon,
 } from "react-share";
 import { makePageLink } from "src/utils/constants";
+import { PATH_PAGE } from "src/routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -99,20 +100,15 @@ const CoverImgStyle = styled("img")({
 // ----------------------------------------------------------------------
 
 FundraiseShare.propTypes = {
-  id: PropTypes.string,
   uid: PropTypes.string,
-  activeStep: PropTypes.number,
-  handleCheckout: PropTypes.func,
+  title: PropTypes.string,
+  isStepBar: PropTypes.bool,
 };
 
-export default function FundraiseShare({
-  id,
-  uid,
-  activeStep,
-  handleCheckout,
-}) {
+export default function FundraiseShare({ uid, title, isStepBar = false }) {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { checkout } = useSelector((state) => state.fundraise);
   const { enqueueSnackbar } = useSnackbar();
   const isLight = theme.palette.mode === "light";
@@ -121,8 +117,6 @@ export default function FundraiseShare({
     value: "",
     copied: false,
   });
-  const [shareUrl, setShareUrl] = useState(checkout.link);
-  const [title, setTitle] = useState(checkout.title);
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -137,21 +131,17 @@ export default function FundraiseShare({
   };
 
   const handleNextStep = () => {
-    // dispatch(addPost({ ...checkout, createdAt: moment() }));
     dispatch(onNextStep());
   };
 
   const NewBlogSchema = Yup.object().shape({
-    // email: Yup.string()
-    //   .email("Email must be a valid email address")
-    //   .required("Email is required"),
-    // link: Yup.string().required("Link is required"),
+    email: Yup.string().email("Email must be a valid email address"),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: checkout.email,
-      link: makePageLink(uid),
+      email: "",
+      pageLink: makePageLink(uid),
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -161,7 +151,7 @@ export default function FundraiseShare({
         handleClosePreview();
         setSubmitting(false);
         // enqueueSnackbar("Save success", { variant: "success" });
-        handleNextStep();
+        navigate(`${PATH_PAGE.fundraiseDetails}/${uid}`);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -190,11 +180,13 @@ export default function FundraiseShare({
   return (
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <FundraiseHeader
-          cancelButton={false}
-          cancelAction={handleBackStep}
-          continueAction={handleSubmit}
-        />
+        {isStepBar && (
+          <FundraiseHeader
+            cancelButton={false}
+            cancelAction={handleBackStep}
+            continueAction={handleSubmit}
+          />
+        )}
 
         <Box
           sx={{
@@ -235,7 +227,7 @@ export default function FundraiseShare({
 
             <Grid container sx={{ mt: 4 }}>
               <ShareButtonWrapper>
-                <FacebookShareButton url={shareUrl}>
+                <FacebookShareButton url={values.pageLink}>
                   <IconWrapperStyle>
                     <CoverImgStyle alt="post cover" src={FACEBOOK_IMG_URL} />
                   </IconWrapperStyle>
@@ -243,7 +235,7 @@ export default function FundraiseShare({
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <FacebookMessengerShareButton url={shareUrl}>
+                <FacebookMessengerShareButton url={values.pageLink}>
                   <IconWrapperStyle>
                     <CoverImgStyle
                       alt="post cover"
@@ -254,7 +246,7 @@ export default function FundraiseShare({
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <TwitterShareButton url={shareUrl} title={title}>
+                <TwitterShareButton url={values.pageLink} title={title}>
                   <IconWrapperStyle>
                     <CoverImgStyle alt="post cover" src={TWITTER_IMG_URL} />
                   </IconWrapperStyle>
@@ -262,7 +254,7 @@ export default function FundraiseShare({
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <WhatsappShareButton url={shareUrl} title={title}>
+                <WhatsappShareButton url={values.pageLink} title={title}>
                   <IconWrapperStyle>
                     <CoverImgStyle alt="post cover" src={WHATSAPP_IMG_URL} />
                   </IconWrapperStyle>
@@ -270,7 +262,7 @@ export default function FundraiseShare({
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <InstapaperShareButton url={shareUrl} title={title}>
+                <InstapaperShareButton url={values.pageLink} title={title}>
                   <IconWrapperStyle>
                     <InstapaperIcon size={32} round />
                   </IconWrapperStyle>
@@ -278,7 +270,7 @@ export default function FundraiseShare({
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <TelegramShareButton url={shareUrl} title={title}>
+                <TelegramShareButton url={values.pageLink} title={title}>
                   <IconWrapperStyle>
                     <TelegramIcon size={32} round />
                   </IconWrapperStyle>
@@ -286,7 +278,7 @@ export default function FundraiseShare({
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <LinkedinShareButton url={shareUrl} title={title}>
+                <LinkedinShareButton url={values.pageLink} title={title}>
                   <IconWrapperStyle>
                     <CoverImgStyle alt="post cover" src={LINKEDIN_IMG_URL} />
                   </IconWrapperStyle>
@@ -294,7 +286,7 @@ export default function FundraiseShare({
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <MailruShareButton url={shareUrl} title={title}>
+                <MailruShareButton url={values.pageLink} title={title}>
                   <IconWrapperStyle>
                     <MailruIcon size={32} round />
                   </IconWrapperStyle>
@@ -320,11 +312,6 @@ export default function FundraiseShare({
                       error={Boolean(touched.email && errors.email)}
                       helperText={touched.email && errors.email}
                       onChange={(e) => {
-                        handleCheckout({
-                          id,
-                          name: e.target.name,
-                          value: e.target.value,
-                        });
                         handleChange(e);
                       }}
                     />
@@ -353,9 +340,9 @@ export default function FundraiseShare({
                       fullWidth
                       size="small"
                       label="Fundraiser link"
-                      {...getFieldProps("link")}
-                      error={Boolean(touched.link && errors.link)}
-                      helperText={touched.link && errors.link}
+                      {...getFieldProps("pageLink")}
+                      error={Boolean(touched.pageLink && errors.pageLink)}
+                      helperText={touched.pageLink && errors.pageLink}
                     />
                     {/* <Button variant="contained" onClick={onCopy}>
                       Copy

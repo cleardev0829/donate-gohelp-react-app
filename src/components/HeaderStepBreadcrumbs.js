@@ -8,8 +8,8 @@ HeaderStepBreadcrumbs.propTypes = {
   cancelTitle: PropTypes.string,
   continueTitle: PropTypes.string,
   cancelButton: PropTypes.bool,
-  cancelAction: PropTypes.node,
-  continueAction: PropTypes.node,
+  cancelAction: PropTypes.func,
+  continueAction: PropTypes.func,
   sx: PropTypes.object,
 };
 

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
@@ -22,8 +23,7 @@ import {
   setCheckout,
 } from "../../../redux/slices/fundraise";
 import { FundraiseTypeCard, FundraiseHeader } from ".";
-import { useEffect } from "react";
-import { makePageLink } from "src/utils/constants";
+
 // ----------------------------------------------------------------------
 
 const TITLES = ["Yourself or someone else", "A charity"];
@@ -61,15 +61,10 @@ export default function FundraiseType() {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const { checkout } = useSelector((state) => state.fundraise);
-  const { type } = checkout;
   const isLight = theme.palette.mode === "light";
 
-  const uid = faker.datatype.uuid();
-  const link = makePageLink(uid);
-
   useEffect(() => {
-    dispatch(setCheckout({ name: "uid", value: uid }));
-    dispatch(setCheckout({ name: "link", value: link }));
+    dispatch(setCheckout({ name: "uid", value: faker.datatype.uuid() }));
   }, [dispatch]);
 
   const handleType = (type) => {
@@ -86,6 +81,11 @@ export default function FundraiseType() {
   };
 
   const handleNextStep = () => {
+    dispatch(onNextStep());
+    // dispatch(onGotoStep(4));
+  };
+
+  const handleContinue = () => {
     if (checkout.type === null) {
       enqueueSnackbar("Please select who you fundraise for", {
         variant: "error",
@@ -93,8 +93,7 @@ export default function FundraiseType() {
       return;
     }
 
-    dispatch(onNextStep());
-    // dispatch(onGotoStep(4));
+    handleNextStep();
   };
 
   return (
@@ -102,7 +101,7 @@ export default function FundraiseType() {
       <FundraiseHeader
         cancelTitle="Cancel"
         cancelAction={handleBackStep}
-        continueAction={handleNextStep}
+        continueAction={handleContinue}
       />
       <Container maxWidth={"md"}>
         <ContentStyle>
@@ -128,7 +127,7 @@ export default function FundraiseType() {
               key={post.id}
               post={post}
               index={index}
-              type={type}
+              type={checkout.type}
               onClick={() => handleType(index)}
             />
           ))}

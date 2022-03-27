@@ -24,7 +24,7 @@ import {
 } from "@material-ui/core";
 // utils
 import fakeRequest from "../../../utils/fakeRequest";
-import { QuillEditor, DraftEditor } from "../../editor";
+import { QuillEditor } from "../../editor";
 import {
   onBackStep,
   onNextStep,
@@ -33,23 +33,16 @@ import {
 } from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from "../fundraise";
 import FundraiseNewPostPreview from "../fundraise/FundraiseNewPostPreview";
-import { Quill } from "react-quill";
+
 // ----------------------------------------------------------------------
 
-FundraiseStory.propTypes = {
-  id: PropTypes.string,
-  activeStep: PropTypes.number,
-  handleCheckout: PropTypes.func,
-};
-
-export default function FundraiseStory({ id, activeStep, handleCheckout }) {
+export default function FundraiseStory() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
-  const [text3, setText3] = useState("");
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -64,17 +57,6 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
   };
 
   const handleNextStep = () => {
-    if (!checkout.isSave) {
-      dispatch(
-        addPost({
-          ...checkout,
-          createdAt: moment(),
-        })
-      );
-      enqueueSnackbar("Save success", { variant: "success" });
-      dispatch(setCheckout({ name: "isSave", value: true }));
-    }
-
     dispatch(onNextStep());
   };
 
@@ -87,7 +69,6 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
     initialValues: {
       title: checkout.title,
       description: checkout.description,
-      cover: checkout.cover,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -96,6 +77,13 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
+        enqueueSnackbar("Save success", { variant: "success" });
+        dispatch(
+          addPost({
+            ...checkout,
+            createdAt: moment(),
+          })
+        );
         handleNextStep();
       } catch (error) {
         console.error(error);
@@ -186,11 +174,9 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
                       error={Boolean(touched.title && errors.title)}
                       helperText={touched.title && errors.title}
                       onChange={(e) => {
-                        handleCheckout({
-                          id,
-                          name: e.target.name,
-                          value: e.target.value,
-                        });
+                        dispatch(
+                          setCheckout({ name: "title", value: e.target.value })
+                        );
                         handleChange(e);
                       }}
                     />
@@ -211,30 +197,6 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
                       Why are you fundraise?
                     </Typography>
 
-                    {/* <TextField
-                      fullWidth
-                      multiline
-                      minRows={3}
-                      maxRows={20}
-                      label=""
-                      {...getFieldProps("description")}
-                      error={Boolean(touched.description && errors.description)}
-                      helperText={touched.description && errors.description}
-                      onChange={(e) => {
-                        handleCheckout({
-                          id,
-                          name: e.target.name,
-                          value: e.target.value,
-                        });
-                        handleChange(e);
-                      }}
-                    /> */}
-
-                    {/* <DraftEditor
-                      editorState={text3}
-                      onEditorStateChange={(value) => setText3(value)}
-                    /> */}
-
                     <QuillEditor
                       id="product-description"
                       simple
@@ -243,14 +205,14 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
                         const text = editor.getText(content);
 
                         setFieldValue("description", content);
-                        handleCheckout({
-                          name: "description",
-                          value: content,
-                        });
-                        handleCheckout({
-                          name: "descriptionText",
-                          value: text,
-                        });
+                        setFieldValue("descriptionText", text);
+
+                        dispatch(
+                          setCheckout({ name: "description", value: content })
+                        );
+                        dispatch(
+                          setCheckout({ name: "descriptionText", value: text })
+                        );
                       }}
                       error={Boolean(touched.description && errors.description)}
                     />
@@ -260,11 +222,7 @@ export default function FundraiseStory({ id, activeStep, handleCheckout }) {
                       </FormHelperText>
                     )}
 
-                    <Button
-                      // type="buttton"
-                      variant="outlined"
-                      onClick={handleOpenPreview}
-                    >
+                    <Button variant="outlined" onClick={handleOpenPreview}>
                       Preview Fundraiser
                     </Button>
                   </Stack>

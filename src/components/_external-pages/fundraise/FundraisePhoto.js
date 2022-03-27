@@ -4,15 +4,12 @@ import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "../../../redux/store";
 import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
-import { useSnackbar } from "notistack";
-import { LoadingButton } from "@material-ui/lab";
 import {
   alpha,
   experimentalStyled as styled,
   useTheme,
 } from "@material-ui/core/styles";
 import {
-  Box,
   Card,
   Grid,
   Stack,
@@ -22,25 +19,22 @@ import {
   FormHelperText,
 } from "@material-ui/core";
 import fakeRequest from "../../../utils/fakeRequest";
-import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import {
+  onBackStep,
+  onNextStep,
+  setCheckout,
+} from "../../../redux/slices/fundraise";
 import { UploadSingleFileOverride } from "../../upload";
 import { FundraiseHeader } from ".";
 import FundraisePhotoEditor from "./FundraisePhotoEditor";
 
 // ----------------------------------------------------------------------
 
-FundraisePhoto.propTypes = {
-  id: PropTypes.string,
-  activeStep: PropTypes.number,
-  handleCheckout: PropTypes.func,
-};
-
-export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
+export default function FundraisePhoto() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
-  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
 
   const handleOpenPreview = () => {
@@ -74,7 +68,6 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
-        // enqueueSnackbar("success", { variant: "success" });
         handleNextStep();
       } catch (error) {
         console.error(error);
@@ -101,6 +94,8 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
         setFieldValue("cover", {
           ...cover,
           preview: URL.createObjectURL(cover),
+          rotate: 0,
+          scale: 0,
         });
       }
     },
@@ -109,10 +104,12 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
 
   const handleDelete = () => {
     setFieldValue("cover", null);
-    handleCheckout({
-      name: "cover",
-      value: null,
-    });
+    dispatch(
+      setCheckout({
+        name: "cover",
+        value: null,
+      })
+    );
   };
 
   const handleEdit = () => {
@@ -172,18 +169,8 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
                         <UploadSingleFileOverride
                           maxSize={3145728}
                           accept="image/*"
-                          file={values.cover}
-                          rotate={checkout.rotate}
-                          scale={checkout.scale}
+                          file={checkout.cover}
                           onDrop={(acceptedFiles) => {
-                            const cover = acceptedFiles[0];
-                            handleCheckout({
-                              name: "cover",
-                              value: {
-                                ...cover,
-                                preview: URL.createObjectURL(cover),
-                              },
-                            });
                             handleOpenPreview();
                             handleDrop(acceptedFiles);
                           }}
@@ -247,7 +234,6 @@ export default function FundraisePhoto({ id, activeStep, handleCheckout }) {
         </Form>
       </FormikProvider>
       <FundraisePhotoEditor
-        file={checkout.cover}
         formik={formik}
         openPreview={open}
         onClosePreview={handleClosePreview}

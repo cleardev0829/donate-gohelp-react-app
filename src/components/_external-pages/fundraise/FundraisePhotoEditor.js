@@ -48,33 +48,6 @@ const HeroStyle = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-PreviewHero.propTypes = {
-  title: PropTypes.string,
-  cover: PropTypes.string,
-};
-
-function PreviewHero({ title, cover }) {
-  return (
-    <HeroStyle>
-      <Container
-        sx={{
-          top: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          position: "absolute",
-          pt: { xs: 3, lg: 10 },
-          color: "common.white",
-        }}
-      >
-        {/* <Typography variant="h2" component="h1">
-          {title}
-        </Typography> */}
-      </Container>
-    </HeroStyle>
-  );
-}
-
 FundraisePhotoEditor.propTypes = {
   formik: PropTypes.object.isRequired,
   openPreview: PropTypes.bool,
@@ -85,33 +58,36 @@ export default function FundraisePhotoEditor({
   formik,
   openPreview,
   onClosePreview,
-  file,
 }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { values, handleSubmit, isSubmitting, isValid } = formik;
-  const { title, description, content } = values;
+  const {
+    values,
+    // handleSubmit,
+    // isSubmitting,
+    isValid,
+  } = formik;
   const cover = isString(values.cover) ? values.cover : values.cover?.preview;
-  const hasContent = title || description || content || cover;
-  const hasHero = title || cover;
+  const hasContent = cover;
+
   const { checkout } = useSelector((state) => state.fundraise);
-  const [scale, setScale] = useState(0);
-  const [rotate, setRotate] = useState(0);
+  const [state, setState] = useState({ rotate: 0, scale: 0 });
 
   const handleRotate = () => {
-    const newRotate = rotate + 1;
-    setRotate(newRotate);
+    const newRotate = state.rotate + 1;
+    setState({ ...state, rotate: newRotate });
   };
 
   const handleScale = (e) => {
-    setScale(e.target.value);
+    setState({ ...state, scale: e.target.value });
   };
 
   const handleDone = () => {
-    dispatch(setCheckout({ name: "rotate", value: rotate }));
-    dispatch(setCheckout({ name: "scale", value: scale }));
-    setScale(0);
-    setRotate(0);
+    dispatch(
+      setCheckout({ name: "cover", value: { ...values.cover, ...state } })
+    );
+
+    setState({ rotate: 0, scale: 0 });
     onClosePreview();
   };
 
@@ -138,32 +114,14 @@ export default function FundraisePhotoEditor({
           <CardMediaStyle>
             <CoverImgStyle
               alt={"cover"}
-              src={isString(file) ? file : file.preview}
+              src={cover}
               sx={{
-                transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
-                  1 + scale / 100
-                })`,
+                transform: `rotate(${
+                  ((-1 * state.rotate) % 4) * 90
+                }deg) scale(${1 + state.scale / 100})`,
               }}
             />
           </CardMediaStyle>
-          {/* <Box
-            component="img"
-            alt="file preview"
-            src={isString(file) ? file : file.preview}
-            sx={{
-              top: 8,
-              borderRadius: 0,
-              objectFit: "cover",
-              position: "absolute",
-              width: "calc(100% )",
-              // height: "calc(100% )",
-              transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
-                1 + scale / 100
-              })`,
-              overflow: "hidden",
-            }}
-          /> */}
-          {/* {hasHero && <PreviewHero title={title} cover={cover} />} */}
 
           <Box sx={{ mt: 2, mb: 5 }}>
             <Stack
@@ -194,7 +152,7 @@ export default function FundraisePhotoEditor({
                 min={0}
                 max={100}
                 defaultValue={0}
-                value={scale}
+                value={state.scale}
                 valueLabelDisplay="auto"
                 onChange={handleScale}
               />

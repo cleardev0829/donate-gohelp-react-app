@@ -70,41 +70,16 @@ export default function Fundraise() {
       {!isComplete ? (
         <>
           {activeStep === -1 && <FundraiseType />}
-          {activeStep === 0 && (
-            <FundraiseBasics
-              id="basics"
-              activeStep={activeStep}
-              handleCheckout={handleCheckout}
-            />
-          )}
-          {activeStep === 1 && (
-            <FundraiseGoal
-              id="goal"
-              activeStep={activeStep}
-              handleCheckout={handleCheckout}
-            />
-          )}
-          {activeStep === 2 && (
-            <FundraisePhoto
-              id="photo"
-              activeStep={activeStep}
-              handleCheckout={handleCheckout}
-            />
-          )}
-          {activeStep === 3 && (
-            <FundraiseStory
-              id="story"
-              activeStep={activeStep}
-              handleCheckout={handleCheckout}
-            />
-          )}
+          {activeStep === 0 && <FundraiseBasics />}
+          {activeStep === 1 && <FundraiseGoal />}
+          {activeStep === 2 && <FundraisePhoto />}
+          {activeStep === 3 && <FundraiseStory />}
           {activeStep === 4 && <FundraiseDonation />}
           {activeStep === 5 && (
             <FundraiseShare
-              id="share"
               uid={checkout.uid}
-              activeStep={activeStep}
-              handleCheckout={handleCheckout}
+              title={checkout.title}
+              isStepBar={true}
             />
           )}
           {activeStep === 6 && <FundraiseDetails uid={checkout.uid} />}

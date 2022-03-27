@@ -67,7 +67,7 @@ export default function DonateProfile({ post }) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { coverUrl, title, description, createdAt, rotate, scale } = post;
+  const { cover, title, description, createdAt, rotate, scale } = post;
 
   const modules = {
     toolbar: false,
@@ -91,7 +91,7 @@ export default function DonateProfile({ post }) {
           <CardMediaStyle>
             <CoverImgStyle
               alt="cover"
-              src={coverUrl}
+              src={cover.preview}
               sx={{
                 transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
                   1 + scale / 100

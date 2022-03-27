@@ -156,7 +156,7 @@ export default function DonatePayment({ post }) {
                     <CardMediaStyle>
                       <CoverImgStyle
                         alt={"title"}
-                        src={post.coverUrl}
+                        src={post.cover.preview}
                         sx={{
                           transform: `rotate(${
                             ((-1 * post.rotate) % 4) * 90

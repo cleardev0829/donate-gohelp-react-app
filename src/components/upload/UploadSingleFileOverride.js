@@ -153,8 +153,8 @@ export default function UploadSingleFile({
               position: "absolute",
               width: "calc(100% - 16px)",
               height: "calc(100% - 16px)",
-              transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
-                1 + scale / 100
+              transform: `rotate(${((-1 * file.rotate) % 4) * 90}deg) scale(${
+                1 + file.scale / 100
               })`,
             }}
           />

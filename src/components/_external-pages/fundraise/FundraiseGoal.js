@@ -1,58 +1,33 @@
 import PropTypes from "prop-types";
 import * as Yup from "yup";
-import { useSnackbar } from "notistack";
-import { useCallback, useState } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
-// material
-import { LoadingButton } from "@material-ui/lab";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-
+import { alpha } from "@material-ui/core/styles";
 import {
   Card,
   Grid,
-  Chip,
   Stack,
-  Button,
-  Switch,
-  Select,
   Container,
   TextField,
-  MenuItem,
   Typography,
-  Autocomplete,
   InputAdornment,
-  FormHelperText,
-  FormControlLabel,
   useTheme,
 } from "@material-ui/core";
-// utils
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
+import {
+  onBackStep,
+  onNextStep,
+  setCheckout,
+} from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
-import { CRYPTO_TYPES } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
-FundraiseGoal.propTypes = {
-  handleCheckout: PropTypes.func,
-};
-
-export default function FundraiseGoal({ handleCheckout }) {
-  const dispatch = useDispatch();
+export default function FundraiseGoal() {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
-  const { enqueueSnackbar } = useSnackbar();
-  const [open, setOpen] = useState(false);
-
-  const handleOpenPreview = () => {
-    setOpen(true);
-  };
-
-  const handleClosePreview = () => {
-    setOpen(false);
-  };
 
   const handleBackStep = () => {
     dispatch(onBackStep());
@@ -63,13 +38,11 @@ export default function FundraiseGoal({ handleCheckout }) {
   };
 
   const Schema = Yup.object().shape({
-    // cryptoType: Yup.string().required("This is required"),
     goal: Yup.number().min(1000).required("This is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      // cryptoType: checkout.cryptoType,
       goal: checkout.goal,
     },
     validationSchema: Schema,
@@ -77,9 +50,13 @@ export default function FundraiseGoal({ handleCheckout }) {
       try {
         await fakeRequest(500);
         resetForm();
-        handleClosePreview();
         setSubmitting(false);
-        // enqueueSnackbar("success", { variant: "success" });
+        dispatch(
+          setCheckout({
+            name: "goal",
+            value: values.goal,
+          })
+        );
         handleNextStep();
       } catch (error) {
         console.error(error);
@@ -147,45 +124,6 @@ export default function FundraiseGoal({ handleCheckout }) {
                     </Typography>
 
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                      {/* <Typography
-                        variant="h5"
-                        sx={{
-                          ...(!isLight && {
-                            textShadow: (theme) =>
-                              `4px 4px 16px ${alpha(
-                                theme.palette.grey[800],
-                                0.48
-                              )}`,
-                          }),
-                        }}
-                      >
-                        Select crypto type.
-                      </Typography>
-
-                      <TextField
-                        fullWidth
-                        size="small"
-                        label=""
-                        {...getFieldProps("cryptoType")}
-                        error={Boolean(touched.cryptoType && errors.cryptoType)}
-                        helperText={touched.cryptoType && errors.cryptoType}
-                        select
-                        onChange={(e) => {
-                          handleCheckout({
-                            id,
-                            name: e.target.name,
-                            value: e.target.value,
-                          });
-                          handleChange(e);
-                        }}
-                      >
-                        {CRYPTO_TYPES.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </TextField> */}
-
                       <Typography
                         variant="h5"
                         sx={{
@@ -212,10 +150,6 @@ export default function FundraiseGoal({ handleCheckout }) {
                           e.target.select();
                         }}
                         onChange={(e) => {
-                          handleCheckout({
-                            name: e.target.name,
-                            value: e.target.value,
-                          });
                           handleChange(e);
                         }}
                         InputProps={{
@@ -264,7 +198,6 @@ export default function FundraiseGoal({ handleCheckout }) {
           </Container>
         </Form>
       </FormikProvider>
-      {/* <BlogNewPostPreview formik={formik} openPreview={open} onClosePreview={handleClosePreview} /> */}
     </>
   );
 }

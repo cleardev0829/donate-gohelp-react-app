@@ -35,7 +35,10 @@ mock.onPost("/api/fundraise/add").reply(async (request) => {
                 .doc(data.uid)
                 .set({
                   ...data,
-                  coverUrl: url,
+                  cover: {
+                    ...data.cover,
+                    preview: url,
+                  },
                 });
             });
           });

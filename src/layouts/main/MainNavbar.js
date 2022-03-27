@@ -3,11 +3,12 @@ import { NavLink as RouterLink, useLocation } from "react-router-dom";
 import { experimentalStyled as styled } from "@material-ui/core/styles";
 import {
   Box,
-  Button,
+  Link,
+  Stack,
   AppBar,
+  Button,
   Toolbar,
   Container,
-  Stack,
   Typography,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
@@ -93,6 +94,20 @@ export default function MainNavbar() {
           </MHidden>
 
           <Stack spacing={3} direction="row" alignItems="center">
+            <Link
+              component={RouterLink}
+              color="inherit"
+              underline="none"
+              to={PATH_PAGE.fundraiseDetails}
+              sx={{
+                display: "block",
+                transition: (theme) => theme.transitions.create("all"),
+                "&:hover": { color: "primary.main" },
+              }}
+            >
+              Your Fundraisers
+            </Link>
+
             <MHidden width="mdDown">
               <Search />
             </MHidden>

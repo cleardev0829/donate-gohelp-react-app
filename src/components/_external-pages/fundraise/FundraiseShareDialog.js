@@ -67,22 +67,24 @@ function PreviewHero({ title, cover }) {
 }
 
 FundraiseShareDialog.propTypes = {
+  uid: PropTypes.string,
+  title: PropTypes.string,
   formik: PropTypes.object.isRequired,
   openPreview: PropTypes.bool,
   onClosePreview: PropTypes.func,
 };
 
 export default function FundraiseShareDialog({
+  uid,
+  title,
   formik,
   openPreview,
   onClosePreview,
 }) {
-  const { values, handleSubmit, isSubmitting, isValid } = formik;
-  const { title, description, content } = values;
-  const cover = isString(values.cover) ? values.cover : values.cover?.preview;
-  const hasContent = title || description || content || cover;
-  const hasHero = title || cover;
-  const { checkout } = useSelector((state) => state.fundraise);
+  // const { values, handleSubmit, isSubmitting, isValid } = formik;
+  // const { title, description, content } = values;
+  // const cover = isString(values.cover) ? values.cover : values.cover?.preview;
+  const hasContent = title;
 
   return (
     <DialogAnimate fullScreen open={openPreview} onClose={onClosePreview}>
@@ -104,16 +106,7 @@ export default function FundraiseShareDialog({
 
       {hasContent ? (
         <Scrollbar>
-          <FundraiseShare />
-          {/* {hasHero && <PreviewHero title={title} cover={cover} />}
-          <Container>
-            <Box sx={{ mt: 5, mb: 10 }}>
-              <Typography variant="h6" sx={{ mb: 5 }}>
-                {description}
-              </Typography>
-              <Markdown children={content} />
-            </Box>
-          </Container> */}
+          <FundraiseShare uid={uid} title={title} />
         </Scrollbar>
       ) : (
         <EmptyContent title="Empty content" />

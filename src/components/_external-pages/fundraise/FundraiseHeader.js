@@ -12,6 +12,7 @@ FundraiseHeader.propTypes = {
   cancelButton: PropTypes.bool,
   cancelAction: PropTypes.func,
   continueAction: PropTypes.func,
+  sx: PropTypes.object,
 };
 
 export default function FundraiseHeader({
@@ -20,7 +21,6 @@ export default function FundraiseHeader({
   cancelButton = true,
   cancelAction,
   continueAction,
-
   sx,
 }) {
   return (

@@ -170,7 +170,7 @@ export default function TopFundraiserCard({ post }) {
                 )}
                 <CoverImgStyle
                   alt={"cover"}
-                  src={post.coverUrl}
+                  src={post.cover.url}
                   sx={{
                     transform: `rotate(${
                       ((-1 * post.rotate) % 4) * 90
