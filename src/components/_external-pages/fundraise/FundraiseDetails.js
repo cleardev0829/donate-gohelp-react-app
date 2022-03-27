@@ -19,19 +19,19 @@ import {
 } from "@material-ui/core/styles";
 import {
   Box,
+  Tab,
+  Tabs,
   Card,
-  CardContent,
   Grid,
   Chip,
   Link,
-  Tabs,
-  Tab,
   Stack,
   Button,
   Switch,
   Container,
   TextField,
   Typography,
+  CardContent,
   Autocomplete,
   FormHelperText,
   FormControlLabel,
@@ -115,7 +115,7 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
 export default function FundraiseDetails() {
   const theme = useTheme();
   const params = useParams();
-  const { uid } = params;
+  const { id } = params;
   const dispatch = useDispatch();
   const { post } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
@@ -126,11 +126,10 @@ export default function FundraiseDetails() {
   const filter = filters([]);
 
   useEffect(() => {
-    dispatch(getPost(uid));
+    dispatch(getPost(id));
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("-----------", data);
     setData(post);
   }, [post]);
 
@@ -154,44 +153,6 @@ export default function FundraiseDetails() {
     dispatch(onNextStep());
   };
 
-  const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    description: Yup.string().required("Description is required"),
-    content: Yup.string().min(1000).required("Content is required"),
-    cover: Yup.mixed().required("Cover is required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      title: post.title,
-      description: post.description,
-      cover: post.cover,
-    },
-    validationSchema: NewBlogSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      try {
-        await fakeRequest(500);
-        resetForm();
-        handleClosePreview();
-        setSubmitting(false);
-        enqueueSnackbar("Post success", { variant: "success" });
-      } catch (error) {
-        console.error(error);
-        setSubmitting(false);
-      }
-    },
-  });
-
-  const {
-    errors,
-    values,
-    touched,
-    handleSubmit,
-    isSubmitting,
-    setFieldValue,
-    getFieldProps,
-  } = formik;
-
   if (_.isEmpty(data)) {
     return null;
   }
@@ -200,150 +161,155 @@ export default function FundraiseDetails() {
 
   return (
     <>
-      <FormikProvider value={formik}>
-        <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <FundraiseHeader
-            continueTitle="Share"
-            // cancelButton={false}
-            cancelAction={handleBackStep}
-            continueAction={handleOpenPreview}
-          />
+      <Container
+        maxWidth="lg"
+        sx={{
+          paddingTop: (theme) => theme.spacing(theme.shape.PAGE_TOP_PADDING),
+          paddingBottom: (theme) =>
+            theme.spacing(theme.shape.PAGE_BOTTOM_PADDING),
+        }}
+      >
+        <FundraiseHeader
+          continueTitle="Share"
+          cancelButton={false}
+          cancelAction={handleBackStep}
+          continueAction={handleOpenPreview}
+        />
 
-          <Container maxWidth="lg">
-            <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-              <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
-                <Grid item xs={12} md={5}>
-                  <Card sx={{ position: "relative" }}>
-                    <CardMediaStyle>
-                      <CoverImgStyle
-                        alt={"cover"}
-                        src={data.cover.preview}
-                        sx={{
-                          transform: `rotate(${
-                            ((-1 * data.cover.rotate) % 4) * 90
-                          }deg) scale(${1 + data.cover.scale / 100})`,
-                        }}
-                      />
-                    </CardMediaStyle>
-                  </Card>
-                </Grid>
-
-                <Grid item xs={12} md={5}>
-                  <Stack
-                    spacing={theme.shape.CARD_CONTENT_SPACING}
-                    justifyContent="space-between"
-                    sx={{ height: "100%", py: 1 }}
-                  >
-                    <Typography
-                      variant="h3"
+        <Container maxWidth="lg">
+          <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
+            <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
+              <Grid item xs={12} md={5}>
+                <Card sx={{ position: "relative" }}>
+                  <CardMediaStyle>
+                    <CoverImgStyle
+                      alt={"cover"}
+                      src={data.cover.preview}
                       sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
+                        transform: `rotate(${
+                          ((-1 * data.cover.rotate) % 4) * 90
+                        }deg) scale(${1 + data.cover.scale / 100})`,
                       }}
-                    >
-                      {data.title}
-                    </Typography>
-
-                    <Stack direction="row" justifyContent="space-between">
-                      <motion.div variants={varFadeInRight}>
-                        <Button
-                          variant="contained"
-                          color="inherit"
-                          // component={RouterLink}
-                          // to={PATH_PAGE.page404}
-                          startIcon={<Icon icon="akar-icons:edit" />}
-                          sx={{
-                            color: "text.primary",
-                            backgroundColor: (theme) =>
-                              theme.palette.background.paper,
-                          }}
-                        >
-                          Edit and settings
-                        </Button>
-                      </motion.div>
-                      <motion.div variants={varFadeInRight}>
-                        <Button
-                          variant="contained"
-                          color="inherit"
-                          component={RouterLink}
-                          to={`${PATH_PAGE.donate}/${uid}`}
-                          startIcon={<Icon icon="akar-icons:eye" />}
-                          sx={{
-                            color: "text.primary",
-                            backgroundColor: (theme) =>
-                              theme.palette.background.paper,
-                          }}
-                        >
-                          View fundraiser
-                        </Button>
-                      </motion.div>
-                    </Stack>
-
-                    <DonateProgress
-                      time={diff(moment(), moment(data.createdAt))}
-                      total={filter.totalAmount}
-                      goal={data.goal}
                     />
-                  </Stack>
-                </Grid>
-                <Grid item xs={12} md={2}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="inherit"
-                    onClick={handleOpenPreview}
-                    sx={{
-                      mr: 1.5,
-                      color: "text.primary",
-                      backgroundColor: (theme) =>
-                        theme.palette.background.paper,
-                    }}
-                  >
-                    Update
-                  </Button>
-                </Grid>
-              </Grid>
-
-              <Grid container>
-                <Card
-                  sx={{
-                    px: 1,
-                    py: 1.5,
-                    width: "100%",
-                    backgroundColor: (theme) => theme.palette.common.white,
-                  }}
-                >
-                  <Stack
-                    direction={{ xs: "column", md: "row" }}
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={1}
-                  >
-                    <Stack spacing={2} direction="row" alignItems="center">
-                      <FacebookImgStyle
-                        alt="post cover"
-                        src="/static/socials/Facebook.png"
-                      />
-                      <Typography
-                        variant="h7"
-                        color={(theme) => theme.palette.common.black}
-                      >
-                        Dud you know? Sharing on Facebook can increase your
-                        donation as much as 350%
-                      </Typography>
-                    </Stack>
-
-                    <Button variant="contained">Share on Facebook</Button>
-                  </Stack>
+                  </CardMediaStyle>
                 </Card>
               </Grid>
 
-              {/* <Card
+              <Grid item xs={12} md={5}>
+                <Stack
+                  spacing={theme.shape.CARD_CONTENT_SPACING}
+                  justifyContent="space-between"
+                  sx={{ height: "100%", py: 1 }}
+                >
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      ...(!isLight && {
+                        textShadow: (theme) =>
+                          `4px 4px 16px ${alpha(
+                            theme.palette.grey[800],
+                            0.48
+                          )}`,
+                      }),
+                    }}
+                  >
+                    {data.title}
+                  </Typography>
+
+                  <Stack direction="row" justifyContent="space-between">
+                    <motion.div variants={varFadeInRight}>
+                      <Button
+                        variant="contained"
+                        color="inherit"
+                        // component={RouterLink}
+                        // to={PATH_PAGE.page404}
+                        startIcon={<Icon icon="akar-icons:edit" />}
+                        sx={{
+                          color: "text.primary",
+                          backgroundColor: (theme) =>
+                            theme.palette.background.paper,
+                        }}
+                      >
+                        Edit and settings
+                      </Button>
+                    </motion.div>
+                    <motion.div variants={varFadeInRight}>
+                      <Button
+                        variant="contained"
+                        color="inherit"
+                        component={RouterLink}
+                        to={`${PATH_PAGE.donate}/${id}`}
+                        startIcon={<Icon icon="akar-icons:eye" />}
+                        sx={{
+                          color: "text.primary",
+                          backgroundColor: (theme) =>
+                            theme.palette.background.paper,
+                        }}
+                      >
+                        View fundraiser
+                      </Button>
+                    </motion.div>
+                  </Stack>
+
+                  <DonateProgress
+                    time={diff(moment(), moment(data.createdAt))}
+                    total={filter.totalAmount}
+                    goal={data.goal}
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={2}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="inherit"
+                  onClick={handleOpenPreview}
+                  sx={{
+                    mr: 1.5,
+                    color: "text.primary",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                  }}
+                >
+                  Update
+                </Button>
+              </Grid>
+            </Grid>
+
+            <Grid container>
+              <Card
+                sx={{
+                  px: 1,
+                  py: 1.5,
+                  width: "100%",
+                  backgroundColor: (theme) => theme.palette.common.white,
+                }}
+              >
+                <Stack
+                  direction={{ xs: "column", md: "row" }}
+                  justifyContent="space-between"
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Stack spacing={2} direction="row" alignItems="center">
+                    <FacebookImgStyle
+                      alt="post cover"
+                      src="/static/socials/Facebook.png"
+                    />
+                    <Typography
+                      variant="h7"
+                      color={(theme) => theme.palette.common.black}
+                    >
+                      Dud you know? Sharing on Facebook can increase your
+                      donation as much as 350%
+                    </Typography>
+                  </Stack>
+
+                  <Button variant="contained">Share on Facebook</Button>
+                </Stack>
+              </Card>
+            </Grid>
+
+            {/* <Card
                 sx={{
                   p: theme.shape.CARD_PADDING,
                 }}
@@ -415,15 +381,13 @@ export default function FundraiseDetails() {
                   </Grid>
                 </Stack>
               </Card> */}
-            </Stack>
-          </Container>
-        </Form>
-      </FormikProvider>
+          </Stack>
+        </Container>
+      </Container>
 
       <FundraiseShareDialog
-        uid={uid}
-        title={post.title}
-        formik={formik}
+        uid={id}
+        title={data.title}
         openPreview={open}
         onClosePreview={handleClosePreview}
       />
