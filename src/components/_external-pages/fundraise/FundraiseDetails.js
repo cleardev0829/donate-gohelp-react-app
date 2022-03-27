@@ -125,14 +125,17 @@ export default function FundraiseDetails() {
   const [updateOpen, setUpdateOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("profile");
   const [data, setData] = useState({});
-  const filter = filters([]);
+  const [filter, setFilter] = useState(filters([]));
 
   useEffect(() => {
     dispatch(getPost(id));
   }, [dispatch]);
 
   useEffect(() => {
+    if (_.isEmpty(post)) return;
+
     setData(post);
+    setFilter(filters(post.donates));
   }, [post]);
 
   const handleOpenPreview = () => {
@@ -166,7 +169,7 @@ export default function FundraiseDetails() {
   if (_.isEmpty(data)) {
     return null;
   }
-
+  console.log("===================================", data, filter);
   return (
     <>
       <Container

@@ -1,7 +1,15 @@
 import PropTypes from "prop-types";
 import { Stack, Typography, useTheme } from "@material-ui/core";
+import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
 import ProgressItem from "./ProgressItem";
 import { fPercent, fCurrency } from "src/utils/formatNumber";
+
+export const TextStyle = styled(Typography)({
+  overflow: "hidden",
+  WebkitLineClamp: 1,
+  display: "-webkit-box",
+  WebkitBoxOrient: "vertical",
+});
 
 DonateProgress.propTypes = {
   time: PropTypes.string,
@@ -18,9 +26,9 @@ export default function DonateProgress({ time, total, goal }) {
         text={`Last donation ${time}`}
         progress={fPercent((total * 100) / goal)}
       />
-      <Typography gutterBottom variant="h6" sx={{ display: "block" }}>
+      <TextStyle variant="h6" color="inherit" sx={{ height: 30 }}>
         {`${fCurrency(total)} raised of ${fCurrency(goal)}`}
-      </Typography>
+      </TextStyle>
     </Stack>
   );
 }

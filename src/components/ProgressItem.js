@@ -28,7 +28,7 @@ export default function ProgressItem({ text, progress }) {
 
       <MLinearProgress
         variant="determinate"
-        value={progress}
+        value={progress.substring(0, progress.length - 1)}
         color={COLORS[0]}
       />
     </Stack>

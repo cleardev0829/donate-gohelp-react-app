@@ -38,43 +38,6 @@ import ReactCountryFlag from "react-country-flag";
 
 // ----------------------------------------------------------------------
 
-const modules = {
-  toolbar: false,
-  history: {
-    delay: 500,
-    maxStack: 100,
-    userOnly: true,
-  },
-  syntax: true,
-  clipboard: {
-    matchVisual: false,
-  },
-};
-
-const QuillWrapperStyle = styled("div")(({ theme }) => ({
-  borderRadius: theme.shape.borderRadius,
-  border: `solid 0px ${theme.palette.grey[500_32]}`,
-  height: 70,
-  "& .ql-container.ql-snow": {
-    borderColor: "transparent",
-    ...theme.typography.body1,
-    fontFamily: theme.typography.fontFamily,
-  },
-  "& .ql-editor": {
-    height: 70,
-    "&.ql-blank::before": {
-      fontStyle: "normal",
-      color: theme.palette.text.disabled,
-    },
-    "& pre.ql-syntax": {
-      ...theme.typography.body2,
-      // padding: theme.spacing(2),
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.grey[900],
-    },
-  },
-}));
-
 export const CARD_BRODER_RADIUS = 2;
 
 export const CardContentStyle = styled(CardContent)(({ theme }) => ({
@@ -210,18 +173,6 @@ export default function TopFundraiserCard({ post, simple = false }) {
                     {post.descriptionText}
                   </DescriptionStyle>
                 )}
-
-                {/* <QuillWrapperStyle>
-                  <ReactQuill
-                    readOnly
-                    value={post.description}
-                    modules={modules}
-                    style={{
-                      border: "0px solid black",
-                      margin: 0,
-                    }}
-                  />
-                </QuillWrapperStyle> */}
               </Stack>
 
               <DonateProgress

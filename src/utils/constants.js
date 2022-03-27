@@ -43,7 +43,7 @@ export const diff = (m1, m2) => {
 };
 
 export const filters = (donates) => {
-  if (donates.length === 0) {
+  if (!donates || donates.length === 0) {
     return {
       recentTimeAgo: "",
       recentAmount: 0,
@@ -76,7 +76,6 @@ export const STEPS = ["Basics", "Goal", "Photo", "Story", "Donation"];
 export const CRYPTO_TYPES = ["BTC", "ETH", "SOL"];
 
 export const CATEGORIES = [
-  "",
   "Medical",
   "Memorial",
   "Emergency",

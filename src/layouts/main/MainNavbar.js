@@ -89,11 +89,11 @@ export default function MainNavbar() {
 
           {/* <Box sx={{ flexGrow: 1 }} /> */}
 
-          <MHidden width="mdDown">
-            <SettingMode />
-          </MHidden>
-
           <Stack spacing={3} direction="row" alignItems="center">
+            <MHidden width="mdDown">
+              <SettingMode />
+            </MHidden>
+
             <Link
               component={RouterLink}
               color="inherit"
@@ -101,6 +101,7 @@ export default function MainNavbar() {
               to={PATH_PAGE.fundraisers}
               sx={{
                 display: "block",
+                color: "text.primary",
                 transition: (theme) => theme.transitions.create("all"),
                 "&:hover": { color: "primary.main" },
               }}
@@ -112,7 +113,9 @@ export default function MainNavbar() {
               <Search />
             </MHidden>
 
-            <Button variant="contained">Connect your wallet</Button>
+            <Button size="small" variant="contained">
+              Connect your wallet
+            </Button>
           </Stack>
 
           <MHidden width="mdUp">
