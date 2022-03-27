@@ -130,6 +130,7 @@ export default function FundraiseDetails() {
   }, [dispatch]);
 
   useEffect(() => {
+    console.log("-----------", data);
     setData(post);
   }, [post]);
 
@@ -194,6 +195,8 @@ export default function FundraiseDetails() {
   if (_.isEmpty(data)) {
     return null;
   }
+
+  if (_.isEmpty(data)) return null;
 
   return (
     <>
