@@ -37,7 +37,9 @@ export const PATH_PAGE = {
   page500: "/500",
   components: "/components",
   fundraise: "/fundraise",
+  fundraisers: "/fundraisers",
   fundraiseDetails: "/fundraiseDetails",
+  fundraiseUpdate: "/fundraiseUpdate",
   donate: "/donate",
 };
 

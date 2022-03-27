@@ -6,6 +6,7 @@ export { default as LandingBottom } from "./LandingBottom";
 
 export { default as LandingAdvertisement } from "./LandingAdvertisement";
 export { default as TopFundraisers } from "./TopFundraisers";
+export { default as YourFundraisers } from "./YourFundraisers";
 export { default as StartFundraise } from "./StartFundraise";
 export { default as DonateCategories } from "./DonateCategories";
 export { default as LandingHugePackElements } from "./LandingHugePackElements";

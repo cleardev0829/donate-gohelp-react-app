@@ -98,7 +98,7 @@ export default function MainNavbar() {
               component={RouterLink}
               color="inherit"
               underline="none"
-              to={PATH_PAGE.fundraiseDetails}
+              to={PATH_PAGE.fundraisers}
               sx={{
                 display: "block",
                 transition: (theme) => theme.transitions.create("all"),

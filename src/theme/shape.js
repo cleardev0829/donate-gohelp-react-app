@@ -14,7 +14,7 @@ const shape = {
   MAIN_VERTICAL_SPACING: 3.5,
 
   ICON_SIZE: 24,
-  PARAGRAPH_SPACING: 16,
+  PARAGRAPH_SPACING: 16, // paragraph in landing page
 };
 
 export default shape;

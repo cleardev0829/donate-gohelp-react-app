@@ -9,11 +9,11 @@ import moment from "moment";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
 import {
   Box,
-  Button,
   Link,
   Card,
   Grid,
   Stack,
+  Button,
   Typography,
   CardContent,
 } from "@material-ui/core";
@@ -126,27 +126,45 @@ const CountryStyle = styled(Box)(({ theme }) => ({
   padding: theme.spacing(0.75, 2),
 }));
 
+const PublishButtonStyle = styled(Box)(({ theme }) => ({
+  zIndex: 9,
+  position: "absolute",
+  left: theme.spacing(2),
+  bottom: theme.spacing(2),
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  backgroundColor: theme.palette.primary.main,
+  borderRadius: 8,
+  padding: theme.spacing(0.75, 2),
+}));
+
 // ----------------------------------------------------------------------
 
 TopFundraiserCard.propTypes = {
   post: PropTypes.object.isRequired,
+  simple: PropTypes.bool,
 };
 
-export default function TopFundraiserCard({ post }) {
+export default function TopFundraiserCard({ post, simple = false }) {
   const navigate = useNavigate();
   const filter = filters(post.donates);
+
+  const handleNavigate = () => {
+    simple
+      ? navigate(`${PATH_PAGE.fundraiseDetails}/${post.id}`)
+      : navigate(`${PATH_PAGE.donate}/${post.id}`);
+  };
 
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card sx={{ position: "relative" }}>
         <CardContentStyle>
-          <Box
-            sx={{ cursor: "pointer" }}
-            onClick={() => navigate(`${PATH_PAGE.donate}/${post.id}`)}
-          >
+          <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
             <Stack>
               <CardMediaStyle>
-                {!_.isEmpty(post.live) && (
+                {!_.isEmpty(post.live) && !simple && (
                   <CountryStyle>
                     <ReactCountryFlag
                       countryCode={post.live.code}
@@ -168,6 +186,9 @@ export default function TopFundraiserCard({ post }) {
                     </Typography>
                   </CountryStyle>
                 )}
+
+                {simple && <PublishButtonStyle>Published</PublishButtonStyle>}
+
                 <CoverImgStyle
                   alt={"cover"}
                   src={post.cover.preview}
@@ -184,9 +205,11 @@ export default function TopFundraiserCard({ post }) {
                   {post.title}
                 </TitleStyle>
 
-                <DescriptionStyle color="inherit" variant="p1">
-                  {post.descriptionText}
-                </DescriptionStyle>
+                {!simple && (
+                  <DescriptionStyle color="inherit" variant="p1">
+                    {post.descriptionText}
+                  </DescriptionStyle>
+                )}
 
                 {/* <QuillWrapperStyle>
                   <ReactQuill
@@ -223,7 +246,7 @@ export default function TopFundraiserCard({ post }) {
                 component={RouterLink}
                 to={`${PATH_PAGE.donate}/${post.id}`}
               >
-                Donate
+                {simple ? "Manage" : "Donate"}
               </Button>
             </motion.div>
           </Box>

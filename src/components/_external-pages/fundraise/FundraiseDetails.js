@@ -57,6 +57,7 @@ import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
 import { diff, filters } from "../../../utils/constants";
 import FundraiseShareDialog from "./FundraiseShareDialog";
+import FundraiseUpdateDialog from "./FundraiseUpdateDialog";
 
 // ----------------------------------------------------------------------
 
@@ -121,6 +122,7 @@ export default function FundraiseDetails() {
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("profile");
   const [data, setData] = useState({});
   const filter = filters([]);
@@ -141,6 +143,14 @@ export default function FundraiseDetails() {
     setOpen(false);
   };
 
+  const handleOpenUpdatePreview = () => {
+    setUpdateOpen(true);
+  };
+
+  const handleCloseUpdatePreview = () => {
+    setUpdateOpen(false);
+  };
+
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
   };
@@ -156,8 +166,6 @@ export default function FundraiseDetails() {
   if (_.isEmpty(data)) {
     return null;
   }
-
-  if (_.isEmpty(data)) return null;
 
   return (
     <>
@@ -263,7 +271,7 @@ export default function FundraiseDetails() {
                   fullWidth
                   variant="contained"
                   color="inherit"
-                  onClick={handleOpenPreview}
+                  onClick={handleOpenUpdatePreview}
                   sx={{
                     mr: 1.5,
                     color: "text.primary",
@@ -390,6 +398,13 @@ export default function FundraiseDetails() {
         title={data.title}
         openPreview={open}
         onClosePreview={handleClosePreview}
+      />
+
+      <FundraiseUpdateDialog
+        uid={id}
+        data={data}
+        openPreview={updateOpen}
+        onClosePreview={handleCloseUpdatePreview}
       />
     </>
   );
