@@ -40,6 +40,7 @@ export const PATH_PAGE = {
   fundraisers: "/fundraisers",
   fundraiseDetails: "/fundraiseDetails",
   fundraiseUpdate: "/fundraiseUpdate",
+  fundraiseEdit: "/fundraiseEdit",
   donate: "/donate",
 };
 

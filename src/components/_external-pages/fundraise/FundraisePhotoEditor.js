@@ -66,6 +66,7 @@ export default function FundraisePhotoEditor({
     // handleSubmit,
     // isSubmitting,
     isValid,
+    setFieldValue,
   } = formik;
   const cover = isString(values.cover) ? values.cover : values.cover?.preview;
   const hasContent = cover;
@@ -88,6 +89,11 @@ export default function FundraisePhotoEditor({
     );
 
     setState({ rotate: 0, scale: 0 });
+
+    setFieldValue("cover", {
+      ...values.cover,
+      ...state,
+    });
     onClosePreview();
   };
 
@@ -101,7 +107,7 @@ export default function FundraisePhotoEditor({
         <LoadingButton
           type="button"
           variant="contained"
-          disabled={!isValid}
+          // disabled={!isValid}
           // loading={isSubmitting}
           onClick={handleDone}
         >

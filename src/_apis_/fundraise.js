@@ -1,6 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-useless-escape */
 import faker from "faker";
+import moment from "moment";
 import { paramCase } from "change-case";
 // utils
 import { mockImgCover } from "../utils/mockImages";
@@ -25,7 +26,7 @@ mock.onPost("/api/fundraise/add").reply(async (request) => {
       await getFileBlob(data.cover.preview, (blob) => {
         firebase
           .storage()
-          .ref(`/photo/${data.uid}-${data.cover.path}`)
+          .ref(`/${data.uid}/fundraise-${data.cover.path}`)
           .put(blob)
           .then((snapshot) => {
             snapshot.ref.getDownloadURL().then(async (url) => {
@@ -49,6 +50,128 @@ mock.onPost("/api/fundraise/add").reply(async (request) => {
         .collection("fundraise")
         .doc(data.uid)
         .set({
+          ...data,
+        });
+    }
+
+    return [200, { results: data }];
+  } catch (error) {
+    console.error(error);
+    return [500, { message: "Internal server error" }];
+  }
+});
+
+// ----------------------------------------------------------------------
+
+mock.onPost("/api/update/add").reply(async (request) => {
+  try {
+    const data = JSON.parse(request.data);
+
+    if (data.cover && data.cover.preview) {
+      await getFileBlob(data.cover.preview, (blob) => {
+        firebase
+          .storage()
+          .ref(`/${data.uid}/update-${data.cover.path}`)
+          .put(blob)
+          .then((snapshot) => {
+            snapshot.ref.getDownloadURL().then(async (url) => {
+              await firebase
+                .firestore()
+                .collection("fundraise")
+                .doc(data.fundraiseId)
+                .collection("updates")
+                .add({
+                  ...data,
+                  cover: {
+                    ...data.cover,
+                    preview: url,
+                  },
+                });
+            });
+          });
+      });
+    } else {
+      await firebase
+        .firestore()
+        .collection("fundraise")
+        .doc(data.fundraiseId)
+        .collection("updates")
+        .add({
+          ...data,
+        });
+    }
+
+    return [200, { data }];
+  } catch (error) {
+    console.error(error);
+    return [500, { message: "Internal server error" }];
+  }
+});
+
+// ----------------------------------------------------------------------
+
+mock.onPost("/api/fundraise/update").reply(async (request) => {
+  try {
+    const data = JSON.parse(request.data);
+
+    if (data.cover && data.cover.preview && data.cover.touched) {
+      await getFileBlob(data.cover.preview, (blob) => {
+        firebase
+          .storage()
+          .ref(`/${data.uid}/fundraise-${data.cover.path}`)
+          .put(blob)
+          .then((snapshot) => {
+            snapshot.ref.getDownloadURL().then(async (url) => {
+              await firebase
+                .firestore()
+                .collection("fundraise")
+                .doc(data.uid)
+                .update({
+                  ...data,
+                  cover: {
+                    ...data.cover,
+                    preview: url,
+                  },
+                });
+            });
+          });
+      });
+    } else if (
+      data.team &&
+      data.team.cover &&
+      data.team.cover.preview &&
+      data.team.cover.touched
+    ) {
+      await getFileBlob(data.team.cover.preview, (blob) => {
+        firebase
+          .storage()
+          .ref(`/${data.uid}/team-${data.team.cover.path}`)
+          .put(blob)
+          .then((snapshot) => {
+            snapshot.ref.getDownloadURL().then(async (url) => {
+              await firebase
+                .firestore()
+                .collection("fundraise")
+                .doc(data.uid)
+                .update({
+                  ...data,
+                  team: {
+                    ...data.team,
+                    cover: {
+                      ...data.team.cover,
+                      preview: url,
+                    },
+                  },
+                });
+            });
+          });
+      });
+    } else {
+      await firebase
+        .firestore()
+        .collection("fundraise")
+        .doc(data.uid)
+        .update({
           ...data,
         });
     }
@@ -208,10 +331,12 @@ mock.onGet("/api/fundraise/post").reply(async (config) => {
         });
       });
 
-    const postWithDonates = {
-      ...post,
-      donates,
-    };
+    const postWithDonates = post
+      ? {
+          ...post,
+          donates,
+        }
+      : null;
 
     if (!postWithDonates) {
       return [404, { message: "Post not found" }];
@@ -262,6 +387,27 @@ mock.onGet("/api/fundraise/posts/search").reply((config) => {
         return results.push(post);
       }
     });
+
+    return [200, { results }];
+  } catch (error) {
+    console.error(error);
+    return [500, { message: "Internal server error" }];
+  }
+});
+
+// ----------------------------------------------------------------------
+
+mock.onGet("/api/fundraise/delete").reply(async (config) => {
+  try {
+    const { uid } = config.params;
+
+    await firebase.firestore().collection("fundraise").doc(uid).delete();
+
+    const results = config.params;
+
+    if (!results) {
+      return [404, { message: "Post not found" }];
+    }
 
     return [200, { results }];
   } catch (error) {

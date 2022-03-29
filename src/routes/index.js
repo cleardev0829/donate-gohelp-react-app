@@ -141,7 +141,8 @@ export default function Router() {
         { path: "/", element: <LandingPage /> },
         { path: "fundraise", element: <Fundraise /> },
         { path: "fundraisers", element: <Fundraisers /> },
-        { path: "fundraiseUpdate", element: <FundraiseUpdate /> },
+        { path: "fundraiseUpdate/:id", element: <FundraiseUpdate /> },
+        { path: "fundraiseEdit/:id", element: <FundraiseEdit /> },
         { path: "fundraise/:type", element: <Fundraise /> },
         { path: "fundraise/:type/:category", element: <Fundraise /> },
         { path: "donate/:id", element: <Donate /> },
@@ -204,5 +205,8 @@ const FundraiseDetails = Loadable(
 );
 const FundraiseUpdate = Loadable(
   lazy(() => import("../components/_external-pages/fundraise/FundraiseUpdate"))
+);
+const FundraiseEdit = Loadable(
+  lazy(() => import("../components/_external-pages/fundraise/FundraiseEdit"))
 );
 const Donate = Loadable(lazy(() => import("../pages/donate/Donate")));

@@ -61,8 +61,8 @@ export default function FundraiseStory() {
   };
 
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    description: Yup.string().required("Description is required"),
+    title: Yup.string().required("This is required"),
+    description: Yup.mixed().required("This is required"),
   });
 
   const formik = useFormik({
@@ -198,20 +198,22 @@ export default function FundraiseStory() {
                     </Typography>
 
                     <QuillEditor
-                      id="product-description"
+                      id="product-content"
                       simple
-                      value={values.description}
+                      value={values.description.content}
                       onChange={(content, delta, source, editor) => {
                         const text = editor.getText(content);
 
-                        setFieldValue("description", content);
-                        setFieldValue("descriptionText", text);
+                        setFieldValue("description", {
+                          content: content,
+                          text: text,
+                        });
 
                         dispatch(
-                          setCheckout({ name: "description", value: content })
-                        );
-                        dispatch(
-                          setCheckout({ name: "descriptionText", value: text })
+                          setCheckout({
+                            name: "description",
+                            value: { content: content, text: text },
+                          })
                         );
                       }}
                       error={Boolean(touched.description && errors.description)}

@@ -19,15 +19,17 @@ const initialState = {
   checkout: {
     activeStep: -1,
 
-    uid: null,
+    uid: "",
     type: null,
     live: null,
     category: "",
     goal: 1000,
     cover: null,
     title: "",
-    description: "",
-    descriptionText: "",
+    description: null,
+    link: "",
+    team: { name: "", cover: null },
+    allows: { allowComment: false, allowDonation: false, allowSearch: false },
   },
 };
 
@@ -87,7 +89,7 @@ const slice = createSlice({
     resetCheckout(state) {
       state.checkout.activeStep = -1;
 
-      state.checkout.uid = null;
+      state.checkout.uid = "";
       state.checkout.type = null;
       state.checkout.live = null;
       state.checkout.category = "";
@@ -95,7 +97,16 @@ const slice = createSlice({
       state.checkout.cover = null;
       state.checkout.title = "";
       state.checkout.description = "";
-      state.checkout.descriptionText = "";
+      state.checkout.link = "";
+      state.checkout.team = {
+        name: "",
+        cover: null,
+      };
+      state.checkout.allows = {
+        allowComment: false,
+        allowDonation: false,
+        allowSearch: false,
+      };
     },
 
     onBackStep(state) {
@@ -119,6 +130,7 @@ export default slice.reducer;
 // Actions
 export const {
   getMorePosts,
+  getPostSuccess,
   setCheckout,
   resetCheckout,
   onGotoStep,
@@ -137,6 +149,43 @@ export function addPost(post) {
       });
 
       dispatch(slice.actions.getPostSuccess(response.data.results));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function addUpdate(update) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post("/api/update/add", {
+        ...update,
+      });
+
+      // dispatch(slice.actions.getPostSuccess(response.data.donate));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function updatePost(post) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post("/api/fundraise/update", {
+        ...post,
+      });
+
+      // dispatch(slice.actions.getPostSuccess(response.data.results));
+      dispatch(getPost(post.uid));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
@@ -209,6 +258,23 @@ export function getRecentPosts(title) {
       });
 
       dispatch(slice.actions.getRecentPostsSuccess(response.data.recentPosts));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError());
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function deletePost(uid) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get("/api/fundraise/delete", {
+        params: { uid },
+      });
+      dispatch(slice.actions.getPostSuccess(response.data.post));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError());

@@ -170,7 +170,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
 
                 {!simple && (
                   <DescriptionStyle color="inherit" variant="p1">
-                    {post.descriptionText}
+                    {post.description.text}
                   </DescriptionStyle>
                 )}
               </Stack>

@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
+import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "../../../redux/store";
+import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
+import radioButtonOffOutline from "@iconify/icons-eva/radio-button-off-outline";
 import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
 import {
@@ -14,6 +18,7 @@ import {
   Grid,
   Stack,
   Button,
+  Checkbox,
   Container,
   Typography,
   FormHelperText,
@@ -23,6 +28,7 @@ import {
   onBackStep,
   onNextStep,
   setCheckout,
+  addUpdate,
 } from "../../../redux/slices/fundraise";
 import { UploadSingleFileOverride } from "../../upload";
 import { FundraiseHeader } from ".";
@@ -32,9 +38,12 @@ import { QuillEditor } from "../../editor";
 
 // ----------------------------------------------------------------------
 
-export default function FundraiseUpdate({ data }) {
+export default function FundraiseUpdate() {
   const theme = useTheme();
+  const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
@@ -55,15 +64,24 @@ export default function FundraiseUpdate({ data }) {
     dispatch(onNextStep());
   };
 
+  const handleEdit = () => {
+    handleOpenPreview();
+  };
+
+  const handleCancel = () => {
+    navigate(-1);
+  };
+
   const NewBlogSchema = Yup.object().shape({
-    description: Yup.string().required("Description is required"),
+    content: Yup.string().required("Description is required"),
     cover: Yup.mixed().required("Cover is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      description: data.description,
-      cover: data.cover,
+      content: "",
+      text: "",
+      cover: null,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -72,7 +90,18 @@ export default function FundraiseUpdate({ data }) {
         resetForm();
         handleClosePreview();
         setSubmitting(false);
-        handleNextStep();
+        dispatch(
+          addUpdate({
+            fundraiseId: params.id,
+            description: {
+              content: values.content,
+              text: values.text,
+            },
+            cover: values.cover,
+          })
+        );
+        enqueueSnackbar("Post success", { variant: "success" });
+        navigate(-1);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -116,47 +145,51 @@ export default function FundraiseUpdate({ data }) {
     );
   };
 
-  const handleEdit = () => {
-    handleOpenPreview();
-  };
-
   return (
     <>
       <Container
         maxWidth="lg"
         sx={{
+          paddingTop: (theme) => theme.spacing(theme.shape.PAGE_TOP_PADDING),
           paddingBottom: (theme) =>
             theme.spacing(theme.shape.PAGE_BOTTOM_PADDING),
         }}
       >
         <FormikProvider value={formik}>
           <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+            <FundraiseHeader
+              cancelTitle="Cancel"
+              continueTitle="Post Update"
+              cancelAction={handleCancel}
+              continueAction={handleSubmit}
+            />
+
             <Container maxWidth="md">
               <Grid container spacing={3}>
                 <Grid item xs={12} md={12}>
                   <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-                    <Typography
-                      component="p"
-                      variant="h3"
-                      sx={{ color: "text.primary" }}
-                    >
-                      Post an Update
-                    </Typography>
-
-                    <Typography
-                      component="p"
-                      variant="h5"
-                      sx={{ color: "text.primary" }}
-                    >
-                      So that people can get in touch with you.
-                    </Typography>
-
                     <Card
                       sx={{
                         p: theme.shape.CARD_PADDING,
                       }}
                     >
                       <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                        <Typography
+                          component="p"
+                          variant="h3"
+                          sx={{ color: "text.primary" }}
+                        >
+                          Post an Update
+                        </Typography>
+
+                        <Typography
+                          component="p"
+                          variant="h5"
+                          sx={{ color: "text.primary" }}
+                        >
+                          So that people can get in touch with you.
+                        </Typography>
+
                         <Typography
                           variant="h5"
                           paragraph
@@ -176,44 +209,21 @@ export default function FundraiseUpdate({ data }) {
                         <QuillEditor
                           id="product-description"
                           simple
-                          value={values.description}
+                          value={values.content}
                           onChange={(content, delta, source, editor) => {
                             const text = editor.getText(content);
 
-                            setFieldValue("description", content);
-                            setFieldValue("descriptionText", text);
-
-                            dispatch(
-                              setCheckout({
-                                name: "description",
-                                value: content,
-                              })
-                            );
-                            dispatch(
-                              setCheckout({
-                                name: "descriptionText",
-                                value: text,
-                              })
-                            );
+                            setFieldValue("content", content);
+                            setFieldValue("text", text);
                           }}
-                          error={Boolean(
-                            touched.description && errors.description
-                          )}
+                          error={Boolean(touched.content && errors.content)}
                         />
-                        {touched.description && errors.description && (
+                        {touched.content && errors.content && (
                           <FormHelperText error sx={{ px: 2 }}>
-                            {touched.description && errors.description}
+                            {touched.content && errors.content}
                           </FormHelperText>
                         )}
-                      </Stack>
-                    </Card>
 
-                    <Card
-                      sx={{
-                        p: theme.shape.CARD_PADDING,
-                      }}
-                    >
-                      <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                         <Typography
                           variant="h3"
                           sx={{
@@ -267,6 +277,41 @@ export default function FundraiseUpdate({ data }) {
                             Delete
                           </Button>
                         </Stack>
+
+                        {/* <Typography
+                          variant="h3"
+                          sx={{
+                            ...(!isLight && {
+                              textShadow: (theme) =>
+                                `4px 4px 16px ${alpha(
+                                  theme.palette.grey[800],
+                                  0.48
+                                )}`,
+                            }),
+                          }}
+                        >
+                          Share Update to
+                        </Typography>
+
+                        <Stack direction="row" alignItems="center">
+                          <Checkbox
+                            disableRipple
+                            // checked={completed}
+                            icon={<Icon icon={radioButtonOffOutline} />}
+                            checkedIcon={
+                              <Icon icon={checkmarkCircle2Outline} />
+                            }
+                            // onChange={handleChangeComplete}
+                          />
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            // onClick={handleOpen}
+                            // sx={{ ...(completed && { opacity: 0.48 }) }}
+                          >
+                            Campaign Page (default)
+                          </Typography>
+                        </Stack> */}
                       </Stack>
                     </Card>
 

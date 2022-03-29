@@ -68,55 +68,55 @@ export default function MainNavbar() {
             justifyContent: "space-between",
           }}
         >
-          <Stack spacing={15} direction="row" alignItems="center">
-            <Stack spacing={1} direction="row" alignItems="center">
-              <RouterLink to="/">
-                <Logo />
-              </RouterLink>
-              <MHidden width="smDown">
-                <GohelpImgStyle src="/static/home/gohelp.png" alt="Gohelp" />
-              </MHidden>
-            </Stack>
-
-            <MHidden width="mdDown">
-              <MenuDesktop
-                isOffset={isOffset}
-                isHome={isHome}
-                navConfig={navConfig}
-              />
+          <Stack direction="row" alignItems="center">
+            <RouterLink to="/">
+              <Logo />
+            </RouterLink>
+            <MHidden width="smDown">
+              <GohelpImgStyle src="/static/home/gohelp.png" alt="Gohelp" />
             </MHidden>
           </Stack>
 
-          {/* <Box sx={{ flexGrow: 1 }} /> */}
+          <MHidden width="mdDown">
+            <MenuDesktop
+              isOffset={isOffset}
+              isHome={isHome}
+              navConfig={navConfig}
+            />
+          </MHidden>
 
-          <Stack spacing={3} direction="row" alignItems="center">
-            <MHidden width="mdDown">
-              <SettingMode />
-            </MHidden>
+          {/* <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          > */}
+          <Link
+            component={RouterLink}
+            color="inherit"
+            underline="none"
+            to={PATH_PAGE.fundraisers}
+            sx={{
+              display: "block",
+              color: "text.primary",
+              transition: (theme) => theme.transitions.create("all"),
+              "&:hover": { color: "primary.main" },
+            }}
+          >
+            Your Fundraisers
+          </Link>
 
-            <Link
-              component={RouterLink}
-              color="inherit"
-              underline="none"
-              to={PATH_PAGE.fundraisers}
-              sx={{
-                display: "block",
-                color: "text.primary",
-                transition: (theme) => theme.transitions.create("all"),
-                "&:hover": { color: "primary.main" },
-              }}
-            >
-              Your Fundraisers
-            </Link>
+          <MHidden width="mdDown">
+            <Search />
+          </MHidden>
 
-            <MHidden width="mdDown">
-              <Search />
-            </MHidden>
+          <Button size="small" variant="contained">
+            Connect
+          </Button>
 
-            <Button size="small" variant="contained">
-              Connect your wallet
-            </Button>
-          </Stack>
+          <MHidden width="mdDown">
+            <SettingMode />
+          </MHidden>
+          {/* </Stack> */}
 
           <MHidden width="mdUp">
             <MHidden width="mdUp">

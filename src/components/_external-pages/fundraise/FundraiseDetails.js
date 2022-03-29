@@ -122,7 +122,7 @@ export default function FundraiseDetails() {
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
-  const [updateOpen, setUpdateOpen] = useState(false);
+  // const [updateOpen, setUpdateOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("profile");
   const [data, setData] = useState({});
   const [filter, setFilter] = useState(filters([]));
@@ -146,13 +146,13 @@ export default function FundraiseDetails() {
     setOpen(false);
   };
 
-  const handleOpenUpdatePreview = () => {
-    setUpdateOpen(true);
-  };
+  // const handleOpenUpdatePreview = () => {
+  //   setUpdateOpen(true);
+  // };
 
-  const handleCloseUpdatePreview = () => {
-    setUpdateOpen(false);
-  };
+  // const handleCloseUpdatePreview = () => {
+  //   setUpdateOpen(false);
+  // };
 
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
@@ -169,7 +169,7 @@ export default function FundraiseDetails() {
   if (_.isEmpty(data)) {
     return null;
   }
-  console.log("===================================", data, filter);
+
   return (
     <>
       <Container
@@ -232,8 +232,8 @@ export default function FundraiseDetails() {
                       <Button
                         variant="contained"
                         color="inherit"
-                        // component={RouterLink}
-                        // to={PATH_PAGE.page404}
+                        component={RouterLink}
+                        to={`${PATH_PAGE.fundraiseEdit}/${id}`}
                         startIcon={<Icon icon="akar-icons:edit" />}
                         sx={{
                           color: "text.primary",
@@ -274,7 +274,8 @@ export default function FundraiseDetails() {
                   fullWidth
                   variant="contained"
                   color="inherit"
-                  onClick={handleOpenUpdatePreview}
+                  component={RouterLink}
+                  to={`${PATH_PAGE.fundraiseUpdate}/${id}`}
                   sx={{
                     mr: 1.5,
                     color: "text.primary",
@@ -320,78 +321,78 @@ export default function FundraiseDetails() {
               </Card>
             </Grid>
 
-            {/* <Card
-                sx={{
-                  p: theme.shape.CARD_PADDING,
-                }}
-              >
-                <Stack spacing={0.1}>
-                  <Grid container xs={12}>
-                    <TabsWrapperStyle>
-                      <Tabs
-                        value={currentTab}
-                        scrollButtons="auto"
-                        variant="scrollable"
-                        allowScrollButtonsMobile
-                        onChange={handleChangeTab}
-                      >
-                        {TABS.map((tab) => (
-                          <Tab
-                            disableRipple
-                            key={tab.value}
-                            value={tab.value}
-                            label={capitalCase(tab.value)}
-                            sx={{ px: 3 }}
-                          />
-                        ))}
-                      </Tabs>
-                    </TabsWrapperStyle>
-                  </Grid>
-
-                  <Grid container spacing={5}>
-                    <Grid item xs={12} md={3}>
-                      <CardMediaStyle>
-                        <ImgStyle
-                          alt={"title"}
-                          src={"/static/home/social-marketing.png"}
+            <Card
+              sx={{
+                p: theme.shape.CARD_PADDING,
+              }}
+            >
+              <Stack spacing={0.1}>
+                <Grid container xs={12}>
+                  <TabsWrapperStyle>
+                    <Tabs
+                      value={currentTab}
+                      scrollButtons="auto"
+                      variant="scrollable"
+                      allowScrollButtonsMobile
+                      onChange={handleChangeTab}
+                    >
+                      {TABS.map((tab) => (
+                        <Tab
+                          disableRipple
+                          key={tab.value}
+                          value={tab.value}
+                          label={capitalCase(tab.value)}
+                          sx={{ px: 3 }}
                         />
-                      </CardMediaStyle>
-                    </Grid>
+                      ))}
+                    </Tabs>
+                  </TabsWrapperStyle>
+                </Grid>
 
-                    <Grid item xs={12} md={9}>
-                      <Stack
-                        spacing={2}
-                        justifyContent="space-between"
-                        sx={{ height: "100%" }}
-                      >
-                        <Typography variant="h3">
-                          Get your first donation by sharing
-                        </Typography>
-
-                        <Typography
-                          gutterBottom
-                          variant="p2"
-                          sx={{ display: "block", mt: 2 }}
-                        >
-                          Share your fundraiser regularly with your social
-                          networks for the most success. Check in and personally
-                          ask friends to donate or share.
-                        </Typography>
-
-                        <motion.div variants={varFadeInRight}>
-                          <Button
-                            variant="contained"
-                            // component={RouterLink}
-                            // to={PATH_PAGE.page404}
-                          >
-                            Share fundraiser
-                          </Button>
-                        </motion.div>
-                      </Stack>
-                    </Grid>
+                <Grid container spacing={5}>
+                  <Grid item xs={12} md={3}>
+                    <CardMediaStyle>
+                      <ImgStyle
+                        alt={"title"}
+                        src={"/static/home/social-marketing.png"}
+                      />
+                    </CardMediaStyle>
                   </Grid>
-                </Stack>
-              </Card> */}
+
+                  <Grid item xs={12} md={9}>
+                    <Stack
+                      spacing={2}
+                      justifyContent="space-between"
+                      sx={{ height: "100%" }}
+                    >
+                      <Typography variant="h3">
+                        Get your first donation by sharing
+                      </Typography>
+
+                      <Typography
+                        gutterBottom
+                        variant="p2"
+                        sx={{ display: "block", mt: 2 }}
+                      >
+                        Share your fundraiser regularly with your social
+                        networks for the most success. Check in and personally
+                        ask friends to donate or share.
+                      </Typography>
+
+                      <motion.div variants={varFadeInRight}>
+                        <Button
+                          variant="contained"
+                          // component={RouterLink}
+                          // to={PATH_PAGE.page404}
+                        >
+                          Share fundraiser
+                        </Button>
+                      </motion.div>
+                    </Stack>
+                  </Grid>
+                </Grid>
+              </Stack>
+            </Card>
           </Stack>
         </Container>
       </Container>
@@ -403,12 +404,12 @@ export default function FundraiseDetails() {
         onClosePreview={handleClosePreview}
       />
 
-      <FundraiseUpdateDialog
+      {/* <FundraiseUpdateDialog
         uid={id}
         data={data}
         openPreview={updateOpen}
         onClosePreview={handleCloseUpdatePreview}
-      />
+      /> */}
     </>
   );
 }

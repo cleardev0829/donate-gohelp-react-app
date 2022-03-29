@@ -56,7 +56,7 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   zIndex: 8,
   width: "100%",
   margin: "auto",
-  filter: `drop-shadow(40px 80px 80px rgba(0, 0, 0, 0.48))`,
+  // filter: `drop-shadow(40px 80px 80px rgba(0, 0, 0, 0.48))`,
   [theme.breakpoints.up("lg")]: {
     right: "8%",
     width: "auto",
