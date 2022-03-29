@@ -129,7 +129,7 @@ export default function DonateList({ post }) {
                         <IconBullet />
                         <Typography
                           component="span"
-                          variant="p1"
+                          variant="subtitle1"
                           color="text.primary"
                         >
                           {diff(moment(), moment(donate.createdAt))}
@@ -139,7 +139,7 @@ export default function DonateList({ post }) {
 
                     <Typography
                       component="span"
-                      variant="p1"
+                      variant="subtitle1"
                       color="text.primary"
                     >
                       {donate.message}

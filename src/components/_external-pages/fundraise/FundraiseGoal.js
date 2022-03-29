@@ -177,7 +177,7 @@ export default function FundraiseGoal() {
                     </Stack>
 
                     <Typography
-                      variant="p1"
+                      variant="subtitle1"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>

@@ -364,7 +364,7 @@ export default function DonatePayment({ post }) {
                           alignItems="center"
                         >
                           <Typography variant="h7">Top donation</Typography>
-                          <Typography gutterBottom variant="p1">
+                          <Typography gutterBottom variant="subtitle1">
                             {`${fCurrency(filter.maxAmount)}`}
                           </Typography>
                         </Stack>
@@ -376,7 +376,7 @@ export default function DonatePayment({ post }) {
                         >
                           <Typography variant="h7">GoHelp tip</Typography>
                           {values.tip > 0 && (
-                            <Typography gutterBottom variant="p1">
+                            <Typography gutterBottom variant="subtitle1">
                               {`${fCurrency(
                                 cryptoToUSD({
                                   count:
@@ -399,7 +399,7 @@ export default function DonatePayment({ post }) {
                         >
                           <Typography variant="h7">Total due</Typography>
                           {values.cryptoCount > 0 && (
-                            <Typography gutterBottom variant="p1">
+                            <Typography gutterBottom variant="subtitle1">
                               {`${fCurrency(
                                 cryptoToUSD({
                                   count:

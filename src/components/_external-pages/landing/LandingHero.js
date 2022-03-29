@@ -88,7 +88,7 @@ export default function LandingHero() {
           <Grid item xs={12} sm={6}>
             <ContentStyle>
               <motion.div variants={varFadeInRight}>
-                <Typography variant="h1" sx={{ color: "text.primary" }}>
+                <Typography variant="h2" sx={{ color: "text.primary" }}>
                   Trusted fundraise <br />
                   for all of life’s
                   <br /> moments
@@ -140,7 +140,9 @@ export default function LandingHero() {
                       />
                     </IconStyle>
 
-                    <Typography variant="p1">See how GoHelp work </Typography>
+                    <Typography variant="subtitle1">
+                      See how GoHelp work{" "}
+                    </Typography>
                   </Stack>
                 </Link>
               </Stack>

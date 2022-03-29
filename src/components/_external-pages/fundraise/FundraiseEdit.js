@@ -33,6 +33,7 @@ import { FundraiseHeader } from ".";
 import { FundraiseEditOverView } from ".";
 import { FundraiseEditPhoto } from ".";
 import { FundraiseEditStory } from ".";
+import { PATH_PAGE } from "src/routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -86,7 +87,7 @@ export default function FundraiseEdit() {
 
   const handleDelete = () => {
     dispatch(deletePost(params.id));
-    navigate("/");
+    navigate(`${PATH_PAGE.fundraisers}`);
   };
 
   if (_.isEmpty(data)) {
@@ -118,10 +119,10 @@ export default function FundraiseEdit() {
               }}
             >
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                <Typography variant="h3" sx={{ color: "text.primary" }}>
+                <Typography variant="h5" sx={{ color: "text.primary" }}>
                   Edit and settings
                 </Typography>
-                <Typography variant="h5" sx={{ color: "text.primary" }}>
+                <Typography variant="subtitle1" sx={{ color: "text.primary" }}>
                   Make changes in your Fundraising.
                 </Typography>
 
@@ -163,7 +164,7 @@ export default function FundraiseEdit() {
               >
                 <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                   <Typography
-                    variant="h4"
+                    variant="h5"
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -180,7 +181,7 @@ export default function FundraiseEdit() {
                   <Grid container xs={12}>
                     <Grid item xs={12} sm={7}>
                       <Typography
-                        variant="p1"
+                        variant="body2"
                         sx={{
                           color: "#A1A1A1",
                           ...(!isLight && {

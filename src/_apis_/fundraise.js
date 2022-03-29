@@ -136,37 +136,39 @@ mock.onPost("/api/fundraise/update").reply(async (request) => {
             });
           });
       });
-    } else if (
-      data.team &&
-      data.team.cover &&
-      data.team.cover.preview &&
-      data.team.cover.touched
-    ) {
-      await getFileBlob(data.team.cover.preview, (blob) => {
-        firebase
-          .storage()
-          .ref(`/${data.uid}/team-${data.team.cover.path}`)
-          .put(blob)
-          .then((snapshot) => {
-            snapshot.ref.getDownloadURL().then(async (url) => {
-              await firebase
-                .firestore()
-                .collection("fundraise")
-                .doc(data.uid)
-                .update({
-                  ...data,
-                  team: {
-                    ...data.team,
-                    cover: {
-                      ...data.team.cover,
-                      preview: url,
-                    },
-                  },
-                });
-            });
-          });
-      });
-    } else {
+    }
+    // else if (
+    //   data.team &&
+    //   data.team.cover &&
+    //   data.team.cover.preview &&
+    //   data.team.cover.touched
+    // ) {
+    //   await getFileBlob(data.team.cover.preview, (blob) => {
+    //     firebase
+    //       .storage()
+    //       .ref(`/${data.uid}/team-${data.team.cover.path}`)
+    //       .put(blob)
+    //       .then((snapshot) => {
+    //         snapshot.ref.getDownloadURL().then(async (url) => {
+    //           await firebase
+    //             .firestore()
+    //             .collection("fundraise")
+    //             .doc(data.uid)
+    //             .update({
+    //               ...data,
+    //               team: {
+    //                 ...data.team,
+    //                 cover: {
+    //                   ...data.team.cover,
+    //                   preview: url,
+    //                 },
+    //               },
+    //             });
+    //         });
+    //       });
+    //   });
+    // }
+    else {
       await firebase
         .firestore()
         .collection("fundraise")
@@ -401,7 +403,9 @@ mock.onGet("/api/fundraise/delete").reply(async (config) => {
   try {
     const { uid } = config.params;
 
-    await firebase.firestore().collection("fundraise").doc(uid).delete();
+    await firebase.firestore().collection("fundraise").doc(uid).update({
+      isDeleted: true,
+    });
 
     const results = config.params;
 

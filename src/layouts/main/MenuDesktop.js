@@ -24,7 +24,7 @@ import { setCheckout, onGotoStep } from "../../redux/slices/fundraise";
 // ----------------------------------------------------------------------
 
 const LinkStyle = styled(Link)(({ theme }) => ({
-  ...theme.typography.p1,
+  ...theme.typography.subtitle2,
   color: theme.palette.text.primary,
   marginRight: theme.spacing(5),
   transition: theme.transitions.create("opacity", {

@@ -116,7 +116,7 @@ export default function TopFundraisers() {
             <MotionInView variants={varFadeInUp}>
               <Typography
                 component="p"
-                variant="h3"
+                variant="h4"
                 sx={{ color: "text.primary" }}
               >
                 Top Fundraisers
@@ -134,7 +134,7 @@ export default function TopFundraisers() {
                 <MotionInView variants={varFadeInUp}>
                   <Typography
                     component="p"
-                    variant="h4"
+                    variant="h5"
                     color={theme.palette.primary.main}
                   >
                     More
@@ -161,10 +161,6 @@ export default function TopFundraisers() {
           style={{ overflow: "inherit" }}
         >
           <Grid container spacing={theme.shape.CARD_MARGIN}>
-            {/* {sortedPosts.splice(0, 3).map((post, index) => (
-              <TopFundraiserCard key={post.id} post={post} index={index} />
-            ))} */}
-
             {data.length > 0 &&
               data.map((post, index) => (
                 <TopFundraiserCard key={post.id} post={post} />

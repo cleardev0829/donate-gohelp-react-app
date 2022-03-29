@@ -76,7 +76,7 @@ export default function DonateCategories() {
         <ContentStyle>
           <MotionInView variants={varFadeInUp}>
             <Typography
-              variant="h2"
+              variant="h3"
               paragraph
               sx={{
                 ...(!isLight && {

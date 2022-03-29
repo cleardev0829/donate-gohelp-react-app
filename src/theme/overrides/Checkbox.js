@@ -37,7 +37,8 @@ export default function Checkbox(theme) {
 
       styleOverrides: {
         root: {
-          padding: theme.spacing(1),
+          color: theme.palette.action.disabled,
+          padding: theme.spacing(0),
           "&.Mui-checked.Mui-disabled, &.Mui-disabled": {
             color: theme.palette.action.disabled,
           },

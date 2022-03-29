@@ -75,7 +75,7 @@ export default function LandingBottom() {
             <Grid item xs={12} sm={6}>
               <Stack spacing={5}>
                 <motion.div variants={varFadeInRight}>
-                  <Typography variant="h1" sx={{ color: "text.primary" }}>
+                  <Typography variant="h2" sx={{ color: "text.primary" }}>
                     Are you ready to <br />
                     fundraise
                   </Typography>

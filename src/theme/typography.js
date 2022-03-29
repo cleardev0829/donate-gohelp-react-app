@@ -19,19 +19,20 @@ function responsiveFontSizes({ sm, md, lg }) {
   };
 }
 
-const FONT_PRIMARY = "Metropolis"; // Google Font
+// const FONT_PRIMARY = "Metropolis"; // Google Font
+const FONT_PRIMARY = "Public Sans, sans-serif"; // Google Font
 // const FONT_SECONDARY = 'CircularStd, sans-serif'; // Local Font
 
 const typography = {
   fontFamily: FONT_PRIMARY,
-  // fontWeightRegular: 400,
-  // fontWeightMedium: 600,
-  // fontWeightBold: 700,
+  fontWeightRegular: 400,
+  fontWeightMedium: 600,
+  fontWeightBold: 700,
   h1: {
     fontWeight: 700,
-    lineHeight: 72 / 56,
+    lineHeight: 80 / 64,
     fontSize: pxToRem(40),
-    ...responsiveFontSizes({ sm: 52, md: 54, lg: 56 }),
+    ...responsiveFontSizes({ sm: 52, md: 58, lg: 64 }),
   },
   h2: {
     fontWeight: 700,
@@ -46,7 +47,7 @@ const typography = {
     ...responsiveFontSizes({ sm: 26, md: 30, lg: 32 }),
   },
   h4: {
-    fontWeight: 600,
+    fontWeight: 700,
     lineHeight: 1.5,
     fontSize: pxToRem(20),
     ...responsiveFontSizes({ sm: 20, md: 24, lg: 24 }),
@@ -58,34 +59,10 @@ const typography = {
     ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
   },
   h6: {
-    fontWeight: 600,
-    lineHeight: 1.5,
-    fontSize: pxToRem(18),
-    ...responsiveFontSizes({ sm: 19, md: 20, lg: 18 }),
-  },
-  h7: {
-    fontWeight: 600,
+    fontWeight: 300,
     lineHeight: 28 / 18,
-    fontSize: pxToRem(16),
-    ...responsiveFontSizes({ sm: 16, md: 16, lg: 16 }),
-  },
-  p1: {
-    fontWeight: 400,
-    lineHeight: 28 / 18,
-    fontSize: pxToRem(16),
-    ...responsiveFontSizes({ sm: 16, md: 16, lg: 16 }),
-  },
-  p2: {
-    fontWeight: 400,
-    lineHeight: 1.5,
-    fontSize: pxToRem(18),
-    ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
-  },
-  p3: {
-    fontWeight: 400,
-    lineHeight: 1.5,
-    fontSize: pxToRem(20),
-    ...responsiveFontSizes({ sm: 20, md: 24, lg: 24 }),
+    fontSize: pxToRem(13),
+    ...responsiveFontSizes({ sm: 13, md: 13, lg: 13 }),
   },
   subtitle1: {
     fontWeight: 600,

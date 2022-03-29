@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { useSnackbar } from "notistack";
+import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "../../../redux/store";
 import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
 import radioButtonOffOutline from "@iconify/icons-eva/radio-button-off-outline";
@@ -33,6 +34,7 @@ import {
   updatePost,
   getPostSuccess,
 } from "../../../redux/slices/fundraise";
+import { varFadeInRight, varFadeInUp } from "../../animate";
 import { UploadSingleFileOverride } from "../../upload";
 import FundraisePhotoEditor from "./FundraisePhotoEditor";
 import { CATEGORIES } from "src/utils/constants";
@@ -125,7 +127,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
           })
         );
         enqueueSnackbar("Save success", { variant: "success" });
-        // navigate(-1);
+        navigate(-1);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -191,7 +193,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
             <Stack spacing={theme.shape.MAIN_SPACING}>
-              <Typography
+              {/* <Typography
                 variant="h5"
                 sx={{
                   ...(!isLight && {
@@ -201,12 +203,12 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                 }}
               >
                 Fundraiser title?
-              </Typography>
+              </Typography> */}
 
               <TextField
                 fullWidth
                 size="small"
-                label=""
+                label="Fundraiser title?"
                 {...getFieldProps("title")}
                 error={Boolean(touched.title && errors.title)}
                 helperText={touched.title && errors.title}
@@ -238,7 +240,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                 }}
               >
                 <Stack spacing={theme.shape.MAIN_SPACING}>
-                  <Typography
+                  {/* <Typography
                     variant="h5"
                     sx={{
                       ...(!isLight && {
@@ -251,12 +253,12 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                     }}
                   >
                     Goal
-                  </Typography>
+                  </Typography> */}
 
                   <TextField
                     fullWidth
                     size="small"
-                    label=""
+                    label="Goal"
                     {...getFieldProps("goal")}
                     error={Boolean(touched.goal && errors.goal)}
                     helperText={touched.goal && errors.goal}
@@ -293,7 +295,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
 
               <Grid item xs={12} md={6}>
                 <Stack spacing={theme.shape.MAIN_SPACING}>
-                  <Typography
+                  {/* <Typography
                     variant="h5"
                     sx={{
                       ...(!isLight && {
@@ -306,12 +308,12 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                     }}
                   >
                     Category
-                  </Typography>
+                  </Typography> */}
 
                   <TextField
                     fullWidth
                     size="small"
-                    label=""
+                    label="Category"
                     {...getFieldProps("category")}
                     error={Boolean(touched.category && errors.category)}
                     helperText={touched.category && errors.category}
@@ -336,7 +338,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
             <Grid container xs={12}>
               <Grid item xs={12} md={6}>
                 <Stack spacing={theme.shape.MAIN_SPACING}>
-                  <Typography
+                  {/* <Typography
                     variant="h5"
                     sx={{
                       ...(!isLight && {
@@ -349,12 +351,12 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                     }}
                   >
                     Country
-                  </Typography>
+                  </Typography> */}
 
                   <TextField
                     fullWidth
                     size="small"
-                    label=""
+                    label="Country"
                     {...getFieldProps("live")}
                     error={Boolean(touched.live && errors.live)}
                     helperText={touched.live && errors.live}
@@ -381,7 +383,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
               </Grid>
             </Grid>
             <Stack spacing={theme.shape.MAIN_SPACING}>
-              <Typography
+              {/* <Typography
                 variant="h5"
                 sx={{
                   ...(!isLight && {
@@ -391,25 +393,28 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                 }}
               >
                 Fundraiser Link
-              </Typography>
+              </Typography> */}
 
-              <Typography
-                variant="p1"
-                sx={{
-                  ...(!isLight && {
-                    textShadow: (theme) =>
-                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                  }),
-                }}
-              >
-                This linked can only be changed once.Changing it will not break
-                your previous one.
-              </Typography>
+              <motion.div variants={varFadeInUp}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "#A1A1A1",
+                    ...(!isLight && {
+                      textShadow: (theme) =>
+                        `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                    }),
+                  }}
+                >
+                  This linked can only be changed once.Changing it will not
+                  break your previous one.
+                </Typography>
+              </motion.div>
 
               <TextField
                 fullWidth
                 size="small"
-                label=""
+                label=" Fundraiser Link"
                 {...getFieldProps("link")}
                 error={Boolean(touched.link && errors.link)}
                 helperText={touched.link && errors.link}
@@ -419,12 +424,12 @@ export default function FundraiseEditOverView({ renderForm, post }) {
               />
 
               <Typography
-                variant="p1"
+                variant="body2"
                 sx={{
                   color: theme.palette.primary.main,
                 }}
               >
-                {`Preview: `}
+                {`Preview: ${window.location.origin}/${values.link}`}
               </Typography>
             </Stack>
 
@@ -556,7 +561,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
             {/* Fundraiser Settings */}
             <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
               <Typography
-                variant="h4"
+                variant="subtitle1"
                 sx={{
                   ...(!isLight && {
                     textShadow: (theme) =>
@@ -573,12 +578,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                   alignItems="center"
                   justifyContent={"space-between"}
                 >
-                  <Typography
-                    variant="h5"
-                    noWrap
-                    // onClick={handleOpen}
-                    // sx={{ ...(completed && { opacity: 0.48 }) }}
-                  >
+                  <Typography variant="subtitle2" noWrap>
                     {item.label}
                   </Typography>
 
@@ -596,7 +596,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
               ))}
 
               <Typography
-                variant="p1"
+                variant="body2"
                 sx={{
                   color: "#A1A1A1",
                   ...(!isLight && {

@@ -8,6 +8,7 @@ export const TextStyle = styled(Typography)({
   overflow: "hidden",
   WebkitLineClamp: 1,
   display: "-webkit-box",
+  whiteSpace: "nowrap",
   WebkitBoxOrient: "vertical",
 });
 
@@ -26,7 +27,7 @@ export default function DonateProgress({ time, total, goal }) {
         text={`Last donation ${time}`}
         progress={fPercent((total * 100) / goal)}
       />
-      <TextStyle variant="h6" color="inherit" sx={{ height: 30 }}>
+      <TextStyle variant="subtitle2" color="inherit">
         {`${fCurrency(total)} raised of ${fCurrency(goal)}`}
       </TextStyle>
     </Stack>

@@ -50,7 +50,7 @@ export default function OnlineFundraiseCard({ post, index }) {
             <TitleStyle color="inherit" variant="h5" sx={{ height: 64 }}>
               {title}
             </TitleStyle>
-            <DescriptionStyle color="inherit" variant="p1">
+            <DescriptionStyle color="inherit" variant="subtitle1">
               {description}
             </DescriptionStyle>
           </Stack>

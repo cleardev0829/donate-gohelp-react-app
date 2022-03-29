@@ -30,6 +30,7 @@ const initialState = {
     link: "",
     // team: { name: "", cover: null },
     allows: { allowComment: false, allowDonation: false, allowSearch: false },
+    isDeleted: false,
   },
 };
 
@@ -107,6 +108,7 @@ const slice = createSlice({
         allowDonation: false,
         allowSearch: false,
       };
+      state.checkout.isDeleted = false;
     },
 
     onBackStep(state) {

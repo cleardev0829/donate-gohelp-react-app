@@ -92,6 +92,7 @@ export default function MainNavbar() {
           > */}
           <Link
             component={RouterLink}
+            variant="subtitle2"
             color="inherit"
             underline="none"
             to={PATH_PAGE.fundraisers}

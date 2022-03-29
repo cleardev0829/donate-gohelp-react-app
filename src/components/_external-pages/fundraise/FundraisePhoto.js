@@ -224,7 +224,7 @@ export default function FundraisePhoto() {
                       justifyContent="flex-start"
                     >
                       <Icon icon="fluent:link-square-20-regular" />
-                      <Typography variant="p1">Add a YouTube link</Typography>
+                      <Typography variant="subtitle1">Add a YouTube link</Typography>
                     </Stack>
                   </Card> */}
                 </Stack>

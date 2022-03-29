@@ -42,7 +42,7 @@ export default function FundraiseTypeCard({ post, index, type, onClick }) {
             {title}
           </TitleStyle>
 
-          <DescriptionStyle color="inherit" variant="p1">
+          <DescriptionStyle color="inherit" variant="subtitle1">
             {description}
           </DescriptionStyle>
         </CardContentStyle>

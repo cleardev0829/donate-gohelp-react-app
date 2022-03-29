@@ -222,7 +222,7 @@ export default function FundraiseBasics() {
 
               <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
                 <Typography
-                  variant="p1"
+                  variant="subtitle1"
                   sx={{
                     ...(!isLight && {
                       textShadow: (theme) =>

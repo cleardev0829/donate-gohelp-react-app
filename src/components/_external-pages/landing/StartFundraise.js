@@ -58,7 +58,7 @@ export default function StartFundraise() {
         <ContentStyle>
           <MotionInView variants={varFadeInUp}>
             <Typography
-              variant="h2"
+              variant="h3"
               paragraph
               sx={{
                 ...(!isLight && {
@@ -73,7 +73,7 @@ export default function StartFundraise() {
 
           <MotionInView variants={varFadeInUp}>
             <Typography
-              variant="p3"
+              variant="body1"
               paragraph
               sx={{
                 ...(!isLight && {
@@ -89,7 +89,7 @@ export default function StartFundraise() {
           <MotionInView variants={varFadeInUp}>
             <Typography
               component="p"
-              variant="p3"
+              variant="body1"
               color="primary"
               sx={{ mb: 5 }}
             >

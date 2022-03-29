@@ -104,7 +104,7 @@ export default function OnlineFundraise() {
         <ContentStyle>
           <MotionInView variants={varFadeInUp}>
             <Typography
-              variant="h2"
+              variant="h3"
               paragraph
               sx={{
                 ...(!isLight && {

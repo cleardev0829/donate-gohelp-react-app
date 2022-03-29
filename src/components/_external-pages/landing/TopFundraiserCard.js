@@ -62,8 +62,9 @@ export const CoverImgStyle = styled("img")(({ sx }) => ({
 
 export const TitleStyle = styled(Typography)({
   overflow: "hidden",
-  WebkitLineClamp: 2,
+  WebkitLineClamp: 1,
   display: "-webkit-box",
+  // whiteSpace: "nowrap",
   WebkitBoxOrient: "vertical",
 });
 
@@ -113,6 +114,7 @@ TopFundraiserCard.propTypes = {
 export default function TopFundraiserCard({ post, simple = false }) {
   const navigate = useNavigate();
   const filter = filters(post.donates);
+  const status = post.isDeleted ? "Deleted" : "Published";
 
   const handleNavigate = () => {
     simple
@@ -133,13 +135,11 @@ export default function TopFundraiserCard({ post, simple = false }) {
                       countryCode={post.live.code}
                       svg
                       style={{
-                        // width: "2em",
-                        // height: "2em",
                         marginRight: 10,
                       }}
                     />
                     <Typography
-                      variant="p1"
+                      variant="subtitle1"
                       sx={{
                         display: "block",
                         color: (theme) => theme.palette.common.white,
@@ -150,7 +150,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
                   </CountryStyle>
                 )}
 
-                {simple && <PublishButtonStyle>Published</PublishButtonStyle>}
+                {simple && <PublishButtonStyle>{status}</PublishButtonStyle>}
 
                 <CoverImgStyle
                   alt={"cover"}
@@ -164,12 +164,12 @@ export default function TopFundraiserCard({ post, simple = false }) {
               </CardMediaStyle>
 
               <Stack spacing={1} sx={{ my: 2 }}>
-                <TitleStyle color="inherit" variant="h5" sx={{ height: 64 }}>
+                <TitleStyle color="inherit" variant="h5">
                   {post.title}
                 </TitleStyle>
 
                 {!simple && (
-                  <DescriptionStyle color="inherit" variant="p1">
+                  <DescriptionStyle color="inherit" variant="body1">
                     {post.description.text}
                   </DescriptionStyle>
                 )}

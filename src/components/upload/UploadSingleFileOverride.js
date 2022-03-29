@@ -122,10 +122,10 @@ export default function UploadSingleFile({
 
           <Box sx={{ px: 6, ml: { md: 2 }, textAlign: "center" }}>
             <Stack spacing={2} justifyContent="space-between">
-              <Typography variant="p1">
+              <Typography variant="subtitle1">
                 Drop or drop an image, or &nbsp;
                 <Typography
-                  variant="p1"
+                  variant="subtitle1"
                   component="span"
                   sx={{ color: "primary.main" }}
                 >

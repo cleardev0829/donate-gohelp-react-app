@@ -7,7 +7,7 @@ const shape = {
 
   PAGE_TOP_PADDING: 15,
   PAGE_BOTTOM_PADDING: 15,
-  MAIN_SPACING: 1,
+  MAIN_SPACING: 0.5,
   CARD_CONTENT_SPACING: 2,
   CARD_PADDING: 3,
   CARD_MARGIN: 3,
@@ -15,7 +15,7 @@ const shape = {
   MAIN_VERTICAL_SPACING: 3.5,
 
   ICON_SIZE: 24,
-  PARAGRAPH_SPACING: 16, // paragraph in landing page
+  PARAGRAPH_SPACING: 12, // paragraph in landing page
 };
 
 export default shape;

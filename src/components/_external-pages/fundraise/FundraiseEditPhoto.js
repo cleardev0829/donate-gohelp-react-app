@@ -86,7 +86,7 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
           })
         );
         enqueueSnackbar("Save success", { variant: "success" });
-        // navigate(-1);
+        navigate(-1);
       } catch (error) {
         console.error(error);
         setSubmitting(false);

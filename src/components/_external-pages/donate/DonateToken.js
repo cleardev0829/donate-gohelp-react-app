@@ -75,11 +75,11 @@ export default function DonateToken({ post }) {
               >
                 <Stack>
                   <Typography variant="h7">Top donation</Typography>
-                  <Typography gutterBottom variant="p1">
+                  <Typography gutterBottom variant="subtitle1">
                     address
                   </Typography>
                 </Stack>
-                <Typography gutterBottom variant="p1">
+                <Typography gutterBottom variant="subtitle1">
                   {`${fCurrency(filter.maxAmount)}`}
                 </Typography>
               </Stack>
@@ -91,11 +91,11 @@ export default function DonateToken({ post }) {
               >
                 <Stack>
                   <Typography variant="h7">Recent donation</Typography>
-                  <Typography gutterBottom variant="p1">
+                  <Typography gutterBottom variant="subtitle1">
                     address
                   </Typography>
                 </Stack>
-                <Typography gutterBottom variant="p1">
+                <Typography gutterBottom variant="subtitle1">
                   {`${fCurrency(filter.recentAmount)}`}
                 </Typography>
               </Stack>
@@ -107,11 +107,11 @@ export default function DonateToken({ post }) {
               >
                 <Stack>
                   <Typography variant="h7">First donation</Typography>
-                  <Typography gutterBottom variant="p1">
+                  <Typography gutterBottom variant="subtitle1">
                     address
                   </Typography>
                 </Stack>
-                <Typography gutterBottom variant="p1">
+                <Typography gutterBottom variant="subtitle1">
                   {`${fCurrency(filter.firstAmount)}`}
                 </Typography>
               </Stack>
@@ -123,7 +123,7 @@ export default function DonateToken({ post }) {
               >
                 <Stack>
                   <Typography variant="h7">Total donation</Typography>
-                  <Typography gutterBottom variant="p1">
+                  <Typography gutterBottom variant="subtitle1">
                     {`${filter.count} people donated`}
                   </Typography>
                 </Stack>
@@ -152,7 +152,7 @@ export default function DonateToken({ post }) {
                         <Typography
                           key={`tp-wallet-${index}`}
                           gutterBottom
-                          variant="p1"
+                          variant="subtitle1"
                         >
                           wallet adress
                         </Typography>
@@ -160,7 +160,7 @@ export default function DonateToken({ post }) {
                       <Typography
                         key={`tp-amount-${index}`}
                         gutterBottom
-                        variant="p1"
+                        variant="subtitle1"
                       >
                         {`${fCurrency(donate.crypto.amount)} (${
                           donate.crypto.count

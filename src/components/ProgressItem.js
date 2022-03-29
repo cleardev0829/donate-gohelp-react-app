@@ -13,15 +13,10 @@ export default function ProgressItem({ text, progress }) {
   return (
     <Stack spacing={0}>
       <Stack direction="row" justifyContent="space-between" sx={{ width: 1 }}>
-        <Typography
-          gutterBottom
-          variant="h7"
-          color="primary"
-          sx={{ display: "block" }}
-        >
+        <Typography gutterBottom color="primary" sx={{ display: "block" }}>
           {text}
         </Typography>
-        <Typography gutterBottom variant="h7" sx={{ display: "block" }}>
+        <Typography gutterBottom sx={{ display: "block" }}>
           {progress}
         </Typography>
       </Stack>
