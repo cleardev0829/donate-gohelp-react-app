@@ -28,7 +28,7 @@ const initialState = {
     title: "",
     description: null,
     link: "",
-    team: { name: "", cover: null },
+    // team: { name: "", cover: null },
     allows: { allowComment: false, allowDonation: false, allowSearch: false },
   },
 };
@@ -98,10 +98,10 @@ const slice = createSlice({
       state.checkout.title = "";
       state.checkout.description = "";
       state.checkout.link = "";
-      state.checkout.team = {
-        name: "",
-        cover: null,
-      };
+      // state.checkout.team = {
+      //   name: "",
+      //   cover: null,
+      // };
       state.checkout.allows = {
         allowComment: false,
         allowDonation: false,

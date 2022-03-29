@@ -75,8 +75,8 @@ export default function FundraiseEditOverView({ renderForm, post }) {
     live: Yup.string().required("This is required"),
     category: Yup.string().required("This is required"),
     link: Yup.string(),
-    name: Yup.string(),
-    cover: Yup.mixed(),
+    // name: Yup.string(),
+    // cover: Yup.mixed(),
     allowComment: Yup.bool(),
     allowDonation: Yup.bool(),
     allowSearch: Yup.bool(),
@@ -91,8 +91,8 @@ export default function FundraiseEditOverView({ renderForm, post }) {
       live: post.live.label,
       category: post.category,
       link: post.link,
-      name: post.team.name,
-      cover: { ...post.team.cover, touched: false },
+      // name: post.team.name,
+      // cover: { ...post.team.cover, touched: false },
       allowComment: post.allows.allowComment,
       allowDonation: post.allows.allowDonation,
       allowSearch: post.allows.allowSearch,
@@ -113,10 +113,10 @@ export default function FundraiseEditOverView({ renderForm, post }) {
             category: values.category,
             live: _.filter(countries, (item) => item.label === values.live)[0],
             link: values.link,
-            team: {
-              name: values.name,
-              cover: values.cover,
-            },
+            // team: {
+            //   name: values.name,
+            //   cover: values.cover,
+            // },
             allows: {
               allowComment: values.allowComment,
               allowDonation: values.allowDonation,
@@ -429,7 +429,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
             </Stack>
 
             {/* Team Setting */}
-            <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+            {/* <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
               <Typography
                 variant="h4"
                 sx={{
@@ -551,7 +551,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                   Delete Team
                 </Button>
               </Stack>
-            </Stack>
+            </Stack> */}
 
             {/* Fundraiser Settings */}
             <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
