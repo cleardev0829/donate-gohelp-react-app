@@ -151,7 +151,7 @@ export default function FundraiseDonation() {
                 >
                   <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                     <Typography
-                      variant="h3"
+                      variant="h5"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -166,7 +166,7 @@ export default function FundraiseDonation() {
                     </Typography>
 
                     <Typography
-                      variant="h6"
+                      variant="body2"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -187,7 +187,7 @@ export default function FundraiseDonation() {
                           icon={checkmarkCircle2Outline}
                           color={theme.palette.primary.main}
                         />
-                        <Typography variant="p2" sx={{ ml: 1 }}>
+                        <Typography variant="subtitle1" sx={{ ml: 1 }}>
                           Set up your GoHelp
                         </Typography>
                       </Stack>
@@ -200,7 +200,7 @@ export default function FundraiseDonation() {
                         alignItems="center"
                       >
                         <IconBullet key={`IconBullet-${index}`} type="item" />
-                        <Typography key={`Typography-${index}`} variant="p2">
+                        <Typography key={`Typography-${index}`} variant="body1">
                           {description}
                         </Typography>
                       </Stack>

@@ -136,7 +136,7 @@ export default function FundraisePhoto() {
                   >
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                       <Typography
-                        variant="h3"
+                        variant="h5"
                         sx={{
                           ...(!isLight && {
                             textShadow: (theme) =>
@@ -151,7 +151,7 @@ export default function FundraisePhoto() {
                       </Typography>
 
                       <Typography
-                        variant="h6"
+                        variant="body2"
                         sx={{
                           ...(!isLight && {
                             textShadow: (theme) =>
@@ -185,7 +185,7 @@ export default function FundraisePhoto() {
 
                       <Stack direction="row" justifyContent="space-between">
                         <Button
-                          size="small"
+                          size="middle"
                           type="button"
                           variant="outlined"
                           startIcon={<Icon icon="akar-icons:edit" />}
@@ -194,7 +194,7 @@ export default function FundraisePhoto() {
                           Edit
                         </Button>
                         <Button
-                          size="small"
+                          size="middle"
                           type="button"
                           variant="outlined"
                           startIcon={<Icon icon="bx:trash-alt" />}

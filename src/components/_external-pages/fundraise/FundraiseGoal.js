@@ -94,7 +94,7 @@ export default function FundraiseGoal() {
                 >
                   <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                     <Typography
-                      variant="h3"
+                      variant="h5"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -109,7 +109,7 @@ export default function FundraiseGoal() {
                     </Typography>
 
                     <Typography
-                      variant="h6"
+                      variant="body2"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -124,7 +124,7 @@ export default function FundraiseGoal() {
                     </Typography>
 
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                      <Typography
+                      {/* <Typography
                         variant="h5"
                         sx={{
                           ...(!isLight && {
@@ -137,12 +137,12 @@ export default function FundraiseGoal() {
                         }}
                       >
                         How much would you like to raise?
-                      </Typography>
+                      </Typography> */}
 
                       <TextField
                         fullWidth
                         size="small"
-                        label=""
+                        label="How much would you like to raise?"
                         {...getFieldProps("goal")}
                         error={Boolean(touched.goal && errors.goal)}
                         helperText={touched.goal && errors.goal}
@@ -177,7 +177,7 @@ export default function FundraiseGoal() {
                     </Stack>
 
                     <Typography
-                      variant="subtitle1"
+                      variant="subtitle2"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>

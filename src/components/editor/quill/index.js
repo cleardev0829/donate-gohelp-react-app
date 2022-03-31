@@ -50,6 +50,7 @@ QuillEditor.propTypes = {
 
 export default function QuillEditor({
   id,
+  placeholder = "Write something awesome",
   error,
   value,
   onChange,
@@ -91,7 +92,7 @@ export default function QuillEditor({
         onChange={onChange}
         modules={modules}
         formats={formats}
-        placeholder="Write something awesome..."
+        placeholder={placeholder}
         {...other}
       />
     </RootStyle>

@@ -165,7 +165,7 @@ export default function FundraiseUpdate() {
             />
 
             <Container maxWidth="md">
-              <Grid container spacing={3}>
+              <Grid container>
                 <Grid item xs={12} md={12}>
                   <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
                     <Card
@@ -176,7 +176,7 @@ export default function FundraiseUpdate() {
                       <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                         <Typography
                           component="p"
-                          variant="h3"
+                          variant="h5"
                           sx={{ color: "text.primary" }}
                         >
                           Post an Update
@@ -184,14 +184,14 @@ export default function FundraiseUpdate() {
 
                         <Typography
                           component="p"
-                          variant="h5"
+                          variant="body1"
                           sx={{ color: "text.primary" }}
                         >
                           So that people can get in touch with you.
                         </Typography>
 
                         <Typography
-                          variant="h5"
+                          variant="subtitle1"
                           paragraph
                           sx={{
                             ...(!isLight && {
@@ -225,7 +225,7 @@ export default function FundraiseUpdate() {
                         )}
 
                         <Typography
-                          variant="h3"
+                          variant="subtitle1"
                           sx={{
                             ...(!isLight && {
                               textShadow: (theme) =>

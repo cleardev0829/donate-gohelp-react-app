@@ -38,17 +38,17 @@ const menuConfig = [
     icon: <Icon icon={homeFill} {...ICON_SIZE} />,
     path: "/",
   },
-  {
-    title: "Fundraise for",
-    path: "/Features",
-    icon: <Icon icon={featureOpenFill} {...ICON_SIZE} />,
-    children: [
-      {
-        subheader: "Fundraise for",
-        items: categories,
-      },
-    ],
-  },
+  // {
+  //   title: "Fundraise for",
+  //   path: "/Features",
+  //   icon: <Icon icon={featureOpenFill} {...ICON_SIZE} />,
+  //   children: [
+  //     {
+  //       subheader: "Fundraise for",
+  //       items: categories,
+  //     },
+  //   ],
+  // },
 ];
 
 export default menuConfig;

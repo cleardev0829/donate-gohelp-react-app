@@ -151,7 +151,7 @@ export default function DonatePayment({ post }) {
           <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
             <Grid item xs={12} md={5}>
               <Box sx={{ py: 3 }}>
-                <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
+                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                   <Box sx={{ position: "relative" }}>
                     <CardMediaStyle>
                       <CoverImgStyle
@@ -166,7 +166,7 @@ export default function DonatePayment({ post }) {
                     </CardMediaStyle>
                   </Box>
 
-                  <Typography variant="h4">
+                  <Typography variant="h5">
                     You're supporting Christina Yuna Lee Memorial Fund
                   </Typography>
 
@@ -182,7 +182,7 @@ export default function DonatePayment({ post }) {
                       alignItems="center"
                     >
                       <Box maxWidth={125}>
-                        <Typography variant="h7">
+                        <Typography variant="subtitle2">
                           We protect your donation
                         </Typography>
                       </Box>
@@ -219,7 +219,7 @@ export default function DonatePayment({ post }) {
                   <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                       <Typography
-                        variant="h4"
+                        variant="h5"
                         sx={{
                           ...(!isLight && {
                             textShadow: (theme) =>
@@ -269,10 +269,10 @@ export default function DonatePayment({ post }) {
                     </Stack>
 
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                      <Typography variant="h7" sx={{ display: "block" }}>
+                      <Typography variant="subtitle1" sx={{ display: "block" }}>
                         Tip GoHelp Services
                       </Typography>
-                      <Typography variant="h7" sx={{ display: "block" }}>
+                      <Typography variant="body2" sx={{ display: "block" }}>
                         GoHelp has a 0% platform fee for organizers. GoFundMe
                         will continue offering its services thanks to donors who
                         will leave an optional amount here:
@@ -363,7 +363,9 @@ export default function DonatePayment({ post }) {
                           justifyContent="space-between"
                           alignItems="center"
                         >
-                          <Typography variant="h7">Top donation</Typography>
+                          <Typography variant="subtitle2">
+                            Top donation
+                          </Typography>
                           <Typography gutterBottom variant="subtitle1">
                             {`${fCurrency(filter.maxAmount)}`}
                           </Typography>
@@ -374,7 +376,9 @@ export default function DonatePayment({ post }) {
                           justifyContent="space-between"
                           alignItems="center"
                         >
-                          <Typography variant="h7">GoHelp tip</Typography>
+                          <Typography variant="subtitle2">
+                            GoHelp tip
+                          </Typography>
                           {values.tip > 0 && (
                             <Typography gutterBottom variant="subtitle1">
                               {`${fCurrency(
@@ -397,7 +401,7 @@ export default function DonatePayment({ post }) {
                           justifyContent="space-between"
                           alignItems="center"
                         >
-                          <Typography variant="h7">Total due</Typography>
+                          <Typography variant="subtitle2">Total due</Typography>
                           {values.cryptoCount > 0 && (
                             <Typography gutterBottom variant="subtitle1">
                               {`${fCurrency(
@@ -418,7 +422,9 @@ export default function DonatePayment({ post }) {
                     </Box>
 
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                      <Typography variant="h4">Leave a message</Typography>
+                      <Typography variant="subtitle1">
+                        Leave a message
+                      </Typography>
                       <TextField
                         fullWidth
                         multiline

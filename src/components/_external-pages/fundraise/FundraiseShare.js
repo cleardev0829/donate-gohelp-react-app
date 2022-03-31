@@ -199,7 +199,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
             <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <Typography
-                  variant="h3"
+                  variant="h5"
                   sx={{
                     ...(!isLight && {
                       textShadow: (theme) =>
@@ -211,7 +211,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
                 </Typography>
 
                 <Typography
-                  variant="h6"
+                  variant="body2"
                   sx={{
                     ...(!isLight && {
                       textShadow: (theme) =>

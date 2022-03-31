@@ -122,7 +122,7 @@ export default function FundraiseStory() {
                 >
                   <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                     <Typography
-                      variant="h3"
+                      variant="h5"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -137,7 +137,7 @@ export default function FundraiseStory() {
                     </Typography>
 
                     <Typography
-                      variant="h6"
+                      variant="body2"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -151,7 +151,7 @@ export default function FundraiseStory() {
                       We're here to guide you through your fundraise journey.
                     </Typography>
 
-                    <Typography
+                    {/* <Typography
                       variant="h5"
                       sx={{
                         ...(!isLight && {
@@ -164,12 +164,12 @@ export default function FundraiseStory() {
                       }}
                     >
                       What’s your fundraiser title?
-                    </Typography>
+                    </Typography> */}
 
                     <TextField
                       fullWidth
                       size="small"
-                      label=""
+                      label="  What’s your fundraiser title?"
                       {...getFieldProps("title")}
                       error={Boolean(touched.title && errors.title)}
                       helperText={touched.title && errors.title}
@@ -181,7 +181,7 @@ export default function FundraiseStory() {
                       }}
                     />
 
-                    <Typography
+                    {/* <Typography
                       variant="h5"
                       paragraph
                       sx={{
@@ -195,10 +195,11 @@ export default function FundraiseStory() {
                       }}
                     >
                       Why are you fundraise?
-                    </Typography>
+                    </Typography> */}
 
                     <QuillEditor
                       id="product-content"
+                      placeholder="Why are you fundraise?"
                       simple
                       value={values.description.content}
                       onChange={(content, delta, source, editor) => {

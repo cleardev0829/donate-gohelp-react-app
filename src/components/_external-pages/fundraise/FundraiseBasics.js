@@ -98,7 +98,7 @@ export default function FundraiseBasics() {
             continueAction={handleSubmit}
           />
           <Container maxWidth="md">
-            <Grid container spacing={3}>
+            <Grid container spacing={theme.shape.MAIN_VERTICAL_SPACING}>
               <Grid item xs={12} md={12}>
                 <Card
                   sx={{
@@ -107,7 +107,7 @@ export default function FundraiseBasics() {
                 >
                   <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                     <Typography
-                      variant="h3"
+                      variant="h5"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -122,7 +122,7 @@ export default function FundraiseBasics() {
                     </Typography>
 
                     <Typography
-                      variant="h6"
+                      variant="body2"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -136,8 +136,8 @@ export default function FundraiseBasics() {
                       We're here to guide you through your fundraise journey.
                     </Typography>
 
-                    <Typography
-                      variant="h5"
+                    {/* <Typography
+                      variant="subtitle1"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -149,12 +149,12 @@ export default function FundraiseBasics() {
                       }}
                     >
                       Where do you live?
-                    </Typography>
+                    </Typography> */}
 
                     <TextField
                       fullWidth
                       size="small"
-                      label=""
+                      label="Where do you live?"
                       {...getFieldProps("live")}
                       error={Boolean(touched.live && errors.live)}
                       helperText={touched.live && errors.live}
@@ -179,8 +179,8 @@ export default function FundraiseBasics() {
                       ))}
                     </TextField>
 
-                    <Typography
-                      variant="h5"
+                    {/* <Typography
+                      variant="on Monday 4 April from 11:00 or at 11:30 (Swedish time)"
                       sx={{
                         ...(!isLight && {
                           textShadow: (theme) =>
@@ -192,12 +192,12 @@ export default function FundraiseBasics() {
                       }}
                     >
                       What are you fundraise for?
-                    </Typography>
+                    </Typography> */}
 
                     <TextField
                       fullWidth
                       size="small"
-                      label=""
+                      label="What are you fundraise for?"
                       {...getFieldProps("category")}
                       error={Boolean(touched.category && errors.category)}
                       helperText={touched.category && errors.category}
@@ -222,7 +222,7 @@ export default function FundraiseBasics() {
 
               <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
                 <Typography
-                  variant="subtitle1"
+                  variant="subtitle2"
                   sx={{
                     ...(!isLight && {
                       textShadow: (theme) =>

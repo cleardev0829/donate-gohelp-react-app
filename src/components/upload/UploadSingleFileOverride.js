@@ -122,10 +122,10 @@ export default function UploadSingleFile({
 
           <Box sx={{ px: 6, ml: { md: 2 }, textAlign: "center" }}>
             <Stack spacing={2} justifyContent="space-between">
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle2">
                 Drop or drop an image, or &nbsp;
                 <Typography
-                  variant="subtitle1"
+                  variant="subtitle2"
                   component="span"
                   sx={{ color: "primary.main" }}
                 >
@@ -133,7 +133,7 @@ export default function UploadSingleFile({
                 </Typography>
               </Typography>
 
-              <Typography variant="body1">
+              <Typography variant="body2">
                 A high-quality photo or video will help tell your story and
                 build trust with donors.
               </Typography>
