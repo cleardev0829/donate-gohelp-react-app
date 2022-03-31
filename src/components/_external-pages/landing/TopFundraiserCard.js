@@ -123,7 +123,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
   };
 
   return (
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid item xs={12} sm={6} md={3}>
       <Card sx={{ position: "relative" }}>
         <CardContentStyle>
           <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
@@ -163,16 +163,16 @@ export default function TopFundraiserCard({ post, simple = false }) {
                 />
               </CardMediaStyle>
 
-              <Stack spacing={1} sx={{ my: 2 }}>
-                <TitleStyle color="inherit" variant="h5">
+              <Stack spacing={0} sx={{ my: 1 }}>
+                <TitleStyle color="inherit" variant="subtitle1">
                   {post.title}
                 </TitleStyle>
 
-                {!simple && (
+                {/* {!simple && (
                   <DescriptionStyle color="inherit" variant="body1">
                     {post.description.text}
                   </DescriptionStyle>
-                )}
+                )} */}
               </Stack>
 
               <DonateProgress
@@ -183,7 +183,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
             </Stack>
           </Box>
 
-          <Box
+          {/* <Box
             sx={{
               width: "100%",
               display: "flex",
@@ -200,7 +200,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
                 {simple ? "Manage" : "Donate"}
               </Button>
             </motion.div>
-          </Box>
+          </Box> */}
         </CardContentStyle>
       </Card>
     </Grid>

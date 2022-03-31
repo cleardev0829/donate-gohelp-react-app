@@ -153,20 +153,20 @@ export default function TopFundraisers() {
           </Stack>
         </ContentStyle>
 
-        <InfiniteScroll
+        {/* <InfiniteScroll
           next={onScroll}
           hasMore={hasMore}
           loader={SkeletonLoad}
           dataLength={posts.length}
           style={{ overflow: "inherit" }}
-        >
-          <Grid container spacing={theme.shape.CARD_MARGIN}>
-            {data.length > 0 &&
-              data.map((post, index) => (
-                <TopFundraiserCard key={post.id} post={post} />
-              ))}
-          </Grid>
-        </InfiniteScroll>
+        > */}
+        <Grid container spacing={theme.shape.CARD_MARGIN}>
+          {data.length > 0 &&
+            data.map((post, index) => (
+              <TopFundraiserCard key={post.id} post={post} />
+            ))}
+        </Grid>
+        {/* </InfiniteScroll> */}
       </Container>
     </RootStyle>
   );

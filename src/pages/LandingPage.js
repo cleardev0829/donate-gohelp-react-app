@@ -38,7 +38,7 @@ export default function LandingPage() {
       <ContentStyle>
         <TopFundraisers />
         <StartFundraise />
-        <DonateCategories />
+        {/* <DonateCategories /> */}
         <OnlineFundraise />
         <LandingBottom />
         <MainFooter />

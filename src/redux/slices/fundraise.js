@@ -14,7 +14,7 @@ const initialState = {
   recentPosts: [],
   hasMore: true,
   index: 0,
-  step: 3,
+  step: 4,
 
   checkout: {
     activeStep: -1,
