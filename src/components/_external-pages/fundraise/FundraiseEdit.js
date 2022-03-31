@@ -34,6 +34,7 @@ import { FundraiseEditOverView } from ".";
 import { FundraiseEditPhoto } from ".";
 import { FundraiseEditStory } from ".";
 import { PATH_PAGE } from "src/routes/paths";
+import LoadingScreen from "src/components/LoadingScreen";
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +59,7 @@ export default function FundraiseEdit() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { post } = useSelector((state) => state.fundraise);
+  const { post, isLoading } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(post);
@@ -90,8 +91,18 @@ export default function FundraiseEdit() {
     navigate(`${PATH_PAGE.fundraisers}`);
   };
 
-  if (_.isEmpty(data)) {
-    return null;
+  if (isLoading || _.isEmpty(data)) {
+    return (
+      <LoadingScreen
+        sx={{
+          top: 0,
+          left: 0,
+          width: 1,
+          zIndex: 9999,
+          position: "fixed",
+        }}
+      />
+    );
   }
 
   return (

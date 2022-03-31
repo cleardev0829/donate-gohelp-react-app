@@ -121,10 +121,6 @@ export default function FundraiseEditStory({ renderForm, post }) {
     renderForm(formik);
   }, [values]);
 
-  if (_.isEmpty(post)) {
-    return null;
-  }
-
   return (
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>

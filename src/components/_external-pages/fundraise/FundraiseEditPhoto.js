@@ -54,6 +54,7 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const { isLoading } = useSelector((state) => state.fundraise);
   const [open, setOpen] = useState(false);
   const isLight = theme.palette.mode === "light";
 
@@ -135,10 +136,6 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
   const handleDelete = () => {
     setFieldValue("cover", null);
   };
-
-  if (_.isEmpty(post)) {
-    return null;
-  }
 
   return (
     <>

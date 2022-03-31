@@ -213,7 +213,7 @@ export default function FundraiseDetails() {
                   sx={{ height: "100%", py: 1 }}
                 >
                   <Typography
-                    variant="h3"
+                    variant="h5"
                     sx={{
                       ...(!isLight && {
                         textShadow: (theme) =>
@@ -308,7 +308,7 @@ export default function FundraiseDetails() {
                       src="/static/socials/Facebook.png"
                     />
                     <Typography
-                      variant="h7"
+                      variant="body2"
                       color={(theme) => theme.palette.common.black}
                     >
                       Dud you know? Sharing on Facebook can increase your
@@ -365,13 +365,13 @@ export default function FundraiseDetails() {
                       justifyContent="space-between"
                       sx={{ height: "100%" }}
                     >
-                      <Typography variant="h3">
+                      <Typography variant="h5">
                         Get your first donation by sharing
                       </Typography>
 
                       <Typography
                         gutterBottom
-                        variant="p2"
+                        variant="body2"
                         sx={{ display: "block", mt: 2 }}
                       >
                         Share your fundraiser regularly with your social
@@ -380,12 +380,7 @@ export default function FundraiseDetails() {
                       </Typography>
 
                       <motion.div variants={varFadeInRight}>
-                        <Button
-                          variant="contained"
-                          // component={RouterLink}
-                          // to={PATH_PAGE.page404}
-                          onClick={handleOpenPreview}
-                        >
+                        <Button variant="contained" onClick={handleOpenPreview}>
                           Share fundraiser
                         </Button>
                       </motion.div>

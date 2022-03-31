@@ -160,7 +160,7 @@ export default function DonateProfile({ post }) {
                   <QuillWrapperStyle>
                     <ReactQuill
                       readOnly
-                      value={description}
+                      value={description.text}
                       modules={modules}
                       style={{
                         margin: 0,

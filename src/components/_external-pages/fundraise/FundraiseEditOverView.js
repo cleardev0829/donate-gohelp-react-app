@@ -67,6 +67,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const { isLoading } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
 
@@ -182,6 +183,11 @@ export default function FundraiseEditOverView({ renderForm, post }) {
   const handleDelete = () => {
     setFieldValue("cover", null);
   };
+
+  // if (isLoading || !post) {
+  //   // return <Loading />;
+  //   return <Typography>sdf</Typography>;
+  // }
 
   if (_.isEmpty(post)) {
     return null;
