@@ -32,6 +32,9 @@ const RootStyle = styled("div")(({ theme }) => ({
       backgroundColor: theme.palette.grey[900],
     },
   },
+  "& .ql-snow .ql-tooltip": {
+    left: "0px !important",
+  },
 }));
 
 // ----------------------------------------------------------------------

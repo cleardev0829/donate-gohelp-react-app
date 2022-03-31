@@ -22,6 +22,7 @@ const QuillEditorToolbarStyle = styled("div")(({ theme }) => {
     "& .ql-picker, .ql-picker-options, .ql-picker-item, .ql-picker-label, button": {
       "&:focus": { outline: "none" },
     },
+
     "& .ql-toolbar.ql-snow": {
       border: "none",
       borderBottom: `solid 1px ${theme.palette.grey[500_32]}`,
