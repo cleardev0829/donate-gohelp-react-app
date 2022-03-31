@@ -40,11 +40,6 @@ import {
 import { UploadSingleFileOverride } from "../../upload";
 import { FundraiseHeader } from ".";
 import FundraisePhotoEditor from "./FundraisePhotoEditor";
-import Page from "src/components/Page";
-import { QuillEditor } from "../../editor";
-import { CATEGORIES } from "src/utils/constants";
-import countries from "./countries";
-import ReactCountryFlag from "react-country-flag";
 
 // ----------------------------------------------------------------------
 
@@ -59,8 +54,8 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
+  const isLight = theme.palette.mode === "light";
 
   const NewBlogSchema = Yup.object().shape({
     cover: Yup.mixed().required("Cover is required"),
@@ -86,7 +81,7 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
           })
         );
         enqueueSnackbar("Save success", { variant: "success" });
-        navigate(-1);
+        // navigate(-1);
       } catch (error) {
         console.error(error);
         setSubmitting(false);

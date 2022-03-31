@@ -114,71 +114,49 @@ mock.onPost("/api/fundraise/update").reply(async (request) => {
   try {
     const data = JSON.parse(request.data);
 
-    if (data.cover && data.cover.preview && data.cover.touched) {
-      await getFileBlob(data.cover.preview, (blob) => {
-        firebase
-          .storage()
-          .ref(`/${data.uid}/fundraise-${data.cover.path}`)
-          .put(blob)
-          .then((snapshot) => {
-            snapshot.ref.getDownloadURL().then(async (url) => {
-              await firebase
-                .firestore()
-                .collection("fundraise")
-                .doc(data.uid)
-                .update({
-                  ...data,
-                  cover: {
-                    ...data.cover,
-                    preview: url,
-                  },
+    let promise = [];
+    promise.push(
+      new Promise((resolve, reject) => {
+        if (data.cover && data.cover.preview && data.cover.touched) {
+          getFileBlob(data.cover.preview, (blob) => {
+            firebase
+              .storage()
+              .ref(`/${data.uid}/fundraise-${data.cover.path}`)
+              .put(blob)
+              .then((snapshot) => {
+                snapshot.ref.getDownloadURL().then(async (url) => {
+                  await firebase
+                    .firestore()
+                    .collection("fundraise")
+                    .doc(data.uid)
+                    .update({
+                      ...data,
+                      cover: {
+                        ...data.cover,
+                        preview: url,
+                      },
+                    });
+                  resolve();
                 });
-            });
+              });
           });
-      });
-    }
-    // else if (
-    //   data.team &&
-    //   data.team.cover &&
-    //   data.team.cover.preview &&
-    //   data.team.cover.touched
-    // ) {
-    //   await getFileBlob(data.team.cover.preview, (blob) => {
-    //     firebase
-    //       .storage()
-    //       .ref(`/${data.uid}/team-${data.team.cover.path}`)
-    //       .put(blob)
-    //       .then((snapshot) => {
-    //         snapshot.ref.getDownloadURL().then(async (url) => {
-    //           await firebase
-    //             .firestore()
-    //             .collection("fundraise")
-    //             .doc(data.uid)
-    //             .update({
-    //               ...data,
-    //               team: {
-    //                 ...data.team,
-    //                 cover: {
-    //                   ...data.team.cover,
-    //                   preview: url,
-    //                 },
-    //               },
-    //             });
-    //         });
-    //       });
-    //   });
-    // }
-    else {
-      await firebase
-        .firestore()
-        .collection("fundraise")
-        .doc(data.uid)
-        .update({
-          ...data,
-        });
-    }
+        } else {
+          firebase
+            .firestore()
+            .collection("fundraise")
+            .doc(data.uid)
+            .update({
+              ...data,
+            });
 
-    return [200, { results: data }];
+          resolve();
+        }
+      })
+    );
+
+    await Promise.all(promise);
+
+    return await [200, { results: data }];
   } catch (error) {
     console.error(error);
     return [500, { message: "Internal server error" }];

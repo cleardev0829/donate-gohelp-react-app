@@ -66,10 +66,10 @@ const TABS = [
     value: "Donation",
     component: <Box />,
   },
-  {
-    value: "Team",
-    component: <Box />,
-  },
+  // {
+  //   value: "Team",
+  //   component: <Box />,
+  // },
   {
     value: "Updates",
     component: <Box />,
@@ -384,6 +384,7 @@ export default function FundraiseDetails() {
                           variant="contained"
                           // component={RouterLink}
                           // to={PATH_PAGE.page404}
+                          onClick={handleOpenPreview}
                         >
                           Share fundraiser
                         </Button>
