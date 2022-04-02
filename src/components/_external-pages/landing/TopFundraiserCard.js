@@ -13,14 +13,10 @@ import {
 } from "@material-ui/core/styles";
 import {
   Box,
-  Link,
   Card,
   Grid,
   Stack,
-  Avatar,
-  Button,
   Divider,
-  Typography,
   CardContent,
 } from "@material-ui/core";
 import {
@@ -37,8 +33,7 @@ import {
   ConnectTextStyle,
 } from "src/components/CommonStyles";
 import MoreMenu from "./MoreMenu";
-import SvgIconStyle from "../../SvgIconStyle";
-import { fDate } from "../../../utils/formatTime";
+import { Connect } from "src/components/Connect";
 import DonateProgress from "../../DonateProgress";
 import { PATH_PAGE } from "../../../routes/paths";
 import { filters } from "../../../utils/constants";
@@ -60,20 +55,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.action.hover,
     },
   },
-}));
-
-const PublishButtonStyle = styled(Box)(({ theme }) => ({
-  zIndex: 9,
-  position: "absolute",
-  left: theme.spacing(2),
-  bottom: theme.spacing(2),
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "flex-start",
-  alignItems: "center",
-  backgroundColor: theme.palette.primary.main,
-  borderRadius: 8,
-  padding: theme.spacing(0.75, 2),
 }));
 
 // ----------------------------------------------------------------------
@@ -182,13 +163,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
                     {status}
                   </ConnectTextStyle>
                 ) : (
-                  <ConnectTextStyle
-                    variant="subtitle2"
-                    color="primary"
-                    sx={{ display: visibility }}
-                  >
-                    Connect
-                  </ConnectTextStyle>
+                  <Connect sx={{ display: visibility }} />
                 )}
               </Box>
               <MoreMenu

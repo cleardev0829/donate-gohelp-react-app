@@ -144,12 +144,7 @@ export default function MainNavbar() {
             </Box>
           </MHidden>
 
-          <MHidden width="mdDown">
-            {/* <Button size="small" variant="contained">
-              Connect
-            </Button> */}
-            {!isConnected && <Connect />}
-          </MHidden>
+          <MHidden width="mdDown">{!isConnected && <Connect />}</MHidden>
 
           <MHidden width="mdDown">
             <SettingMode />

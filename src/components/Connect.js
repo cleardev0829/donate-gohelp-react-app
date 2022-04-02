@@ -1,21 +1,21 @@
 import { ConnectionRejectedError, useWallet } from "use-wallet";
 import * as React from "react";
+import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
 import {
   List,
-  ListItem,
   Dialog,
+  Button,
+  Avatar,
+  ListItem,
   DialogTitle,
+  ListItemText,
   DialogContent,
   ListItemAvatar,
-  Avatar,
-  ListItemText,
-  Button,
-  DialogActions,
 } from "@material-ui/core";
-import useConnect from "src/hooks/useOffSetTop";
-
 import toast from "react-hot-toast";
+import useConnect from "src/hooks/useOffSetTop";
+import { ConnectTextStyle } from "./CommonStyles";
 
 function SimpleDialog(props) {
   const wallet = useWallet();
@@ -80,7 +80,11 @@ function SimpleDialog(props) {
   );
 }
 
-export function Connect() {
+Connect.propTypes = {
+  sx: PropTypes.object,
+};
+
+export function Connect({ sx }) {
   const [open, setOpen] = React.useState(false);
   const wallet = useWallet();
 
@@ -94,7 +98,7 @@ export function Connect() {
 
   return (
     <>
-      <Button variant="contained" onClick={handleClickOpen}>
+      <ConnectTextStyle sx={sx} variant="subtitle2" onClick={handleClickOpen}>
         {wallet?.status === "connected" && wallet.account ? (
           <span>
             {wallet.account.slice(0, 3)}...
@@ -103,7 +107,7 @@ export function Connect() {
         ) : (
           <span>Connect</span>
         )}
-      </Button>
+      </ConnectTextStyle>
       <SimpleDialog open={open} onClose={handleClose} />
     </>
   );
