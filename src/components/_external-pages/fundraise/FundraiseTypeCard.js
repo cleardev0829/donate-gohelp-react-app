@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import {
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Stack, CardContent } from "@material-ui/core";
 import RoundedImg from "../../RoundedImg";
-import { TitleStyle, DescriptionStyle } from "../landing/TopFundraiserCard";
-import { CardStyle, CardContentStyle } from "../landing/OnlineFundraiseCard";
+import OutlineCard from "src/components/OutlineCard";
+import { TitleStyle, DescriptionStyle } from "../../../components/CommonStyles";
 
 FundraiseTypeCard.propTypes = {
   post: PropTypes.object.isRequired,
@@ -21,9 +21,8 @@ export default function FundraiseTypeCard({ post, index, type, onClick }) {
 
   return (
     <Grid item xs={12} sm={6} md={6}>
-      <CardStyle
+      <OutlineCard
         sx={{
-          position: "relative",
           backgroundColor: (theme) =>
             type === index ? theme.palette.primary.main : "",
           borderColor: (theme) =>
@@ -31,22 +30,28 @@ export default function FundraiseTypeCard({ post, index, type, onClick }) {
         }}
         onClick={() => onClick(index)}
       >
-        <RoundedImg
-          alt={title}
-          src={cover}
-          color={type === index ? theme.palette.common.white : ""}
-        />
+        <CardContent sx={{ px: 5 }}>
+          <Stack
+            spacing={theme.shape.MAIN_VERTICAL_SPACING}
+            alignItems="center"
+            sx={{ textAlign: "center" }}
+          >
+            <RoundedImg
+              alt={title}
+              src={cover}
+              color={type === index ? theme.palette.common.white : ""}
+            />
 
-        <CardContentStyle>
-          <TitleStyle color="inherit" variant="h5" sx={{ height: 64 }}>
-            {title}
-          </TitleStyle>
+            <TitleStyle color="inherit" variant="h5">
+              {title}
+            </TitleStyle>
 
-          <DescriptionStyle color="inherit" variant="subtitle1">
-            {description}
-          </DescriptionStyle>
-        </CardContentStyle>
-      </CardStyle>
+            <DescriptionStyle color="inherit" variant="body2">
+              {description}
+            </DescriptionStyle>
+          </Stack>
+        </CardContent>
+      </OutlineCard>
     </Grid>
   );
 }

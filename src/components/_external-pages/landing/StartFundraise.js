@@ -1,18 +1,7 @@
 import { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "../../../redux/store";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { orderBy } from "lodash";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-import {
-  Grid,
-  Box,
-  Skeleton,
-  Stack,
-  Container,
-  Typography,
-  useTheme,
-} from "@material-ui/core";
-//
+import { Grid, Container, Typography, useTheme } from "@material-ui/core";
 import { varFadeInUp, MotionInView } from "../../animate";
 import { StartFundraiseCard } from "../landing";
 import { FUNDRAISE_TYPES } from "src/utils/constants";
@@ -41,7 +30,6 @@ const ContentStyle = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
     zIndex: 11,
     textAlign: "center",
-    // position: "absolute",
   },
 }));
 

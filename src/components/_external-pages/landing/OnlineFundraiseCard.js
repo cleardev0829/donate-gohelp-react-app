@@ -1,45 +1,12 @@
 import PropTypes from "prop-types";
 import {
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
-import {
-  Box,
-  Icon,
-  Card,
-  Link,
-  Grid,
-  Stack,
-  Avatar,
-  Typography,
-  CardContent,
-} from "@material-ui/core";
-import { TitleStyle, DescriptionStyle } from "./TopFundraiserCard";
+import { Box, Card, Link, Grid, Stack, CardContent } from "@material-ui/core";
 import RoundedImg from "src/components/RoundedImg";
 import OutlineCard from "src/components/OutlineCard";
-
-// ----------------------------------------------------------------------
-
-export const CardStyle = styled(Card)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  flexDirection: "column",
-  textAlign: "center",
-  border: "1px solid #DADADA",
-  borderRadius: "12px",
-  backgroundColor: theme.palette.background.default,
-  padding: theme.spacing(theme.shape.CARD_PADDING),
-}));
-
-export const CardContentStyle = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "space-between",
-  textAlign: "center",
-  paddingTop: theme.spacing(4),
-}));
+import { TitleStyle, DescriptionStyle } from "../../../components/CommonStyles";
 
 // ----------------------------------------------------------------------
 

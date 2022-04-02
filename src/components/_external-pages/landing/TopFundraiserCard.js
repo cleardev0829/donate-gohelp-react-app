@@ -1,21 +1,15 @@
-import PropTypes from "prop-types";
-import { Icon } from "@iconify/react";
-import { motion } from "framer-motion";
-import { paramCase } from "change-case";
-import roundThumbUp from "@iconify/icons-ic/round-thumb-up";
-import roundVerified from "@iconify/icons-ic/round-verified";
-import checkmarkFill from "@iconify/icons-eva/checkmark-fill";
-import shareFill from "@iconify/icons-eva/share-fill";
-import eyeFill from "@iconify/icons-eva/eye-fill";
-// material
+import { useEffect, useState } from "react";
 import _ from "lodash";
+import PropTypes from "prop-types";
+import ReactQuill from "react-quill";
+import ReactCountryFlag from "react-country-flag";
+// material
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import moment from "moment";
 import {
   alpha,
+  useTheme,
   makeStyles,
   experimentalStyled as styled,
-  useTheme,
 } from "@material-ui/core/styles";
 import {
   Box,
@@ -29,24 +23,26 @@ import {
   Typography,
   CardContent,
 } from "@material-ui/core";
-import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
-import { useDispatch, useSelector } from "../../../redux/store";
-import { fDate } from "../../../utils/formatTime";
-import { fShortenNumber } from "../../../utils/formatNumber";
-import SvgIconStyle from "../../SvgIconStyle";
 import {
   varFadeIn,
   varFadeInUp,
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import DonateProgress from "../../DonateProgress";
-import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
-import { filters } from "../../../utils/constants";
-import { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
-import ReactCountryFlag from "react-country-flag";
+import {
+  TitleStyle,
+  CoverImgStyle,
+  CardMediaStyle,
+  DescriptionStyle,
+  ConnectTextStyle,
+} from "src/components/CommonStyles";
 import MoreMenu from "./MoreMenu";
+import SvgIconStyle from "../../SvgIconStyle";
+import { fDate } from "../../../utils/formatTime";
+import DonateProgress from "../../DonateProgress";
+import { PATH_PAGE } from "../../../routes/paths";
+import { filters } from "../../../utils/constants";
+import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 
 // ----------------------------------------------------------------------
@@ -63,50 +59,6 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
     },
-  },
-}));
-
-export const CardMediaStyle = styled("div")({
-  position: "relative",
-  paddingTop: "calc(100% * 3 / 4)",
-  // overflow: "hidden",
-});
-
-export const CoverImgStyle = styled("img")(({ sx }) => ({
-  top: 0,
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-  position: "absolute",
-  borderRadius: "0.25rem",
-  ...sx,
-}));
-
-export const TitleStyle = styled(Typography)({
-  overflow: "hidden",
-  WebkitLineClamp: 1,
-  display: "-webkit-box",
-  WebkitBoxOrient: "vertical",
-});
-
-export const DescriptionStyle = styled(Typography)(({ theme }) => ({
-  height: 70,
-  overflow: "hidden",
-  WebkitLineClamp: 3,
-  display: "-webkit-box",
-  WebkitBoxOrient: "vertical",
-  color: theme.palette.text.disabled,
-}));
-
-export const ConnectTextStyle = styled(Link)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  transition: theme.transitions.create("opacity", {
-    duration: theme.transitions.duration.shortest,
-  }),
-  cursor: "pointer",
-  "&:hover": {
-    opacity: 0.48,
-    textDecoration: "none",
   },
 }));
 
@@ -181,7 +133,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
             <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <CardMediaStyle>
-                  {simple && <PublishButtonStyle>{status}</PublishButtonStyle>}
+                  {/* {simple && <PublishButtonStyle>{status}</PublishButtonStyle>} */}
 
                   <CoverImgStyle
                     alt={"cover"}
@@ -221,13 +173,23 @@ export default function TopFundraiserCard({ post, simple = false }) {
               justifyContent={"space-between"}
             >
               <Box>
-                <ConnectTextStyle
-                  variant="subtitle2"
-                  color="primary"
-                  sx={{ display: visibility }}
-                >
-                  Connect
-                </ConnectTextStyle>
+                {simple ? (
+                  <ConnectTextStyle
+                    variant="subtitle2"
+                    color="primary"
+                    sx={{ display: "visibility" }}
+                  >
+                    {status}
+                  </ConnectTextStyle>
+                ) : (
+                  <ConnectTextStyle
+                    variant="subtitle2"
+                    color="primary"
+                    sx={{ display: visibility }}
+                  >
+                    Connect
+                  </ConnectTextStyle>
+                )}
               </Box>
               <MoreMenu
                 uid={post.id}

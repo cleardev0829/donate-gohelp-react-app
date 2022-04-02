@@ -1,16 +1,16 @@
-import * as Yup from "yup";
-import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
 import { Link as RouterLink, useParams, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { Form, FormikProvider, useFormik } from "formik";
+import * as Yup from "yup";
 import moment from "moment";
 import lodash from "lodash";
+import PropTypes from "prop-types";
+import { useSnackbar } from "notistack";
+import { Form, FormikProvider, useFormik } from "formik";
 // material
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
   Box,
@@ -18,29 +18,27 @@ import {
   Card,
   Link,
   Stack,
-  Button,
-  Divider,
   Slider,
+  Divider,
   MenuItem,
   TextField,
   Container,
   Typography,
+  CardContent,
   InputAdornment,
 } from "@material-ui/core";
-import { useDispatch, useSelector } from "../../../redux/store";
-import { PATH_DASHBOARD } from "../../../routes/paths";
-import fakeRequest from "../../../utils/fakeRequest";
-import useAuth from "../../../hooks/useAuth";
-import { FundraiseHeader } from "../fundraise";
 import {
+  addDonate,
   onBackStep,
   onNextStep,
-  setCheckout,
-  addDonate,
 } from "../../../redux/slices/donate";
+import { FundraiseHeader } from "../fundraise";
+import fakeRequest from "../../../utils/fakeRequest";
+import OutlineCard from "../../../components/OutlineCard";
 import { fCurrency, fPercent } from "src/utils/formatNumber";
+import { useDispatch, useSelector } from "../../../redux/store";
 import { filters, CRYPTO_TYPES, cryptoToUSD } from "src/utils/constants";
-import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
+import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
 
 // ----------------------------------------------------------------------
 
@@ -170,7 +168,7 @@ export default function DonatePayment({ post }) {
                     You're supporting Christina Yuna Lee Memorial Fund
                   </Typography>
 
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ color: "text.disabled" }}>
                     Your donation will benefit Angela Yujin Lee on behalf of The
                     Lee Family
                   </Typography>
@@ -209,7 +207,7 @@ export default function DonatePayment({ post }) {
             <Grid item xs={12} md={7}>
               <Box sx={{ py: 3 }}>
                 <Box sx={{ textAlign: "right" }}>
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ color: "text.disabled" }}>
                     By continuing, you agree to the GoFundMe terms and privacy
                     policy.
                   </Typography>
@@ -272,7 +270,10 @@ export default function DonatePayment({ post }) {
                       <Typography variant="subtitle1" sx={{ display: "block" }}>
                         Tip GoHelp Services
                       </Typography>
-                      <Typography variant="body2" sx={{ display: "block" }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ display: "block", color: "text.disabled" }}
+                      >
                         GoHelp has a 0% platform fee for organizers. GoFundMe
                         will continue offering its services thanks to donors who
                         will leave an optional amount here:
@@ -349,77 +350,74 @@ export default function DonatePayment({ post }) {
                       Enter custom tip
                     </Link>
 
-                    <Box
-                      sx={{
-                        borderColor: "background.primary",
-                        border: "solid 1px",
-                        borderRadius: 1,
-                        p: 2,
-                      }}
-                    >
-                      <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          alignItems="center"
-                        >
-                          <Typography variant="subtitle2">
-                            Top donation
-                          </Typography>
-                          <Typography gutterBottom variant="subtitle1">
-                            {`${fCurrency(filter.maxAmount)}`}
-                          </Typography>
-                        </Stack>
-
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          alignItems="center"
-                        >
-                          <Typography variant="subtitle2">
-                            GoHelp tip
-                          </Typography>
-                          {values.tip > 0 && (
-                            <Typography gutterBottom variant="subtitle1">
-                              {`${fCurrency(
-                                cryptoToUSD({
-                                  count:
-                                    (values.cryptoCount * values.tip) / 100,
-                                  type: values.cryptoType,
-                                })
-                              )}(${(values.cryptoCount * values.tip) / 100} ${
-                                values.cryptoType
-                              })`}
+                    <OutlineCard>
+                      <CardContent>
+                        <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                          >
+                            <Typography variant="subtitle2">
+                              Top donation
                             </Typography>
-                          )}
-                        </Stack>
-
-                        <Divider flexItem />
-
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          alignItems="center"
-                        >
-                          <Typography variant="subtitle2">Total due</Typography>
-                          {values.cryptoCount > 0 && (
                             <Typography gutterBottom variant="subtitle1">
-                              {`${fCurrency(
-                                cryptoToUSD({
-                                  count:
-                                    parseFloat(values.cryptoCount) +
-                                    (values.cryptoCount * values.tip) / 100,
-                                  type: values.cryptoType,
-                                })
-                              )}(${
-                                parseFloat(values.cryptoCount) +
-                                (values.cryptoCount * values.tip) / 100
-                              } ${values.cryptoType})`}
+                              {`${fCurrency(filter.maxAmount)}`}
                             </Typography>
-                          )}
+                          </Stack>
+
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                          >
+                            <Typography variant="subtitle2">
+                              GoHelp tip
+                            </Typography>
+                            {values.tip > 0 && (
+                              <Typography gutterBottom variant="subtitle1">
+                                {`${fCurrency(
+                                  cryptoToUSD({
+                                    count:
+                                      (values.cryptoCount * values.tip) / 100,
+                                    type: values.cryptoType,
+                                  })
+                                )}(${(values.cryptoCount * values.tip) / 100} ${
+                                  values.cryptoType
+                                })`}
+                              </Typography>
+                            )}
+                          </Stack>
+
+                          <Divider flexItem />
+
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                          >
+                            <Typography variant="subtitle2">
+                              Total due
+                            </Typography>
+                            {values.cryptoCount > 0 && (
+                              <Typography gutterBottom variant="subtitle1">
+                                {`${fCurrency(
+                                  cryptoToUSD({
+                                    count:
+                                      parseFloat(values.cryptoCount) +
+                                      (values.cryptoCount * values.tip) / 100,
+                                    type: values.cryptoType,
+                                  })
+                                )}(${
+                                  parseFloat(values.cryptoCount) +
+                                  (values.cryptoCount * values.tip) / 100
+                                } ${values.cryptoType})`}
+                              </Typography>
+                            )}
+                          </Stack>
                         </Stack>
-                      </Stack>
-                    </Box>
+                      </CardContent>
+                    </OutlineCard>
 
                     <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                       <Typography variant="subtitle1">

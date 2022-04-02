@@ -1,12 +1,12 @@
+import { useState } from "react";
 import { isString } from "lodash";
 import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
-// material
 import { LoadingButton } from "@material-ui/lab";
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
   Box,
@@ -17,34 +17,14 @@ import {
   Typography,
   DialogActions,
 } from "@material-ui/core";
-//
-import { DialogAnimate } from "../../animate";
 import Markdown from "../../Markdown";
-import Scrollbar from "../../Scrollbar";
-import EmptyContent from "../../EmptyContent";
 import { DonateMain } from "../donate";
-import { useDispatch, useSelector } from "../../../redux/store";
-import { useState } from "react";
+import Scrollbar from "../../Scrollbar";
+import { DialogAnimate } from "../../animate";
+import EmptyContent from "../../EmptyContent";
 import { setCheckout } from "../../../redux/slices/fundraise";
-import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
-
-// ----------------------------------------------------------------------
-
-const HeroStyle = styled("div")(({ theme }) => ({
-  paddingTop: "56%",
-  position: "relative",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  "&:before": {
-    top: 0,
-    content: "''",
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    // backgroundColor: alpha(theme.palette.grey[900], 0.72),
-  },
-}));
+import { useDispatch, useSelector } from "../../../redux/store";
+import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
 
 // ----------------------------------------------------------------------
 
@@ -71,7 +51,6 @@ export default function FundraisePhotoEditor({
   const cover = isString(values.cover) ? values.cover : values.cover?.preview;
   const hasContent = cover;
 
-  const { checkout } = useSelector((state) => state.fundraise);
   const [state, setState] = useState({ rotate: 0, scale: 0 });
 
   const handleRotate = () => {

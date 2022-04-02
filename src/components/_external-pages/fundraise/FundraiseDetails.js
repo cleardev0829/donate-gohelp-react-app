@@ -1,21 +1,15 @@
-import _ from "lodash";
-import * as Yup from "yup";
-import { useSnackbar } from "notistack";
-import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
-import { capitalCase } from "change-case";
-import { Form, FormikProvider, useFormik } from "formik";
-import { motion } from "framer-motion";
-import moment from "moment";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
+import _ from "lodash";
+import moment from "moment";
 import { Icon } from "@iconify/react";
-// material
-import { LoadingButton } from "@material-ui/lab";
+import { motion } from "framer-motion";
+import { useSnackbar } from "notistack";
+import { capitalCase } from "change-case";
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
   Box,
@@ -23,41 +17,29 @@ import {
   Tabs,
   Card,
   Grid,
-  Chip,
-  Link,
   Stack,
   Button,
-  Switch,
   Container,
-  TextField,
   Typography,
-  CardContent,
-  Autocomplete,
-  FormHelperText,
-  FormControlLabel,
 } from "@material-ui/core";
-// utils
-import fakeRequest from "../../../utils/fakeRequest";
-
 import {
   varFadeIn,
   varFadeInUp,
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import DonateProgress from "../../DonateProgress";
-import { useDispatch, useSelector } from "../../../redux/store";
 import {
   onBackStep,
   onNextStep,
   getPost,
 } from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
-import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
-import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
+import { PATH_PAGE } from "src/routes/paths";
+import DonateProgress from "../../DonateProgress";
 import { diff, filters } from "../../../utils/constants";
 import FundraiseShareDialog from "./FundraiseShareDialog";
-import FundraiseUpdateDialog from "./FundraiseUpdateDialog";
+import { useDispatch, useSelector } from "../../../redux/store";
+import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
 
 // ----------------------------------------------------------------------
 
@@ -122,7 +104,6 @@ export default function FundraiseDetails() {
   const isLight = theme.palette.mode === "light";
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
-  // const [updateOpen, setUpdateOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("profile");
   const [data, setData] = useState({});
   const [filter, setFilter] = useState(filters([]));
@@ -145,14 +126,6 @@ export default function FundraiseDetails() {
   const handleClosePreview = () => {
     setOpen(false);
   };
-
-  // const handleOpenUpdatePreview = () => {
-  //   setUpdateOpen(true);
-  // };
-
-  // const handleCloseUpdatePreview = () => {
-  //   setUpdateOpen(false);
-  // };
 
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
@@ -399,13 +372,6 @@ export default function FundraiseDetails() {
         openPreview={open}
         onClosePreview={handleClosePreview}
       />
-
-      {/* <FundraiseUpdateDialog
-        uid={id}
-        data={data}
-        openPreview={updateOpen}
-        onClosePreview={handleCloseUpdatePreview}
-      /> */}
     </>
   );
 }

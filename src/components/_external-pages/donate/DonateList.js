@@ -1,45 +1,39 @@
-import { useDispatch, useSelector } from "../../../redux/store";
-import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { orderBy } from "lodash";
-import { Icon } from "@iconify/react";
-import lodash from "lodash";
-import pinFill from "@iconify/icons-eva/pin-fill";
-import emailFill from "@iconify/icons-eva/email-fill";
-import roundBusinessCenter from "@iconify/icons-ic/round-business-center";
-// material
+import moment from "moment";
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
 import {
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
   Box,
   Link,
   Card,
   Grid,
+  Stack,
   Avatar,
   Button,
   Typography,
-  CardHeader,
-  Stack,
+  CardContent,
 } from "@material-ui/core";
-import { motion } from "framer-motion";
-import moment from "moment";
-import { Link as RouterLink, useParams } from "react-router-dom";
-import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import {
   varFadeIn,
   varFadeInUp,
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import { IconBullet } from "src/layouts/dashboard/MenuDesktop";
 import {
   onNextStep,
   getDonatesInitial,
   getMoreDonates,
 } from "../../../redux/slices/donate";
 import { diff } from "../../../utils/constants";
-import { useEffect, useState } from "react";
+import { IconBullet } from "src/layouts/dashboard/MenuDesktop";
+import { useDispatch, useSelector } from "../../../redux/store";
+import OutlineCard from "src/components/OutlineCard";
 
 // ----------------------------------------------------------------------
 
@@ -95,42 +89,36 @@ export default function DonateList({ post }) {
   return (
     <Box>
       <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-        <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-          <Card
-            sx={{
-              backgroundColor: "background.default",
-              border: "1px solid #F3F3F3",
-              p: (theme) => theme.shape.CARD_PADDING,
-            }}
-          >
+        <OutlineCard>
+          <CardContent>
             <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-              <Typography variant="h4">{`Words of support (${data.length})`}</Typography>
+              <Typography variant="h5">{`Words of support (${data.length})`}</Typography>
 
               {data.map((donate, index) => (
                 <Stack
                   direction="row"
                   spacing={theme.shape.CARD_CONTENT_SPACING}
                 >
-                  <Avatar
+                  {/* <Avatar
                     key={donate.id}
                     alt={donate.id}
                     src={" /static/avatars/avatar_man.png"}
-                  />
+                  /> */}
                   <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                     <Stack
                       direction="row"
                       alignItems="center"
                       spacing={theme.shape.MAIN_HORIZONTAL_SPACING}
                     >
-                      <Link variant="h4" sx={{ color: "text.primary" }}>
+                      <Link variant="subtitle2" sx={{ color: "text.primary" }}>
                         {`Support ${index + 1}`}
                       </Link>
                       <Stack direction="row" alignItems="center">
                         <IconBullet />
                         <Typography
                           component="span"
-                          variant="subtitle1"
-                          color="text.primary"
+                          variant="body2"
+                          color="text.disabled"
                         >
                           {diff(moment(), moment(donate.createdAt))}
                         </Typography>
@@ -139,8 +127,8 @@ export default function DonateList({ post }) {
 
                     <Typography
                       component="span"
-                      variant="subtitle1"
-                      color="text.primary"
+                      variant="subtitle2"
+                      color="text.disabled"
                     >
                       {donate.message}
                     </Typography>
@@ -159,14 +147,18 @@ export default function DonateList({ post }) {
                 </Stack>
               ))}
             </Stack>
-          </Card>
-        </Stack>
+          </CardContent>
+        </OutlineCard>
 
         <Stack direction="row" justifyContent="space-between">
           <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
             <Grid item xs="12" md="6">
               <motion.div variants={varFadeInRight}>
-                <Typography component="span" variant="h7">
+                <Typography
+                  component="span"
+                  variant="body2"
+                  sx={{ color: "text.disabled" }}
+                >
                   Please donate to share words of encouragement.
                 </Typography>
               </motion.div>

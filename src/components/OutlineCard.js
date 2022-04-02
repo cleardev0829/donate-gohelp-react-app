@@ -21,11 +21,17 @@ const useStyles = makeStyles((theme) => ({
 // ----------------------------------------------------------------------
 
 OutlineCard.propTypes = {
+  sx: PropTypes.object,
+  onClick: PropTypes.func,
   children: PropTypes.node,
 };
 
-export default function OutlineCard({ children }) {
+export default function OutlineCard({ sx, onClick, children }) {
   const classes = useStyles();
 
-  return <Card class={classes.root}>{children}</Card>;
+  return (
+    <Card sx={sx} class={classes.root} onClick={onClick}>
+      {children}
+    </Card>
+  );
 }

@@ -1,43 +1,28 @@
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { paramCase } from "change-case";
-import eyeFill from "@iconify/icons-eva/eye-fill";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import shareFill from "@iconify/icons-eva/share-fill";
-import messageCircleFill from "@iconify/icons-eva/message-circle-fill";
-import { fPercent, fCurrency } from "../../../utils/formatNumber";
-// material
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
-import {
-  Box,
-  Button,
-  Link,
-  Card,
-  Grid,
-  Stack,
-  Avatar,
-  Typography,
-  CardContent,
-} from "@material-ui/core";
-import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
-import { fDate } from "../../../utils/formatTime";
-import { fShortenNumber } from "../../../utils/formatNumber";
-import SvgIconStyle from "../../SvgIconStyle";
+import { Box, Grid, CardContent } from "@material-ui/core";
 import {
   varFadeIn,
   varFadeInUp,
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import { CardMediaStyle, CoverImgStyle, TitleStyle } from "./TopFundraiserCard";
-import { setCheckout, onGotoStep } from "../../../redux/slices/fundraise";
+import {
+  CardMediaStyle,
+  CoverImgStyle,
+  TitleStyle,
+} from "../../../components/CommonStyles";
+import { PATH_PAGE } from "../../../routes/paths";
+import OutlineCard from "../../../components/OutlineCard";
 import { useSelector, useDispatch } from "../../../redux/store";
-import OutlineCard from "src/components/OutlineCard";
+import { setCheckout, onGotoStep } from "../../../redux/slices/fundraise";
 
 StartFundraiseCard.propTypes = {
   post: PropTypes.object.isRequired,

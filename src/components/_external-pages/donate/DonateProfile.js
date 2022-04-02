@@ -1,40 +1,35 @@
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "../../../redux/store";
-import { Icon } from "@iconify/react";
-import ReactQuill from "react-quill";
+import { useState } from "react";
 import moment from "moment";
+import PropTypes from "prop-types";
+import ReactQuill from "react-quill";
+import { Icon } from "@iconify/react";
+import { motion } from "framer-motion";
 // material
 import {
   Box,
   Card,
-  CardHeader,
   Grid,
   Stack,
   Button,
   Typography,
-  Divider,
+  CardContent,
 } from "@material-ui/core";
-// utils
-import { fNumber } from "../../../utils/formatNumber";
 import {
   experimentalStyled as styled,
   useTheme,
 } from "@material-ui/core/styles";
-import { motion } from "framer-motion";
-import { Link as RouterLink } from "react-router-dom";
-import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import {
   varFadeIn,
   varFadeInUp,
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import { ProgressItem } from "../landing/TopFundraiserCard";
-import { onNextStep } from "src/redux/slices/donate";
-import { CardMediaStyle, CoverImgStyle } from "../landing/TopFundraiserCard";
 import { diff } from "../../../utils/constants";
-import { useState } from "react";
+import { onNextStep } from "src/redux/slices/donate";
+import OutlineCard from "src/components/OutlineCard";
+import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
+import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
 
 // ----------------------------------------------------------------------
 
@@ -143,36 +138,28 @@ export default function DonateProfile({ post }) {
             </motion.div>
           </Stack>
 
-          <Box>
-            <Stack>
-              <Card
-                sx={{
-                  backgroundColor: "background.default",
-                  border: "1px solid #F3F3F3",
-                  p: (theme) => theme.shape.CARD_PADDING,
-                }}
-              >
-                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                  <Typography variant="h4">
-                    A few words from Fundraiser
-                  </Typography>
+          <OutlineCard>
+            <CardContent>
+              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                <Typography variant="h5">
+                  A few words from Fundraiser
+                </Typography>
 
-                  <QuillWrapperStyle>
-                    <ReactQuill
-                      readOnly
-                      value={description.text}
-                      modules={modules}
-                      style={{
-                        margin: 0,
-                      }}
-                    />
-                  </QuillWrapperStyle>
+                <QuillWrapperStyle>
+                  <ReactQuill
+                    readOnly
+                    value={description.text}
+                    modules={modules}
+                    style={{
+                      margin: 0,
+                    }}
+                  />
+                </QuillWrapperStyle>
 
-                  {/* <Typography variant="body2">{description}</Typography> */}
-                </Stack>
-              </Card>
-            </Stack>
-          </Box>
+                {/* <Typography variant="body2">{description}</Typography> */}
+              </Stack>
+            </CardContent>
+          </OutlineCard>
 
           <Stack
             direction="row"
