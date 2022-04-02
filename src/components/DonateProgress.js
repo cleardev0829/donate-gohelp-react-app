@@ -30,10 +30,10 @@ export default function DonateProgress({ time, total, goal }) {
   return (
     <Stack spacing={0.5}>
       <Stack direction="row" justifyContent="space-between">
-        <RecentTimeAgoTextStyle variant="body2" color="primary">
+        <RecentTimeAgoTextStyle variant="h6" color="primary">
           {`Last donation ${time}`}
         </RecentTimeAgoTextStyle>
-        <Typography variant="subtitle2">
+        <Typography variant="h6" color="primary">
           {fPercent((total * 100) / goal)}
         </Typography>
       </Stack>
@@ -42,7 +42,7 @@ export default function DonateProgress({ time, total, goal }) {
         text={`Last donation ${time}`}
         progress={fPercent((total * 100) / goal)}
       />
-      <DonationTextStyle variant="subtitle2" color="inherit">
+      <DonationTextStyle variant="h6" color="primary">
         {`${fCurrency(total)} raised of ${fCurrency(goal)}`}
       </DonationTextStyle>
     </Stack>

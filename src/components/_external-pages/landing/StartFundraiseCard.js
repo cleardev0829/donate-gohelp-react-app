@@ -30,12 +30,7 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import {
-  CardContentStyle,
-  CardMediaStyle,
-  CoverImgStyle,
-  TitleStyle,
-} from "./TopFundraiserCard";
+import { CardMediaStyle, CoverImgStyle, TitleStyle } from "./TopFundraiserCard";
 import { setCheckout, onGotoStep } from "../../../redux/slices/fundraise";
 import { useSelector, useDispatch } from "../../../redux/store";
 
@@ -63,7 +58,7 @@ export default function StartFundraiseCard({ post }) {
     <Grid item xs={12} sm={6} md={4}>
       <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
         <Card sx={{ position: "relative" }}>
-          <CardContentStyle>
+          <CardContent>
             <CardMediaStyle>
               <CoverImgStyle alt={title} src={cover} />
             </CardMediaStyle>
@@ -77,7 +72,7 @@ export default function StartFundraiseCard({ post }) {
             >
               {title}
             </TitleStyle>
-          </CardContentStyle>
+          </CardContent>
         </Card>
       </Box>
     </Grid>

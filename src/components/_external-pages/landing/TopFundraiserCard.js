@@ -13,6 +13,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import moment from "moment";
 import {
   alpha,
+  makeStyles,
   experimentalStyled as styled,
   useTheme,
 } from "@material-ui/core/styles";
@@ -50,8 +51,18 @@ import ProductMoreMenu from "./ProductMoreMenu";
 
 // ----------------------------------------------------------------------
 
-export const CardContentStyle = styled(CardContent)(({ theme }) => ({
-  padding: theme.spacing(2, 2),
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: "relative",
+    boxShadow: theme.customShadows.z16,
+    borderRadius: theme.shape.borderRadius,
+    border: `1px solid ${theme.palette.divider}`,
+    zIndex: 0, // Fix Safari overflow: hidden with border radius
+
+    "&:hover": {
+      backgroundColor: theme.palette.background.paper,
+    },
+  },
 }));
 
 export const CardMediaStyle = styled("div")({
@@ -70,20 +81,10 @@ export const CoverImgStyle = styled("img")(({ sx }) => ({
   ...sx,
 }));
 
-const AvatarStyle = styled(Avatar)(({ theme }) => ({
-  zIndex: 9,
-  width: 32,
-  height: 32,
-  position: "absolute",
-  left: theme.spacing(3),
-  bottom: theme.spacing(-2),
-}));
-
 export const TitleStyle = styled(Typography)({
   overflow: "hidden",
   WebkitLineClamp: 1,
   display: "-webkit-box",
-  // whiteSpace: "nowrap",
   WebkitBoxOrient: "vertical",
 });
 
@@ -95,18 +96,16 @@ export const DescriptionStyle = styled(Typography)({
   WebkitBoxOrient: "vertical",
 });
 
-const CountryStyle = styled(Box)(({ theme }) => ({
-  zIndex: 9,
-  position: "absolute",
-  left: theme.spacing(2),
-  bottom: theme.spacing(2),
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "flex-start",
-  alignItems: "center",
-  backgroundColor: "#333333",
-  borderRadius: 8,
-  padding: theme.spacing(0.75, 2),
+export const ConnectTextStyle = styled(Link)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  transition: theme.transitions.create("opacity", {
+    duration: theme.transitions.duration.shortest,
+  }),
+  cursor: "pointer",
+  "&:hover": {
+    opacity: 0.48,
+    textDecoration: "none",
+  },
 }));
 
 const PublishButtonStyle = styled(Box)(({ theme }) => ({
@@ -132,9 +131,11 @@ TopFundraiserCard.propTypes = {
 
 export default function TopFundraiserCard({ post, simple = false }) {
   const theme = useTheme();
+  const classes = useStyles();
   const navigate = useNavigate();
   const filter = filters(post.donates);
   const status = post.isDeleted ? "Deleted" : "Published";
+  const [visibility, setVisivility] = useState("none");
 
   const handleNavigate = () => {
     simple
@@ -142,9 +143,22 @@ export default function TopFundraiserCard({ post, simple = false }) {
       : navigate(`${PATH_PAGE.donate}/${post.id}`);
   };
 
+  const handleMouseOver = () => {
+    setVisivility("visivility");
+  };
+
+  const handleMouseOut = () => {
+    setVisivility("none");
+  };
+
   return (
     <Grid item xs={12} sm={6} md={3}>
-      <Card sx={{ position: "relative" }}>
+      <Card
+        class={classes.root}
+        sx={{ position: "relative" }}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+      >
         <CardContent>
           <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
             <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
@@ -189,8 +203,17 @@ export default function TopFundraiserCard({ post, simple = false }) {
             direction="row"
             alignItems="center"
             justifyContent={"space-between"}
+            sx={{ paddingBottom: 0.8 }}
           >
-            <Link variant="subtitle2">Connect</Link>
+            <Box>
+              <ConnectTextStyle
+                variant="subtitle2"
+                color="primary"
+                sx={{ display: visibility }}
+              >
+                Connect
+              </ConnectTextStyle>
+            </Box>
             <ProductMoreMenu
               onDelete={() => {
                 console.log("");
