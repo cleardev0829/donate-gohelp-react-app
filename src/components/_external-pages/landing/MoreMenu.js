@@ -16,16 +16,18 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
+import { PATH_PAGE } from "src/routes/paths";
 // routes
 
 // ----------------------------------------------------------------------
 
-ProductMoreMenu.propTypes = {
-  onDelete: PropTypes.func,
-  productName: PropTypes.string,
+MoreMenu.propTypes = {
+  uid: PropTypes.string,
+  onOpenShareDialog: PropTypes.func,
+  name: PropTypes.string,
 };
 
-export default function ProductMoreMenu({ onDelete, productName }) {
+export default function MoreMenu({ uid, onOpenShareDialog, name }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -51,31 +53,31 @@ export default function ProductMoreMenu({ onDelete, productName }) {
           </ListItemIcon>
           <ListItemText
             primary="Favorite"
-            primaryTypographyProps={{ variant: "body2" }}
+            primaryTypographyProps={{ variant: "h6" }}
           />
         </MenuItem>
 
-        <MenuItem sx={{ color: "text.secondary" }}>
+        <MenuItem
+          sx={{ color: "text.secondary" }}
+          component={RouterLink}
+          to={`${PATH_PAGE.fundraiseDetails}/${uid}`}
+        >
           <ListItemIcon>
             <Icon icon={eyeFill} width={18} height={18} />
           </ListItemIcon>
           <ListItemText
             primary="View"
-            primaryTypographyProps={{ variant: "body2" }}
+            primaryTypographyProps={{ variant: "h6" }}
           />
         </MenuItem>
 
-        <MenuItem
-          // component={RouterLink}
-          // to={`${PATH_DASHBOARD.eCommerce.root}/product/${paramCase(productName)}/edit`}
-          sx={{ color: "text.secondary" }}
-        >
+        <MenuItem onClick={onOpenShareDialog} sx={{ color: "text.secondary" }}>
           <ListItemIcon>
             <Icon icon={shareFill} width={18} height={18} />
           </ListItemIcon>
           <ListItemText
             primary="Share"
-            primaryTypographyProps={{ variant: "body2" }}
+            primaryTypographyProps={{ variant: "h6" }}
           />
         </MenuItem>
       </Menu>

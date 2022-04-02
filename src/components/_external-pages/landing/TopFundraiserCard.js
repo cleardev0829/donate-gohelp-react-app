@@ -47,7 +47,8 @@ import { useEffect, useState } from "react";
 import { getDonate, getDonatesById } from "src/redux/slices/donate";
 import ReactQuill from "react-quill";
 import ReactCountryFlag from "react-country-flag";
-import ProductMoreMenu from "./ProductMoreMenu";
+import MoreMenu from "./MoreMenu";
+import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 
 // ----------------------------------------------------------------------
 
@@ -135,12 +136,21 @@ export default function TopFundraiserCard({ post, simple = false }) {
   const navigate = useNavigate();
   const filter = filters(post.donates);
   const status = post.isDeleted ? "Deleted" : "Published";
+  const [open, setOpen] = useState(false);
   const [visibility, setVisivility] = useState("none");
 
   const handleNavigate = () => {
     simple
       ? navigate(`${PATH_PAGE.fundraiseDetails}/${post.id}`)
       : navigate(`${PATH_PAGE.donate}/${post.id}`);
+  };
+
+  const handleOpenPreview = () => {
+    setOpen(true);
+  };
+
+  const handleClosePreview = () => {
+    setOpen(false);
   };
 
   const handleMouseOver = () => {
@@ -152,77 +162,85 @@ export default function TopFundraiserCard({ post, simple = false }) {
   };
 
   return (
-    <Grid item xs={12} sm={6} md={3}>
-      <Card
-        class={classes.root}
-        sx={{ position: "relative" }}
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
-      >
-        <CardContent>
-          <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
-            <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-              <CardMediaStyle>
-                {simple && <PublishButtonStyle>{status}</PublishButtonStyle>}
+    <>
+      <Grid item xs={12} sm={6} md={3}>
+        <Card
+          class={classes.root}
+          sx={{ position: "relative" }}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+        >
+          <CardContent>
+            <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
+              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                <CardMediaStyle>
+                  {simple && <PublishButtonStyle>{status}</PublishButtonStyle>}
 
-                <CoverImgStyle
-                  alt={"cover"}
-                  src={post.cover.preview}
-                  sx={{
-                    transform: `rotate(${
-                      ((-1 * post.rotate) % 4) * 90
-                    }deg) scale(${1 + post.scale / 100})`,
+                  <CoverImgStyle
+                    alt={"cover"}
+                    src={post.cover.preview}
+                    sx={{
+                      transform: `rotate(${
+                        ((-1 * post.rotate) % 4) * 90
+                      }deg) scale(${1 + post.scale / 100})`,
+                    }}
+                  />
+                </CardMediaStyle>
+
+                <TitleStyle color="inherit" variant="subtitle1">
+                  {post.title}
+                </TitleStyle>
+
+                <ReactCountryFlag
+                  countryCode={post.live.code}
+                  svg
+                  style={{
+                    margin: 0,
+                    marginRight: 0,
                   }}
                 />
-              </CardMediaStyle>
 
-              <TitleStyle color="inherit" variant="subtitle1">
-                {post.title}
-              </TitleStyle>
+                <DonateProgress
+                  time={filter.recentTimeAgo}
+                  total={filter.totalAmount}
+                  goal={post.goal}
+                />
+              </Stack>
+            </Box>
 
-              <ReactCountryFlag
-                countryCode={post.live.code}
-                svg
-                style={{
-                  margin: 0,
-                  marginRight: 0,
-                }}
-              />
+            <Divider sx={{ mt: theme.shape.MAIN_VERTICAL_SPACING, mb: 1 }} />
 
-              <DonateProgress
-                time={filter.recentTimeAgo}
-                total={filter.totalAmount}
-                goal={post.goal}
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent={"space-between"}
+              sx={{ paddingBottom: 0.8 }}
+            >
+              <Box>
+                <ConnectTextStyle
+                  variant="subtitle2"
+                  color="primary"
+                  sx={{ display: visibility }}
+                >
+                  Connect
+                </ConnectTextStyle>
+              </Box>
+              <MoreMenu
+                uid={post.id}
+                onOpenShareDialog={handleOpenPreview}
+                name={"name"}
               />
             </Stack>
-          </Box>
+          </CardContent>
+        </Card>
+      </Grid>
 
-          <Divider sx={{ mt: theme.shape.MAIN_VERTICAL_SPACING, mb: 1 }} />
-
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent={"space-between"}
-            sx={{ paddingBottom: 0.8 }}
-          >
-            <Box>
-              <ConnectTextStyle
-                variant="subtitle2"
-                color="primary"
-                sx={{ display: visibility }}
-              >
-                Connect
-              </ConnectTextStyle>
-            </Box>
-            <ProductMoreMenu
-              onDelete={() => {
-                console.log("");
-              }}
-              productName={"name"}
-            />
-          </Stack>
-        </CardContent>
-      </Card>
-    </Grid>
+      <FundraiseShareDialog
+        uid={post.id}
+        title={post.title}
+        openPreview={open}
+        onClosePreview={handleClosePreview}
+      />
+    </>
   );
 }
