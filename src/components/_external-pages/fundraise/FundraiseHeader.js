@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-
 import { Container } from "@material-ui/core";
-
 import HeaderStepBreadcrumbs from "../../HeaderStepBreadcrumbs";
 import HeaderStep from "../../HeaderStep";
 

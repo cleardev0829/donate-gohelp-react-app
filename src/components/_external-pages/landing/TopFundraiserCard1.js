@@ -2,20 +2,11 @@ import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { paramCase } from "change-case";
-import roundThumbUp from "@iconify/icons-ic/round-thumb-up";
-import roundVerified from "@iconify/icons-ic/round-verified";
-import checkmarkFill from "@iconify/icons-eva/checkmark-fill";
-import shareFill from "@iconify/icons-eva/share-fill";
 import eyeFill from "@iconify/icons-eva/eye-fill";
-// material
 import _ from "lodash";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import moment from "moment";
-import {
-  alpha,
-  experimentalStyled as styled,
-  useTheme,
-} from "@material-ui/core/styles";
+import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
 import {
   Box,
   Link,
@@ -24,7 +15,6 @@ import {
   Stack,
   Avatar,
   Button,
-  Divider,
   Typography,
   CardContent,
 } from "@material-ui/core";
@@ -46,9 +36,10 @@ import { useEffect, useState } from "react";
 import { getDonate, getDonatesById } from "src/redux/slices/donate";
 import ReactQuill from "react-quill";
 import ReactCountryFlag from "react-country-flag";
-import ProductMoreMenu from "./ProductMoreMenu";
 
 // ----------------------------------------------------------------------
+
+export const CARD_BRODER_RADIUS = 2;
 
 export const CardContentStyle = styled(CardContent)(({ theme }) => ({
   padding: theme.spacing(2, 2),
@@ -66,7 +57,7 @@ export const CoverImgStyle = styled("img")(({ sx }) => ({
   height: "100%",
   objectFit: "cover",
   position: "absolute",
-  borderRadius: "0.25rem",
+  borderRadius: 8,
   ...sx,
 }));
 
@@ -131,7 +122,6 @@ TopFundraiserCard.propTypes = {
 };
 
 export default function TopFundraiserCard({ post, simple = false }) {
-  const theme = useTheme();
   const navigate = useNavigate();
   const filter = filters(post.donates);
   const status = post.isDeleted ? "Deleted" : "Published";
@@ -145,11 +135,57 @@ export default function TopFundraiserCard({ post, simple = false }) {
   return (
     <Grid item xs={12} sm={6} md={3}>
       <Card sx={{ position: "relative" }}>
-        <CardContent>
+        <CardContentStyle>
           <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
-            <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+            <Stack>
               <CardMediaStyle>
-                {simple && <PublishButtonStyle>{status}</PublishButtonStyle>}
+                <SvgIconStyle
+                  color="paper"
+                  src="/static/icons/shape-avatar.svg"
+                  sx={{
+                    width: 80,
+                    height: 36,
+                    zIndex: 9,
+                    bottom: -15,
+                    position: "absolute",
+                    // ...((latestPostLarge || latestPost) && { display: 'none' })
+                  }}
+                />
+                <AvatarStyle
+                  alt={"flag"}
+                  src={"/static/avatars/avatar_man.png"}
+                  // sx={{
+                  //   ...((latestPostLarge || latestPost) && {
+                  //     zIndex: 9,
+                  //     top: 24,
+                  //     left: 24,
+                  //     width: 40,
+                  //     height: 40
+                  //   })
+                  // }}
+                />
+                {/* {!_.isEmpty(post.live) && !simple && (
+                  <CountryStyle>
+                    <ReactCountryFlag
+                      countryCode={post.live.code}
+                      svg
+                      style={{
+                        marginRight: 10,
+                      }}
+                    />
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        display: "block",
+                        color: (theme) => theme.palette.common.white,
+                      }}
+                    >
+                      {post.live.label}
+                    </Typography>
+                  </CountryStyle>
+                )}
+
+                {simple && <PublishButtonStyle>{status}</PublishButtonStyle>} */}
 
                 <CoverImgStyle
                   alt={"cover"}
@@ -162,18 +198,17 @@ export default function TopFundraiserCard({ post, simple = false }) {
                 />
               </CardMediaStyle>
 
-              <TitleStyle color="inherit" variant="subtitle1">
-                {post.title}
-              </TitleStyle>
+              <Stack spacing={0} sx={{ my: 1 }}>
+                <TitleStyle color="inherit" variant="subtitle1">
+                  {post.title}
+                </TitleStyle>
 
-              <ReactCountryFlag
-                countryCode={post.live.code}
-                svg
-                style={{
-                  margin: 0,
-                  marginRight: 0,
-                }}
-              />
+                {/* {!simple && (
+                  <DescriptionStyle color="inherit" variant="body1">
+                    {post.description.text}
+                  </DescriptionStyle>
+                )} */}
+              </Stack>
 
               <DonateProgress
                 time={filter.recentTimeAgo}
@@ -183,22 +218,25 @@ export default function TopFundraiserCard({ post, simple = false }) {
             </Stack>
           </Box>
 
-          <Divider sx={{ mt: theme.shape.MAIN_VERTICAL_SPACING, mb: 1 }} />
-
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent={"space-between"}
+          {/* <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              mt: 2,
+            }}
           >
-            <Link variant="subtitle2">Connect</Link>
-            <ProductMoreMenu
-              onDelete={() => {
-                console.log("");
-              }}
-              productName={"name"}
-            />
-          </Stack>
-        </CardContent>
+            <motion.div variants={varFadeInRight}>
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to={`${PATH_PAGE.donate}/${post.id}`}
+              >
+                {simple ? "Manage" : "Donate"}
+              </Button>
+            </motion.div>
+          </Box> */}
+        </CardContentStyle>
       </Card>
     </Grid>
   );

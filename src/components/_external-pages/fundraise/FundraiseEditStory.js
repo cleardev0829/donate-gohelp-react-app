@@ -1,11 +1,7 @@
 import PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import { useSnackbar } from "notistack";
-import { useDispatch, useSelector } from "../../../redux/store";
-import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
-import radioButtonOffOutline from "@iconify/icons-eva/radio-button-off-outline";
 import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
 import {
@@ -13,54 +9,13 @@ import {
   experimentalStyled as styled,
   useTheme,
 } from "@material-ui/core/styles";
-import {
-  Box,
-  Card,
-  Grid,
-  Stack,
-  Button,
-  MenuItem,
-  Checkbox,
-  TextField,
-  Container,
-  Typography,
-  InputAdornment,
-  FormHelperText,
-} from "@material-ui/core";
+import { Stack, FormHelperText } from "@material-ui/core";
 import fakeRequest from "../../../utils/fakeRequest";
-import {
-  onBackStep,
-  onNextStep,
-  setCheckout,
-  addUpdate,
-  getPost,
-  updatePost,
-  getPostSuccess,
-} from "../../../redux/slices/fundraise";
-import { UploadSingleFileOverride } from "../../upload";
-import { FundraiseHeader } from ".";
-import FundraisePhotoEditor from "./FundraisePhotoEditor";
-import Page from "src/components/Page";
+import { useDispatch, useSelector } from "../../../redux/store";
+import { updatePost, getPostSuccess } from "../../../redux/slices/fundraise";
 import { QuillEditor } from "../../editor";
-import { CATEGORIES } from "src/utils/constants";
-import countries from "./countries";
-import ReactCountryFlag from "react-country-flag";
 
 // ----------------------------------------------------------------------
-
-const initialValues = {
-  title: "",
-  description: null,
-  goal: 0,
-  live: null,
-  category: "",
-  link: "",
-  team: { name: "", cover: null },
-  allowComment: 0,
-  allowDonation: 0,
-  allowSearch: 0,
-  cover: null,
-};
 
 FundraiseEditStory.propTypes = {
   renderForm: PropTypes.func,
@@ -76,13 +31,14 @@ export default function FundraiseEditStory({ renderForm, post }) {
   const isLight = theme.palette.mode === "light";
 
   const NewBlogSchema = Yup.object().shape({
-    description: Yup.mixed().required("This is required"),
+    content: Yup.string().min(100).required("This is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       uid: post.uid,
       description: post.description,
+      content: post.description.content,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -90,7 +46,6 @@ export default function FundraiseEditStory({ renderForm, post }) {
         await fakeRequest(500);
         resetForm();
         setSubmitting(false);
-        console.log("----------------", values);
         dispatch(getPostSuccess(null));
         dispatch(
           updatePost({
@@ -132,13 +87,14 @@ export default function FundraiseEditStory({ renderForm, post }) {
             onChange={(content, delta, source, editor) => {
               const text = editor.getText(content);
 
+              setFieldValue("content", content);
               setFieldValue("description", { content, text });
             }}
-            error={Boolean(touched.description && errors.description)}
+            error={Boolean(touched.content && errors.content)}
           />
-          {touched.description && errors.description && (
+          {touched.content && errors.content && (
             <FormHelperText error sx={{ px: 2 }}>
-              {touched.description && errors.description}
+              {touched.content && errors.content}
             </FormHelperText>
           )}
         </Stack>
