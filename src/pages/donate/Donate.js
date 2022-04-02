@@ -46,7 +46,7 @@ export default function Donate() {
         paddingTop: (theme) => theme.spacing(theme.shape.PAGE_TOP_PADDING),
         paddingBottom: (theme) =>
           theme.spacing(theme.shape.PAGE_BOTTOM_PADDING),
-        backgroundColor: (theme) => theme.palette.background.body,
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
       <>

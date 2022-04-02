@@ -55,7 +55,8 @@ import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "relative",
-    boxShadow: theme.customShadows.z16,
+    // boxShadow: theme.customShadows.z16,
+    backgroundColor: theme.palette.background.default,
     borderRadius: theme.shape.borderRadius,
     border: `1px solid ${theme.palette.divider}`,
     zIndex: 0, // Fix Safari overflow: hidden with border radius

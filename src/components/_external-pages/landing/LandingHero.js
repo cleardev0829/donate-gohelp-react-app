@@ -34,7 +34,7 @@ import Grid from "@material-ui/core/Grid";
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
   paddingTop: theme.spacing(theme.shape.PAGE_TOP_PADDING),
-  backgroundColor: theme.palette.background.body,
+  backgroundColor: theme.palette.background.default,
 }));
 
 const ContentStyle = styled((props) => <Stack spacing={5} {...props} />)(

@@ -122,7 +122,6 @@ const palette = {
       paper: "#fff",
       default: "#fff",
       neutral: GREY[200],
-      body: "#fff",
     },
     action: { active: GREY[600], ...COMMON.action },
   },
@@ -139,7 +138,6 @@ const palette = {
       paper: "#1B1D1F", //card
       default: "#141719",
       neutral: GREY[500_16],
-      body: "#141719", //background
     },
     action: { active: GREY[500], ...COMMON.action },
   },

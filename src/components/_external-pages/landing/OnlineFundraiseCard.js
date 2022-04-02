@@ -17,7 +17,7 @@ export const CardStyle = styled(Card)(({ theme }) => ({
   textAlign: "center",
   border: "1px solid #DADADA",
   borderRadius: "12px",
-  backgroundColor: theme.palette.background.body,
+  backgroundColor: theme.palette.background.default,
   padding: theme.spacing(theme.shape.CARD_PADDING),
 }));
 

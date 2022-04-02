@@ -147,7 +147,7 @@ export default function DonateProfile({ post }) {
             <Stack>
               <Card
                 sx={{
-                  backgroundColor: "background.body",
+                  backgroundColor: "background.default",
                   border: "1px solid #F3F3F3",
                   p: (theme) => theme.shape.CARD_PADDING,
                 }}

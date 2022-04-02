@@ -11,7 +11,7 @@ import { resetCheckout as resetDonate } from "../../redux/slices/donate";
 const ContentStyle = styled("div")(({ theme }) => ({
   overflow: "hidden",
   position: "relative",
-  backgroundColor: theme.palette.background.body,
+  backgroundColor: theme.palette.background.default,
 }));
 
 export default function Fundraisers() {
