@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 0, // Fix Safari overflow: hidden with border radius
 
     "&:hover": {
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: theme.palette.action.hover,
     },
   },
 }));
