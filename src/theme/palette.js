@@ -113,7 +113,7 @@ const palette = {
     ...COMMON,
     text: {
       primary: "#333333",
-      secondary: "#5BE584",
+      secondary: "#3EB489",
       scale: "#4267b2",
       grey: "#888",
       disabled: GREY[500],
