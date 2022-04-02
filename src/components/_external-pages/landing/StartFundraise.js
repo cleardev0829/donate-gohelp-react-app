@@ -76,10 +76,7 @@ export default function StartFundraise() {
               variant="body1"
               paragraph
               sx={{
-                ...(!isLight && {
-                  textShadow: (theme) =>
-                    `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                }),
+                color: "text.disabled",
               }}
             >
               More money raised online than anywhere else.
@@ -87,12 +84,7 @@ export default function StartFundraise() {
           </MotionInView>
 
           <MotionInView variants={varFadeInUp}>
-            <Typography
-              component="p"
-              variant="body1"
-              color="primary"
-              sx={{ mb: 5 }}
-            >
+            <Typography variant="body1" color="primary" sx={{ mb: 5 }}>
               Learn about how GoHelp works
             </Typography>
           </MotionInView>

@@ -28,7 +28,7 @@ export default function Card(theme) {
         root: {
           padding: theme.spacing(theme.shape.CARD_PADDING),
           "&:last-child": {
-            paddingBottom: 0,
+            paddingBottom: theme.spacing(theme.shape.CARD_PADDING),
           },
         },
       },

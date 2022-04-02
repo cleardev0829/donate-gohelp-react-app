@@ -1,4 +1,5 @@
 import { NavLink as RouterLink, useLocation } from "react-router-dom";
+import { Icon } from "@iconify/react";
 // material
 import { experimentalStyled as styled } from "@material-ui/core/styles";
 import {
@@ -27,6 +28,14 @@ import navConfig from "./MenuConfig";
 // routes
 import { PATH_AUTH, PATH_PAGE } from "../../routes/paths";
 import { BlogPostsSearch } from "src/components/_dashboard/blog";
+import Searchbar from "./Searchbar";
+import { Contract, providers, utils } from "ethers";
+import { useWallet } from "use-wallet";
+import { Connect } from "src/components/Connect";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
+
+const Web3 = require("web3");
 
 // const APP_BAR_MOBILE = 94;
 // const APP_BAR_DESKTOP = 118;
@@ -48,9 +57,23 @@ export const GohelpImgStyle = styled("img")({
 // ----------------------------------------------------------------------
 
 export default function MainNavbar() {
+  const wallet = useWallet();
   const isOffset = useOffSetTop(100);
   const { pathname } = useLocation();
   const isHome = pathname === "/";
+  const isConnected = !!wallet?.account;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const web3 = new Web3(
+          "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, [wallet]);
 
   return (
     <AppBar sx={{ boxShadow: 0 }}>
@@ -85,11 +108,6 @@ export default function MainNavbar() {
             />
           </MHidden>
 
-          {/* <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          > */}
           <Link
             component={RouterLink}
             variant="subtitle2"
@@ -106,18 +124,36 @@ export default function MainNavbar() {
             Your Fundraisers
           </Link>
 
+          <MHidden width="mdUp">
+            <Searchbar />
+          </MHidden>
+
           <MHidden width="mdDown">
             <Search />
           </MHidden>
 
-          <Button size="small" variant="contained">
-            Connect
-          </Button>
+          <MHidden width="mdUp">
+            <Box
+              sx={{
+                display: "flex",
+                color: "primary.main",
+                justifyContent: "center",
+              }}
+            >
+              <Icon icon="carbon:wallet" width={24} height={24} />
+            </Box>
+          </MHidden>
+
+          <MHidden width="mdDown">
+            {/* <Button size="small" variant="contained">
+              Connect
+            </Button> */}
+            {!isConnected && <Connect />}
+          </MHidden>
 
           <MHidden width="mdDown">
             <SettingMode />
           </MHidden>
-          {/* </Stack> */}
 
           <MHidden width="mdUp">
             <MHidden width="mdUp">

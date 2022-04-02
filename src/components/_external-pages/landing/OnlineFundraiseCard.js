@@ -3,9 +3,20 @@ import {
   experimentalStyled as styled,
   useTheme,
 } from "@material-ui/core/styles";
-import { Box, Card, Link, Grid, Stack, Typography } from "@material-ui/core";
+import {
+  Box,
+  Icon,
+  Card,
+  Link,
+  Grid,
+  Stack,
+  Avatar,
+  Typography,
+  CardContent,
+} from "@material-ui/core";
 import { TitleStyle, DescriptionStyle } from "./TopFundraiserCard";
 import RoundedImg from "src/components/RoundedImg";
+import OutlineCard from "src/components/OutlineCard";
 
 // ----------------------------------------------------------------------
 
@@ -38,32 +49,34 @@ OnlineFundraiseCard.propTypes = {
 };
 
 export default function OnlineFundraiseCard({ post, index }) {
+  const theme = useTheme();
   const { cover, title, description, link } = post;
 
   return (
     <Grid item xs={12} sm={6} md={4}>
-      <CardStyle sx={{ position: "relative" }}>
-        <RoundedImg ait={title} src={cover} />
+      <OutlineCard>
+        <CardContent sx={{ px: 5 }}>
+          <Stack
+            spacing={theme.shape.MAIN_VERTICAL_SPACING}
+            alignItems="center"
+            sx={{ textAlign: "center" }}
+          >
+            <RoundedImg ait={title} src={cover} />
 
-        <Stack>
-          <Stack spacing={1} sx={{ my: 2 }}>
-            <TitleStyle color="inherit" variant="h5" sx={{ height: 64 }}>
-              {title}
-            </TitleStyle>
-            <DescriptionStyle color="inherit" variant="subtitle1">
-              {description}
-            </DescriptionStyle>
+            <TitleStyle variant="h5">{title}</TitleStyle>
+
+            <DescriptionStyle variant="body2">{description}</DescriptionStyle>
+
+            {link && (
+              <Box sx={{ height: 40 }}>
+                <Link variant="body1" underline="always">
+                  {link}
+                </Link>
+              </Box>
+            )}
           </Stack>
-
-          {link && (
-            <Box sx={{ height: 40 }}>
-              <Link variant="body1" underline="always">
-                {link}
-              </Link>
-            </Box>
-          )}
-        </Stack>
-      </CardStyle>
+        </CardContent>
+      </OutlineCard>
     </Grid>
   );
 }

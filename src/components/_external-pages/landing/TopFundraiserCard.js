@@ -44,7 +44,6 @@ import DonateProgress from "../../DonateProgress";
 import { fNumber, fCurrency, fPercent } from "../../../utils/formatNumber";
 import { filters } from "../../../utils/constants";
 import { useEffect, useState } from "react";
-import { getDonate, getDonatesById } from "src/redux/slices/donate";
 import ReactQuill from "react-quill";
 import ReactCountryFlag from "react-country-flag";
 import MoreMenu from "./MoreMenu";
@@ -90,13 +89,14 @@ export const TitleStyle = styled(Typography)({
   WebkitBoxOrient: "vertical",
 });
 
-export const DescriptionStyle = styled(Typography)({
+export const DescriptionStyle = styled(Typography)(({ theme }) => ({
   height: 70,
   overflow: "hidden",
   WebkitLineClamp: 3,
   display: "-webkit-box",
   WebkitBoxOrient: "vertical",
-});
+  color: theme.palette.text.disabled,
+}));
 
 export const ConnectTextStyle = styled(Link)(({ theme }) => ({
   color: theme.palette.text.secondary,
@@ -171,7 +171,13 @@ export default function TopFundraiserCard({ post, simple = false }) {
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         >
-          <CardContent>
+          <CardContent
+            sx={{
+              "&:last-child": {
+                paddingBottom: 0.5,
+              },
+            }}
+          >
             <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <CardMediaStyle>
@@ -208,14 +214,11 @@ export default function TopFundraiserCard({ post, simple = false }) {
                 />
               </Stack>
             </Box>
-
-            <Divider sx={{ mt: theme.shape.MAIN_VERTICAL_SPACING, mb: 1 }} />
-
+            <Divider sx={{ mt: theme.shape.CARD_CONTENT_SPACING, mb: 0.5 }} />
             <Stack
               direction="row"
               alignItems="center"
               justifyContent={"space-between"}
-              sx={{ paddingBottom: 0.8 }}
             >
               <Box>
                 <ConnectTextStyle

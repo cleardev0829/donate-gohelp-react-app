@@ -83,6 +83,7 @@ export default function TopFundraisers() {
   const isLight = theme.palette.mode === "light";
 
   const onScroll = useCallback(() => {
+    alert();
     dispatch(getMorePosts());
   }, [dispatch]);
 

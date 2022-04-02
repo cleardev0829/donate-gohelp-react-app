@@ -12,6 +12,8 @@ import LoadingScreen from "./components/LoadingScreen";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import NotistackProvider from "./components/NotistackProvider";
 import ThemePrimaryColor from "./components/ThemePrimaryColor";
+import { UseWalletProvider } from "use-wallet";
+import { Toaster } from "react-hot-toast";
 
 // ----------------------------------------------------------------------
 
@@ -19,17 +21,32 @@ export default function App() {
   const { isInitialized } = useAuth();
 
   return (
-    <ThemeConfig>
-      <ThemePrimaryColor>
-        <RtlLayout>
-          <NotistackProvider>
-            {/* <Settings /> */}
-            <ScrollToTop />
-            <GoogleAnalytics />
-            {isInitialized ? <Router /> : <LoadingScreen />}
-          </NotistackProvider>
-        </RtlLayout>
-      </ThemePrimaryColor>
-    </ThemeConfig>
+    <UseWalletProvider
+      connectors={{
+        injected: {
+          //allows you to connect and switch between mainnet and rinkeby within Metamask.
+          chainId: [1],
+        },
+        walletconnect: {
+          chainId: 1,
+          rpcUrl:
+            "https://mainnet.infura.io/v3/84842078b09946638c03157f83405213",
+        },
+      }}
+    >
+      <ThemeConfig>
+        <ThemePrimaryColor>
+          <RtlLayout>
+            <NotistackProvider>
+              {/* <Settings /> */}
+              <ScrollToTop />
+              <GoogleAnalytics />
+              <Toaster />
+              {isInitialized ? <Router /> : <LoadingScreen />}
+            </NotistackProvider>
+          </RtlLayout>
+        </ThemePrimaryColor>
+      </ThemeConfig>
+    </UseWalletProvider>
   );
 }

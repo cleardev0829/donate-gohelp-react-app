@@ -8,7 +8,11 @@ import shareFill from "@iconify/icons-eva/share-fill";
 import messageCircleFill from "@iconify/icons-eva/message-circle-fill";
 import { fPercent, fCurrency } from "../../../utils/formatNumber";
 // material
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  alpha,
+  experimentalStyled as styled,
+  useTheme,
+} from "@material-ui/core/styles";
 import {
   Box,
   Button,
@@ -33,12 +37,14 @@ import {
 import { CardMediaStyle, CoverImgStyle, TitleStyle } from "./TopFundraiserCard";
 import { setCheckout, onGotoStep } from "../../../redux/slices/fundraise";
 import { useSelector, useDispatch } from "../../../redux/store";
+import OutlineCard from "src/components/OutlineCard";
 
 StartFundraiseCard.propTypes = {
   post: PropTypes.object.isRequired,
 };
 
 export default function StartFundraiseCard({ post }) {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id, cover, title } = post;
@@ -57,7 +63,7 @@ export default function StartFundraiseCard({ post }) {
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
-        <Card sx={{ position: "relative" }}>
+        <OutlineCard>
           <CardContent>
             <CardMediaStyle>
               <CoverImgStyle alt={title} src={cover} />
@@ -65,15 +71,15 @@ export default function StartFundraiseCard({ post }) {
 
             <TitleStyle
               color="inherit"
-              variant="h4"
+              variant="h5"
               sx={{
-                mt: 3,
+                mt: theme.shape.MAIN_VERTICAL_SPACING,
               }}
             >
               {title}
             </TitleStyle>
           </CardContent>
-        </Card>
+        </OutlineCard>
       </Box>
     </Grid>
   );
