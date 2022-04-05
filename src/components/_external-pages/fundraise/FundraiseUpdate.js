@@ -10,8 +10,8 @@ import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
   Card,
@@ -23,30 +23,23 @@ import {
   Typography,
   FormHelperText,
 } from "@material-ui/core";
-import fakeRequest from "../../../utils/fakeRequest";
-import {
-  onBackStep,
-  onNextStep,
-  setCheckout,
-  addUpdate,
-} from "../../../redux/slices/fundraise";
-import { UploadSingleFileOverride } from "../../upload";
-import { FundraiseHeader } from ".";
-import FundraisePhotoEditor from "./FundraisePhotoEditor";
-import Page from "src/components/Page";
+import { addUpdate } from "../../../redux/slices/fundraise";
 import { QuillEditor } from "../../editor";
+import FundraiseHeader from "./FundraiseHeader";
+import fakeRequest from "../../../utils/fakeRequest";
+import { UploadSingleFileOverride } from "../../upload";
+import FundraisePhotoEditor from "./FundraisePhotoEditor";
 
 // ----------------------------------------------------------------------
 
 export default function FundraiseUpdate() {
   const theme = useTheme();
   const params = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
-  const { checkout } = useSelector((state) => state.fundraise);
-  const isLight = theme.palette.mode === "light";
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const isLight = theme.palette.mode === "light";
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -54,14 +47,6 @@ export default function FundraiseUpdate() {
 
   const handleClosePreview = () => {
     setOpen(false);
-  };
-
-  const handleBackStep = () => {
-    dispatch(onBackStep());
-  };
-
-  const handleNextStep = () => {
-    dispatch(onNextStep());
   };
 
   const handleEdit = () => {
@@ -137,12 +122,6 @@ export default function FundraiseUpdate() {
 
   const handleDelete = () => {
     setFieldValue("cover", null);
-    dispatch(
-      setCheckout({
-        name: "cover",
-        value: null,
-      })
-    );
   };
 
   return (
@@ -277,65 +256,8 @@ export default function FundraiseUpdate() {
                             Delete
                           </Button>
                         </Stack>
-
-                        {/* <Typography
-                          variant="h3"
-                          sx={{
-                            ...(!isLight && {
-                              textShadow: (theme) =>
-                                `4px 4px 16px ${alpha(
-                                  theme.palette.grey[800],
-                                  0.48
-                                )}`,
-                            }),
-                          }}
-                        >
-                          Share Update to
-                        </Typography>
-
-                        <Stack direction="row" alignItems="center">
-                          <Checkbox
-                            disableRipple
-                            // checked={completed}
-                            icon={<Icon icon={radioButtonOffOutline} />}
-                            checkedIcon={
-                              <Icon icon={checkmarkCircle2Outline} />
-                            }
-                            // onChange={handleChangeComplete}
-                          />
-                          <Typography
-                            variant="subtitle2"
-                            noWrap
-                            // onClick={handleOpen}
-                            // sx={{ ...(completed && { opacity: 0.48 }) }}
-                          >
-                            Campaign Page (default)
-                          </Typography>
-                        </Stack> */}
                       </Stack>
                     </Card>
-
-                    {/* <Box
-                    sx={{
-                      height: 2,
-                      backgroundColor: (theme) => theme.palette.common.white,
-                      background:
-                        "radial-gradient(50% 50% at 50% 50%, #DADADA 0%, rgba(218, 218, 218, 0) 100%)",
-                      transform: "matrix(-1, 0, 0, 1, 0, 0)",
-                    }}
-                  ></Box>
-
-                  <Card sx={{ px: 2, py: 2 }}>
-                    <Stack
-                      spacing={1}
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="flex-start"
-                    >
-                      <Icon icon="fluent:link-square-20-regular" />
-                      <Typography variant="subtitle1">Add a YouTube link</Typography>
-                    </Stack>
-                  </Card> */}
                   </Stack>
                 </Grid>
               </Grid>

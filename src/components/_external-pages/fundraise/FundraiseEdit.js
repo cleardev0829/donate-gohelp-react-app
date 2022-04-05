@@ -1,17 +1,14 @@
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
 import { Icon } from "@iconify/react";
 import { useSnackbar } from "notistack";
-import { useDispatch, useSelector } from "../../../redux/store";
-import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
-import radioButtonOffOutline from "@iconify/icons-eva/radio-button-off-outline";
-import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
   Box,
@@ -27,14 +24,15 @@ import {
   InputAdornment,
   FormHelperText,
 } from "@material-ui/core";
-import fakeRequest from "../../../utils/fakeRequest";
 import { getPost, deletePost } from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
-import { FundraiseEditOverView } from ".";
 import { FundraiseEditPhoto } from ".";
 import { FundraiseEditStory } from ".";
+import { FundraiseEditOverView } from ".";
 import { PATH_PAGE } from "src/routes/paths";
+import fakeRequest from "../../../utils/fakeRequest";
 import LoadingScreen from "src/components/LoadingScreen";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
 

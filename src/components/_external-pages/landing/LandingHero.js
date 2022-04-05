@@ -96,7 +96,7 @@ export default function LandingHero() {
               </motion.div>
 
               <motion.div variants={varFadeInRight}>
-                <Typography variant="p3" sx={{ color: "text.primary" }}>
+                <Typography variant="body2" sx={{ color: "text.primary" }}>
                   Get help. Give kindness. Start in just 5 minutes.
                 </Typography>
               </motion.div>

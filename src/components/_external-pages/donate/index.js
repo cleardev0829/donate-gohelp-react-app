@@ -8,6 +8,6 @@ export { default as ProfileFollowers } from "./ProfileFollowers";
 export { default as DonateProfile } from "./DonateProfile";
 export { default as ProfileSocialInfo } from "./ProfileSocialInfo";
 export { default as DonateToken } from "./DonateToken";
-export { default as DonateMain } from "./DonateMain";
 export { default as DonatePayment } from "./DonatePayment";
+export { default as DonateDonation } from "./DonateDonation";
 export { default as DonateComplete } from "./DonateComplete";

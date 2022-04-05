@@ -1,48 +1,57 @@
 import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "../../../redux/store";
+import { Link as RouterLink } from "react-router-dom";
 import PropTypes from "prop-types";
-// material
+import { motion } from "framer-motion";
+import { capitalCase } from "change-case";
 import {
   Box,
+  Tab,
+  Tabs,
   Link,
   Card,
-  CardContent,
   Stack,
   Button,
+  Divider,
   TextField,
   IconButton,
   Typography,
+  CardContent,
 } from "@material-ui/core";
 import {
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
-import { motion } from "framer-motion";
-import { Link as RouterLink } from "react-router-dom";
-import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import {
   varFadeIn,
   varFadeInUp,
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import DonateProgress from "../../../components/DonateProgress";
-import { onNextStep } from "src/redux/slices/donate";
-import { fCurrency, fPercent } from "src/utils/formatNumber";
+import OutlineCard from "../../OutlineCard";
 import { filters } from "src/utils/constants";
+import DonateProgress from "../../DonateProgress";
+import { onNextStep } from "src/redux/slices/donate";
+import Scrollbar from "../../../components/Scrollbar";
+import DonatePaymentDialog from "./DonatePaymentDialog";
+import { fCurrency, fPercent } from "src/utils/formatNumber";
+import { useDispatch, useSelector } from "../../../redux/store";
+import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
+
 // ----------------------------------------------------------------------
 
-DonateToken.propTypes = {
-  post: PropTypes.object,
-};
+DonateToken.propTypes = {};
 
-export default function DonateToken({ post }) {
+export default function DonateToken() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const filter = filters(post.donates);
-  const [isHidden, setHidden] = useState(true);
+
   const [open, setOpen] = useState(false);
+  const [isHidden, setHidden] = useState(true);
+  const [currentTab, setCurrentTab] = useState("About");
+  const [donateDlgOpen, setDonateDlgOpen] = useState(false);
+  const { post, isLoading } = useSelector((state) => state.fundraise);
+  const filter = filters(post.donates);
 
   const handleOpenPreview = () => {
     setOpen(true);
@@ -52,174 +61,208 @@ export default function DonateToken({ post }) {
     setOpen(false);
   };
 
+  const handleDonateDlgOpen = () => {
+    setDonateDlgOpen(true);
+  };
+
+  const handleDonateDlgClose = () => {
+    setDonateDlgOpen(false);
+  };
+
   const handleShare = () => {
     handleOpenPreview();
+  };
+
+  const handleChangeTab = (event, newValue) => {
+    setCurrentTab(newValue);
   };
 
   return (
     <>
       <Box sx={{ py: 3 }}>
-        <Card sx={{ p: theme.shape.CARD_PADDING }}>
-          <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-            <DonateProgress
-              time={filter.recentTimeAgo}
-              total={filter.totalAmount}
-              goal={post.goal}
-            />
+        <OutlineCard>
+          <Tabs
+            value={currentTab}
+            scrollButtons="auto"
+            variant="scrollable"
+            allowScrollButtonsMobile
+            onChange={handleChangeTab}
+          >
+            {["About", "History"].map((tab) => (
+              <Tab
+                disableRipple
+                key={tab}
+                value={tab}
+                label={capitalCase(tab)}
+                sx={{ px: 3 }}
+              />
+            ))}
+          </Tabs>
 
-            <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Stack>
-                  <Typography variant="h7">Top donation</Typography>
-                  <Typography
-                    gutterBottom
-                    variant="subtitle2"
-                    sx={{ color: "text.disabled" }}
-                  >
-                    address
-                  </Typography>
-                </Stack>
-                <Typography gutterBottom variant="subtitle2">
-                  {`${fCurrency(filter.maxAmount)}`}
-                </Typography>
-              </Stack>
+          <Divider />
+          <CardContent>
+            {/* <DonateProgress
+                time={filter.recentTimeAgo}
+                total={filter.totalAmount}
+                goal={post.goal}
+              /> */}
 
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Stack>
-                  <Typography variant="h7">Recent donation</Typography>
-                  <Typography
-                    gutterBottom
-                    variant="subtitle2"
-                    sx={{ color: "text.disabled" }}
-                  >
-                    address
-                  </Typography>
-                </Stack>
-                <Typography gutterBottom variant="subtitle2">
-                  {`${fCurrency(filter.recentAmount)}`}
-                </Typography>
-              </Stack>
-
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Stack>
-                  <Typography variant="h7">First donation</Typography>
-                  <Typography
-                    gutterBottom
-                    variant="subtitle2"
-                    sx={{ color: "text.disabled" }}
-                  >
-                    address
-                  </Typography>
-                </Stack>
-                <Typography gutterBottom variant="subtitle2">
-                  {`${fCurrency(filter.firstAmount)}`}
-                </Typography>
-              </Stack>
-
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Stack>
-                  <Typography variant="h7">Total donation</Typography>
-                  <Typography
-                    gutterBottom
-                    variant="subtitle2"
-                    sx={{ color: "text.disabled" }}
-                  >
-                    {`${filter.count} people donated`}
-                  </Typography>
-                </Stack>
-                {isHidden && (
-                  <Link
-                    variant="body2"
-                    underline="always"
-                    sx={{ cursor: "pointer" }}
-                    onClick={() => setHidden(!isHidden)}
-                  >
-                    See All
-                  </Link>
-                )}
-              </Stack>
-
-              {!isHidden && (
-                <Stack spacing={1}>
-                  {post.donates.map((donate, index) => (
-                    <Stack
-                      key={`up-stack-${index}`}
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
+            {currentTab == "About" && (
+              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                <Typography variant="subtitle1">{post.title}</Typography>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Stack>
+                    <Typography variant="subtitle2">Top donation</Typography>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ color: "text.disabled" }}
                     >
-                      <Stack key={`down-stack-${index}`}>
-                        <Typography
-                          key={`tp-wallet-${index}`}
-                          gutterBottom
-                          variant="subtitle2"
+                      address
+                    </Typography>
+                  </Stack>
+                  <Typography variant="subtitle2">
+                    {`${fCurrency(filter.maxAmount)}`}
+                  </Typography>
+                </Stack>
+
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Stack>
+                    <Typography variant="subtitle2">Recent donation</Typography>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ color: "text.disabled" }}
+                    >
+                      address
+                    </Typography>
+                  </Stack>
+                  <Typography variant="subtitle2">
+                    {`${fCurrency(filter.recentAmount)}`}
+                  </Typography>
+                </Stack>
+
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Stack>
+                    <Typography variant="subtitle2">First donation</Typography>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ color: "text.disabled" }}
+                    >
+                      address
+                    </Typography>
+                  </Stack>
+                  <Typography variant="subtitle2">
+                    {`${fCurrency(filter.firstAmount)}`}
+                  </Typography>
+                </Stack>
+
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Stack>
+                    <Typography variant="">Total donation</Typography>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ color: "text.disabled" }}
+                    >
+                      {`${filter.count} people donated`}
+                    </Typography>
+                  </Stack>
+                  <Typography variant="subtitle2">
+                    {`${fCurrency(filter.totalAmount)}`}
+                  </Typography>
+                </Stack>
+              </Stack>
+            )}
+          </CardContent>
+
+          {currentTab === "About" && (
+            <>
+              <Divider />
+
+              <CardContent>
+                <Stack direction="row" justifyContent={"space-between"}>
+                  <motion.div variants={varFadeInRight}>
+                    <Button fullWidth variant="outlined" onClick={handleShare}>
+                      Share
+                    </Button>
+                  </motion.div>
+                  <motion.div variants={varFadeInRight}>
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      onClick={handleDonateDlgOpen}
+                    >
+                      Connect
+                    </Button>
+                  </motion.div>
+                </Stack>
+              </CardContent>
+            </>
+          )}
+
+          {currentTab === "History" && (
+            <Scrollbar sx={{ maxHeight: 450 }}>
+              <CardContent>
+                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                  {post.donates.map((donate, index) => (
+                    <OutlineCard key={`outlinecard-${index}`}>
+                      <CardContent key={`cardcontent-${index}`}>
+                        <Stack
+                          key={`up-stack-${index}`}
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
                         >
-                          wallet adress
-                        </Typography>
-                      </Stack>
-                      <Typography
-                        key={`tp-amount-${index}`}
-                        gutterBottom
-                        variant="subtitle2"
-                      >
-                        {`${fCurrency(donate.crypto.amount)} (${
-                          donate.crypto.count
-                        } ${donate.crypto.type})`}
-                      </Typography>
-                    </Stack>
+                          <Stack key={`down-stack-${index}`}>
+                            <Typography
+                              key={`tp-wallet-${index}`}
+                              variant="subtitle2"
+                            >
+                              wallet adress
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            key={`tp-amount-${index}`}
+                            variant="subtitle2"
+                          >
+                            {`${fCurrency(donate.crypto.amount)} (${
+                              donate.crypto.count
+                            } ${donate.crypto.type})`}
+                          </Typography>
+                        </Stack>
+                      </CardContent>
+                    </OutlineCard>
                   ))}
                 </Stack>
-              )}
-            </Stack>
-
-            <Stack spacing={2}>
-              <motion.div variants={varFadeInRight}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  // component={RouterLink}
-                  // to={PATH_PAGE.page404}
-                  onClick={handleShare}
-                >
-                  Share
-                </Button>
-              </motion.div>
-              <motion.div variants={varFadeInRight}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  // component={RouterLink}
-                  // to={PATH_PAGE.donate_payment}
-                  onClick={() => dispatch(onNextStep())}
-                >
-                  Donate Now
-                </Button>
-              </motion.div>
-            </Stack>
-          </Stack>
-        </Card>
+              </CardContent>
+            </Scrollbar>
+          )}
+        </OutlineCard>
       </Box>
       <FundraiseShareDialog
         uid={post.uid}
         title={post.title}
         openPreview={open}
         onClosePreview={handleClosePreview}
+      />
+      <DonatePaymentDialog
+        post={post}
+        open={donateDlgOpen}
+        onClose={handleDonateDlgClose}
       />
     </>
   );

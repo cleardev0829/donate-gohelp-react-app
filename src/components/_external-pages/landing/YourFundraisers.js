@@ -1,23 +1,21 @@
 import { useEffect, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "../../../redux/store";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Icon } from "@iconify/react";
 import { orderBy } from "lodash";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-import rightArrowAlt from "@iconify/icons-bxs/right-arrow-alt";
-import arrowRightFill from "@iconify/icons-eva/arrow-right-fill";
+import { Icon } from "@iconify/react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import {
   Box,
   Grid,
-  Skeleton,
   Stack,
+  useTheme,
+  Skeleton,
   Container,
   Typography,
-  useTheme,
 } from "@material-ui/core";
-import { varFadeInUp, MotionInView } from "../../animate";
-import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 import { TopFundraiserCard } from ".";
+import { varFadeInUp, MotionInView } from "../../animate";
+import { useDispatch, useSelector } from "../../../redux/store";
+import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -55,8 +53,8 @@ const ContentStyle = styled("div")(({ theme }) => ({
 
 const SkeletonLoad = (
   <Grid container spacing={3} sx={{ mt: 2 }}>
-    {[...Array(3)].map((_, index) => (
-      <Grid item xs={12} md={4} key={index}>
+    {[...Array(4)].map((_, index) => (
+      <Grid item xs={12} md={3} key={index}>
         <Skeleton
           variant="rectangular"
           width="100%"
@@ -87,7 +85,7 @@ export default function TopFundraisers() {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getPostsInitial(index, 1000));
+    dispatch(getPostsInitial(index, step));
   }, [dispatch, index]);
 
   useEffect(() => {
@@ -122,51 +120,23 @@ export default function TopFundraisers() {
                 Your Fundraisers
               </Typography>
             </MotionInView>
-
-            {/* {hasMore && (
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                onClick={handleGetMorePost}
-                sx={{ cursor: "pointer" }}
-              >
-                <MotionInView variants={varFadeInUp}>
-                  <Typography
-                    component="p"
-                    variant="h4"
-                    color={theme.palette.primary.main}
-                  >
-                    More
-                  </Typography>
-                </MotionInView>
-                <MotionInView variants={varFadeInUp}>
-                  <Icon
-                    icon={rightArrowAlt}
-                    color={theme.palette.primary.main}
-                    width={theme.shape.ICON_SIZE}
-                    height={theme.shape.ICON_SIZE}
-                  />
-                </MotionInView>
-              </Stack>
-            )} */}
           </Stack>
         </ContentStyle>
 
-        {/* <InfiniteScroll
+        <InfiniteScroll
           next={onScroll}
           hasMore={hasMore}
           loader={SkeletonLoad}
           dataLength={posts.length}
           style={{ overflow: "inherit" }}
-        > */}
-        <Grid container spacing={theme.shape.CARD_MARGIN}>
-          {data.length > 0 &&
-            data.map((post, index) => (
-              <TopFundraiserCard key={post.id} post={post} simple />
-            ))}
-        </Grid>
-        {/* </InfiniteScroll> */}
+        >
+          <Grid container spacing={theme.shape.CARD_MARGIN}>
+            {data.length > 0 &&
+              data.map((post, index) => (
+                <TopFundraiserCard key={post.id} post={post} simple />
+              ))}
+          </Grid>
+        </InfiniteScroll>
       </Container>
     </RootStyle>
   );

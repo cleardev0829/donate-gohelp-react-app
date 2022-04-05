@@ -37,6 +37,8 @@ mock.onPost("/api/donate/add").reply(async (request) => {
       });
     // );
 
+    console.log("------------1", data);
+
     return [200, { data }];
   } catch (error) {
     console.error(error);

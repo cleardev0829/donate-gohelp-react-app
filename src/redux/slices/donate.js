@@ -124,7 +124,7 @@ export function addDonate(donate) {
       const response = await axios.post("/api/donate/add", {
         ...donate,
       });
-
+      console.log("------------2", response.data);
       dispatch(slice.actions.getDonateSuccess(response.data.donate));
     } catch (error) {
       console.error(error);

@@ -4,13 +4,16 @@ import PropTypes from "prop-types";
 import ReactQuill from "react-quill";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { capitalCase } from "change-case";
+import shareFill from "@iconify/icons-eva/share-fill";
 // material
 import {
   Box,
-  Card,
-  Grid,
+  Tab,
+  Tabs,
   Stack,
   Button,
+  Divider,
   Typography,
   CardContent,
 } from "@material-ui/core";
@@ -25,8 +28,7 @@ import {
   varFadeInRight,
 } from "../../animate";
 import { diff } from "../../../utils/constants";
-import { onNextStep } from "src/redux/slices/donate";
-import OutlineCard from "src/components/OutlineCard";
+import OutlineCard from "../../../components/OutlineCard";
 import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
@@ -42,7 +44,7 @@ const QuillWrapperStyle = styled("div")(({ theme }) => ({
     fontFamily: theme.typography.fontFamily,
   },
   "& .ql-editor": {
-    minHeight: 200,
+    // minHeight: 200,
     "&.ql-blank::before": {
       fontStyle: "normal",
       color: theme.palette.text.disabled,
@@ -56,15 +58,12 @@ const QuillWrapperStyle = styled("div")(({ theme }) => ({
   },
 }));
 
-DonateProfile.propTypes = {
-  post: PropTypes.object,
-};
+DonateProfile.propTypes = {};
 
-export default function DonateProfile({ post }) {
+export default function DonateProfile() {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
-  const { cover, title, description, createdAt, rotate, scale } = post;
+  const [currentTab, setCurrentTab] = useState("Story");
+  const { post, isLoading } = useSelector((state) => state.fundraise);
 
   const modules = {
     toolbar: false,
@@ -79,131 +78,110 @@ export default function DonateProfile({ post }) {
     },
   };
 
-  const handleOpenPreview = () => {
-    setOpen(true);
-  };
-
-  const handleClosePreview = () => {
-    setOpen(false);
-  };
-
-  const handleShare = () => {
-    handleOpenPreview();
+  const handleChangeTab = (event, newValue) => {
+    setCurrentTab(newValue);
   };
 
   return (
     <>
       <Box sx={{ py: 3 }}>
-        <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-          <Typography variant="h3">{title}</Typography>
-
-          <Box sx={{ position: "relative" }}>
+        <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
+          <OutlineCard>
+            <CardContent>
+              <Stack direction="row" justifyContent={"space-between"}>
+                <Icon icon="cil:fullscreen" width={20} height={20} />
+                <Stack
+                  spacing={theme.shape.CARD_CONTENT_SPACING}
+                  direction="row"
+                  justifyContent={"flex-end"}
+                  alignItems="center"
+                >
+                  <Icon icon="carbon:wallet" width={20} height={20} />
+                  <Icon icon="carbon:share" width={20} height={20} />
+                </Stack>
+              </Stack>
+            </CardContent>
+            <Divider />
             <CardMediaStyle>
               <CoverImgStyle
                 alt="cover"
-                src={cover.preview}
+                src={post.cover.preview}
                 sx={{
-                  transform: `rotate(${((-1 * rotate) % 4) * 90}deg) scale(${
-                    1 + scale / 100
-                  })`,
+                  transform: `rotate(${
+                    ((-1 * post.rotate) % 4) * 90
+                  }deg) scale(${1 + post.scale / 100})`,
                 }}
               />
             </CardMediaStyle>
-          </Box>
-
-          {/* <Typography variant="body2">{description}</Typography> */}
-
-          <Stack direction="row" spacing={theme.shape.CARD_CONTENT_SPACING}>
-            <motion.div variants={varFadeInRight}>
-              <Button
-                variant="outlined"
-                color="inherit"
-                // component={RouterLink}
-                // to={PATH_PAGE.page404}
-                startIcon={<Icon icon="iconoir:timer" />}
-              >
-                {`Created ${diff(moment(), moment(createdAt))}`}
-              </Button>
-            </motion.div>
-            <motion.div variants={varFadeInRight}>
-              <Button
-                variant="outlined"
-                color="inherit"
-                // component={RouterLink}
-                // to={PATH_PAGE.page404}
-                startIcon={<Icon icon="akar-icons:ribbon" />}
-              >
-                Funerals & Memorials
-              </Button>
-            </motion.div>
-          </Stack>
+          </OutlineCard>
 
           <OutlineCard>
-            <CardContent>
-              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                <Typography variant="h5">
-                  A few words from Fundraiser
-                </Typography>
+            <Tabs
+              value={currentTab}
+              scrollButtons="auto"
+              variant="scrollable"
+              allowScrollButtonsMobile
+              onChange={handleChangeTab}
+            >
+              {["Story", "Updates"].map((tab) => (
+                <Tab
+                  disableRipple
+                  key={tab}
+                  value={tab}
+                  label={capitalCase(tab)}
+                  sx={{ px: 3 }}
+                />
+              ))}
+            </Tabs>
+            <Divider />
 
+            {currentTab === "Story" && (
+              <CardContent>
                 <QuillWrapperStyle>
                   <ReactQuill
                     readOnly
-                    value={description.text}
+                    value={post.description.content}
                     modules={modules}
                     style={{
                       margin: 0,
                     }}
                   />
                 </QuillWrapperStyle>
+              </CardContent>
+            )}
 
-                {/* <Typography variant="body2">{description}</Typography> */}
-              </Stack>
-            </CardContent>
+            {currentTab === "Updates" && (
+              <>
+                {/* <CardContent>
+                  <Typography variant="h5">News from Fundraiser</Typography>
+                </CardContent>
+
+                <Divider /> */}
+
+                {post.updates.map((update, index) => (
+                  <>
+                    <QuillWrapperStyle key={`quil-wrapper-${index}`}>
+                      <ReactQuill
+                        key={`react-quill-${index}`}
+                        readOnly
+                        value={update.description.content}
+                        modules={modules}
+                        style={{
+                          margin: 0,
+                        }}
+                      />
+                    </QuillWrapperStyle>
+
+                    {index < post.updates.length - 1 && (
+                      <Divider key={`divider-${index}`} />
+                    )}
+                  </>
+                ))}
+              </>
+            )}
           </OutlineCard>
-
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            spacing={theme.shape.CARD_CONTENT_SPACING}
-          >
-            <Grid container spacing={theme.shape.CARD_CONTENT_SPACING}>
-              <Grid item xs="12" md="6">
-                <motion.div variants={varFadeInRight}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    // component={RouterLink}
-                    // to={PATH_PAGE.donate_payment}
-                    onClick={() => dispatch(onNextStep())}
-                  >
-                    Donate Now
-                  </Button>
-                </motion.div>
-              </Grid>
-              <Grid item xs="12" md="6">
-                <motion.div variants={varFadeInRight}>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    // component={RouterLink}
-                    // to={PATH_PAGE.page404}
-                    onClick={handleShare}
-                  >
-                    Share
-                  </Button>
-                </motion.div>
-              </Grid>
-            </Grid>
-          </Stack>
         </Stack>
       </Box>
-
-      <FundraiseShareDialog
-        uid={post.uid}
-        title={post.title}
-        openPreview={open}
-        onClosePreview={handleClosePreview}
-      />
     </>
   );
 }

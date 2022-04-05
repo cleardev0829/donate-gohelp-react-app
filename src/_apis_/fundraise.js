@@ -224,9 +224,9 @@ mock.onGet("/api/fundraise/posts").reply(async (config) => {
         });
       });
 
+    // get donates
     let promise = [];
     let postsWithDonates = [];
-
     posts.map((post) => {
       promise.push(
         new Promise((resolve, reject) => {
@@ -252,6 +252,36 @@ mock.onGet("/api/fundraise/posts").reply(async (config) => {
               postsWithDonates.push({ ...post, donates });
 
               resolve(postsWithDonates);
+            });
+        })
+      );
+    });
+
+    await Promise.all(promise);
+
+    // get updates
+    promise = [];
+    let postsWithUpdates = [];
+    postsWithDonates.map((post) => {
+      promise.push(
+        new Promise((resolve, reject) => {
+          const updates = [];
+          firebase
+            .firestore()
+            .collection("fundraise")
+            .doc(post.id)
+            .collection("updates")
+            .get()
+            .then((snapshot) => {
+              snapshot.docs.map((doc) => {
+                updates.push({
+                  ...doc.data(),
+                });
+              });
+
+              postsWithUpdates.push({ ...post, updates });
+
+              resolve(postsWithUpdates);
             });
         })
       );
@@ -311,6 +341,21 @@ mock.onGet("/api/fundraise/post").reply(async (config) => {
         });
       });
 
+    const updates = [];
+    await firebase
+      .firestore()
+      .collection("fundraise")
+      .doc(uid)
+      .collection("updates")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.docs.map((doc) => {
+          updates.push({
+            ...doc.data(),
+          });
+        });
+      });
+
     const postWithDonates = post
       ? {
           ...post,
@@ -318,11 +363,18 @@ mock.onGet("/api/fundraise/post").reply(async (config) => {
         }
       : null;
 
-    if (!postWithDonates) {
+    const postWithUpdates = postWithDonates
+      ? {
+          ...postWithDonates,
+          updates,
+        }
+      : null;
+
+    if (!postWithUpdates) {
       return [404, { message: "Post not found" }];
     }
 
-    return [200, { post: postWithDonates }];
+    return [200, { post: postWithUpdates }];
   } catch (error) {
     console.error(error);
     return [500, { message: "Internal server error" }];

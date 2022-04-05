@@ -70,6 +70,12 @@ const slice = createSlice({
       state.hasMore = false;
     },
 
+    // RESET POST
+    resetPost(state, action) {
+      state.isLoading = false;
+      state.post = null;
+    },
+
     // GET POST
     getPostSuccess(state, action) {
       state.isLoading = false;
@@ -133,6 +139,7 @@ export default slice.reducer;
 export const {
   getMorePosts,
   getPostSuccess,
+  resetPost,
   setCheckout,
   resetCheckout,
   onGotoStep,
@@ -160,6 +167,25 @@ export function addPost(post) {
 
 // ----------------------------------------------------------------------
 
+export function addDonate(donate) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post("/api/donate/add", {
+        ...donate,
+      });
+      console.log("------------2", response.data, donate);
+      dispatch(getPost(donate.fundraiseId));
+      // dispatch(slice.actions.getDonateSuccess(response.data.donate));
+    } catch (error) {
+      console.error(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
 export function addUpdate(update) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -175,7 +201,6 @@ export function addUpdate(update) {
     }
   };
 }
-
 // ----------------------------------------------------------------------
 
 export function updatePost(post) {

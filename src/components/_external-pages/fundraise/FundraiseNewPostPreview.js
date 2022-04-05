@@ -1,6 +1,5 @@
 import { isString } from "lodash";
 import PropTypes from "prop-types";
-// material
 import { LoadingButton } from "@material-ui/lab";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
 import {
@@ -10,31 +9,12 @@ import {
   Typography,
   DialogActions,
 } from "@material-ui/core";
-//
-import { DialogAnimate } from "../../animate";
 import Markdown from "../../Markdown";
+import { Donate } from "../../../pages/donate/Donate";
 import Scrollbar from "../../Scrollbar";
 import EmptyContent from "../../EmptyContent";
-import { DonateMain } from "../donate";
+import { DialogAnimate } from "../../animate";
 import { useDispatch, useSelector } from "../../../redux/store";
-
-// ----------------------------------------------------------------------
-
-const HeroStyle = styled("div")(({ theme }) => ({
-  paddingTop: "56%",
-  position: "relative",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  "&:before": {
-    top: 0,
-    content: "''",
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    backgroundColor: alpha(theme.palette.grey[900], 0.72),
-  },
-}));
 
 // ----------------------------------------------------------------------
 
@@ -75,12 +55,12 @@ export default function FundraiseNewPostPreview({
 
       {hasContent ? (
         <Scrollbar>
-          <DonateMain
+          {/* <Donate
             post={{
               ...checkout,
               donates: [],
             }}
-          />
+          /> */}
         </Scrollbar>
       ) : (
         <EmptyContent title="Empty content" />

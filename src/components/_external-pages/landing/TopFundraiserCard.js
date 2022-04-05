@@ -37,6 +37,7 @@ import { Connect } from "src/components/Connect";
 import DonateProgress from "../../DonateProgress";
 import { PATH_PAGE } from "../../../routes/paths";
 import { filters } from "../../../utils/constants";
+import { resetPost } from "../../../redux/slices/fundraise";
 import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 
@@ -67,13 +68,15 @@ TopFundraiserCard.propTypes = {
 export default function TopFundraiserCard({ post, simple = false }) {
   const theme = useTheme();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const filter = filters(post.donates);
-  const status = post.isDeleted ? "Deleted" : "Published";
   const [open, setOpen] = useState(false);
   const [visibility, setVisivility] = useState("none");
+  const status = post.isDeleted ? "Deleted" : "Published";
 
-  const handleNavigate = () => {
+  const handleNavigate = async () => {
+    dispatch(resetPost());
     simple
       ? navigate(`${PATH_PAGE.fundraiseDetails}/${post.id}`)
       : navigate(`${PATH_PAGE.donate}/${post.id}`);
