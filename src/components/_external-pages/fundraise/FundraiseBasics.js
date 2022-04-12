@@ -1,8 +1,7 @@
+import _ from "lodash";
 import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
-import _ from "lodash";
 import { alpha, useTheme } from "@material-ui/core/styles";
-
 import {
   Box,
   Card,
@@ -12,19 +11,19 @@ import {
   TextField,
   MenuItem,
   Typography,
+  InputAdornment,
 } from "@material-ui/core";
-
-import fakeRequest from "../../../utils/fakeRequest";
-import { useDispatch, useSelector } from "../../../redux/store";
 import {
   onBackStep,
   onNextStep,
   setCheckout,
 } from "../../../redux/slices/fundraise";
-import { FundraiseHeader } from ".";
-import { CATEGORIES } from "../../../utils/constants";
 import countries from "./countries";
+import FundraiseFooter from "./FundraiseFooter";
 import ReactCountryFlag from "react-country-flag";
+import fakeRequest from "../../../utils/fakeRequest";
+import { CATEGORIES } from "../../../utils/constants";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
 
@@ -45,12 +44,14 @@ export default function FundraiseBasics() {
   const NewBlogSchema = Yup.object().shape({
     live: Yup.mixed().required("This is required"),
     category: Yup.string().required("This is required"),
+    goal: Yup.number().min(1000).required("This is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      live: checkout.live,
+      live: checkout.live ? checkout.live.code : "",
       category: checkout.category,
+      goal: checkout.goal,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -61,13 +62,22 @@ export default function FundraiseBasics() {
         dispatch(
           setCheckout({
             name: "live",
-            value: values.live,
+            value: _.filter(
+              countries,
+              (country) => country.code === values.live
+            )[0],
           })
         );
         dispatch(
           setCheckout({
             name: "category",
             value: values.category,
+          })
+        );
+        dispatch(
+          setCheckout({
+            name: "goal",
+            value: parseFloat(values.goal),
           })
         );
         handleNextStep();
@@ -93,149 +103,184 @@ export default function FundraiseBasics() {
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <FundraiseHeader
+          <Grid container spacing={theme.shape.MAIN_VERTICAL_SPACING}>
+            <Grid item xs={12} md={12}>
+              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                <Stack
+                  direction="row"
+                  justifyContent={"space-between"}
+                  alignItems="center"
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      ...(!isLight && {
+                        textShadow: (theme) =>
+                          `4px 4px 16px ${alpha(
+                            theme.palette.grey[800],
+                            0.48
+                          )}`,
+                      }),
+                    }}
+                  >
+                    Where do you live?
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Where do you live?"
+                    {...getFieldProps("live")}
+                    error={Boolean(touched.live && errors.live)}
+                    helperText={touched.live && errors.live}
+                    select
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    sx={{ width: 300 }}
+                  >
+                    {countries.map((option) => (
+                      <MenuItem key={option.code} value={option.code}>
+                        <ReactCountryFlag
+                          countryCode={option.code}
+                          svg
+                          style={{
+                            // width: "2em",
+                            // height: "2em",
+                            marginRight: 10,
+                          }}
+                        />
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Stack>
+
+                <Stack
+                  direction="row"
+                  justifyContent={"space-between"}
+                  alignItems="center"
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      ...(!isLight && {
+                        textShadow: (theme) =>
+                          `4px 4px 16px ${alpha(
+                            theme.palette.grey[800],
+                            0.48
+                          )}`,
+                      }),
+                    }}
+                  >
+                    What are you fundraise for?
+                  </Typography>
+
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="What are you fundraise for?"
+                    {...getFieldProps("category")}
+                    error={Boolean(touched.category && errors.category)}
+                    helperText={touched.category && errors.category}
+                    select
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    sx={{ maxWidth: 300 }}
+                  >
+                    {_.orderBy(
+                      CATEGORIES,
+                      [(item) => item.toLowerCase()],
+                      ["asc"]
+                    ).map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Stack>
+
+                <Stack
+                  direction="row"
+                  justifyContent={"space-between"}
+                  alignItems="center"
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      ...(!isLight && {
+                        textShadow: (theme) =>
+                          `4px 4px 16px ${alpha(
+                            theme.palette.grey[800],
+                            0.48
+                          )}`,
+                      }),
+                    }}
+                  >
+                    How much would you like to raise?
+                  </Typography>
+
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="How much would you like to raise?"
+                    {...getFieldProps("goal")}
+                    error={Boolean(touched.goal && errors.goal)}
+                    helperText={touched.goal && errors.goal}
+                    onFocus={(e) => {
+                      e.target.select();
+                    }}
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              ...(!isLight && {
+                                textShadow: (theme) =>
+                                  `4px 4px 16px ${alpha(
+                                    theme.palette.grey[800],
+                                    0.48
+                                  )}`,
+                              }),
+                            }}
+                          >
+                            $
+                          </Typography>
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{ maxWidth: 300 }}
+                  />
+                </Stack>
+              </Stack>
+              {/* </Card> */}
+            </Grid>
+
+            <Grid item xs={12} md={12} sx={{ textAlign: "left" }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "text.disabled",
+                  ...(!isLight && {
+                    textShadow: (theme) =>
+                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                  }),
+                }}
+              >
+                By continuing, you agree to the GoFundMe terms and privacy
+                policy.
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <FundraiseFooter
             cancelAction={handleBackStep}
             continueAction={handleSubmit}
           />
-          <Container maxWidth="md">
-            <Grid container spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-              <Grid item xs={12} md={12}>
-                <Card
-                  sx={{
-                    p: theme.shape.CARD_PADDING,
-                  }}
-                >
-                  <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      Let’s start with the basic
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      We're here to guide you through your fundraise journey.
-                    </Typography>
-
-                    {/* <Typography
-                      variant="subtitle1"
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      Where do you live?
-                    </Typography> */}
-
-                    <TextField
-                      fullWidth
-                      size="small"
-                      label="Where do you live?"
-                      {...getFieldProps("live")}
-                      error={Boolean(touched.live && errors.live)}
-                      helperText={touched.live && errors.live}
-                      select
-                      onChange={(e) => {
-                        handleChange(e);
-                      }}
-                    >
-                      {countries.map((option) => (
-                        <MenuItem key={option.code} value={option}>
-                          <ReactCountryFlag
-                            countryCode={option.code}
-                            svg
-                            style={{
-                              // width: "2em",
-                              // height: "2em",
-                              marginRight: 10,
-                            }}
-                          />
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-
-                    {/* <Typography
-                      variant="on Monday 4 April from 11:00 or at 11:30 (Swedish time)"
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      What are you fundraise for?
-                    </Typography> */}
-
-                    <TextField
-                      fullWidth
-                      size="small"
-                      label="What are you fundraise for?"
-                      {...getFieldProps("category")}
-                      error={Boolean(touched.category && errors.category)}
-                      helperText={touched.category && errors.category}
-                      select
-                      onChange={(e) => {
-                        handleChange(e);
-                      }}
-                    >
-                      {_.orderBy(
-                        CATEGORIES,
-                        [(item) => item.toLowerCase()],
-                        ["asc"]
-                      ).map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Stack>
-                </Card>
-              </Grid>
-
-              <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    ...(!isLight && {
-                      textShadow: (theme) =>
-                        `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                    }),
-                  }}
-                >
-                  By continuing, you agree to the GoFundMe terms and privacy
-                  policy.
-                </Typography>
-              </Grid>
-            </Grid>
-          </Container>
         </Form>
       </FormikProvider>
     </>

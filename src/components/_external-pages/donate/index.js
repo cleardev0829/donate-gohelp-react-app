@@ -1,13 +1,6 @@
-export { default as Profile } from "./Profile";
-export { default as ProfileCover } from "./ProfileCover";
-export { default as ProfileFriends } from "./ProfileFriends";
-export { default as ProfileGallery } from "./ProfileGallery";
-export { default as DonateSupports } from "./DonateSupports";
 export { default as DonateList } from "./DonateList";
-export { default as ProfileFollowers } from "./ProfileFollowers";
-export { default as DonateProfile } from "./DonateProfile";
-export { default as ProfileSocialInfo } from "./ProfileSocialInfo";
-export { default as DonateToken } from "./DonateToken";
-export { default as DonatePayment } from "./DonatePayment";
+export { default as DonateAbout } from "./DonateAbout";
+export { default as DonateUpdates } from "./DonateUpdates";
 export { default as DonateDonation } from "./DonateDonation";
-export { default as DonateComplete } from "./DonateComplete";
+// export { default as DonatePayment } from "./DonatePayment~";
+// export { default as DonateSupports } from "./DonateSupports~";

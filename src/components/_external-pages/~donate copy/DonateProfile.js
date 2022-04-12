@@ -28,7 +28,7 @@ import {
   varFadeInRight,
 } from "../../animate";
 import { diff } from "../../../utils/constants";
-import OutlineCard from "../../../components/OutlineCard";
+import OutlineCard from "../../OutlineCard";
 import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
@@ -108,8 +108,8 @@ export default function DonateProfile() {
                 src={post.cover.preview}
                 sx={{
                   transform: `rotate(${
-                    ((-1 * post.rotate) % 4) * 90
-                  }deg) scale(${1 + post.scale / 100})`,
+                    ((-1 * post.cover.rotate) % 4) * 90
+                  }deg) scale(${1 + post.cover.scale / 100})`,
                 }}
               />
             </CardMediaStyle>
@@ -159,7 +159,7 @@ export default function DonateProfile() {
                 <Divider /> */}
 
                 {post.updates.map((update, index) => (
-                  <>
+                  <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                     <QuillWrapperStyle key={`quil-wrapper-${index}`}>
                       <ReactQuill
                         key={`react-quill-${index}`}
@@ -171,11 +171,23 @@ export default function DonateProfile() {
                         }}
                       />
                     </QuillWrapperStyle>
-
+                    <CardContent>
+                      <CardMediaStyle>
+                        <CoverImgStyle
+                          alt="cover"
+                          src={update.cover.preview}
+                          sx={{
+                            transform: `rotate(${
+                              ((-1 * update.cover.rotate) % 4) * 90
+                            }deg) scale(${1 + update.cover.scale / 100})`,
+                          }}
+                        />
+                      </CardMediaStyle>
+                    </CardContent>
                     {index < post.updates.length - 1 && (
                       <Divider key={`divider-${index}`} />
                     )}
-                  </>
+                  </Stack>
                 ))}
               </>
             )}

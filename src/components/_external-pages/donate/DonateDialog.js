@@ -28,16 +28,17 @@ import { DialogAnimate } from "../../animate";
 import EmptyContent from "../../EmptyContent";
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
+import { addDonate, resetPost } from "src/redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
-DonatePaymentDialog.propTypes = {
+DonateDialog.propTypes = {
   post: PropTypes.object,
   open: PropTypes.bool,
   onClose: PropTypes.func,
 };
 
-export default function DonatePaymentDialog({ post, open, onClose }) {
+export default function DonateDialog({ post, open, onClose }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();

@@ -1,20 +1,18 @@
-import * as Yup from "yup";
-import PropTypes from "prop-types";
-import faker from "faker";
-import { useSnackbar } from "notistack";
-import moment from "moment";
 import { useCallback, useState } from "react";
+import faker from "faker";
+import * as Yup from "yup";
+import moment from "moment";
+import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
+import { useSnackbar } from "notistack";
 import { Form, FormikProvider, useFormik } from "formik";
 import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
-// material
 import { LoadingButton } from "@material-ui/lab";
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
-
 import {
   Box,
   Card,
@@ -23,16 +21,9 @@ import {
   Container,
   Typography,
 } from "@material-ui/core";
-// utils
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
-import {
-  onBackStep,
-  onNextStep,
-  addPost,
-  setCheckout,
-} from "../../../redux/slices/fundraise";
-import { FundraiseHeader } from ".";
+import { onBackStep, onNextStep } from "../../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 

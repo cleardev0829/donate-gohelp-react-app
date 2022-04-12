@@ -1,23 +1,22 @@
 import { useEffect, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "../../../redux/store";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { orderBy } from "lodash";
+import { Link as RouterLink } from "react-router-dom";
+import _ from "lodash";
 import { motion } from "framer-motion";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import InfiniteScroll from "react-infinite-scroll-component";
 import {
-  Button,
-  Grid,
+  alpha,
+  useTheme,
+  experimentalStyled as styled,
+} from "@material-ui/core/styles";
+import {
   Box,
-  Skeleton,
+  Grid,
   Stack,
+  Button,
+  Skeleton,
   Container,
   Typography,
-  useTheme,
 } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from "../blog";
-import { OnlineFundraiseCard } from ".";
-import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 import {
   varFadeIn,
   varFadeInUp,
@@ -25,7 +24,10 @@ import {
   varFadeInRight,
   MotionInView,
 } from "../../animate";
+import { OnlineFundraiseCard } from ".";
+import { useDispatch, useSelector } from "../../../redux/store";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
+import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -104,7 +106,7 @@ export default function OnlineFundraise() {
         <ContentStyle>
           <MotionInView variants={varFadeInUp}>
             <Typography
-              variant="h3"
+              variant="h4"
               paragraph
               sx={{
                 ...(!isLight && {
@@ -118,24 +120,33 @@ export default function OnlineFundraise() {
           </MotionInView>
         </ContentStyle>
 
-        <Grid container spacing={theme.shape.CARD_MARGIN}>
-          {posts.map((post, index) => (
+        <Grid
+          container
+          spacing={theme.shape.CARD_MARGIN_LG}
+          sx={{ mb: theme.shape.CARD_MARGIN }}
+        >
+          {_.slice(posts, 0, 3).map((post, index) => (
+            <OnlineFundraiseCard key={post.id} post={post} index={index} />
+          ))}
+        </Grid>
+        <Grid container spacing={theme.shape.CARD_MARGIN_LG}>
+          {_.slice(posts, 3, 6).map((post, index) => (
             <OnlineFundraiseCard key={post.id} post={post} index={index} />
           ))}
         </Grid>
 
-        <ContentStyle>
+        {/* <ContentStyle>
           <motion.div variants={varFadeInRight}>
             <Button
               variant="contained"
-              component={RouterLink}
-              to={PATH_PAGE.fundraise}
+              // component={RouterLink}
+              // to={PATH_PAGE.fundraise}
               sx={{ mt: theme.shape.MAIN_VERTICAL_SPACING }}
             >
               Start a GoHelp
             </Button>
           </motion.div>
-        </ContentStyle>
+        </ContentStyle> */}
       </Container>
     </RootStyle>
   );

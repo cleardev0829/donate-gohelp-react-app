@@ -1,13 +1,14 @@
-import PropTypes from "prop-types";
-import * as Yup from "yup";
-import { useSnackbar } from "notistack";
-import moment from "moment";
 import { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "../../../redux/store";
+import * as Yup from "yup";
+import moment from "moment";
+import PropTypes from "prop-types";
+import { useSnackbar } from "notistack";
 import { Form, FormikProvider, useFormik } from "formik";
-// material
-import { LoadingButton } from "@material-ui/lab";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  alpha,
+  useTheme,
+  experimentalStyled as styled,
+} from "@material-ui/core/styles";
 
 import {
   Card,
@@ -20,37 +21,26 @@ import {
   Autocomplete,
   FormHelperText,
   FormControlLabel,
-  useTheme,
 } from "@material-ui/core";
-// utils
-import fakeRequest from "../../../utils/fakeRequest";
-import { QuillEditor } from "../../editor";
 import {
   onBackStep,
   onNextStep,
-  addPost,
   setCheckout,
 } from "../../../redux/slices/fundraise";
-import { FundraiseHeader } from "../fundraise";
-import FundraiseNewPostPreview from "../fundraise/FundraiseNewPostPreview";
+import { QuillEditor } from "../../editor";
+import FundraiseFooter from "./FundraiseFooter";
+import fakeRequest from "../../../utils/fakeRequest";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
 
 export default function FundraiseStory() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
-  const { enqueueSnackbar } = useSnackbar();
-  const [open, setOpen] = useState(false);
-
-  const handleOpenPreview = () => {
-    setOpen(true);
-  };
-
-  const handleClosePreview = () => {
-    setOpen(false);
-  };
 
   const handleBackStep = () => {
     dispatch(onBackStep());
@@ -75,13 +65,12 @@ export default function FundraiseStory() {
       try {
         await fakeRequest(500);
         resetForm();
-        handleClosePreview();
         setSubmitting(false);
-        enqueueSnackbar("Save success", { variant: "success" });
+        dispatch(setCheckout({ name: "title", value: values.title }));
         dispatch(
-          addPost({
-            ...checkout,
-            createdAt: moment(),
+          setCheckout({
+            name: "description",
+            value: { ...values.description },
           })
         );
         handleNextStep();
@@ -107,139 +96,85 @@ export default function FundraiseStory() {
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <FundraiseHeader
-            cancelAction={handleBackStep}
-            continueAction={handleSubmit}
-          />
+          <Grid container>
+            <Grid item xs={12} md={12}>
+              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+                <Stack spacing={theme.shape.MAIN_SPACING}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      ...(!isLight && {
+                        textShadow: (theme) =>
+                          `4px 4px 16px ${alpha(
+                            theme.palette.grey[800],
+                            0.48
+                          )}`,
+                      }),
+                    }}
+                  >
+                    What’s your fundraiser title?
+                  </Typography>
 
-          <Container maxWidth="md">
-            <Grid container>
-              <Grid item xs={12} md={12}>
-                <Card
-                  sx={{
-                    p: theme.shape.CARD_PADDING,
-                  }}
-                >
-                  <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      Tell your story
-                    </Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="  What’s your fundraiser title?"
+                    {...getFieldProps("title")}
+                    error={Boolean(touched.title && errors.title)}
+                    helperText={touched.title && errors.title}
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                  />
+                </Stack>
 
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      We're here to guide you through your fundraise journey.
-                    </Typography>
+                <Stack spacing={theme.shape.MAIN_SPACING}>
+                  <Typography
+                    variant="body2"
+                    paragraph
+                    sx={{
+                      ...(!isLight && {
+                        textShadow: (theme) =>
+                          `4px 4px 16px ${alpha(
+                            theme.palette.grey[800],
+                            0.48
+                          )}`,
+                      }),
+                    }}
+                  >
+                    Why are you fundraise?
+                  </Typography>
 
-                    {/* <Typography
-                      variant="h5"
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      What’s your fundraiser title?
-                    </Typography> */}
+                  <QuillEditor
+                    id="product-content"
+                    placeholder="Why are you fundraise?"
+                    simple
+                    value={values.description.content}
+                    onChange={(content, delta, source, editor) => {
+                      const text = editor.getText(content);
 
-                    <TextField
-                      fullWidth
-                      size="small"
-                      label="  What’s your fundraiser title?"
-                      {...getFieldProps("title")}
-                      error={Boolean(touched.title && errors.title)}
-                      helperText={touched.title && errors.title}
-                      onChange={(e) => {
-                        dispatch(
-                          setCheckout({ name: "title", value: e.target.value })
-                        );
-                        handleChange(e);
-                      }}
-                    />
-
-                    {/* <Typography
-                      variant="h5"
-                      paragraph
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      Why are you fundraise?
-                    </Typography> */}
-
-                    <QuillEditor
-                      id="product-content"
-                      placeholder="Why are you fundraise?"
-                      simple
-                      value={values.description.content}
-                      onChange={(content, delta, source, editor) => {
-                        const text = editor.getText(content);
-
-                        setFieldValue("description", {
-                          content: content,
-                          text: text,
-                        });
-
-                        dispatch(
-                          setCheckout({
-                            name: "description",
-                            value: { content: content, text: text },
-                          })
-                        );
-                      }}
-                      error={Boolean(touched.description && errors.description)}
-                    />
-                    {touched.description && errors.description && (
-                      <FormHelperText error sx={{ px: 2 }}>
-                        {touched.description && errors.description}
-                      </FormHelperText>
-                    )}
-
-                    <Button variant="outlined" onClick={handleOpenPreview}>
-                      Preview Fundraiser
-                    </Button>
-                  </Stack>
-                </Card>
-              </Grid>
+                      setFieldValue("description", {
+                        content: content,
+                        text: text,
+                      });
+                    }}
+                    error={Boolean(touched.description && errors.description)}
+                  />
+                  {touched.description && errors.description && (
+                    <FormHelperText error sx={{ px: 2 }}>
+                      {touched.description && errors.description}
+                    </FormHelperText>
+                  )}
+                </Stack>
+              </Stack>
             </Grid>
-          </Container>
+          </Grid>
         </Form>
       </FormikProvider>
 
-      <FundraiseNewPostPreview
-        formik={formik}
-        openPreview={open}
-        onClosePreview={handleClosePreview}
+      <FundraiseFooter
+        cancelAction={handleBackStep}
+        continueAction={handleSubmit}
       />
     </>
   );

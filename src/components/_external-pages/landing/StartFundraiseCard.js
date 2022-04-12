@@ -42,7 +42,7 @@ export default function StartFundraiseCard({ post }) {
       })
     );
     dispatch(onGotoStep(0));
-    navigate(PATH_PAGE.fundraise);
+    // navigate(PATH_PAGE.fundraise);
   };
 
   return (
@@ -55,8 +55,7 @@ export default function StartFundraiseCard({ post }) {
             </CardMediaStyle>
 
             <TitleStyle
-              color="inherit"
-              variant="h5"
+              variant="subtitle1"
               sx={{
                 mt: theme.shape.MAIN_VERTICAL_SPACING,
               }}

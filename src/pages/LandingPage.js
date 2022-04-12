@@ -40,7 +40,7 @@ export default function LandingPage() {
         <StartFundraise />
         {/* <DonateCategories /> */}
         <OnlineFundraise />
-        <LandingBottom />
+        {/* <LandingBottom /> */}
         <MainFooter />
       </ContentStyle>
     </RootStyle>

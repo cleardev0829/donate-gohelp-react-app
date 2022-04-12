@@ -1,21 +1,15 @@
-import {
-  Link as RouterLink,
-  useParams,
-  useRoutes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { Icon } from "@iconify/react";
 import { useSnackbar } from "notistack";
-import moment from "moment";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
-
-import { LoadingButton } from "@material-ui/lab";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-
+import {
+  alpha,
+  useTheme,
+  experimentalStyled as styled,
+} from "@material-ui/core/styles";
 import {
   Box,
   Card,
@@ -23,21 +17,8 @@ import {
   Stack,
   Button,
   TextField,
-  Container,
   Typography,
-  useTheme,
 } from "@material-ui/core";
-// utils
-import fakeRequest from "../../../utils/fakeRequest";
-//
-import { useDispatch, useSelector } from "../../../redux/store";
-import {
-  onBackStep,
-  onNextStep,
-  addPost,
-} from "../../../redux/slices/fundraise";
-import { FundraiseHeader } from ".";
-import CopyClipboard from "../../CopyClipboard";
 import {
   FacebookShareButton,
   FacebookMessengerShareButton,
@@ -54,8 +35,11 @@ import {
   InstapaperIcon,
   MailruIcon,
 } from "react-share";
-import { makePageLink } from "src/utils/constants";
-import { PATH_PAGE } from "src/routes/paths";
+import { PATH_PAGE } from "../../../routes/paths";
+import CopyClipboard from "../../CopyClipboard";
+import fakeRequest from "../../../utils/fakeRequest";
+import { makePageLink } from "../../../utils/constants";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
 
@@ -100,58 +84,35 @@ const CoverImgStyle = styled("img")({
 // ----------------------------------------------------------------------
 
 FundraiseShare.propTypes = {
-  uid: PropTypes.string,
-  title: PropTypes.string,
-  isStepBar: PropTypes.bool,
+  post: PropTypes.object,
 };
 
-export default function FundraiseShare({ uid, title, isStepBar = false }) {
+export default function FundraiseShare({ post }) {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { checkout } = useSelector((state) => state.fundraise);
-  const { enqueueSnackbar } = useSnackbar();
-  const isLight = theme.palette.mode === "light";
-  const [open, setOpen] = useState(false);
   const [state, setState] = useState({
     value: "",
     copied: false,
   });
+  const { enqueueSnackbar } = useSnackbar();
+  const isLight = theme.palette.mode === "light";
 
-  const handleOpenPreview = () => {
-    setOpen(true);
-  };
-
-  const handleClosePreview = () => {
-    setOpen(false);
-  };
-
-  const handleBackStep = () => {
-    dispatch(onBackStep());
-  };
-
-  const handleNextStep = () => {
-    dispatch(onNextStep());
-  };
-
-  const NewBlogSchema = Yup.object().shape({
+  const Schema = Yup.object().shape({
     email: Yup.string().email("Email must be a valid email address"),
   });
 
   const formik = useFormik({
     initialValues: {
       email: "",
-      pageLink: makePageLink(uid),
+      pageLink: makePageLink(post.id),
     },
-    validationSchema: NewBlogSchema,
+    validationSchema: Schema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         await fakeRequest(500);
         resetForm();
-        handleClosePreview();
+        // handleClose();
         setSubmitting(false);
         // enqueueSnackbar("Save success", { variant: "success" });
-        navigate(`${PATH_PAGE.fundraiseDetails}/${uid}`);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -180,14 +141,6 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
   return (
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        {isStepBar && (
-          <FundraiseHeader
-            cancelButton={false}
-            cancelAction={handleBackStep}
-            continueAction={handleSubmit}
-          />
-        )}
-
         <Box
           sx={{
             maxWidth: 480,
@@ -227,7 +180,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
 
             <Grid container sx={{ mt: 4 }}>
               <ShareButtonWrapper>
-                <FacebookShareButton url={values.pageLink}>
+                <FacebookShareButton url={post.link}>
                   <IconWrapperStyle>
                     <CoverImgStyle alt="post cover" src={FACEBOOK_IMG_URL} />
                   </IconWrapperStyle>
@@ -235,7 +188,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <FacebookMessengerShareButton url={values.pageLink}>
+                <FacebookMessengerShareButton url={post.link}>
                   <IconWrapperStyle>
                     <CoverImgStyle
                       alt="post cover"
@@ -246,7 +199,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <TwitterShareButton url={values.pageLink} title={title}>
+                <TwitterShareButton url={post.link} title={post.title}>
                   <IconWrapperStyle>
                     <CoverImgStyle alt="post cover" src={TWITTER_IMG_URL} />
                   </IconWrapperStyle>
@@ -254,7 +207,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <WhatsappShareButton url={values.pageLink} title={title}>
+                <WhatsappShareButton url={post.link} title={post.title}>
                   <IconWrapperStyle>
                     <CoverImgStyle alt="post cover" src={WHATSAPP_IMG_URL} />
                   </IconWrapperStyle>
@@ -262,7 +215,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <InstapaperShareButton url={values.pageLink} title={title}>
+                <InstapaperShareButton url={post.link} title={post.title}>
                   <IconWrapperStyle>
                     <InstapaperIcon size={32} round />
                   </IconWrapperStyle>
@@ -270,7 +223,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <TelegramShareButton url={values.pageLink} title={title}>
+                <TelegramShareButton url={post.link} title={post.title}>
                   <IconWrapperStyle>
                     <TelegramIcon size={32} round />
                   </IconWrapperStyle>
@@ -278,7 +231,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <LinkedinShareButton url={values.pageLink} title={title}>
+                <LinkedinShareButton url={post.link} title={post.title}>
                   <IconWrapperStyle>
                     <CoverImgStyle alt="post cover" src={LINKEDIN_IMG_URL} />
                   </IconWrapperStyle>
@@ -286,7 +239,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
               </ShareButtonWrapper>
 
               <ShareButtonWrapper>
-                <MailruShareButton url={values.pageLink} title={title}>
+                <MailruShareButton url={post.link} title={post.title}>
                   <IconWrapperStyle>
                     <MailruIcon size={32} round />
                   </IconWrapperStyle>
@@ -299,10 +252,13 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
                 <Card
                   sx={{
                     p: (theme) => theme.spacing(1.25, 3),
+                    backgroundColor: theme.palette.background.default,
                   }}
                 >
                   <Stack spacing={1} direction="row" alignItems="center">
-                    <img src="/static/home/gmail.png" alt="gmail" />
+                    <Box sx={{ p: 0.1 }}>
+                      <img src="/static/home/gmail.png" alt="gmail" />
+                    </Box>
 
                     <TextField
                       fullWidth
@@ -319,10 +275,10 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
                     <ShareButtonWrapper>
                       <EmailShareButton
                         url={values.email}
-                        subject={title}
+                        subject={post.title}
                         body="body"
                       >
-                        <Button size="medium" variant="contained">
+                        <Button type="submit" size="medium" variant="contained">
                           Share
                         </Button>
                       </EmailShareButton>
@@ -333,6 +289,7 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
                 <Card
                   sx={{
                     p: (theme) => theme.spacing(1.25, 3),
+                    backgroundColor: theme.palette.background.default,
                   }}
                 >
                   <Stack spacing={1} direction="row" alignItems="center">
@@ -344,9 +301,6 @@ export default function FundraiseShare({ uid, title, isStepBar = false }) {
                       error={Boolean(touched.pageLink && errors.pageLink)}
                       helperText={touched.pageLink && errors.pageLink}
                     />
-                    {/* <Button variant="contained" onClick={onCopy}>
-                      Copy
-                    </Button> */}
                   </Stack>
                 </Card>
               </Stack>

@@ -24,15 +24,16 @@ import {
   InputAdornment,
   FormHelperText,
 } from "@material-ui/core";
-import { getPost, deletePost } from "../../../redux/slices/fundraise";
 import { FundraiseHeader } from ".";
 import { FundraiseEditPhoto } from ".";
 import { FundraiseEditStory } from ".";
 import { FundraiseEditOverView } from ".";
 import { PATH_PAGE } from "src/routes/paths";
+import Loading from "../../../components/Loading";
 import fakeRequest from "../../../utils/fakeRequest";
 import LoadingScreen from "src/components/LoadingScreen";
 import { useDispatch, useSelector } from "../../../redux/store";
+import { getPost, deletePost } from "../../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -51,190 +52,138 @@ const TABS = [
   },
 ];
 
-export default function FundraiseEdit() {
+FundraiseEdit.propTypes = {
+  uid: PropTypes.string,
+  childRef: PropTypes.object,
+  open: PropTypes.bool,
+  onclose: PropTypes.func,
+};
+
+export default function FundraiseEdit({ uid, childRef }) {
   const theme = useTheme();
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
-  const { post, isLoading } = useSelector((state) => state.fundraise);
-  const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState(post);
+  const { enqueueSnackbar } = useSnackbar();
   const [formik, setFormik] = useState(null);
+  const isLight = theme.palette.mode === "light";
   const [currentTab, setCurrentTab] = useState("Over View");
+  const { post, isLoading } = useSelector((state) => state.fundraise);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    dispatch(getPost(params.id));
+    dispatch(getPost(uid));
   }, [dispatch]);
 
   useEffect(() => {
     setData(post);
   }, [post]);
 
-  const handleCancel = () => {
-    navigate(-1);
-  };
-
-  const handleSubmit = async () => {
-    formik.handleSubmit();
-  };
-
   const handleTab = (val) => {
     setCurrentTab(val);
   };
 
   const handleDelete = () => {
-    dispatch(deletePost(params.id));
+    dispatch(deletePost(uid));
     navigate(`${PATH_PAGE.fundraisers}`);
   };
 
-  if (isLoading || _.isEmpty(data)) {
-    return (
-      <LoadingScreen
-        sx={{
-          top: 0,
-          left: 0,
-          width: 1,
-          zIndex: 9999,
-          position: "fixed",
-        }}
-      />
-    );
+  if (!data) {
+    return <Loading />;
   }
 
   return (
-    <>
-      <Container
-        maxWidth="lg"
-        sx={{
-          paddingTop: (theme) => theme.spacing(theme.shape.PAGE_TOP_PADDING),
-          paddingBottom: (theme) =>
-            theme.spacing(theme.shape.PAGE_BOTTOM_PADDING),
-        }}
-      >
-        <FundraiseHeader
-          cancelTitle="Cancel"
-          continueTitle="Save Changes"
-          cancelAction={handleCancel}
-          continueAction={handleSubmit}
-        />
+    <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
+      <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+        {/* <Typography variant="h5" sx={{ color: "text.primary" }}>
+          Edit and settings
+        </Typography> */}
+        {/* <Typography variant="subtitle1" sx={{ color: "text.primary" }}>
+          Make changes in your Fundraising.
+        </Typography> */}
 
-        <Container maxWidth="md">
-          <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-            <Card
-              sx={{
-                p: theme.shape.CARD_PADDING,
-              }}
+        <Stack direction="row" spacing={theme.shape.CARD_CONTENT_SPACING}>
+          {TABS.map((tab) => (
+            <Button
+              key={tab.value}
+              color="inherit"
+              variant="outlined"
+              onClick={() => handleTab(tab.value)}
             >
-              <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                <Typography variant="h5" sx={{ color: "text.primary" }}>
-                  Edit and settings
-                </Typography>
-                <Typography variant="subtitle1" sx={{ color: "text.primary" }}>
-                  Make changes in your Fundraising.
-                </Typography>
+              {tab.value}
+            </Button>
+          ))}
+        </Stack>
 
-                <Stack
-                  direction="row"
-                  spacing={theme.shape.CARD_CONTENT_SPACING}
-                >
-                  {TABS.map((tab) => (
-                    <Button
-                      key={tab.value}
-                      color="inherit"
-                      variant="outlined"
-                      onClick={() => handleTab(tab.value)}
-                    >
-                      {tab.value}
-                    </Button>
-                  ))}
-                </Stack>
+        {currentTab === "Over View" && (
+          <FundraiseEditOverView uid={uid} post={data} childRef={childRef} />
+        )}
 
-                {currentTab === "Over View" && (
-                  <FundraiseEditOverView renderForm={setFormik} post={data} />
-                )}
+        {currentTab === "Photo" && (
+          <FundraiseEditPhoto post={data} childRef={childRef} />
+        )}
 
-                {currentTab === "Photo" && (
-                  <FundraiseEditPhoto renderForm={setFormik} post={data} />
-                )}
+        {currentTab === "Story" && (
+          <FundraiseEditStory post={data} childRef={childRef} />
+        )}
+      </Stack>
 
-                {currentTab === "Story" && (
-                  <FundraiseEditStory renderForm={setFormik} post={data} />
-                )}
-              </Stack>
-            </Card>
+      {currentTab === "Over View" && (
+        <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+          <Typography
+            variant="h5"
+            sx={{
+              ...(!isLight && {
+                textShadow: (theme) =>
+                  `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+              }),
+            }}
+          >
+            Delete my fundraiser
+          </Typography>
 
-            {currentTab === "Over View" && (
-              <Card
+          <Grid container xs={12}>
+            <Grid item xs={12} sm={7}>
+              <Typography
+                variant="body2"
                 sx={{
-                  p: theme.shape.CARD_PADDING,
+                  color: "#A1A1A1",
+                  ...(!isLight && {
+                    textShadow: (theme) =>
+                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+                  }),
                 }}
               >
-                <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Delete my fundraiser
-                  </Typography>
+                You will no longer hav e access to this fundraiser after
+                deleting. If you receive donation. Your donation will be still
+                able to view a summary.
+              </Typography>
+            </Grid>
 
-                  <Grid container xs={12}>
-                    <Grid item xs={12} sm={7}>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "#A1A1A1",
-                          ...(!isLight && {
-                            textShadow: (theme) =>
-                              `4px 4px 16px ${alpha(
-                                theme.palette.grey[800],
-                                0.48
-                              )}`,
-                          }),
-                        }}
-                      >
-                        You will no longer hav e access to this fundraiser after
-                        deleting. If you receive donation. Your donation will be
-                        still able to view a summary.
-                      </Typography>
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sm={5}
-                      sx={{
-                        display: "flex",
-                        justifyContent: { xs: "center", sm: "flex-end" },
-                        alignItems: "flex-start",
-                      }}
-                    >
-                      <Button
-                        size="middle"
-                        type="button"
-                        variant="contained"
-                        color="error"
-                        onClick={handleDelete}
-                      >
-                        Delete Fundraiser
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Stack>
-              </Card>
-            )}
-          </Stack>
-        </Container>
-      </Container>
-    </>
+            <Grid
+              item
+              xs={12}
+              sm={5}
+              sx={{
+                display: "flex",
+                justifyContent: { xs: "center", sm: "flex-end" },
+                alignItems: "flex-start",
+              }}
+            >
+              <Button
+                size="middle"
+                type="button"
+                variant="contained"
+                color="error"
+                onClick={handleDelete}
+              >
+                Delete Fundraiser
+              </Button>
+            </Grid>
+          </Grid>
+        </Stack>
+      )}
+    </Stack>
   );
 }

@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 // components
 import Page from "../components/Page";
-import { PricingPlanCard } from "../components/_external-pages/pricing";
+import { PricingPlanCard } from "../components/_external-pages/~pricing";
 import PricingFeaturesTable from "../components/PricingFeaturesTable";
 
 const month_plans = [

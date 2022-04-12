@@ -27,6 +27,7 @@ export default function Card(theme) {
       styleOverrides: {
         root: {
           padding: theme.spacing(theme.shape.CARD_PADDING),
+          borderRadius: theme.shape.borderRadius,
           "&:last-child": {
             paddingBottom: theme.spacing(theme.shape.CARD_PADDING),
           },

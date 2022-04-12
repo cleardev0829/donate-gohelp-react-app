@@ -1,3 +1,4 @@
+import numeral from "numeral";
 import PropTypes from "prop-types";
 import { Stack, Typography, useTheme } from "@material-ui/core";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
@@ -40,7 +41,7 @@ export default function DonateProgress({ time, total, goal }) {
 
       <ProgressItem
         text={`Last donation ${time}`}
-        progress={fPercent((total * 100) / goal)}
+        progress={parseFloat(fPercent((total * 100) / goal))}
       />
       <DonationTextStyle variant="h6" color="primary">
         {`${fCurrency(total)} raised of ${fCurrency(goal)}`}

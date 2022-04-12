@@ -34,9 +34,9 @@ export default function FundraiseHeader({
         />
       </Container>
 
-      <Container maxWidth="md">
+      {/* <Container maxWidth="md">
         <HeaderStep />
-      </Container>
+      </Container> */}
     </>
   );
 }

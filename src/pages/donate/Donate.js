@@ -4,8 +4,8 @@ import _ from "lodash";
 import { Grid, Stack, Container, useTheme } from "@material-ui/core";
 import {
   DonateList,
-  DonateToken,
-  DonateProfile,
+  DonateAbout,
+  DonateUpdates,
 } from "../../components/_external-pages/donate";
 import Page from "../../components/Page";
 import { getPost } from "../../redux/slices/fundraise";
@@ -58,13 +58,13 @@ export default function Donate() {
         <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
           <Grid item xs={12} md={7}>
             <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-              <DonateProfile />
+              <DonateUpdates />
               <DonateList />
             </Stack>
           </Grid>
 
           <Grid item xs={12} md={5}>
-            <DonateToken />
+            <DonateAbout />
           </Grid>
         </Grid>
       </Container>

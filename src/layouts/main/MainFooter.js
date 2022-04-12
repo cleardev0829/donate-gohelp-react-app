@@ -25,6 +25,9 @@ import { GohelpImgStyle } from "./MainNavbar";
 
 // ----------------------------------------------------------------------
 
+const APP_BAR_MOBILE = 64;
+const APP_BAR_DESKTOP = 88;
+
 const SOCIALS = [
   { name: "Instagram", icon: instagramFilled },
   { name: "Linkedin", icon: linkedinFill },
@@ -34,9 +37,14 @@ const SOCIALS = [
 
 const RootStyle = styled("div")(({ theme }) => ({
   position: "relative",
+  display: "flex",
+  alignItems: "center",
   backgroundColor: "#333333",
   marginTop: 170,
-  padding: theme.spacing(28, 0, 12, 0),
+  height: APP_BAR_MOBILE,
+  [theme.breakpoints.up("md")]: {
+    height: APP_BAR_DESKTOP,
+  },
 }));
 
 // ----------------------------------------------------------------------
@@ -44,52 +52,61 @@ const RootStyle = styled("div")(({ theme }) => ({
 export default function MainFooter() {
   return (
     <RootStyle>
-      <Container maxWidth="lg" sx={{}}>
+      <Container maxWidth="lg">
         <Grid
           container
-          spacing={1}
           justifyContent={{ xs: "center", md: "space-between" }}
           sx={{
             textAlign: { xs: "center", md: "left" },
           }}
         >
           <Grid item xs={12} md={4}>
-            <Stack
-              spacing={1}
-              direction="row"
-              alignItems="center"
-              justifyContent={{ xs: "center", md: "flex-start" }}
-            >
-              <RouterLink to="/">
-                <Logo type="white" />
-              </RouterLink>
-              <GohelpImgStyle
+            <RouterLink to="/">
+              <Logo type="white" />
+            </RouterLink>
+            {/* <GohelpImgStyle
                 src="/static/home/gohelp_white.png"
                 alt="Gohelp"
-              />
-            </Stack>
+              /> */}
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <Stack spacing={1} direction="row" justifyContent="center">
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Stack spacing={3} direction="row" justifyContent="center">
               {SOCIALS.map((social) => (
-                <IconButton key={social.name} color="secondary" sx={{ p: 1 }}>
+                <IconButton key={social.name} color="secondary">
                   <Icon icon={social.icon} width={20} height={20} />
                 </IconButton>
               ))}
             </Stack>
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
             <Stack
               direction="row"
               justifyContent={{ xs: "center", md: "flex-end" }}
             >
               <Typography
                 alignSelf={"right"}
-                variant="body2"
+                variant="caption"
                 sx={{
-                  fontSize: 14,
                   color: (theme) => theme.palette.secondary.main,
                   textAlign: { xs: "center", md: "left" },
                 }}

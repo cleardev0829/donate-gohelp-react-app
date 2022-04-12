@@ -30,7 +30,7 @@ export default function OutlineCard({ sx, onClick, children }) {
   const classes = useStyles();
 
   return (
-    <Card sx={sx} class={classes.root} onClick={onClick}>
+    <Card sx={sx} className={classes.root} onClick={onClick}>
       {children}
     </Card>
   );

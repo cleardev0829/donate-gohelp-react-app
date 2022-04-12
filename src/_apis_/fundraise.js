@@ -19,11 +19,12 @@ import { getFileBlob, cryptoToUSD } from "src/utils/constants";
 // ----------------------------------------------------------------------
 
 mock.onPost("/api/fundraise/add").reply(async (request) => {
-  try {
-    const data = JSON.parse(request.data);
+  // try {
+  const data = JSON.parse(request.data);
 
+  return new Promise((resolve, reject) => {
     if (data.cover && data.cover.preview) {
-      await getFileBlob(data.cover.preview, (blob) => {
+      getFileBlob(data.cover.preview, (blob) => {
         firebase
           .storage()
           .ref(`/${data.uid}/fundraise-${data.cover.path}`)
@@ -41,34 +42,34 @@ mock.onPost("/api/fundraise/add").reply(async (request) => {
                     preview: url,
                   },
                 });
+
+              resolve([200, { results: data }]);
             });
           });
       });
     } else {
-      await firebase
+      firebase
         .firestore()
         .collection("fundraise")
         .doc(data.uid)
         .set({
           ...data,
         });
-    }
 
-    return [200, { results: data }];
-  } catch (error) {
-    console.error(error);
-    return [500, { message: "Internal server error" }];
-  }
+      resolve([200, { results: data }]);
+    }
+  });
 });
 
 // ----------------------------------------------------------------------
 
 mock.onPost("/api/update/add").reply(async (request) => {
-  try {
-    const data = JSON.parse(request.data);
+  // try {
+  const data = JSON.parse(request.data);
 
+  return new Promise((resolve, reject) => {
     if (data.cover && data.cover.preview) {
-      await getFileBlob(data.cover.preview, (blob) => {
+      getFileBlob(data.cover.preview, (blob) => {
         firebase
           .storage()
           .ref(`/${data.uid}/update-${data.cover.path}`)
@@ -87,11 +88,12 @@ mock.onPost("/api/update/add").reply(async (request) => {
                     preview: url,
                   },
                 });
+              resolve([200, { results: data }]);
             });
           });
       });
     } else {
-      await firebase
+      firebase
         .firestore()
         .collection("fundraise")
         .doc(data.fundraiseId)
@@ -99,13 +101,15 @@ mock.onPost("/api/update/add").reply(async (request) => {
         .add({
           ...data,
         });
+      resolve([200, { results: data }]);
     }
+  });
 
-    return [200, { data }];
-  } catch (error) {
-    console.error(error);
-    return [500, { message: "Internal server error" }];
-  }
+  //   return [200, { data }];
+  // } catch (error) {
+  //   console.error(error);
+  //   return [500, { message: "Internal server error" }];
+  // }
 });
 
 // ----------------------------------------------------------------------
@@ -116,7 +120,7 @@ mock.onPost("/api/fundraise/update").reply(async (request) => {
 
     let promise = [];
     promise.push(
-      new Promise((resolve, reject) => {
+      new Promise(async (resolve, reject) => {
         if (data.cover && data.cover.preview && data.cover.touched) {
           getFileBlob(data.cover.preview, (blob) => {
             firebase
@@ -136,12 +140,13 @@ mock.onPost("/api/fundraise/update").reply(async (request) => {
                         preview: url,
                       },
                     });
+
                   resolve();
                 });
               });
           });
         } else {
-          firebase
+          await firebase
             .firestore()
             .collection("fundraise")
             .doc(data.uid)

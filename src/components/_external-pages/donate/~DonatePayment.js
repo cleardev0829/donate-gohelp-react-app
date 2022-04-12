@@ -34,7 +34,7 @@ import {
 } from "../../../redux/slices/donate";
 import { FundraiseHeader } from "../fundraise";
 import fakeRequest from "../../../utils/fakeRequest";
-import OutlineCard from "../../../components/OutlineCard";
+import OutlineCard from "../../OutlineCard";
 import { fCurrency, fPercent } from "src/utils/formatNumber";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { filters, CRYPTO_TYPES, cryptoToUSD } from "src/utils/constants";

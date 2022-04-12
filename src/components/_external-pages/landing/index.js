@@ -16,3 +16,5 @@ export { default as DonateCategoryCard } from "./DonateCategoryCard";
 export { default as TopFundraiserCard } from "./TopFundraiserCard";
 export { default as StartFundraiseCard } from "./StartFundraiseCard";
 export { default as OnlineFundraiseCard } from "./OnlineFundraiseCard";
+
+export { default as FundraiseDialog } from "./FundraiseDialog";

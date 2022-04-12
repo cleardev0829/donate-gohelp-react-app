@@ -213,7 +213,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
               <DonateProgress
                 time={filter.recentTimeAgo}
                 total={filter.totalAmount}
-                goal={post.goal}
+                goal={parseFloat(post.goal)}
               />
             </Stack>
           </Box>

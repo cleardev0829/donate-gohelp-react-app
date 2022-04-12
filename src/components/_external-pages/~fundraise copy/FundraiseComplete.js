@@ -14,9 +14,9 @@ import {
 } from "@material-ui/core";
 // redux
 import { useDispatch } from "../../../redux/store";
-import { resetCheckout } from "../../../redux/slices/donate";
+import { resetCheckout } from "../../../redux/slices/fundraise";
 // routes
-import { PATH_DASHBOARD } from "../../../routes/paths";
+import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 //
 import { DialogAnimate } from "../../animate";
 import { OrderCompleteIllustration } from "../../../assets";
@@ -35,7 +35,7 @@ const DialogStyle = styled(DialogAnimate)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function DonateComplete({ ...other }) {
+export default function CheckoutOrderComplete({ ...other }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -49,7 +49,7 @@ export default function DonateComplete({ ...other }) {
       <Box sx={{ p: 4, maxWidth: 480, margin: "auto" }}>
         <Box sx={{ textAlign: "center" }}>
           <Typography variant="h4" paragraph>
-            Thank you for your working!
+            Completed successfully
           </Typography>
 
           {/* <OrderCompleteIllustration sx={{ height: 260, my: 10 }} />

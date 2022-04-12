@@ -95,7 +95,7 @@ export default function DonateList() {
 
         {/* <Stack spacing={theme.shape.CARD_CONTENT_SPACING}> */}
         {data.map((donate, index) => (
-          <>
+          <Box key={`box-${index}`}>
             <CardContent key={`cardcontent-${index}`}>
               <Stack
                 key={`stack-1-${index}`}
@@ -168,7 +168,7 @@ export default function DonateList() {
               </Stack>
             </CardContent>
             {index < data.length - 1 && <Divider key={`divider-${index}`} />}
-          </>
+          </Box>
         ))}
         {/* </Stack> */}
       </OutlineCard>

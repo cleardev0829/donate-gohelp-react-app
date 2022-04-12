@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "../../../redux/store";
 import { useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
 import faker from "faker";
+import { motion } from "framer-motion";
+import { useSnackbar } from "notistack";
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Grid, Container, Typography } from "@material-ui/core";
 import {
   varFadeIn,
   varFadeInUp,
@@ -16,13 +16,13 @@ import {
   varFadeInRight,
   MotionInView,
 } from "../../animate";
-import { motion } from "framer-motion";
 import {
   onNextStep,
   onGotoStep,
   setCheckout,
 } from "../../../redux/slices/fundraise";
-import { FundraiseTypeCard, FundraiseHeader } from ".";
+import { FundraiseTypeCard } from ".";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
 
@@ -67,6 +67,14 @@ export default function FundraiseType() {
     dispatch(setCheckout({ name: "uid", value: faker.datatype.uuid() }));
   }, [dispatch]);
 
+  const handleBackStep = () => {
+    navigate("/");
+  };
+
+  const handleNextStep = () => {
+    dispatch(onNextStep());
+  };
+
   const handleType = (type) => {
     dispatch(
       setCheckout({
@@ -74,65 +82,20 @@ export default function FundraiseType() {
         value: type,
       })
     );
-  };
-
-  const handleBackStep = () => {
-    navigate("/");
-  };
-
-  const handleNextStep = () => {
-    dispatch(onNextStep());
-    // dispatch(onGotoStep(4));
-  };
-
-  const handleContinue = () => {
-    if (checkout.type === null) {
-      enqueueSnackbar("Please select who you fundraise for", {
-        variant: "error",
-      });
-      return;
-    }
-
     handleNextStep();
   };
 
   return (
-    <>
-      <FundraiseHeader
-        cancelTitle="Cancel"
-        cancelAction={handleBackStep}
-        continueAction={handleContinue}
-      />
-      <Container maxWidth={"md"}>
-        <ContentStyle>
-          <MotionInView variants={varFadeInUp}>
-            <Typography
-              variant="h3"
-              paragraph
-              sx={{
-                ...(!isLight && {
-                  textShadow: (theme) =>
-                    `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                }),
-              }}
-            >
-              Hi there, Who are you fundraise for?
-            </Typography>
-          </MotionInView>
-        </ContentStyle>
-
-        <Grid container spacing={5}>
-          {posts.map((post, index) => (
-            <FundraiseTypeCard
-              key={post.id}
-              post={post}
-              index={index}
-              type={checkout.type}
-              onClick={() => handleType(index)}
-            />
-          ))}
-        </Grid>
-      </Container>
-    </>
+    <Grid container spacing={5}>
+      {posts.map((post, index) => (
+        <FundraiseTypeCard
+          key={post.id}
+          post={post}
+          index={index}
+          type={checkout.type}
+          onClick={() => handleType(index)}
+        />
+      ))}
+    </Grid>
   );
 }

@@ -27,10 +27,22 @@ export default function FundraiseTypeCard({ post, index, type, onClick }) {
             type === index ? theme.palette.primary.main : "",
           borderColor: (theme) =>
             type === index ? theme.palette.primary.main : "",
+
+          // "&: hover": {
+          //   backgroundColor: theme.palette.primary.main,
+          // },
         }}
         onClick={() => onClick(index)}
       >
-        <CardContent sx={{ px: 5 }}>
+        <CardContent
+          sx={{
+            cursor: "pointer",
+            px: 3,
+            "&: hover": {
+              backgroundColor: theme.palette.primary.main,
+            },
+          }}
+        >
           <Stack
             spacing={theme.shape.MAIN_VERTICAL_SPACING}
             alignItems="center"
@@ -42,7 +54,7 @@ export default function FundraiseTypeCard({ post, index, type, onClick }) {
               color={type === index ? theme.palette.common.white : ""}
             />
 
-            <TitleStyle color="inherit" variant="h5">
+            <TitleStyle color="inherit" variant="subtitle1">
               {title}
             </TitleStyle>
 

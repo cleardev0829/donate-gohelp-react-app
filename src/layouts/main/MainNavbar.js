@@ -95,9 +95,9 @@ export default function MainNavbar() {
             <RouterLink to="/">
               <Logo />
             </RouterLink>
-            <MHidden width="smDown">
+            {/* <MHidden width="smDown">
               <GohelpImgStyle src="/static/home/gohelp.png" alt="Gohelp" />
-            </MHidden>
+            </MHidden> */}
           </Stack>
 
           <MHidden width="mdDown">

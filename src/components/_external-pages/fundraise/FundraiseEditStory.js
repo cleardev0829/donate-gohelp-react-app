@@ -18,11 +18,11 @@ import { QuillEditor } from "../../editor";
 // ----------------------------------------------------------------------
 
 FundraiseEditStory.propTypes = {
-  renderForm: PropTypes.func,
+  childRef: PropTypes.object,
   post: PropTypes.object,
 };
 
-export default function FundraiseEditStory({ renderForm, post }) {
+export default function FundraiseEditStory({ childRef, post }) {
   const theme = useTheme();
   const params = useParams();
   const dispatch = useDispatch();
@@ -44,17 +44,15 @@ export default function FundraiseEditStory({ renderForm, post }) {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         await fakeRequest(500);
-        resetForm();
-        setSubmitting(false);
-        dispatch(getPostSuccess(null));
-        dispatch(
+        // resetForm();
+        await dispatch(
           updatePost({
             uid: values.uid,
             description: values.description,
           })
         );
+        setSubmitting(false);
         enqueueSnackbar("Save success", { variant: "success" });
-        // navigate(-1);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -73,8 +71,8 @@ export default function FundraiseEditStory({ renderForm, post }) {
   } = formik;
 
   useEffect(() => {
-    renderForm(formik);
-  }, [values]);
+    childRef.current = formik;
+  }, []);
 
   return (
     <FormikProvider value={formik}>

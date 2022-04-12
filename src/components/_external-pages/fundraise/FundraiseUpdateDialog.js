@@ -1,114 +1,90 @@
-import { isString } from "lodash";
+import { useRef } from "react";
 import PropTypes from "prop-types";
-// material
 import { LoadingButton } from "@material-ui/lab";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  alpha,
+  useTheme,
+  experimentalStyled as styled,
+} from "@material-ui/core/styles";
 import {
   Box,
   Button,
+  Divider,
   Container,
   Typography,
+  DialogTitle,
   DialogActions,
+  DialogContent,
 } from "@material-ui/core";
-//
-import { DialogAnimate } from "../../animate";
-import Markdown from "../../Markdown";
-import Scrollbar from "../../Scrollbar";
-import EmptyContent from "../../EmptyContent";
-import { DonateMain } from "../donate";
-import { useDispatch, useSelector } from "../../../redux/store";
+import {
+  varFadeIn,
+  varFadeInUp,
+  varWrapEnter,
+  varFadeInRight,
+  MotionInView,
+} from "../../animate";
 import { FundraiseShare } from ".";
+import Markdown from "../../Markdown";
+import { DonateMain } from "../donate";
+import Scrollbar from "../../Scrollbar";
+import { DialogAnimate } from "../../animate";
+import EmptyContent from "../../EmptyContent";
 import FundraiseUpdate from "./FundraiseUpdate";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
-
-const HeroStyle = styled("div")(({ theme }) => ({
-  paddingTop: "56%",
-  position: "relative",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  "&:before": {
-    top: 0,
-    content: "''",
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    backgroundColor: alpha(theme.palette.grey[900], 0.72),
-  },
-}));
-
-// ----------------------------------------------------------------------
-
-PreviewHero.propTypes = {
-  title: PropTypes.string,
-  cover: PropTypes.string,
-};
-
-function PreviewHero({ title, cover }) {
-  return (
-    <HeroStyle>
-      <Container
-        sx={{
-          top: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          position: "absolute",
-          pt: { xs: 3, lg: 10 },
-          color: "common.white",
-        }}
-      >
-        <Typography variant="h2" component="h1">
-          {title}
-        </Typography>
-      </Container>
-    </HeroStyle>
-  );
-}
 
 FundraiseUpdateDialog.propTypes = {
   uid: PropTypes.string,
-  data: PropTypes.object,
-  openPreview: PropTypes.bool,
-  onClosePreview: PropTypes.func,
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
-export default function FundraiseUpdateDialog({
-  uid,
-  data,
-  openPreview,
-  onClosePreview,
-}) {
-  const { description, cover } = data;
-
-  const hasContent = description || cover;
+export default function FundraiseUpdateDialog({ uid, open, onClose }) {
+  const theme = useTheme();
+  const childRef = useRef();
+  const isLight = theme.palette.mode === "light";
+  const { isLoading } = useSelector((state) => state.fundraise);
 
   return (
-    <DialogAnimate fullScreen open={openPreview} onClose={onClosePreview}>
+    <DialogAnimate maxWidth="md" open={open} onClose={onClose}>
+      <DialogTitle>
+        <MotionInView variants={varFadeInUp}>
+          <Typography
+            variant="h5"
+            paragraph
+            sx={{
+              ...(!isLight && {
+                textShadow: (theme) =>
+                  `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
+              }),
+            }}
+          >
+            Post an Update
+          </Typography>
+        </MotionInView>
+      </DialogTitle>
+
+      <Divider />
+
+      <DialogContent>
+        <Scrollbar>
+          <FundraiseUpdate uid={uid} childRef={childRef} />
+        </Scrollbar>
+      </DialogContent>
+
       <DialogActions sx={{ py: 2, px: 3 }}>
-        <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
-          Update Fundraiser
-        </Typography>
-        <Button onClick={onClosePreview}>Cancel</Button>
+        <Button onClick={onClose}>Cancel</Button>
         <LoadingButton
           type="submit"
           variant="contained"
           // disabled={!isValid}
-          // loading={isSubmitting}
-          // onClick={handleSubmit}
+          loading={isLoading}
+          onClick={() => childRef.current.handleSubmit()}
         >
           Submit
         </LoadingButton>
       </DialogActions>
-
-      {hasContent ? (
-        <Scrollbar>
-          <FundraiseUpdate uid={uid} data={data} />
-        </Scrollbar>
-      ) : (
-        <EmptyContent title="Empty content" />
-      )}
     </DialogAnimate>
   );
 }

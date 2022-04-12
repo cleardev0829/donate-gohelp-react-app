@@ -139,12 +139,12 @@ export default function Router() {
       element: <MainLayout />,
       children: [
         { path: "/", element: <LandingPage /> },
-        { path: "fundraise", element: <Fundraise /> },
+        // { path: "fundraise", element: <Fundraise /> },
         { path: "fundraisers", element: <Fundraisers /> },
-        { path: "fundraiseUpdate/:id", element: <FundraiseUpdate /> },
-        { path: "fundraiseEdit/:id", element: <FundraiseEdit /> },
-        { path: "fundraise/:type", element: <Fundraise /> },
-        { path: "fundraise/:type/:category", element: <Fundraise /> },
+        // { path: "fundraiseUpdate/:id", element: <FundraiseUpdate /> },
+        // { path: "fundraiseEdit/:id", element: <FundraiseEdit /> },
+        // { path: "fundraise/:type", element: <Fundraise /> },
+        // { path: "fundraise/:type/:category", element: <Fundraise /> },
         { path: "donate/:id", element: <Donate /> },
         { path: "fundraiseDetails/:id", element: <FundraiseDetails /> },
       ],
@@ -196,17 +196,17 @@ const Billing = Loadable(
   )
 );
 
-const Fundraise = Loadable(lazy(() => import("../pages/fundraise/Fundraise")));
+// const Fundraise = Loadable(lazy(() => import("../pages/fundraise/~Fundraise")));
 const Fundraisers = Loadable(
   lazy(() => import("../pages/fundraise/Fundraisers"))
 );
 const FundraiseDetails = Loadable(
   lazy(() => import("../components/_external-pages/fundraise/FundraiseDetails"))
 );
-const FundraiseUpdate = Loadable(
-  lazy(() => import("../components/_external-pages/fundraise/FundraiseUpdate"))
-);
-const FundraiseEdit = Loadable(
-  lazy(() => import("../components/_external-pages/fundraise/FundraiseEdit"))
-);
+// const FundraiseUpdate = Loadable(
+//   lazy(() => import("../components/_external-pages/fundraise/FundraiseUpdate"))
+// );
+// const FundraiseEdit = Loadable(
+//   lazy(() => import("../components/_external-pages/fundraise/FundraiseEdit"))
+// );
 const Donate = Loadable(lazy(() => import("../pages/donate/Donate")));

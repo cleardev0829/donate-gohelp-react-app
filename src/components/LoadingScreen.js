@@ -10,6 +10,7 @@ import {
 import { Box } from "@material-ui/core";
 //
 import Logo from "./Logo";
+import LoadingLogo from "./LoadingLogo";
 
 // ----------------------------------------------------------------------
 
@@ -74,7 +75,7 @@ export default function LoadingScreen({ ...other }) {
           repeat: Infinity,
         }}
       >
-        <Logo sx={{ width: 64, height: 64 }} />
+        <LoadingLogo sx={{ width: 64, height: 64 }} />
       </motion.div>
 
       <Box

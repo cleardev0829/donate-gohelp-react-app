@@ -46,7 +46,7 @@ export default function StartFundraise() {
         <ContentStyle>
           <MotionInView variants={varFadeInUp}>
             <Typography
-              variant="h3"
+              variant="h4"
               paragraph
               sx={{
                 ...(!isLight && {
@@ -78,7 +78,7 @@ export default function StartFundraise() {
           </MotionInView>
         </ContentStyle>
 
-        <Grid container spacing={theme.shape.CARD_MARGIN}>
+        <Grid container spacing={theme.shape.CARD_MARGIN_LG}>
           {posts.map((post) => (
             <StartFundraiseCard key={post.id} post={post} />
           ))}

@@ -30,7 +30,7 @@ export default function OnlineFundraiseCard({ post, index }) {
           >
             <RoundedImg ait={title} src={cover} />
 
-            <TitleStyle variant="h5">{title}</TitleStyle>
+            <TitleStyle variant="subtitle1">{title}</TitleStyle>
 
             <DescriptionStyle variant="body2">{description}</DescriptionStyle>
 

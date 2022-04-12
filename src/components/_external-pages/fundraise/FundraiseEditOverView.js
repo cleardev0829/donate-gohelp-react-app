@@ -1,18 +1,18 @@
-import PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Icon } from "@iconify/react";
-import { useSnackbar } from "notistack";
-import { motion } from "framer-motion";
-import { useDispatch, useSelector } from "../../../redux/store";
-import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
-import radioButtonOffOutline from "@iconify/icons-eva/radio-button-off-outline";
+import _ from "lodash";
 import * as Yup from "yup";
+import PropTypes from "prop-types";
+import { Icon } from "@iconify/react";
+import { motion } from "framer-motion";
+import { useSnackbar } from "notistack";
+import radioButtonOffOutline from "@iconify/icons-eva/radio-button-off-outline";
+import checkmarkCircle2Outline from "@iconify/icons-eva/checkmark-circle-2-outline";
 import { Form, FormikProvider, useFormik } from "formik";
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
   Box,
@@ -28,19 +28,21 @@ import {
   InputAdornment,
   FormHelperText,
 } from "@material-ui/core";
-import fakeRequest from "../../../utils/fakeRequest";
 import {
-  setCheckout,
+  resetPost,
   updatePost,
-  getPostSuccess,
+  setCheckout,
+  getPost,
 } from "../../../redux/slices/fundraise";
-import { varFadeInRight, varFadeInUp } from "../../animate";
+import countries from "./countries";
+import FundraiseFooter from "./FundraiseFooter";
+import { CATEGORIES } from "src/utils/constants";
+import ReactCountryFlag from "react-country-flag";
+import fakeRequest from "../../../utils/fakeRequest";
 import { UploadSingleFileOverride } from "../../upload";
 import FundraisePhotoEditor from "./FundraisePhotoEditor";
-import { CATEGORIES } from "src/utils/constants";
-import countries from "./countries";
-import ReactCountryFlag from "react-country-flag";
-import _ from "lodash";
+import { varFadeInRight, varFadeInUp } from "../../animate";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
 
@@ -57,29 +59,25 @@ const fundraiserSettings = [
 ];
 
 FundraiseEditOverView.propTypes = {
-  renderForm: PropTypes.func,
+  childRef: PropTypes.object,
   post: PropTypes.object,
 };
 
-export default function FundraiseEditOverView({ renderForm, post }) {
+export default function FundraiseEditOverView({ post, childRef }) {
   const theme = useTheme();
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
-  const { isLoading } = useSelector((state) => state.fundraise);
-  const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const isLight = theme.palette.mode === "light";
 
   const NewBlogSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
-    description: Yup.mixed().required("Title is required"),
     goal: Yup.number().min(1000).required("This is required"),
     live: Yup.string().required("This is required"),
     category: Yup.string().required("This is required"),
     link: Yup.string(),
-    // name: Yup.string(),
-    // cover: Yup.mixed(),
     allowComment: Yup.bool(),
     allowDonation: Yup.bool(),
     allowSearch: Yup.bool(),
@@ -89,13 +87,10 @@ export default function FundraiseEditOverView({ renderForm, post }) {
     initialValues: {
       uid: post.uid,
       title: post.title,
-      description: post.description,
       goal: post.goal,
       live: post.live.label,
       category: post.category,
       link: post.link,
-      // name: post.team.name,
-      // cover: { ...post.team.cover, touched: false },
       allowComment: post.allows.allowComment,
       allowDonation: post.allows.allowDonation,
       allowSearch: post.allows.allowSearch,
@@ -104,11 +99,8 @@ export default function FundraiseEditOverView({ renderForm, post }) {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         await fakeRequest(500);
-        resetForm();
-        handleClosePreview();
-        setSubmitting(false);
-        dispatch(getPostSuccess(null));
-        dispatch(
+        // resetForm();
+        await dispatch(
           updatePost({
             uid: values.uid,
             title: values.title,
@@ -116,10 +108,6 @@ export default function FundraiseEditOverView({ renderForm, post }) {
             category: values.category,
             live: _.filter(countries, (item) => item.label === values.live)[0],
             link: values.link,
-            // team: {
-            //   name: values.name,
-            //   cover: values.cover,
-            // },
             allows: {
               allowComment: values.allowComment,
               allowDonation: values.allowDonation,
@@ -127,8 +115,8 @@ export default function FundraiseEditOverView({ renderForm, post }) {
             },
           })
         );
+        setSubmitting(false);
         enqueueSnackbar("Save success", { variant: "success" });
-        // navigate(-1);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -140,6 +128,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
     errors,
     values,
     touched,
+    isValid,
     handleSubmit,
     isSubmitting,
     setFieldValue,
@@ -148,50 +137,16 @@ export default function FundraiseEditOverView({ renderForm, post }) {
   } = formik;
 
   useEffect(() => {
-    renderForm(formik);
-  }, [values]);
+    childRef.current = formik;
+  }, [formik]);
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const cover = acceptedFiles[0];
-
-      if (cover) {
-        setFieldValue("cover", {
-          ...cover,
-          preview: URL.createObjectURL(cover),
-          rotate: 0,
-          scale: 0,
-          touched: true,
-        });
-      }
-    },
-    [setFieldValue]
-  );
-
-  const handleOpenPreview = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
-  const handleClosePreview = () => {
+  const handleClose = () => {
     setOpen(false);
   };
-
-  const handleEdit = () => {
-    handleOpenPreview();
-  };
-
-  const handleDelete = () => {
-    setFieldValue("cover", null);
-  };
-
-  // if (isLoading || !post) {
-  //   // return <Loading />;
-  //   return <Typography>sdf</Typography>;
-  // }
-
-  if (_.isEmpty(post)) {
-    return null;
-  }
 
   return (
     <>
@@ -199,18 +154,6 @@ export default function FundraiseEditOverView({ renderForm, post }) {
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
             <Stack spacing={theme.shape.MAIN_SPACING}>
-              {/* <Typography
-                variant="h5"
-                sx={{
-                  ...(!isLight && {
-                    textShadow: (theme) =>
-                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                  }),
-                }}
-              >
-                Fundraiser title?
-              </Typography> */}
-
               <TextField
                 fullWidth
                 size="small"
@@ -219,12 +162,6 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                 error={Boolean(touched.title && errors.title)}
                 helperText={touched.title && errors.title}
                 onChange={(e) => {
-                  dispatch(
-                    setCheckout({
-                      name: "title",
-                      value: e.target.value,
-                    })
-                  );
                   handleChange(e);
                 }}
               />
@@ -246,21 +183,6 @@ export default function FundraiseEditOverView({ renderForm, post }) {
                 }}
               >
                 <Stack spacing={theme.shape.MAIN_SPACING}>
-                  {/* <Typography
-                    variant="h5"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Goal
-                  </Typography> */}
-
                   <TextField
                     fullWidth
                     size="small"
@@ -301,21 +223,6 @@ export default function FundraiseEditOverView({ renderForm, post }) {
 
               <Grid item xs={12} md={6}>
                 <Stack spacing={theme.shape.MAIN_SPACING}>
-                  {/* <Typography
-                    variant="h5"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Category
-                  </Typography> */}
-
                   <TextField
                     fullWidth
                     size="small"
@@ -344,21 +251,6 @@ export default function FundraiseEditOverView({ renderForm, post }) {
             <Grid container xs={12}>
               <Grid item xs={12} md={6}>
                 <Stack spacing={theme.shape.MAIN_SPACING}>
-                  {/* <Typography
-                    variant="h5"
-                    sx={{
-                      ...(!isLight && {
-                        textShadow: (theme) =>
-                          `4px 4px 16px ${alpha(
-                            theme.palette.grey[800],
-                            0.48
-                          )}`,
-                      }),
-                    }}
-                  >
-                    Country
-                  </Typography> */}
-
                   <TextField
                     fullWidth
                     size="small"
@@ -389,18 +281,6 @@ export default function FundraiseEditOverView({ renderForm, post }) {
               </Grid>
             </Grid>
             <Stack spacing={theme.shape.MAIN_SPACING}>
-              {/* <Typography
-                variant="h5"
-                sx={{
-                  ...(!isLight && {
-                    textShadow: (theme) =>
-                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                  }),
-                }}
-              >
-                Fundraiser Link
-              </Typography> */}
-
               <motion.div variants={varFadeInUp}>
                 <Typography
                   variant="body2"
@@ -439,132 +319,6 @@ export default function FundraiseEditOverView({ renderForm, post }) {
               </Typography>
             </Stack>
 
-            {/* Team Setting */}
-            {/* <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-              <Typography
-                variant="h4"
-                sx={{
-                  ...(!isLight && {
-                    textShadow: (theme) =>
-                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                  }),
-                }}
-              >
-                Team Settings
-              </Typography>
-
-              <Stack spacing={theme.shape.MAIN_SPACING}>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    ...(!isLight && {
-                      textShadow: (theme) =>
-                        `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                    }),
-                  }}
-                >
-                  Team Name
-                </Typography>
-
-                <TextField
-                  fullWidth
-                  size="small"
-                  label=""
-                  {...getFieldProps("name")}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
-                  onChange={(e) => {
-                    dispatch(
-                      setCheckout({
-                        name: "name",
-                        value: e.target.value,
-                      })
-                    );
-                    handleChange(e);
-                  }}
-                />
-              </Stack>
-
-              <Stack spacing={theme.shape.MAIN_SPACING}>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    ...(!isLight && {
-                      textShadow: (theme) =>
-                        `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                    }),
-                  }}
-                >
-                  Add team photo (Optional)
-                </Typography>
-
-                <div>
-                  <UploadSingleFileOverride
-                    maxSize={3145728}
-                    accept="image/*"
-                    file={values.cover}
-                    onDrop={(acceptedFiles) => {
-                      handleOpenPreview();
-                      handleDrop(acceptedFiles);
-                    }}
-                    error={Boolean(touched.cover && errors.cover)}
-                  />
-                  {touched.cover && errors.cover && (
-                    <FormHelperText error sx={{ px: 2 }}>
-                      {touched.cover && errors.cover}
-                    </FormHelperText>
-                  )}
-                </div>
-
-                <Stack direction="row" justifyContent="space-between">
-                  <Button
-                    size="middle"
-                    type="button"
-                    variant="outlined"
-                    startIcon={<Icon icon="akar-icons:edit" />}
-                    onClick={handleEdit}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    size="middle"
-                    type="button"
-                    variant="outlined"
-                    startIcon={<Icon icon="bx:trash-alt" />}
-                    onClick={handleDelete}
-                  >
-                    Delete
-                  </Button>
-                </Stack>
-              </Stack>
-
-              <Typography
-                variant="h5"
-                paragraph
-                sx={{
-                  ...(!isLight && {
-                    textShadow: (theme) =>
-                      `4px 4px 16px ${alpha(theme.palette.grey[800], 0.48)}`,
-                  }),
-                }}
-              >
-                Show the amount each team member has raised publicly.
-              </Typography>
-
-              <Stack direction="row" justifyContent={"flex-end"}>
-                <Button
-                  size="middle"
-                  type="button"
-                  variant="contained"
-                  color="error"
-                  onClick={handleEdit}
-                >
-                  Delete Team
-                </Button>
-              </Stack>
-            </Stack> */}
-
-            {/* Fundraiser Settings */}
             <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
               <Typography
                 variant="subtitle1"
@@ -620,11 +374,7 @@ export default function FundraiseEditOverView({ renderForm, post }) {
         </Form>
       </FormikProvider>
 
-      <FundraisePhotoEditor
-        formik={formik}
-        openPreview={open}
-        onClosePreview={handleClosePreview}
-      />
+      <FundraisePhotoEditor formik={formik} open={open} onClose={handleClose} />
     </>
   );
 }

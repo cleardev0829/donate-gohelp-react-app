@@ -30,15 +30,11 @@ import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
 
 FundraisePhotoEditor.propTypes = {
   formik: PropTypes.object.isRequired,
-  openPreview: PropTypes.bool,
-  onClosePreview: PropTypes.func,
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
-export default function FundraisePhotoEditor({
-  formik,
-  openPreview,
-  onClosePreview,
-}) {
+export default function FundraisePhotoEditor({ formik, open, onClose }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const {
@@ -73,16 +69,16 @@ export default function FundraisePhotoEditor({
       ...values.cover,
       ...state,
     });
-    onClosePreview();
+    onClose();
   };
 
   return (
-    <DialogAnimate maxWidth="md" open={openPreview} onClose={onClosePreview}>
+    <DialogAnimate maxWidth="md" open={open} onClose={onClose}>
       <DialogActions sx={{ py: 2, px: 3 }}>
         <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
           Preview
         </Typography>
-        <Button onClick={onClosePreview}>Cancel</Button>
+        <Button onClick={onClose}>Cancel</Button>
         <LoadingButton
           type="button"
           variant="contained"

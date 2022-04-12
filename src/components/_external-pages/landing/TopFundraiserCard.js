@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import _ from "lodash";
+import numeral from "numeral";
 import PropTypes from "prop-types";
 import ReactQuill from "react-quill";
 import ReactCountryFlag from "react-country-flag";
@@ -37,6 +38,7 @@ import { Connect } from "src/components/Connect";
 import DonateProgress from "../../DonateProgress";
 import { PATH_PAGE } from "../../../routes/paths";
 import { filters } from "../../../utils/constants";
+import { fNumber } from "../../../utils/formatNumber";
 import { resetPost } from "../../../redux/slices/fundraise";
 import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
@@ -102,7 +104,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
     <>
       <Grid item xs={12} sm={6} md={3}>
         <Card
-          class={classes.root}
+          className={classes.root}
           sx={{ position: "relative" }}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
@@ -117,15 +119,13 @@ export default function TopFundraiserCard({ post, simple = false }) {
             <Box sx={{ cursor: "pointer" }} onClick={handleNavigate}>
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <CardMediaStyle>
-                  {/* {simple && <PublishButtonStyle>{status}</PublishButtonStyle>} */}
-
                   <CoverImgStyle
                     alt={"cover"}
                     src={post.cover.preview}
                     sx={{
                       transform: `rotate(${
-                        ((-1 * post.rotate) % 4) * 90
-                      }deg) scale(${1 + post.scale / 100})`,
+                        ((-1 * post.cover.rotate) % 4) * 90
+                      }deg) scale(${1 + post.cover.scale / 100})`,
                     }}
                   />
                 </CardMediaStyle>
@@ -146,7 +146,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
                 <DonateProgress
                   time={filter.recentTimeAgo}
                   total={filter.totalAmount}
-                  goal={post.goal}
+                  goal={parseFloat(post.goal)}
                 />
               </Stack>
             </Box>
@@ -180,10 +180,9 @@ export default function TopFundraiserCard({ post, simple = false }) {
       </Grid>
 
       <FundraiseShareDialog
-        uid={post.id}
-        title={post.title}
-        openPreview={open}
-        onClosePreview={handleClosePreview}
+        post={post}
+        open={open}
+        onClose={handleClosePreview}
       />
     </>
   );

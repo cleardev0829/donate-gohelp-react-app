@@ -14,8 +14,8 @@ export default function Logo({ sx, type = "default" }) {
   const theme = useTheme();
 
   return (
-    <Box sx={{ width: 41, height: 42, ...sx }}>
-      {type === "default" ? (
+    <Box sx={{ overflow: "hidden" }}>
+      {/* {type === "default" ? (
         <svg
           version="1.1"
           id="Layer_1"
@@ -124,7 +124,15 @@ VDA4OjUxOjE5KzAwOjAwm5izxAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMi0wMy0xMFQwODo1MTox
 OSswMDowMOrFC3gAAAAASUVORK5CYII="
           />
         </svg>
-      )}
+      )} */}
+
+      <img
+        src="/favicon/PNG/GO HELP.png"
+        style={{
+          width: 200,
+          objectFit: "cover",
+        }}
+      />
     </Box>
   );
 }

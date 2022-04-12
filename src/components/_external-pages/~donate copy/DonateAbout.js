@@ -27,12 +27,11 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
+import DonateDialog from "./DonateDialog";
 import OutlineCard from "../../OutlineCard";
 import { filters } from "src/utils/constants";
-import DonateProgress from "../../DonateProgress";
 import { onNextStep } from "src/redux/slices/donate";
-import Scrollbar from "../../../components/Scrollbar";
-import DonatePaymentDialog from "./DonatePaymentDialog";
+import Scrollbar from "../../Scrollbar";
 import { fCurrency, fPercent } from "src/utils/formatNumber";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
@@ -40,9 +39,9 @@ import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 
 // ----------------------------------------------------------------------
 
-DonateToken.propTypes = {};
+DonateAbout.propTypes = {};
 
-export default function DonateToken() {
+export default function DonateAbout() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -101,12 +100,6 @@ export default function DonateToken() {
 
           <Divider />
           <CardContent>
-            {/* <DonateProgress
-                time={filter.recentTimeAgo}
-                total={filter.totalAmount}
-                goal={post.goal}
-              /> */}
-
             {currentTab == "About" && (
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <Typography variant="subtitle1">{post.title}</Typography>
@@ -254,12 +247,11 @@ export default function DonateToken() {
         </OutlineCard>
       </Box>
       <FundraiseShareDialog
-        uid={post.uid}
-        title={post.title}
-        openPreview={open}
-        onClosePreview={handleClosePreview}
+        post={post}
+        open={open}
+        onClose={handleClosePreview}
       />
-      <DonatePaymentDialog
+      <DonateDialog
         post={post}
         open={donateDlgOpen}
         onClose={handleDonateDlgClose}

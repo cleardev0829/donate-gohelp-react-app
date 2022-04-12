@@ -8,6 +8,10 @@ export default function Input(theme) {
           "&.Mui-disabled": {
             "& svg": { color: theme.palette.text.disabled },
           },
+
+          "&.MuiInputBase-sizeSmall": {
+            // fontSize: 14,
+          },
         },
         input: {
           "&::placeholder": {
@@ -58,6 +62,13 @@ export default function Input(theme) {
               borderColor: theme.palette.action.disabledBackground,
             },
           },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          ...theme.typography.body2,
         },
       },
     },

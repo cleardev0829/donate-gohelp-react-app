@@ -1,15 +1,15 @@
-import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
-import { Icon } from "@iconify/react";
-import { useDispatch, useSelector } from "../../../redux/store";
 import * as Yup from "yup";
+import PropTypes from "prop-types";
+import { Icon } from "@iconify/react";
 import { Form, FormikProvider, useFormik } from "formik";
 import {
   alpha,
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
+  Box,
   Card,
   Grid,
   Stack,
@@ -24,24 +24,26 @@ import {
   onNextStep,
   setCheckout,
 } from "../../../redux/slices/fundraise";
-import { UploadSingleFileOverride } from "../../upload";
 import { FundraiseHeader } from ".";
+import FundraiseFooter from "./FundraiseFooter";
+import { UploadSingleFileOverride } from "../../upload";
 import FundraisePhotoEditor from "./FundraisePhotoEditor";
+import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
 
 export default function FundraisePhoto() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
-  const [open, setOpen] = useState(false);
 
-  const handleOpenPreview = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
-  const handleClosePreview = () => {
+  const handleClose = () => {
     setOpen(false);
   };
 
@@ -66,7 +68,7 @@ export default function FundraisePhoto() {
       try {
         await fakeRequest(500);
         resetForm();
-        handleClosePreview();
+        handleClose();
         setSubmitting(false);
         handleNextStep();
       } catch (error) {
@@ -113,130 +115,91 @@ export default function FundraisePhoto() {
   };
 
   const handleEdit = () => {
-    handleOpenPreview();
+    handleOpen();
   };
 
   return (
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <FundraiseHeader
-            cancelAction={handleBackStep}
-            continueAction={handleSubmit}
-          />
-
-          <Container maxWidth="md">
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={12}>
-                <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-                  <Card
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12}>
+              <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
+                <Stack spacing={theme.shape.MAIN_SPACING}>
+                  <Typography
+                    variant="body2"
                     sx={{
-                      p: theme.shape.CARD_PADDING,
+                      ...(!isLight && {
+                        textShadow: (theme) =>
+                          `4px 4px 16px ${alpha(
+                            theme.palette.grey[800],
+                            0.48
+                          )}`,
+                      }),
                     }}
                   >
-                    <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                      <Typography
-                        variant="h5"
-                        sx={{
-                          ...(!isLight && {
-                            textShadow: (theme) =>
-                              `4px 4px 16px ${alpha(
-                                theme.palette.grey[800],
-                                0.48
-                              )}`,
-                          }),
-                        }}
-                      >
-                        Add a cover photo or video
-                      </Typography>
+                    We're here to guide you through your fundraise journey.
+                  </Typography>
 
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          ...(!isLight && {
-                            textShadow: (theme) =>
-                              `4px 4px 16px ${alpha(
-                                theme.palette.grey[800],
-                                0.48
-                              )}`,
-                          }),
-                        }}
-                      >
-                        We're here to guide you through your fundraise journey.
-                      </Typography>
+                  <div>
+                    <UploadSingleFileOverride
+                      maxSize={3145728}
+                      accept="image/*"
+                      file={checkout.cover}
+                      onDrop={(acceptedFiles) => {
+                        handleOpen();
+                        handleDrop(acceptedFiles);
+                      }}
+                      error={Boolean(touched.cover && errors.cover)}
+                    />
+                    {touched.cover && errors.cover && (
+                      <FormHelperText error sx={{ px: 2 }}>
+                        {touched.cover && errors.cover}
+                      </FormHelperText>
+                    )}
+                  </div>
 
-                      <div>
-                        <UploadSingleFileOverride
-                          maxSize={3145728}
-                          accept="image/*"
-                          file={checkout.cover}
-                          onDrop={(acceptedFiles) => {
-                            handleOpenPreview();
-                            handleDrop(acceptedFiles);
-                          }}
-                          error={Boolean(touched.cover && errors.cover)}
-                        />
-                        {touched.cover && errors.cover && (
-                          <FormHelperText error sx={{ px: 2 }}>
-                            {touched.cover && errors.cover}
-                          </FormHelperText>
-                        )}
-                      </div>
-
-                      <Stack direction="row" justifyContent="space-between">
-                        <Button
-                          size="middle"
-                          type="button"
-                          variant="outlined"
-                          startIcon={<Icon icon="akar-icons:edit" />}
-                          onClick={handleEdit}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="middle"
-                          type="button"
-                          variant="outlined"
-                          startIcon={<Icon icon="bx:trash-alt" />}
-                          onClick={handleDelete}
-                        >
-                          Delete
-                        </Button>
-                      </Stack>
-                    </Stack>
-                  </Card>
-
-                  {/* <Box
-                    sx={{
-                      height: 2,
-                      backgroundColor: (theme) => theme.palette.common.white,
-                      background:
-                        "radial-gradient(50% 50% at 50% 50%, #DADADA 0%, rgba(218, 218, 218, 0) 100%)",
-                      transform: "matrix(-1, 0, 0, 1, 0, 0)",
-                    }}
-                  ></Box>
-
-                  <Card sx={{ px: 2, py: 2 }}>
-                    <Stack
-                      spacing={1}
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="flex-start"
+                  <Stack direction="row" justifyContent="space-between">
+                    <Button
+                      size="middle"
+                      type="button"
+                      variant="outlined"
+                      startIcon={<Icon icon="akar-icons:edit" />}
+                      onClick={handleEdit}
                     >
-                      <Icon icon="fluent:link-square-20-regular" />
-                      <Typography variant="subtitle1">Add a YouTube link</Typography>
-                    </Stack>
-                  </Card> */}
+                      Edit
+                    </Button>
+                    <Button
+                      size="middle"
+                      type="button"
+                      variant="outlined"
+                      startIcon={<Icon icon="bx:trash-alt" />}
+                      onClick={handleDelete}
+                    >
+                      Delete
+                    </Button>
+                  </Stack>
                 </Stack>
-              </Grid>
+
+                <Box
+                  sx={{
+                    height: 2,
+                    backgroundColor: (theme) => theme.palette.common.white,
+                    background:
+                      "radial-gradient(50% 50% at 50% 50%, #DADADA 0%, rgba(218, 218, 218, 0) 100%)",
+                    transform: "matrix(-1, 0, 0, 1, 0, 0)",
+                  }}
+                />
+              </Stack>
             </Grid>
-          </Container>
+          </Grid>
         </Form>
       </FormikProvider>
-      <FundraisePhotoEditor
-        formik={formik}
-        openPreview={open}
-        onClosePreview={handleClosePreview}
+      <FundraisePhotoEditor formik={formik} open={open} onClose={handleClose} />
+
+      <FundraiseFooter
+        cancelAction={handleBackStep}
+        continueAction={handleSubmit}
       />
     </>
   );

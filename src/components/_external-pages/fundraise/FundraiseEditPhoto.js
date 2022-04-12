@@ -44,11 +44,11 @@ import FundraisePhotoEditor from "./FundraisePhotoEditor";
 // ----------------------------------------------------------------------
 
 FundraiseEditPhoto.propTypes = {
-  renderForm: PropTypes.func,
+  childRef: PropTypes.object,
   post: PropTypes.object,
 };
 
-export default function FundraiseEditPhoto({ renderForm, post }) {
+export default function FundraiseEditPhoto({ childRef, post }) {
   const theme = useTheme();
   const params = useParams();
   const dispatch = useDispatch();
@@ -71,18 +71,15 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         await fakeRequest(500);
-        resetForm();
-        handleClosePreview();
-        setSubmitting(false);
-        dispatch(getPostSuccess(null));
-        dispatch(
+        // resetForm();
+        await dispatch(
           updatePost({
             uid: values.uid,
             cover: values.cover,
           })
         );
+        setSubmitting(false);
         enqueueSnackbar("Save success", { variant: "success" });
-        // navigate(-1);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -118,19 +115,19 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
   );
 
   useEffect(() => {
-    renderForm(formik);
-  }, [values]);
+    childRef.current = formik;
+  }, []);
 
-  const handleOpenPreview = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
-  const handleClosePreview = () => {
+  const handleClose = () => {
     setOpen(false);
   };
 
   const handleEdit = () => {
-    handleOpenPreview();
+    handleOpen();
   };
 
   const handleDelete = () => {
@@ -149,7 +146,7 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
                   accept="image/*"
                   file={values.cover}
                   onDrop={(acceptedFiles) => {
-                    handleOpenPreview();
+                    handleOpen();
                     handleDrop(acceptedFiles);
                   }}
                   error={Boolean(touched.cover && errors.cover)}
@@ -186,11 +183,7 @@ export default function FundraiseEditPhoto({ renderForm, post }) {
         </Form>
       </FormikProvider>
 
-      <FundraisePhotoEditor
-        formik={formik}
-        openPreview={open}
-        onClosePreview={handleClosePreview}
-      />
+      <FundraisePhotoEditor formik={formik} open={open} onClose={handleClose} />
     </>
   );
 }

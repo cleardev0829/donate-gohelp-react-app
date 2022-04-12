@@ -17,8 +17,7 @@ const initialState = {
   step: 4,
 
   checkout: {
-    activeStep: -1,
-
+    activeStep: 0,
     uid: "",
     type: null,
     live: null,
@@ -26,7 +25,7 @@ const initialState = {
     goal: 1000,
     cover: null,
     title: "",
-    description: null,
+    description: { content: "", text: "" },
     link: "",
     // team: { name: "", cover: null },
     allows: { allowComment: false, allowDonation: false, allowSearch: false },
@@ -94,7 +93,7 @@ const slice = createSlice({
     },
 
     resetCheckout(state) {
-      state.checkout.activeStep = -1;
+      state.checkout.activeStep = 0;
 
       state.checkout.uid = "";
       state.checkout.type = null;
@@ -103,7 +102,7 @@ const slice = createSlice({
       state.checkout.goal = 1000;
       state.checkout.cover = null;
       state.checkout.title = "";
-      state.checkout.description = "";
+      state.checkout.description = { content: "", text: "" };
       state.checkout.link = "";
       // state.checkout.team = {
       //   name: "",
@@ -174,9 +173,8 @@ export function addDonate(donate) {
       const response = await axios.post("/api/donate/add", {
         ...donate,
       });
-      console.log("------------2", response.data, donate);
+
       dispatch(getPost(donate.fundraiseId));
-      // dispatch(slice.actions.getDonateSuccess(response.data.donate));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
@@ -193,8 +191,7 @@ export function addUpdate(update) {
       const response = await axios.post("/api/update/add", {
         ...update,
       });
-
-      // dispatch(slice.actions.getPostSuccess(response.data.donate));
+      dispatch(getPost(update.fundraiseId));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
@@ -211,8 +208,7 @@ export function updatePost(post) {
         ...post,
       });
 
-      // dispatch(slice.actions.getPostSuccess(response.data.results));
-      dispatch(getPost(post.uid));
+      await dispatch(getPost(post.uid));
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
@@ -266,6 +262,7 @@ export function getPost(uid) {
       const response = await axios.get("/api/fundraise/post", {
         params: { uid },
       });
+
       dispatch(slice.actions.getPostSuccess(response.data.post));
     } catch (error) {
       console.error(error);

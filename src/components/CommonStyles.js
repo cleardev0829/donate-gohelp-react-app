@@ -12,7 +12,7 @@ import { Link, Button, Typography } from "@material-ui/core";
 export const CardMediaStyle = styled("div")({
   position: "relative",
   paddingTop: "calc(100% * 3 / 4)",
-  // overflow: "hidden",
+  overflow: "hidden",
 });
 
 export const CoverImgStyle = styled("img")(({ sx }) => ({

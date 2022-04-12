@@ -1,23 +1,24 @@
 import { useEffect, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "../../../redux/store";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Icon } from "@iconify/react";
 import { orderBy } from "lodash";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import { Icon } from "@iconify/react";
 import rightArrowAlt from "@iconify/icons-bxs/right-arrow-alt";
-import arrowRightFill from "@iconify/icons-eva/arrow-right-fill";
+import {
+  alpha,
+  useTheme,
+  experimentalStyled as styled,
+} from "@material-ui/core/styles";
 import {
   Box,
   Grid,
-  Skeleton,
   Stack,
+  Skeleton,
   Container,
   Typography,
-  useTheme,
 } from "@material-ui/core";
-import { varFadeInUp, MotionInView } from "../../animate";
-import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 import { TopFundraiserCard } from "../landing";
+import { varFadeInUp, MotionInView } from "../../animate";
+import { useDispatch, useSelector } from "../../../redux/store";
+import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -73,14 +74,14 @@ const SkeletonLoad = (
 // ----------------------------------------------------------------------
 
 export default function TopFundraisers() {
-  const dispatch = useDispatch();
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const isLight = theme.palette.mode === "light";
+  const [filters, setFilters] = useState("latest");
   const { posts, hasMore, index, step } = useSelector(
     (state) => state.fundraise
   );
-  const [filters, setFilters] = useState("latest");
   const [data, setData] = useState(posts);
-  const isLight = theme.palette.mode === "light";
 
   const onScroll = useCallback(() => {
     alert();

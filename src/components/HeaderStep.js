@@ -85,7 +85,7 @@ export default function HeaderStep() {
   return (
     <Grid container justifyContent={isComplete ? "center" : "flex-start"}>
       <Grid item xs={12} md={12} sx={{ mb: 0 }}>
-        {activeStep > -1 && activeStep <= 4 && (
+        {activeStep > 0 && activeStep <= 4 && (
           <Stepper
             alternativeLabel
             activeStep={activeStep}

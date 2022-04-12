@@ -1,116 +1,58 @@
-import { isString } from "lodash";
 import PropTypes from "prop-types";
-// material
-import { LoadingButton } from "@material-ui/lab";
-import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
+import {
+  alpha,
+  useTheme,
+  experimentalStyled as styled,
+} from "@material-ui/core/styles";
 import {
   Box,
+  Stack,
   Button,
+  Divider,
   Container,
   Typography,
+  CardContent,
   DialogActions,
+  DialogContent,
 } from "@material-ui/core";
-//
-import { DialogAnimate } from "../../animate";
 import Markdown from "../../Markdown";
 import Scrollbar from "../../Scrollbar";
+import FundraiseShare from "./FundraiseShare";
+import { DialogAnimate } from "../../animate";
 import EmptyContent from "../../EmptyContent";
-import { DonateMain } from "../donate";
+import { PATH_PAGE } from "../../../routes/paths";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { FundraiseShare } from ".";
 
 // ----------------------------------------------------------------------
-
-const HeroStyle = styled("div")(({ theme }) => ({
-  paddingTop: "56%",
-  position: "relative",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  "&:before": {
-    top: 0,
-    content: "''",
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    backgroundColor: alpha(theme.palette.grey[900], 0.72),
-  },
-}));
-
-// ----------------------------------------------------------------------
-
-PreviewHero.propTypes = {
-  title: PropTypes.string,
-  cover: PropTypes.string,
-};
-
-function PreviewHero({ title, cover }) {
-  return (
-    <HeroStyle>
-      <Container
-        sx={{
-          top: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          position: "absolute",
-          pt: { xs: 3, lg: 10 },
-          color: "common.white",
-        }}
-      >
-        <Typography variant="h2" component="h1">
-          {title}
-        </Typography>
-      </Container>
-    </HeroStyle>
-  );
-}
 
 FundraiseShareDialog.propTypes = {
-  uid: PropTypes.string,
-  title: PropTypes.string,
-  formik: PropTypes.object.isRequired,
-  openPreview: PropTypes.bool,
-  onClosePreview: PropTypes.func,
+  post: PropTypes.object,
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
-export default function FundraiseShareDialog({
-  uid,
-  title,
-  formik,
-  openPreview,
-  onClosePreview,
-}) {
-  // const { values, handleSubmit, isSubmitting, isValid } = formik;
-  // const { title, description, content } = values;
-  // const cover = isString(values.cover) ? values.cover : values.cover?.preview;
-  const hasContent = title;
+export default function FundraiseShareDialog({ post, open, onClose }) {
+  const theme = useTheme();
 
   return (
-    <DialogAnimate fullScreen open={openPreview} onClose={onClosePreview}>
-      <DialogActions sx={{ py: 2, px: 3 }}>
+    <DialogAnimate open={open} onClose={onClose}>
+      <CardContent sx={{ px: 3 }}>
         <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
           Share Fundraiser
         </Typography>
-        <Button onClick={onClosePreview}>Cancel</Button>
-        {/* <LoadingButton
-          type="submit"
-          variant="contained"
-          disabled={!isValid}
-          loading={isSubmitting}
-          onClick={handleSubmit}
-        >
-          Submit
-        </LoadingButton> */}
-      </DialogActions>
+      </CardContent>
 
-      {hasContent ? (
+      <Divider />
+
+      <DialogContent>
         <Scrollbar>
-          <FundraiseShare uid={uid} title={title} />
+          <FundraiseShare post={post} />
         </Scrollbar>
-      ) : (
-        <EmptyContent title="Empty content" />
-      )}
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+      </DialogActions>
     </DialogAnimate>
   );
 }
