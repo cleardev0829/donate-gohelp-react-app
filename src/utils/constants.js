@@ -1,5 +1,13 @@
 import moment from "moment";
 
+export const ADDRESS = "0x2c3A2a9fBB92947216E2B5d5CD9B87cC4FDD0591";
+
+export const CRYPTO_TYPES = [
+  { name: "BTC", price: 43602.25, type: "" },
+  { name: "ETH", price: 43602.25, type: "native" },
+  { name: "SOL", price: 43602.25, type: "sol" },
+];
+
 export const CRYPTO_PRICE = {
   BTC: 43602.25,
   ETH: 3098.56,
@@ -72,8 +80,6 @@ export const filters = (donates) => {
 };
 
 export const STEPS = ["Basics", "Goal", "Photo", "Story", "Donation"];
-
-export const CRYPTO_TYPES = ["BTC", "ETH", "SOL"];
 
 export const CATEGORIES = [
   "Medical",

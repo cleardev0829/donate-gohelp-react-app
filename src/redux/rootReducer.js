@@ -12,6 +12,7 @@ import kanbanReducer from "./slices/kanban";
 import postReducer from "./slices/post";
 import donateReducer from "./slices/donate";
 import fundraiseReducer from "./slices/fundraise";
+// import moralisReducer from "./slices/moralis";
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
   // donate: persistReducer(donatePersistConfig, donateReducer),
   donate: donateReducer,
   fundraise: fundraiseReducer,
+  // moralis: moralisReducer,
 });
 
 export { rootPersistConfig, rootReducer };

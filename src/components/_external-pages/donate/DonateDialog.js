@@ -1,3 +1,4 @@
+import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import * as Yup from "yup";
 import moment from "moment";
 import { isString } from "lodash";
@@ -28,7 +29,8 @@ import { DialogAnimate } from "../../animate";
 import EmptyContent from "../../EmptyContent";
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { addDonate, resetPost } from "src/redux/slices/fundraise";
+import { addDonate, resetPost } from "../../../redux/slices/fundraise";
+import { ADDRESS } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +44,18 @@ export default function DonateDialog({ post, open, onClose }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const Web3Api = useMoralisWeb3Api();
+  const {
+    Moralis,
+    authenticate,
+    isWeb3Enabled,
+    isAuthenticated,
+    isAuthenticating,
+    user,
+    account,
+    enableWeb3,
+    logout,
+  } = useMoralis();
 
   const Schema = Yup.object().shape({
     cryptoType: Yup.string().required("This is required"),
@@ -62,8 +76,19 @@ export default function DonateDialog({ post, open, onClose }) {
         await fakeRequest(500);
         resetForm();
         onClose();
-        setSubmitting(false);
-
+        console.log("====", user);
+        console.log("----isWeb3Enabled", isWeb3Enabled);
+        console.log("----isAuthenticated", isAuthenticated);
+        if (!isWeb3Enabled) {
+          enableWeb3();
+        }
+        const balance = await getBalance();
+        if (parseFloat(balance) < values.cryptoCount) {
+          enqueueSnackbar("Insufficient funds.", { variant: "warning" });
+          return;
+        }
+        alert();
+        await transfer();
         dispatch(resetPost());
         dispatch(
           addDonate({
@@ -74,6 +99,8 @@ export default function DonateDialog({ post, open, onClose }) {
             createdAt: moment(),
           })
         );
+
+        setSubmitting(false);
         enqueueSnackbar("Save success", { variant: "success" });
       } catch (error) {
         console.error(error);
@@ -93,6 +120,26 @@ export default function DonateDialog({ post, open, onClose }) {
     getFieldProps,
     handleChange,
   } = formik;
+
+  const transfer = async () => {
+    const options = {
+      type: "native",
+      amount: Moralis.Units.ETH(values.cryptoCount),
+      receiver: ADDRESS,
+    };
+    const result = await Moralis.transfer(options);
+  };
+
+  const getBalance = async () => {
+    const options = {
+      chain: "testnet",
+      address: account,
+      // to_block: "1234",
+    };
+    const result = await Moralis.Web3API.account.getNativeBalance(options);
+
+    return Moralis.Units.FromWei(result.balance);
+  };
 
   return (
     <DialogAnimate open={open} onClose={onClose}>

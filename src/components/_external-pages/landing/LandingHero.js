@@ -192,27 +192,27 @@ export default function LandingHero() {
                   {CRYPTO_TYPES.map((option, index) => (
                     <Stack spacing={6} direction="row" key={`box-${index}`}>
                       <Stack
-                        key={`stack-${option}`}
+                        key={`stack-${option.name}`}
                         spacing={theme.shape.MAIN_SPACING}
                       >
                         <Typography
-                          key={`typography-1-${option}`}
+                          key={`typography-1-${option.name}`}
                           variant="caption"
                         >
-                          {option}
+                          {option.name}
                         </Typography>
                         <img
-                          key={`img-${option}`}
-                          src={`/static/coins/${option}.webp`}
+                          key={`img-${option.name}`}
+                          src={`/static/coins/${option.name}.webp`}
                           height={24}
                           width={24}
                         />
 
                         <Typography
-                          key={`typography-2-${option}`}
+                          key={`typography-2-${option.name}`}
                           variant="caption"
                         >
-                          {CRYPTO_PRICE[option]}
+                          {CRYPTO_PRICE[option.name]}
                         </Typography>
                       </Stack>
 

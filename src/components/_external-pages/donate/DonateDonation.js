@@ -32,21 +32,18 @@ import {
   onBackStep,
   onNextStep,
 } from "../../../redux/slices/donate";
+import {
+  CardMediaStyle,
+  CoverImgStyle,
+} from "../../../components/CommonStyles";
+import OutlineCard from "../../OutlineCard";
 import { FundraiseHeader } from "../fundraise";
 import fakeRequest from "../../../utils/fakeRequest";
-import OutlineCard from "../../OutlineCard";
-import { fCurrency, fPercent } from "src/utils/formatNumber";
 import { useDispatch, useSelector } from "../../../redux/store";
+import { fCurrency, fPercent } from "../../../utils/formatNumber";
 import { filters, CRYPTO_TYPES, cryptoToUSD } from "src/utils/constants";
-import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
 
 // ----------------------------------------------------------------------
-
-const ImgStyle = styled("img")({
-  // width: 40,
-  height: 20,
-  objectFit: "contain",
-});
 
 DonateDonation.propTypes = {
   post: PropTypes.object,
@@ -131,17 +128,24 @@ export default function DonateDonation({ post, formik }) {
                         sx={{ width: 200 }}
                       >
                         {CRYPTO_TYPES.map((option) => (
-                          <MenuItem key={option} value={option}>
+                          <MenuItem
+                            key={`menuitem-${option.name}`}
+                            value={option.name}
+                          >
                             <Stack
+                              key={`stack-${option.name}`}
                               spacing={theme.shape.CARD_CONTENT_SPACING}
                               direction="row"
                               alignItems={"center"}
                             >
                               <img
-                                src={`/static/coins/${option}.webp`}
+                                key={`img-${option.name}`}
+                                src={`/static/coins/${option.name}.webp`}
                                 height="18"
                               />
-                              <span>{option}</span>
+                              <span key={`span-${option.name}`}>
+                                {option.name}
+                              </span>
                             </Stack>
                           </MenuItem>
                         ))}

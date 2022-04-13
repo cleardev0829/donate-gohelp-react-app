@@ -1,6 +1,5 @@
 import React from "react";
 import { experimentalStyled as styled } from "@material-ui/core/styles";
-import Page from "../components/Page";
 import {
   LandingHero,
   LandingBottom,
@@ -9,11 +8,11 @@ import {
   DonateCategories,
   OnlineFundraise,
 } from "../components/_external-pages/landing";
+import Page from "../components/Page";
+import MainFooter from "../layouts/main/MainFooter";
 import { useDispatch, useSelector } from "../redux/store";
-import { resetCheckout as resetFundraise } from "../redux/slices/fundraise";
 import { resetCheckout as resetDonate } from "../redux/slices/donate";
-
-import MainFooter from "src/layouts/main/MainFooter";
+import { resetCheckout as resetFundraise } from "../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 

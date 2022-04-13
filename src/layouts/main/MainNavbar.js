@@ -1,6 +1,11 @@
+import { useEffect, useState } from "react";
 import { NavLink as RouterLink, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 import { Icon } from "@iconify/react";
-// material
+import { useWallet } from "use-wallet";
+import { useMoralis } from "react-moralis";
+import SearchIcon from "@material-ui/icons/Search";
+import { Contract, providers, utils } from "ethers";
 import { experimentalStyled as styled } from "@material-ui/core/styles";
 import {
   Box,
@@ -12,28 +17,21 @@ import {
   Container,
   Typography,
 } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-// hooks
-import useOffSetTop from "../../hooks/useOffSetTop";
-// components
-import Logo from "../../components/Logo";
-import Search from "../../components/Search";
-import Label from "../../components/Label";
-import SettingMode from "../../components/settings/SettingMode";
-import { MHidden } from "../../components/@material-extend";
-//
-import MenuDesktop from "./MenuDesktop";
-import MenuMobile from "./MenuMobile";
-import navConfig from "./MenuConfig";
-// routes
-import { PATH_AUTH, PATH_PAGE } from "../../routes/paths";
-import { BlogPostsSearch } from "src/components/_dashboard/blog";
 import Searchbar from "./Searchbar";
-import { Contract, providers, utils } from "ethers";
-import { useWallet } from "use-wallet";
-import { Connect } from "src/components/Connect";
-import toast from "react-hot-toast";
-import { useEffect } from "react";
+import navConfig from "./MenuConfig";
+import MenuMobile from "./MenuMobile";
+import MenuDesktop from "./MenuDesktop";
+import Logo from "../../components/Logo";
+import Label from "../../components/Label";
+import Search from "../../components/Search";
+import { Connect } from "../../components/Connect";
+import useOffSetTop from "../../hooks/useOffSetTop";
+import { PATH_AUTH, PATH_PAGE } from "../../routes/paths";
+import { MHidden } from "../../components/@material-extend";
+import SettingMode from "../../components/settings/SettingMode";
+import { BlogPostsSearch } from "src/components/_dashboard/blog";
+import { ConnectByMoralis } from "../../components/ConnectByMoralis";
+import { ProfileDialog } from "../../components/_external-pages/fundraise";
 
 const Web3 = require("web3");
 
@@ -61,110 +59,129 @@ export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
   const { pathname } = useLocation();
   const isHome = pathname === "/";
-  const isConnected = !!wallet?.account;
+  const [open, setOpen] = useState(false);
+  const { isWeb3Enabled, isAuthenticated, logout } = useMoralis();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const web3 = new Web3(
-          "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, [wallet]);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const web3 = new Web3(
+  //         "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
+  //       );
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   })();
+  // }, [wallet]);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <AppBar sx={{ boxShadow: 0 }}>
-      <ToolbarStyle
-        disableGutters
-        sx={{
-          bgcolor: "background.paper",
-        }}
-      >
-        <Container
-          maxWidth="lg"
+    <>
+      <AppBar sx={{ boxShadow: 0 }}>
+        <ToolbarStyle
+          disableGutters
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            bgcolor: "background.paper",
           }}
         >
-          <Stack direction="row" alignItems="center">
-            <RouterLink to="/">
-              <Logo />
-            </RouterLink>
-            {/* <MHidden width="smDown">
-              <GohelpImgStyle src="/static/home/gohelp.png" alt="Gohelp" />
-            </MHidden> */}
-          </Stack>
-
-          <MHidden width="mdDown">
-            <MenuDesktop
-              isOffset={isOffset}
-              isHome={isHome}
-              navConfig={navConfig}
-            />
-          </MHidden>
-
-          <Link
-            component={RouterLink}
-            variant="subtitle2"
-            color="inherit"
-            underline="none"
-            to={PATH_PAGE.fundraisers}
+          <Container
+            maxWidth="lg"
             sx={{
-              display: "block",
-              color: "text.primary",
-              transition: (theme) => theme.transitions.create("all"),
-              "&:hover": { color: "primary.main" },
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            Your Fundraisers
-          </Link>
+            <Stack direction="row" alignItems="center">
+              <RouterLink to="/">
+                <Logo />
+              </RouterLink>
+              {/* <MHidden width="smDown">
+              <GohelpImgStyle src="/static/home/gohelp.png" alt="Gohelp" />
+            </MHidden> */}
+            </Stack>
 
-          <MHidden width="mdUp">
-            <Searchbar />
-          </MHidden>
+            <MHidden width="mdDown">
+              <MenuDesktop
+                isOffset={isOffset}
+                isHome={isHome}
+                navConfig={navConfig}
+              />
+            </MHidden>
 
-          <MHidden width="mdDown">
-            <Search />
-          </MHidden>
-
-          <MHidden width="mdUp">
-            <Box
+            <Link
+              component={RouterLink}
+              variant="subtitle2"
+              color="inherit"
+              underline="none"
+              to={PATH_PAGE.fundraisers}
               sx={{
-                display: "flex",
-                color: "primary.main",
-                justifyContent: "center",
+                display: "block",
+                color: "text.primary",
+                transition: (theme) => theme.transitions.create("all"),
+                "&:hover": { color: "primary.main" },
               }}
             >
-              <Icon icon="carbon:wallet" width={24} height={24} />
-            </Box>
-          </MHidden>
+              Your Fundraisers
+            </Link>
 
-          <MHidden width="mdDown">{!isConnected && <Connect />}</MHidden>
-
-          <MHidden width="mdDown">
-            <SettingMode />
-          </MHidden>
-
-          <MHidden width="mdUp">
             <MHidden width="mdUp">
+              <Searchbar />
+            </MHidden>
+
+            <MHidden width="mdDown">
+              <Search />
+            </MHidden>
+
+            <MHidden width="mdUp">
+              <Box
+                sx={{
+                  display: "flex",
+                  color: "primary.main",
+                  justifyContent: "center",
+                }}
+              >
+                <Icon icon="carbon:wallet" width={24} height={24} />
+              </Box>
+            </MHidden>
+
+            <MHidden width="mdDown">
+              {isWeb3Enabled && isAuthenticated ? (
+                <Button onClick={handleOpen}>Profile</Button>
+              ) : (
+                <ConnectByMoralis />
+              )}
+            </MHidden>
+
+            <MHidden width="mdDown">
               <SettingMode />
             </MHidden>
 
-            <MenuMobile
-              isOffset={isOffset}
-              isHome={isHome}
-              navConfig={navConfig}
-            />
-          </MHidden>
-        </Container>
-      </ToolbarStyle>
+            <MHidden width="mdUp">
+              <MHidden width="mdUp">
+                <SettingMode />
+              </MHidden>
 
-      {/* {isOffset && <ToolbarShadowStyle />} */}
-    </AppBar>
+              <MenuMobile
+                isOffset={isOffset}
+                isHome={isHome}
+                navConfig={navConfig}
+              />
+            </MHidden>
+          </Container>
+        </ToolbarStyle>
+
+        {/* {isOffset && <ToolbarShadowStyle />} */}
+      </AppBar>
+
+      {/* <ProfileDialog open={open} onClose={handleClose} /> */}
+    </>
   );
 }

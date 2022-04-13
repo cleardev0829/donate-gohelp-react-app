@@ -14,6 +14,7 @@ import NotistackProvider from "./components/NotistackProvider";
 import ThemePrimaryColor from "./components/ThemePrimaryColor";
 import { UseWalletProvider } from "use-wallet";
 import { Toaster } from "react-hot-toast";
+import { MoralisProvider } from "react-moralis";
 
 // ----------------------------------------------------------------------
 
@@ -34,19 +35,24 @@ export default function App() {
         },
       }}
     >
-      <ThemeConfig>
-        <ThemePrimaryColor>
-          <RtlLayout>
-            <NotistackProvider>
-              {/* <Settings /> */}
-              <ScrollToTop />
-              <GoogleAnalytics />
-              <Toaster />
-              {isInitialized ? <Router /> : <LoadingScreen />}
-            </NotistackProvider>
-          </RtlLayout>
-        </ThemePrimaryColor>
-      </ThemeConfig>
+      <MoralisProvider
+        serverUrl="https://dh3yon2lni9b.usemoralis.com:2053/server"
+        appId="IPmAIQsjnEu7SkSCl8iXTaBRqqR0Gdapyq2STUf4"
+      >
+        <ThemeConfig>
+          <ThemePrimaryColor>
+            <RtlLayout>
+              <NotistackProvider>
+                {/* <Settings /> */}
+                <ScrollToTop />
+                <GoogleAnalytics />
+                <Toaster />
+                {isInitialized ? <Router /> : <LoadingScreen />}
+              </NotistackProvider>
+            </RtlLayout>
+          </ThemePrimaryColor>
+        </ThemeConfig>
+      </MoralisProvider>
     </UseWalletProvider>
   );
 }

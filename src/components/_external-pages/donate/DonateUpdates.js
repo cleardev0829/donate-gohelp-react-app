@@ -14,6 +14,7 @@ import {
   Stack,
   Button,
   Divider,
+  IconButton,
   Typography,
   CardContent,
 } from "@material-ui/core";
@@ -27,13 +28,32 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import { diff } from "../../../utils/constants";
+import DonateDialog from "./DonateDialog";
 import OutlineCard from "../../OutlineCard";
+import { diff } from "../../../utils/constants";
 import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
+import SettingFullscreen from "src/components/settings/SettingFullscreen";
+import FullScreenButton from "src/components/FullScreenButton";
 
 // ----------------------------------------------------------------------
+
+const HeroStyle = styled("div")(({ theme }) => ({
+  paddingTop: "56%",
+  position: "relative",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  "&:before": {
+    top: 0,
+    content: "''",
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    backgroundColor: alpha(theme.palette.grey[900], 0.72),
+  },
+}));
 
 const QuillWrapperStyle = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -62,7 +82,9 @@ DonateUpdates.propTypes = {};
 
 export default function DonateUpdates() {
   const theme = useTheme();
+  const [open, setOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("Story");
+  const [donateDlgOpen, setDonateDlgOpen] = useState(false);
   const { post, isLoading } = useSelector((state) => state.fundraise);
 
   const modules = {
@@ -82,6 +104,22 @@ export default function DonateUpdates() {
     setCurrentTab(newValue);
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(close);
+  };
+
+  const handleDonateDlgOpen = () => {
+    setDonateDlgOpen(true);
+  };
+
+  const handleDonateDlgClose = () => {
+    setDonateDlgOpen(false);
+  };
+
   return (
     <>
       <Box sx={{ py: 3 }}>
@@ -89,30 +127,36 @@ export default function DonateUpdates() {
           <OutlineCard>
             <CardContent>
               <Stack direction="row" justifyContent={"space-between"}>
-                <Icon icon="cil:fullscreen" width={20} height={20} />
+                <FullScreenButton elementId="cover" />
                 <Stack
                   spacing={theme.shape.CARD_CONTENT_SPACING}
                   direction="row"
                   justifyContent={"flex-end"}
                   alignItems="center"
                 >
-                  <Icon icon="carbon:wallet" width={20} height={20} />
-                  <Icon icon="carbon:share" width={20} height={20} />
+                  <IconButton onClick={handleDonateDlgOpen}>
+                    <Icon icon="carbon:wallet" width={20} height={20} />
+                  </IconButton>
+                  <IconButton onClick={handleOpen}>
+                    <Icon icon="carbon:share" width={20} height={20} />
+                  </IconButton>
                 </Stack>
               </Stack>
             </CardContent>
             <Divider />
-            <CardMediaStyle>
-              <CoverImgStyle
-                alt="cover"
-                src={post.cover.preview}
-                sx={{
-                  transform: `rotate(${
-                    ((-1 * post.cover.rotate) % 4) * 90
-                  }deg) scale(${1 + post.cover.scale / 100})`,
-                }}
-              />
-            </CardMediaStyle>
+            <div id="cover">
+              <CardMediaStyle>
+                <CoverImgStyle
+                  alt="cover"
+                  src={post.cover.preview}
+                  sx={{
+                    transform: `rotate(${
+                      ((-1 * post.cover.rotate) % 4) * 90
+                    }deg) scale(${1 + post.cover.scale / 100})`,
+                  }}
+                />
+              </CardMediaStyle>
+            </div>
           </OutlineCard>
 
           <OutlineCard>
@@ -196,6 +240,13 @@ export default function DonateUpdates() {
           </OutlineCard>
         </Stack>
       </Box>
+
+      <FundraiseShareDialog post={post} open={open} onClose={handleClose} />
+      <DonateDialog
+        post={post}
+        open={donateDlgOpen}
+        onClose={handleDonateDlgClose}
+      />
     </>
   );
 }

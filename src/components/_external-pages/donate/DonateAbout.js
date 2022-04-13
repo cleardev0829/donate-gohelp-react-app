@@ -3,6 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { capitalCase } from "change-case";
+import { useMoralis } from "react-moralis";
 import {
   Box,
   Tab,
@@ -36,6 +37,7 @@ import { fCurrency, fPercent } from "src/utils/formatNumber";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
+import { ConnectByMoralis } from "../../../components/ConnectByMoralis";
 
 // ----------------------------------------------------------------------
 
@@ -44,19 +46,19 @@ DonateAbout.propTypes = {};
 export default function DonateAbout() {
   const theme = useTheme();
   const dispatch = useDispatch();
-
   const [open, setOpen] = useState(false);
+  const { isAuthenticated, isWeb3Enabled } = useMoralis();
   const [isHidden, setHidden] = useState(true);
   const [currentTab, setCurrentTab] = useState("About");
   const [donateDlgOpen, setDonateDlgOpen] = useState(false);
   const { post, isLoading } = useSelector((state) => state.fundraise);
   const filter = filters(post.donates);
 
-  const handleOpenPreview = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
-  const handleClosePreview = () => {
+  const handleClose = () => {
     setOpen(false);
   };
 
@@ -69,7 +71,7 @@ export default function DonateAbout() {
   };
 
   const handleShare = () => {
-    handleOpenPreview();
+    handleOpen();
   };
 
   const handleChangeTab = (event, newValue) => {
@@ -194,13 +196,13 @@ export default function DonateAbout() {
                     </Button>
                   </motion.div>
                   <motion.div variants={varFadeInRight}>
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      onClick={handleDonateDlgOpen}
-                    >
-                      Connect
-                    </Button>
+                    {isWeb3Enabled && isAuthenticated ? (
+                      <Button variant="outlined" onClick={handleDonateDlgOpen}>
+                        Give
+                      </Button>
+                    ) : (
+                      <ConnectByMoralis variant={"outlined"} />
+                    )}
                   </motion.div>
                 </Stack>
               </CardContent>
@@ -246,11 +248,7 @@ export default function DonateAbout() {
           )}
         </OutlineCard>
       </Box>
-      <FundraiseShareDialog
-        post={post}
-        open={open}
-        onClose={handleClosePreview}
-      />
+      <FundraiseShareDialog post={post} open={open} onClose={handleClose} />
       <DonateDialog
         post={post}
         open={donateDlgOpen}

@@ -33,11 +33,12 @@ _.orderBy(CATEGORIES, [(item) => item.toLowerCase()], ["asc"]).map((category) =>
 );
 
 const menuConfig = [
-  // {
-  //   title: "Home",
-  //   icon: <Icon icon={homeFill} {...ICON_SIZE} />,
-  //   path: "/",
-  // },
+  {
+    title: "Home",
+    icon: <Icon icon={homeFill} {...ICON_SIZE} />,
+    path: "/",
+  },
+
   // {
   //   title: "Fundraise for",
   //   path: "/Features",

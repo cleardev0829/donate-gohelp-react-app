@@ -13,6 +13,7 @@ export { default as FundraisePreview } from "./FundraisePreview";
 export { default as FundraiseEditDialog } from "./FundraiseEditDialog";
 export { default as FundraiseHader } from "./FundraiseHeader";
 export { default as FundraiseUpdateDialog } from "./FundraiseUpdateDialog";
+export { default as ProfileDialog } from "./ProfileDialog";
 // export { default as FundraiseShare1 } from "./~FundraiseShare1";
 // export { default as FundraiseComplete } from "./~FundraiseComplete";
 // export { default as FundraiseGoal } from "./~FundraiseGoal";
