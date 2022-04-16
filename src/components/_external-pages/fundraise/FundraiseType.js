@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import faker from "faker";
 import { motion } from "framer-motion";
 import { useSnackbar } from "notistack";
+import { useMoralis } from "react-moralis";
+
 import {
   alpha,
   useTheme,
@@ -62,6 +64,7 @@ export default function FundraiseType() {
   const { enqueueSnackbar } = useSnackbar();
   const { checkout } = useSelector((state) => state.fundraise);
   const isLight = theme.palette.mode === "light";
+  const { account } = useMoralis();
 
   useEffect(() => {
     dispatch(setCheckout({ name: "uid", value: faker.datatype.uuid() }));
@@ -76,6 +79,12 @@ export default function FundraiseType() {
   };
 
   const handleType = (type) => {
+    dispatch(
+      setCheckout({
+        name: "account",
+        value: account,
+      })
+    );
     dispatch(
       setCheckout({
         name: "type",

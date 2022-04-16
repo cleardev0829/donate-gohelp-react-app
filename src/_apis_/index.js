@@ -8,3 +8,6 @@ import "./products";
 import "./kanban";
 import "./fundraise";
 import "./donate";
+import "./fundraiser";
+import "./history";
+import "./favorite";

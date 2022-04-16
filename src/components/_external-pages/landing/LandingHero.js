@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { useMoralis } from "react-moralis";
 import { Link as RouterLink } from "react-router-dom";
 import arrowRightFill from "@iconify/icons-eva/arrow-right-fill";
 import {
@@ -83,6 +84,7 @@ export default function LandingHero() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const isLight = theme.palette.mode === "light";
+  const { isWeb3Enabled, isAuthenticated } = useMoralis();
 
   const handleOpen = () => {
     setOpen(true);
@@ -131,7 +133,7 @@ export default function LandingHero() {
                     <Button
                       variant="contained"
                       // component={RouterLink}
-                      // to={PATH_PAGE.fundraise}
+                      // to={PATH_PAGE.view}
                       onClick={handleOpen}
                     >
                       Start a GoHelp
@@ -181,7 +183,8 @@ export default function LandingHero() {
                   <Button
                     variant="contained"
                     // component={RouterLink}
-                    // to={PATH_PAGE.fundraise}
+                    // to={PATH_PAGE.view}
+                    disabled={!isWeb3Enabled || !isAuthenticated}
                     onClick={handleOpen}
                   >
                     Start a helpblog

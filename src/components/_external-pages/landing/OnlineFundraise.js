@@ -140,7 +140,7 @@ export default function OnlineFundraise() {
             <Button
               variant="contained"
               // component={RouterLink}
-              // to={PATH_PAGE.fundraise}
+              // to={PATH_PAGE.view}
               sx={{ mt: theme.shape.MAIN_VERTICAL_SPACING }}
             >
               Start a GoHelp

@@ -4,8 +4,8 @@ export const ADDRESS = "0x2c3A2a9fBB92947216E2B5d5CD9B87cC4FDD0591";
 
 export const CRYPTO_TYPES = [
   { name: "BTC", price: 43602.25, type: "" },
-  { name: "ETH", price: 43602.25, type: "native" },
-  { name: "SOL", price: 43602.25, type: "sol" },
+  { name: "ETH", price: 3098.56, type: "native" },
+  { name: "SOL", price: 102.84, type: "sol" },
 ];
 
 export const CRYPTO_PRICE = {
@@ -53,24 +53,20 @@ export const diff = (m1, m2) => {
 export const filters = (donates) => {
   if (!donates || donates.length === 0) {
     return {
-      recentTimeAgo: "",
-      recentAmount: 0,
-      firstAmount: 0,
-      totalAmount: 0,
-      maxAmount: 0,
-      minAmount: 0,
       counts: 0,
+      totalAmount: 0,
+      recentTimeAgo: "",
+      recentDonation: { account: "", crypto: { amount: 0 } },
+      firstDonation: { account: "", crypto: { amount: 0 } },
+      topDonation: { account: "", crypto: { amount: 0 } },
     };
   } else {
     return {
       count: donates.length,
-      recentAmount: _.maxBy(donates, (item) => item.createdAt).crypto.amount,
       totalAmount: _.sumBy(donates, (item) => parseFloat(item.crypto.amount)),
-      firstAmount: _.minBy(donates, (item) => item.createdAt).crypto.amount,
-      maxAmount: _.maxBy(donates, (item) => parseFloat(item.crypto.amount))
-        .crypto.amount,
-      minAmount: _.minBy(donates, (item) => parseFloat(item.crypto.amount))
-        .crypto.amount,
+      recentDonation: _.maxBy(donates, (item) => item.createdAt),
+      firstDonation: _.minBy(donates, (item) => item.createdAt),
+      topDonation: _.maxBy(donates, (item) => parseFloat(item.crypto.amount)),
       recentTimeAgo: diff(
         moment(),
         _.maxBy(donates, (item) => item.createdAt).createdAt

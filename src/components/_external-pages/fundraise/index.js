@@ -4,7 +4,7 @@ export { default as FundraiseBasics } from "./FundraiseBasics";
 export { default as FundraisePhoto } from "./FundraisePhoto";
 export { default as FundraiseStory } from "./FundraiseStory";
 export { default as FundraiseDonation } from "./FundraiseDonation";
-export { default as FundraiseDetails } from "./FundraiseDetails";
+// export { default as FundraiseDetails } from "../../../pages/FundraiseDetails";
 export { default as FundraiseFooter } from "./FundraiseFooter";
 export { default as FundraiseEditOverView } from "./FundraiseEditOverView";
 export { default as FundraiseEditPhoto } from "./FundraiseEditPhoto";

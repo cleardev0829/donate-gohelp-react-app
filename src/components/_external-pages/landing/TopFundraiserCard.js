@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import _ from "lodash";
+import moment from "moment";
 import numeral from "numeral";
 import PropTypes from "prop-types";
 import ReactQuill from "react-quill";
+import { Icon } from "@iconify/react";
 import ReactCountryFlag from "react-country-flag";
-// material
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import {
   alpha,
   useTheme,
@@ -39,9 +41,10 @@ import DonateProgress from "../../DonateProgress";
 import { PATH_PAGE } from "../../../routes/paths";
 import { filters } from "../../../utils/constants";
 import { fNumber } from "../../../utils/formatNumber";
-import { resetPost } from "../../../redux/slices/fundraise";
 import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
+import { addFavorite, removeFavorite } from "src/redux/slices/favorite";
+import { resetPost, getPostsInitial } from "../../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -72,16 +75,39 @@ export default function TopFundraiserCard({ post, simple = false }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { account } = useMoralis();
   const filter = filters(post.donates);
   const [open, setOpen] = useState(false);
   const [visibility, setVisivility] = useState("none");
   const status = post.isDeleted ? "Deleted" : "Published";
+  const { index, step } = useSelector((state) => state.fundraise);
 
   const handleNavigate = async () => {
     dispatch(resetPost());
     simple
-      ? navigate(`${PATH_PAGE.fundraiseDetails}/${post.id}`)
+      ? navigate(`${PATH_PAGE.view}/${post.id}`)
       : navigate(`${PATH_PAGE.donate}/${post.id}`);
+  };
+
+  const handleFavorite = async () => {
+    const favorite = _.find(post.favorites, (item) => item.account === account);
+    if (favorite) {
+      await dispatch(
+        removeFavorite({
+          ...favorite,
+        })
+      );
+    } else {
+      await dispatch(
+        addFavorite({
+          fundraiseId: post.id,
+          account,
+          favorite: true,
+          createdAt: moment(),
+        })
+      );
+    }
+    dispatch(getPostsInitial(index, step));
   };
 
   const handleOpenPreview = () => {
@@ -169,11 +195,21 @@ export default function TopFundraiserCard({ post, simple = false }) {
                   <Connect sx={{ display: visibility }} />
                 )}
               </Box>
-              <MoreMenu
-                uid={post.id}
-                onOpenShareDialog={handleOpenPreview}
-                name={"name"}
-              />
+              <Stack direction="row" alignItems={"center"}>
+                {_.find(post.favorites, (item) => item.account === account) && (
+                  <Icon
+                    icon="carbon:favorite-filled"
+                    color={theme.palette.primary.main}
+                    width={18}
+                    height={18}
+                  />
+                )}
+                <MoreMenu
+                  uid={post.id}
+                  onOpenShareDialog={handleOpenPreview}
+                  handleFavorite={handleFavorite}
+                />
+              </Stack>
             </Stack>
           </CardContent>
         </Card>

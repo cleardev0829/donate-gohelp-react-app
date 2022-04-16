@@ -30,7 +30,7 @@ import { PATH_AUTH, PATH_PAGE } from "../../routes/paths";
 import { MHidden } from "../../components/@material-extend";
 import SettingMode from "../../components/settings/SettingMode";
 import { BlogPostsSearch } from "src/components/_dashboard/blog";
-import { ConnectByMoralis } from "../../components/ConnectByMoralis";
+import { ConnectButton } from "../../components/ConnectButton";
 import { ProfileDialog } from "../../components/_external-pages/fundraise";
 
 const Web3 = require("web3");
@@ -59,8 +59,7 @@ export default function MainNavbar() {
   const isOffset = useOffSetTop(100);
   const { pathname } = useLocation();
   const isHome = pathname === "/";
-  const [open, setOpen] = useState(false);
-  const { isWeb3Enabled, isAuthenticated, logout } = useMoralis();
+  const { isWeb3Enabled, isAuthenticated, account } = useMoralis();
 
   // useEffect(() => {
   //   (async () => {
@@ -74,13 +73,13 @@ export default function MainNavbar() {
   //   })();
   // }, [wallet]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  // const handleOpen = () => {
+  //   setOpen(true);
+  // };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
   return (
     <>
@@ -116,12 +115,13 @@ export default function MainNavbar() {
               />
             </MHidden>
 
-            <Link
+            {/* <Button
               component={RouterLink}
               variant="subtitle2"
               color="inherit"
               underline="none"
               to={PATH_PAGE.fundraisers}
+              disabled={!isWeb3Enabled || !isAuthenticated}
               sx={{
                 display: "block",
                 color: "text.primary",
@@ -130,7 +130,7 @@ export default function MainNavbar() {
               }}
             >
               Your Fundraisers
-            </Link>
+            </Button> */}
 
             <MHidden width="mdUp">
               <Searchbar />
@@ -154,9 +154,14 @@ export default function MainNavbar() {
 
             <MHidden width="mdDown">
               {isWeb3Enabled && isAuthenticated ? (
-                <Button onClick={handleOpen}>Profile</Button>
+                <Button
+                  component={RouterLink}
+                  to={`${PATH_PAGE.profile}/${account}`}
+                >
+                  Profile
+                </Button>
               ) : (
-                <ConnectByMoralis />
+                <ConnectButton />
               )}
             </MHidden>
 

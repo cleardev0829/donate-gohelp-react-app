@@ -1,24 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { experimentalStyled as styled } from "@material-ui/core/styles";
-import {
-  LandingHero,
-  LandingBottom,
-  TopFundraisers,
-  StartFundraise,
-  DonateCategories,
-  OnlineFundraise,
-} from "../components/_external-pages/landing";
 import Page from "../components/Page";
-import MainFooter from "../layouts/main/MainFooter";
 import { useDispatch, useSelector } from "../redux/store";
 import { resetCheckout as resetDonate } from "../redux/slices/donate";
+import { YourFundraisers } from "../components/_external-pages/landing";
 import { resetCheckout as resetFundraise } from "../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
-
-const RootStyle = styled(Page)({
-  height: "100%",
-});
 
 const ContentStyle = styled("div")(({ theme }) => ({
   overflow: "hidden",
@@ -26,22 +14,23 @@ const ContentStyle = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
 }));
 
-export default function LandingPage() {
+export default function Fundraisers() {
   const dispatch = useDispatch();
-  dispatch(resetDonate());
   dispatch(resetFundraise());
+  dispatch(resetDonate());
 
   return (
-    <RootStyle title="Go Help Website" id="move_top">
-      <LandingHero />
+    <Page
+      title="Fundraise"
+      sx={{
+        paddingTop: (theme) => theme.spacing(theme.shape.PAGE_TOP_PADDING),
+        paddingBottom: (theme) =>
+          theme.spacing(theme.shape.PAGE_BOTTOM_PADDING),
+      }}
+    >
       <ContentStyle>
-        <TopFundraisers />
-        <StartFundraise />
-        {/* <DonateCategories /> */}
-        <OnlineFundraise />
-        {/* <LandingBottom /> */}
-        <MainFooter />
+        <YourFundraisers />
       </ContentStyle>
-    </RootStyle>
+    </Page>
   );
 }

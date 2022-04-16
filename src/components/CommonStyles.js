@@ -41,6 +41,13 @@ export const DescriptionStyle = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.disabled,
 }));
 
+export const OneLineTextStyle = styled(Typography)({
+  overflow: "hidden",
+  WebkitLineClamp: 1,
+  display: "-webkit-box",
+  WebkitBoxOrient: "vertical",
+});
+
 export const ConnectTextStyle = styled(Link)(({ theme }) => ({
   color: theme.palette.text.secondary,
   transition: theme.transitions.create("opacity", {

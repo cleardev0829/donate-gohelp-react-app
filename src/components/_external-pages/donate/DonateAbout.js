@@ -13,6 +13,7 @@ import {
   Stack,
   Button,
   Divider,
+  Tooltip,
   TextField,
   IconButton,
   Typography,
@@ -34,10 +35,11 @@ import OutlineCard from "../../OutlineCard";
 import { filters } from "src/utils/constants";
 import { onNextStep } from "../../../redux/slices/donate";
 import { fCurrency, fPercent } from "src/utils/formatNumber";
+import { OneLineTextStyle } from "src/components/CommonStyles";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
+import { ConnectButton } from "../../../components/ConnectButton";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
-import { ConnectByMoralis } from "../../../components/ConnectByMoralis";
 
 // ----------------------------------------------------------------------
 
@@ -105,60 +107,63 @@ export default function DonateAbout() {
             {currentTab == "About" && (
               <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
                 <Typography variant="subtitle1">{post.title}</Typography>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Stack>
+                <Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
                     <Typography variant="subtitle2">Top donation</Typography>
-                    <Typography
-                      variant="subtitle2"
-                      sx={{ color: "text.disabled" }}
-                    >
-                      address
+                    <Typography variant="subtitle2">
+                      {`${fCurrency(filter.topDonation.crypto.amount)}`}
                     </Typography>
                   </Stack>
-                  <Typography variant="subtitle2">
-                    {`${fCurrency(filter.maxAmount)}`}
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "text.disabled" }}
+                    noWrap
+                  >
+                    {filter.topDonation.account}
                   </Typography>
                 </Stack>
 
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Stack>
+                <Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
                     <Typography variant="subtitle2">Recent donation</Typography>
-                    <Typography
-                      variant="subtitle2"
-                      sx={{ color: "text.disabled" }}
-                    >
-                      address
+                    <Typography variant="subtitle2">
+                      {`${fCurrency(filter.recentDonation.crypto.amount)}`}
                     </Typography>
                   </Stack>
-                  <Typography variant="subtitle2">
-                    {`${fCurrency(filter.recentAmount)}`}
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "text.disabled" }}
+                    noWrap
+                  >
+                    {filter.recentDonation.account}
                   </Typography>
                 </Stack>
 
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Stack>
+                <Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
                     <Typography variant="subtitle2">First donation</Typography>
-                    <Typography
-                      variant="subtitle2"
-                      sx={{ color: "text.disabled" }}
-                    >
-                      address
+                    <Typography variant="subtitle2">
+                      {`${fCurrency(filter.firstDonation.crypto.amount)}`}
                     </Typography>
                   </Stack>
-                  <Typography variant="subtitle2">
-                    {`${fCurrency(filter.firstAmount)}`}
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "text.disabled" }}
+                    noWrap
+                  >
+                    {filter.firstDonation.account}
                   </Typography>
                 </Stack>
 
@@ -201,7 +206,7 @@ export default function DonateAbout() {
                         Give
                       </Button>
                     ) : (
-                      <ConnectByMoralis variant={"outlined"} />
+                      <ConnectButton variant={"outlined"} />
                     )}
                   </motion.div>
                 </Stack>
@@ -218,21 +223,25 @@ export default function DonateAbout() {
                       <CardContent key={`cardcontent-${index}`}>
                         <Stack
                           key={`up-stack-${index}`}
+                          spacing={theme.shape.CARD_PADDING}
                           direction="row"
                           justifyContent="space-between"
                           alignItems="center"
                         >
-                          <Stack key={`down-stack-${index}`}>
+                          <Tooltip title={donate.account}>
                             <Typography
-                              key={`tp-wallet-${index}`}
+                              key={`wallet-${index}`}
                               variant="subtitle2"
+                              sx={{ color: "text.disabled", width: 30 }}
+                              noWrap
                             >
-                              wallet adress
+                              {`${donate.account}`}
                             </Typography>
-                          </Stack>
+                          </Tooltip>
                           <Typography
                             key={`tp-amount-${index}`}
                             variant="subtitle2"
+                            noWrap
                           >
                             {`${fCurrency(donate.crypto.amount)} (${
                               donate.crypto.count

@@ -42,7 +42,7 @@ export default function StartFundraiseCard({ post }) {
       })
     );
     dispatch(onGotoStep(0));
-    // navigate(PATH_PAGE.fundraise);
+    // navigate(PATH_PAGE.view);
   };
 
   return (

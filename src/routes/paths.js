@@ -36,12 +36,10 @@ export const PATH_PAGE = {
   page404: "/404",
   page500: "/500",
   components: "/components",
-  fundraiseDetails: "/fundraiseDetails",
+  view: "/view",
   fundraisers: "/fundraisers",
   donate: "/donate",
-  // fundraise: "/fundraise",
-  // fundraiseEdit: "/fundraiseEdit",
-  // fundraiseUpdate: "/fundraiseUpdate",
+  profile: "/profile",
 };
 
 export const PATH_DASHBOARD = {

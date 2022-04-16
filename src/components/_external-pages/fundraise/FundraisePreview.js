@@ -76,7 +76,7 @@ export default function FundraisePreview({ onClose }) {
     );
     onClose();
     enqueueSnackbar("Save success", { variant: "success" });
-    navigate(`${PATH_PAGE.fundraiseDetails}/${checkout.uid}`);
+    navigate(`${PATH_PAGE.view}/${checkout.uid}`);
   };
 
   return (

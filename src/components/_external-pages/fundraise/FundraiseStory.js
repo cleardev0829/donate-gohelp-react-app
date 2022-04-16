@@ -154,8 +154,8 @@ export default function FundraiseStory() {
                       const text = editor.getText(content);
 
                       setFieldValue("description", {
-                        content: content,
-                        text: text,
+                        content,
+                        text,
                       });
                     }}
                     error={Boolean(touched.description && errors.description)}

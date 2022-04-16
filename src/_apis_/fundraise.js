@@ -1,5 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-useless-escape */
+import _ from "lodash";
 import faker from "faker";
 import moment from "moment";
 import { paramCase } from "change-case";
@@ -14,12 +15,11 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-import { getFileBlob, cryptoToUSD } from "src/utils/constants";
+import { getFileBlob } from "src/utils/constants";
 
 // ----------------------------------------------------------------------
 
 mock.onPost("/api/fundraise/add").reply(async (request) => {
-  // try {
   const data = JSON.parse(request.data);
 
   return new Promise((resolve, reject) => {
@@ -63,8 +63,29 @@ mock.onPost("/api/fundraise/add").reply(async (request) => {
 
 // ----------------------------------------------------------------------
 
+mock.onPost("/api/donate/add").reply(async (request) => {
+  try {
+    const data = JSON.parse(request.data);
+    console.log(data);
+    await firebase
+      .firestore()
+      .collection("fundraise")
+      .doc(data.fundraiseId)
+      .update({
+        donors: firebase.firestore.FieldValue.arrayUnion(data.account),
+        donates: firebase.firestore.FieldValue.arrayUnion({ ...data }),
+      });
+
+    return [200, { data }];
+  } catch (error) {
+    console.error(error);
+    return [500, { message: "Internal server error" }];
+  }
+});
+
+// ----------------------------------------------------------------------
+
 mock.onPost("/api/update/add").reply(async (request) => {
-  // try {
   const data = JSON.parse(request.data);
 
   return new Promise((resolve, reject) => {
@@ -80,14 +101,16 @@ mock.onPost("/api/update/add").reply(async (request) => {
                 .firestore()
                 .collection("fundraise")
                 .doc(data.fundraiseId)
-                .collection("updates")
-                .add({
-                  ...data,
-                  cover: {
-                    ...data.cover,
-                    preview: url,
-                  },
+                .update({
+                  updates: firebase.firestore.FieldValue.arrayUnion({
+                    ...data,
+                    cover: {
+                      ...data.cover,
+                      preview: url,
+                    },
+                  }),
                 });
+
               resolve([200, { results: data }]);
             });
           });
@@ -97,19 +120,19 @@ mock.onPost("/api/update/add").reply(async (request) => {
         .firestore()
         .collection("fundraise")
         .doc(data.fundraiseId)
-        .collection("updates")
-        .add({
-          ...data,
+        .update({
+          updates: firebase.firestore.FieldValue.arrayUnion({
+            ...data,
+            cover: {
+              ...data.cover,
+              preview: url,
+            },
+          }),
         });
+
       resolve([200, { results: data }]);
     }
   });
-
-  //   return [200, { data }];
-  // } catch (error) {
-  //   console.error(error);
-  //   return [500, { message: "Internal server error" }];
-  // }
 });
 
 // ----------------------------------------------------------------------
@@ -211,91 +234,43 @@ mock.onGet("/api/fundraise/posts/all").reply(async () => {
 
 mock.onGet("/api/fundraise/posts").reply(async (config) => {
   try {
-    const { index, step } = config.params;
+    const { index, step, fAccount, dAccount, fvAccount } = config.params;
     const loadMore = index + step;
 
     let posts = [];
 
-    await firebase
-      .firestore()
-      .collection("fundraise")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.docs.map(async (doc) => {
-          posts.push({
-            ...doc.data(),
-            id: doc.id,
-          });
+    let dbRef = firebase.firestore().collection("fundraise");
+
+    if (fAccount) {
+      dbRef = dbRef.where("account", "==", fAccount);
+    }
+
+    await dbRef.get().then((querySnapshot) => {
+      querySnapshot.docs.map(async (doc) => {
+        posts.push({
+          ...doc.data(),
+          id: doc.id,
+          donatesWithOnlyAccount: _.map(doc.data().donates, "account"),
+          updatesWithOnlyAccount: _.map(doc.data().updates, "account"),
+          favoritesWithOnlyAccount: _.map(doc.data().favorites, "account"),
         });
       });
-
-    // get donates
-    let promise = [];
-    let postsWithDonates = [];
-    posts.map((post) => {
-      promise.push(
-        new Promise((resolve, reject) => {
-          const donates = [];
-          firebase
-            .firestore()
-            .collection("fundraise")
-            .doc(post.id)
-            .collection("donate")
-            .get()
-            .then((snapshot) => {
-              snapshot.docs.map((doc) => {
-                donates.push({
-                  ...doc.data(),
-                  crypto: {
-                    ...doc.data().crypto,
-                    amount: cryptoToUSD(doc.data().crypto),
-                  },
-                  id: doc.id,
-                });
-              });
-
-              postsWithDonates.push({ ...post, donates });
-
-              resolve(postsWithDonates);
-            });
-        })
-      );
     });
 
-    await Promise.all(promise);
-
-    // get updates
-    promise = [];
-    let postsWithUpdates = [];
-    postsWithDonates.map((post) => {
-      promise.push(
-        new Promise((resolve, reject) => {
-          const updates = [];
-          firebase
-            .firestore()
-            .collection("fundraise")
-            .doc(post.id)
-            .collection("updates")
-            .get()
-            .then((snapshot) => {
-              snapshot.docs.map((doc) => {
-                updates.push({
-                  ...doc.data(),
-                });
-              });
-
-              postsWithUpdates.push({ ...post, updates });
-
-              resolve(postsWithUpdates);
-            });
-        })
+    if (dAccount) {
+      posts = _.filter(posts, (item) =>
+        item.donatesWithOnlyAccount.includes(dAccount)
       );
-    });
+    }
 
-    await Promise.all(promise);
+    if (fvAccount) {
+      posts = _.filter(posts, (item) =>
+        item.favoritesWithOnlyAccount.includes(fvAccount)
+      );
+    }
 
-    const maxLength = postsWithDonates.length;
-    const sortPosts = await [...postsWithDonates].sort((a, b) => {
+    const maxLength = posts.length;
+    const sortPosts = await [...posts].sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
@@ -326,60 +301,11 @@ mock.onGet("/api/fundraise/post").reply(async (config) => {
 
     const post = docRef.data();
 
-    const donates = [];
-    await firebase
-      .firestore()
-      .collection("fundraise")
-      .doc(uid)
-      .collection("donate")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.docs.map((doc) => {
-          donates.push({
-            ...doc.data(),
-            crypto: {
-              ...doc.data().crypto,
-              amount: cryptoToUSD(doc.data().crypto),
-            },
-            id: doc.id,
-          });
-        });
-      });
-
-    const updates = [];
-    await firebase
-      .firestore()
-      .collection("fundraise")
-      .doc(uid)
-      .collection("updates")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.docs.map((doc) => {
-          updates.push({
-            ...doc.data(),
-          });
-        });
-      });
-
-    const postWithDonates = post
-      ? {
-          ...post,
-          donates,
-        }
-      : null;
-
-    const postWithUpdates = postWithDonates
-      ? {
-          ...postWithDonates,
-          updates,
-        }
-      : null;
-
-    if (!postWithUpdates) {
+    if (!post) {
       return [404, { message: "Post not found" }];
     }
 
-    return [200, { post: postWithUpdates }];
+    return [200, { post: post }];
   } catch (error) {
     console.error(error);
     return [500, { message: "Internal server error" }];

@@ -237,7 +237,7 @@ function MenuDesktopItem({
       sx={{
         // ...(isHome && { color: "common.primary" }),
         // ...(isOffset && { color: "text.primary" }),
-        ...(isActive && { color: "primary.main" }),
+        ...(isActive && { color: "text.secondary" }),
       }}
     >
       {title}

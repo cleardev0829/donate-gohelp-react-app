@@ -1,4 +1,3 @@
-import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import * as Yup from "yup";
 import moment from "moment";
 import { isString } from "lodash";
@@ -6,6 +5,7 @@ import PropTypes from "prop-types";
 import { useSnackbar } from "notistack";
 import { LoadingButton } from "@material-ui/lab";
 import { Form, FormikProvider, useFormik } from "formik";
+import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import {
   alpha,
   useTheme,
@@ -30,7 +30,7 @@ import EmptyContent from "../../EmptyContent";
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { addDonate, resetPost } from "../../../redux/slices/fundraise";
-import { ADDRESS } from "../../../utils/constants";
+import { ADDRESS, cryptoToUSD, CRYPTO_PRICE } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
 
@@ -76,9 +76,7 @@ export default function DonateDialog({ post, open, onClose }) {
         await fakeRequest(500);
         resetForm();
         onClose();
-        console.log("====", user);
-        console.log("----isWeb3Enabled", isWeb3Enabled);
-        console.log("----isAuthenticated", isAuthenticated);
+
         if (!isWeb3Enabled) {
           enableWeb3();
         }
@@ -87,13 +85,23 @@ export default function DonateDialog({ post, open, onClose }) {
           enqueueSnackbar("Insufficient funds.", { variant: "warning" });
           return;
         }
-        alert();
+
         await transfer();
+
         dispatch(resetPost());
         dispatch(
           addDonate({
             fundraiseId: post.uid,
-            crypto: { type: values.cryptoType, count: values.cryptoCount },
+            account,
+            crypto: {
+              type: values.cryptoType,
+              count: values.cryptoCount,
+              price: CRYPTO_PRICE[values.cryptoType],
+              amount: cryptoToUSD({
+                type: values.cryptoType,
+                count: values.cryptoCount,
+              }),
+            },
             tip: values.tip,
             message: values.message,
             createdAt: moment(),

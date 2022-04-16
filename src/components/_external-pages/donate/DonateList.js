@@ -66,35 +66,18 @@ export default function DonateList() {
   const params = useParams();
   const dispatch = useDispatch();
   const [filters, setFilters] = useState("latest");
-  const { donates, hasMore, index, step } = useSelector(
-    (state) => state.donate
-  );
-  const [data, setData] = useState(donates);
   const { post, isLoading } = useSelector((state) => state.fundraise);
-
-  useEffect(() => {
-    dispatch(getDonatesInitial(params.id, index, step));
-  }, [dispatch, index, step, params]);
-
-  useEffect(() => {
-    const sortedPosts = applySort(donates, filters);
-    setData(sortedPosts);
-  }, [donates]);
-
-  const handleGetMoreDonates = () => {
-    dispatch(getMoreDonates());
-  };
 
   return (
     <Box>
       <OutlineCard>
         <CardContent>
-          <Typography variant="h5">{`Words of support (${data.length})`}</Typography>
+          <Typography variant="h5">{`Words of support (${post.donates.length})`}</Typography>
         </CardContent>
         <Divider />
 
         {/* <Stack spacing={theme.shape.CARD_CONTENT_SPACING}> */}
-        {data.map((donate, index) => (
+        {post.donates.map((donate, index) => (
           <Box key={`box-${index}`}>
             <CardContent key={`cardcontent-${index}`}>
               <Stack
@@ -122,19 +105,20 @@ export default function DonateList() {
                       variant="subtitle2"
                       sx={{ color: "text.primary" }}
                     >
-                      {`Support ${index + 1}`}
+                      {donate.account}
                     </Link>
                     <Stack
                       key={`stack-4-${index}`}
                       direction="row"
                       alignItems="center"
                     >
-                      <IconBullet key={`iconbullet-${index}`} />
+                      {/* <IconBullet key={`iconbullet-${index}`} /> */}
                       <Typography
                         key={`typography-1-${index}`}
                         component="span"
                         variant="body2"
                         color="text.disabled"
+                        noWrap
                       >
                         {diff(moment(), moment(donate.createdAt))}
                       </Typography>
@@ -150,7 +134,7 @@ export default function DonateList() {
                     {donate.message}
                   </Typography>
 
-                  {index === donates.length - 1 && hasMore && (
+                  {/* {index === post.donates.length - 1 && hasMore && (
                     <motion.div
                       key={`motion-div-${index}`}
                       variants={varFadeInRight}
@@ -163,11 +147,13 @@ export default function DonateList() {
                         Show more
                       </Button>
                     </motion.div>
-                  )}
+                  )} */}
                 </Stack>
               </Stack>
             </CardContent>
-            {index < data.length - 1 && <Divider key={`divider-${index}`} />}
+            {index < post.donates.length - 1 && (
+              <Divider key={`divider-${index}`} />
+            )}
           </Box>
         ))}
         {/* </Stack> */}

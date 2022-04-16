@@ -3,21 +3,8 @@ import PropTypes from "prop-types";
 import { Stack, Typography, useTheme } from "@material-ui/core";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
 import ProgressItem from "./ProgressItem";
+import { OneLineTextStyle } from "./CommonStyles";
 import { fPercent, fCurrency } from "src/utils/formatNumber";
-
-export const RecentTimeAgoTextStyle = styled(Typography)({
-  overflow: "hidden",
-  WebkitLineClamp: 1,
-  display: "-webkit-box",
-  WebkitBoxOrient: "vertical",
-});
-
-export const DonationTextStyle = styled(Typography)({
-  overflow: "hidden",
-  WebkitLineClamp: 1,
-  display: "-webkit-box",
-  WebkitBoxOrient: "vertical",
-});
 
 DonateProgress.propTypes = {
   time: PropTypes.string,
@@ -30,10 +17,14 @@ export default function DonateProgress({ time, total, goal }) {
 
   return (
     <Stack spacing={0.5}>
-      <Stack direction="row" justifyContent="space-between">
-        <RecentTimeAgoTextStyle variant="h6" color="primary">
+      <Stack
+        spacing={theme.shape.CARD_MARGIN}
+        direction="row"
+        justifyContent="space-between"
+      >
+        <OneLineTextStyle variant="h6" color="primary">
           {`Last donation ${time}`}
-        </RecentTimeAgoTextStyle>
+        </OneLineTextStyle>
         <Typography variant="h6" color="primary">
           {fPercent((total * 100) / goal)}
         </Typography>
@@ -43,9 +34,9 @@ export default function DonateProgress({ time, total, goal }) {
         text={`Last donation ${time}`}
         progress={parseFloat(fPercent((total * 100) / goal))}
       />
-      <DonationTextStyle variant="h6" color="primary">
+      <OneLineTextStyle variant="h6" color="primary">
         {`${fCurrency(total)} raised of ${fCurrency(goal)}`}
-      </DonationTextStyle>
+      </OneLineTextStyle>
     </Stack>
   );
 }

@@ -85,7 +85,7 @@ export default function LandingBottom() {
                   <Button
                     variant="contained"
                     component={RouterLink}
-                    to={PATH_PAGE.fundraise}
+                    to={PATH_PAGE.view}
                   >
                     Start a GoHelp
                   </Button>

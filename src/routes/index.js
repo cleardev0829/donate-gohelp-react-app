@@ -10,6 +10,7 @@ import LogoOnlyLayout from "../layouts/LogoOnlyLayout";
 import GuestGuard from "../guards/GuestGuard";
 import AuthGuard from "../guards/AuthGuard";
 import PaymentGuard from "src/guards/PaymentGuard";
+import WalletAuthGuard from "src/guards/WalletAuthGuard";
 // components
 import LoadingScreen from "../components/LoadingScreen";
 
@@ -138,15 +139,46 @@ export default function Router() {
       path: "/",
       element: <MainLayout />,
       children: [
-        { path: "/", element: <LandingPage /> },
-        // { path: "fundraise", element: <Fundraise /> },
-        { path: "fundraisers", element: <Fundraisers /> },
-        // { path: "fundraiseUpdate/:id", element: <FundraiseUpdate /> },
-        // { path: "fundraiseEdit/:id", element: <FundraiseEdit /> },
-        // { path: "fundraise/:type", element: <Fundraise /> },
-        // { path: "fundraise/:type/:category", element: <Fundraise /> },
-        { path: "donate/:id", element: <Donate /> },
-        { path: "fundraiseDetails/:id", element: <FundraiseDetails /> },
+        {
+          path: "/",
+          element: (
+            <WalletAuthGuard>
+              <LandingPage />
+            </WalletAuthGuard>
+          ),
+        },
+        {
+          path: "donate/:id",
+          element: (
+            <WalletAuthGuard>
+              <Donate />
+            </WalletAuthGuard>
+          ),
+        },
+        {
+          path: "profile/:id",
+          element: (
+            <WalletAuthGuard>
+              <Profile />
+            </WalletAuthGuard>
+          ),
+        },
+        {
+          path: "view/:id",
+          element: (
+            <WalletAuthGuard>
+              <View />
+            </WalletAuthGuard>
+          ),
+        },
+        {
+          path: "fundraisers",
+          element: (
+            <WalletAuthGuard>
+              <Fundraisers />
+            </WalletAuthGuard>
+          ),
+        },
       ],
     },
     { path: "*", element: <Navigate to="/404" replace /> },
@@ -196,17 +228,7 @@ const Billing = Loadable(
   )
 );
 
-// const Fundraise = Loadable(lazy(() => import("../pages/fundraise/~Fundraise")));
-const Fundraisers = Loadable(
-  lazy(() => import("../pages/fundraise/Fundraisers"))
-);
-const FundraiseDetails = Loadable(
-  lazy(() => import("../components/_external-pages/fundraise/FundraiseDetails"))
-);
-// const FundraiseUpdate = Loadable(
-//   lazy(() => import("../components/_external-pages/fundraise/FundraiseUpdate"))
-// );
-// const FundraiseEdit = Loadable(
-//   lazy(() => import("../components/_external-pages/fundraise/FundraiseEdit"))
-// );
-const Donate = Loadable(lazy(() => import("../pages/donate/Donate")));
+const Fundraisers = Loadable(lazy(() => import("../pages/Fundraisers")));
+const View = Loadable(lazy(() => import("../pages/View")));
+const Donate = Loadable(lazy(() => import("../pages/Donate")));
+const Profile = Loadable(lazy(() => import("../pages/Profile")));

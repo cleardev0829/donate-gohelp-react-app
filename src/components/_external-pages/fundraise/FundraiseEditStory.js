@@ -31,14 +31,13 @@ export default function FundraiseEditStory({ childRef, post }) {
   const isLight = theme.palette.mode === "light";
 
   const NewBlogSchema = Yup.object().shape({
-    content: Yup.string().min(100).required("This is required"),
+    description: Yup.mixed().required("This is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       uid: post.uid,
       description: post.description,
-      content: post.description.content,
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -85,7 +84,6 @@ export default function FundraiseEditStory({ childRef, post }) {
             onChange={(content, delta, source, editor) => {
               const text = editor.getText(content);
 
-              setFieldValue("content", content);
               setFieldValue("description", { content, text });
             }}
             error={Boolean(touched.content && errors.content)}

@@ -84,7 +84,6 @@ export default function TopFundraisers() {
   const [data, setData] = useState(posts);
 
   const onScroll = useCallback(() => {
-    alert();
     dispatch(getMorePosts());
   }, [dispatch]);
 

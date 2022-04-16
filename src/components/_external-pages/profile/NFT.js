@@ -1,7 +1,6 @@
 import { useEffect, useCallback, useState } from "react";
 import { orderBy } from "lodash";
 import { Icon } from "@iconify/react";
-import { useMoralis } from "react-moralis";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
   Box,
@@ -12,15 +11,11 @@ import {
   Container,
   Typography,
 } from "@material-ui/core";
-import { TopFundraiserCard } from ".";
+import { TopFundraiserCard } from "../landing";
 import { varFadeInUp, MotionInView } from "../../animate";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-import {
-  getPostsInitial,
-  getMorePosts,
-} from "../../../redux/slices/fundraiser";
-import { Fundraiser } from "../profile";
+import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +39,7 @@ const applySort = (posts, sortBy) => {
 };
 
 const RootStyle = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(0),
+  paddingTop: theme.spacing(theme.shape.MAIN_VERTICAL_SPACING),
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
@@ -75,29 +70,28 @@ const SkeletonLoad = (
 );
 // ----------------------------------------------------------------------
 
-export default function TopFundraisers() {
+export default function NFT() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const { posts, hasMore, index, step } = useSelector(
-    (state) => state.fundraiser
+    (state) => state.fundraise
   );
   const [filters, setFilters] = useState("latest");
   const [data, setData] = useState(posts);
   const isLight = theme.palette.mode === "light";
-  const { account } = useMoralis();
 
   const onScroll = useCallback(() => {
     dispatch(getMorePosts());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(getPostsInitial(index, step, account));
-  }, [dispatch, index]);
+  // useEffect(() => {
+  //   dispatch(getPostsInitial(index, step));
+  // }, [dispatch, index]);
 
-  useEffect(() => {
-    const sortedPosts = applySort(posts, filters);
-    setData(sortedPosts);
-  }, [posts]);
+  // useEffect(() => {
+  //   const sortedPosts = applySort(posts, filters);
+  //   setData(sortedPosts);
+  // }, [posts]);
 
   const handleChangeSort = (event) => {
     setFilters(event.target.value);
@@ -108,24 +102,19 @@ export default function TopFundraisers() {
   };
 
   return (
-    <RootStyle>
-      <Container maxWidth="lg">
-        <Fundraiser />
-        {/* <InfiniteScroll
-          next={onScroll}
-          hasMore={hasMore}
-          loader={SkeletonLoad}
-          dataLength={posts.length}
-          style={{ overflow: "inherit" }}
-        >
-          <Grid container spacing={theme.shape.CARD_MARGIN}>
-            {data.length > 0 &&
-              data.map((post, index) => (
-                <TopFundraiserCard key={post.id} post={post} simple />
-              ))}
-          </Grid>
-        </InfiniteScroll> */}
-      </Container>
-    </RootStyle>
+    <InfiniteScroll
+      next={onScroll}
+      hasMore={hasMore}
+      loader={SkeletonLoad}
+      dataLength={posts.length}
+      style={{ overflow: "inherit" }}
+    >
+      {/* <Grid container spacing={theme.shape.CARD_MARGIN}>
+        {data.length > 0 &&
+          data.map((post, index) => (
+            <TopFundraiserCard key={post.id} post={post} simple />
+          ))}
+      </Grid> */}
+    </InfiniteScroll>
   );
 }

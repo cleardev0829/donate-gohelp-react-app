@@ -14,9 +14,7 @@ import {
 } from "@material-ui/core";
 //
 import { varFadeInUp, MotionInView } from "../../animate";
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from "../~blog";
 import { DonateCategoryCard } from "../landing";
-import { getPostsInitial, getMorePosts } from "../../../redux/slices/fundraise";
 import { CATEGORIES } from "src/utils/constants";
 
 // ----------------------------------------------------------------------

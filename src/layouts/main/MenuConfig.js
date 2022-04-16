@@ -26,7 +26,7 @@ let categories = [];
 _.orderBy(CATEGORIES, [(item) => item.toLowerCase()], ["asc"]).map((category) =>
   categories.push({
     title: category,
-    path: PATH_PAGE.fundraise,
+    path: PATH_PAGE.view,
     type: 0,
     category: category,
   })
@@ -37,6 +37,11 @@ const menuConfig = [
     title: "Home",
     icon: <Icon icon={homeFill} {...ICON_SIZE} />,
     path: "/",
+  },
+  {
+    title: "Your Fundraisers",
+    icon: <Icon icon={homeFill} {...ICON_SIZE} />,
+    path: "/fundraisers",
   },
 
   // {

@@ -12,7 +12,7 @@ import {
   Container,
   Typography,
 } from "@material-ui/core";
-import { TopFundraiserCard } from ".";
+import { TopFundraiserCard } from "../landing";
 import { varFadeInUp, MotionInView } from "../../animate";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
@@ -20,7 +20,6 @@ import {
   getPostsInitial,
   getMorePosts,
 } from "../../../redux/slices/fundraiser";
-import { Fundraiser } from "../profile";
 
 // ----------------------------------------------------------------------
 
@@ -43,19 +42,6 @@ const applySort = (posts, sortBy) => {
   return posts;
 };
 
-const RootStyle = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(0),
-}));
-
-const ContentStyle = styled("div")(({ theme }) => ({
-  margin: "auto",
-  textAlign: "center",
-  [theme.breakpoints.up("md")]: {
-    zIndex: 11,
-    textAlign: "left",
-  },
-}));
-
 const SkeletonLoad = (
   <Grid container spacing={3} sx={{ mt: 2 }}>
     {[...Array(4)].map((_, index) => (
@@ -75,16 +61,16 @@ const SkeletonLoad = (
 );
 // ----------------------------------------------------------------------
 
-export default function TopFundraisers() {
-  const dispatch = useDispatch();
+export default function Fundraiser() {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const { account } = useMoralis();
+  const isLight = theme.palette.mode === "light";
+  const [filters, setFilters] = useState("latest");
   const { posts, hasMore, index, step } = useSelector(
     (state) => state.fundraiser
   );
-  const [filters, setFilters] = useState("latest");
   const [data, setData] = useState(posts);
-  const isLight = theme.palette.mode === "light";
-  const { account } = useMoralis();
 
   const onScroll = useCallback(() => {
     dispatch(getMorePosts());
@@ -92,7 +78,7 @@ export default function TopFundraisers() {
 
   useEffect(() => {
     dispatch(getPostsInitial(index, step, account));
-  }, [dispatch, index]);
+  }, [dispatch, index, account]);
 
   useEffect(() => {
     const sortedPosts = applySort(posts, filters);
@@ -108,24 +94,19 @@ export default function TopFundraisers() {
   };
 
   return (
-    <RootStyle>
-      <Container maxWidth="lg">
-        <Fundraiser />
-        {/* <InfiniteScroll
-          next={onScroll}
-          hasMore={hasMore}
-          loader={SkeletonLoad}
-          dataLength={posts.length}
-          style={{ overflow: "inherit" }}
-        >
-          <Grid container spacing={theme.shape.CARD_MARGIN}>
-            {data.length > 0 &&
-              data.map((post, index) => (
-                <TopFundraiserCard key={post.id} post={post} simple />
-              ))}
-          </Grid>
-        </InfiniteScroll> */}
-      </Container>
-    </RootStyle>
+    <InfiniteScroll
+      next={onScroll}
+      hasMore={hasMore}
+      loader={SkeletonLoad}
+      dataLength={posts.length}
+      style={{ overflow: "inherit" }}
+    >
+      <Grid container spacing={theme.shape.CARD_MARGIN}>
+        {data.length > 0 &&
+          data.map((post, index) => (
+            <TopFundraiserCard key={post.id} post={post} simple />
+          ))}
+      </Grid>
+    </InfiniteScroll>
   );
 }

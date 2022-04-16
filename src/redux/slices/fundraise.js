@@ -1,4 +1,3 @@
-import { sum, map, filter, uniqBy, reject, sumBy, maxBy, MinBy } from "lodash";
 import moment from "moment";
 import { createSlice } from "@reduxjs/toolkit";
 // utils
@@ -27,8 +26,13 @@ const initialState = {
     title: "",
     description: { content: "", text: "" },
     link: "",
-    // team: { name: "", cover: null },
+    account: "",
     allows: { allowComment: false, allowDonation: false, allowSearch: false },
+    favoritors: [],
+    favorites: [],
+    donors: [],
+    donates: [],
+    updates: [],
     isDeleted: false,
   },
 };
@@ -104,15 +108,17 @@ const slice = createSlice({
       state.checkout.title = "";
       state.checkout.description = { content: "", text: "" };
       state.checkout.link = "";
-      // state.checkout.team = {
-      //   name: "",
-      //   cover: null,
-      // };
+      state.checkout.account = "";
       state.checkout.allows = {
         allowComment: false,
         allowDonation: false,
         allowSearch: false,
       };
+      state.checkout.favoritors = [];
+      state.checkout.favorites = [];
+      state.checkout.donors = [];
+      state.checkout.donates = [];
+      state.checkout.updates = [];
       state.checkout.isDeleted = false;
     },
 
@@ -232,12 +238,12 @@ export function getAllPosts() {
 
 // ----------------------------------------------------------------------
 
-export function getPostsInitial(index, step) {
+export function getPostsInitial(index, step, fAccount, dAccount, fvAccount) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get("/api/fundraise/posts", {
-        params: { index, step },
+        params: { index, step, fAccount, dAccount, fvAccount },
       });
       const results = response.data.results.length;
       const { maxLength } = response.data;

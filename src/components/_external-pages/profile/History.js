@@ -12,15 +12,11 @@ import {
   Container,
   Typography,
 } from "@material-ui/core";
-import { TopFundraiserCard } from ".";
+import { TopFundraiserCard } from "../landing";
 import { varFadeInUp, MotionInView } from "../../animate";
 import { useDispatch, useSelector } from "../../../redux/store";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-import {
-  getPostsInitial,
-  getMorePosts,
-} from "../../../redux/slices/fundraiser";
-import { Fundraiser } from "../profile";
+import { getPostsInitial, getMorePosts } from "../../../redux/slices/history";
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +40,7 @@ const applySort = (posts, sortBy) => {
 };
 
 const RootStyle = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(0),
+  paddingTop: theme.spacing(theme.shape.MAIN_VERTICAL_SPACING),
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
@@ -75,16 +71,14 @@ const SkeletonLoad = (
 );
 // ----------------------------------------------------------------------
 
-export default function TopFundraisers() {
-  const dispatch = useDispatch();
+export default function History() {
   const theme = useTheme();
-  const { posts, hasMore, index, step } = useSelector(
-    (state) => state.fundraiser
-  );
-  const [filters, setFilters] = useState("latest");
-  const [data, setData] = useState(posts);
-  const isLight = theme.palette.mode === "light";
+  const dispatch = useDispatch();
   const { account } = useMoralis();
+  const [filters, setFilters] = useState("latest");
+  const isLight = theme.palette.mode === "light";
+  const { posts, hasMore, index, step } = useSelector((state) => state.history);
+  const [data, setData] = useState(posts);
 
   const onScroll = useCallback(() => {
     dispatch(getMorePosts());
@@ -108,24 +102,19 @@ export default function TopFundraisers() {
   };
 
   return (
-    <RootStyle>
-      <Container maxWidth="lg">
-        <Fundraiser />
-        {/* <InfiniteScroll
-          next={onScroll}
-          hasMore={hasMore}
-          loader={SkeletonLoad}
-          dataLength={posts.length}
-          style={{ overflow: "inherit" }}
-        >
-          <Grid container spacing={theme.shape.CARD_MARGIN}>
-            {data.length > 0 &&
-              data.map((post, index) => (
-                <TopFundraiserCard key={post.id} post={post} simple />
-              ))}
-          </Grid>
-        </InfiniteScroll> */}
-      </Container>
-    </RootStyle>
+    <InfiniteScroll
+      next={onScroll}
+      hasMore={hasMore}
+      loader={SkeletonLoad}
+      dataLength={posts.length}
+      style={{ overflow: "inherit" }}
+    >
+      <Grid container spacing={theme.shape.CARD_MARGIN}>
+        {data.length > 0 &&
+          data.map((post, index) => (
+            <TopFundraiserCard key={post.id} post={post} simple />
+          ))}
+      </Grid>
+    </InfiniteScroll>
   );
 }
