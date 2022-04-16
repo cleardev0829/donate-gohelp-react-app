@@ -31,14 +31,14 @@ import {
 } from "../../animate";
 import Scrollbar from "../../Scrollbar";
 import DonateDialog from "./DonateDialog";
-import OutlineCard from "../../OutlineCard";
+import OutlineCard from "../../custom-component/OutlineCard";
 import { filters } from "src/utils/constants";
 import { onNextStep } from "../../../redux/slices/donate";
 import { fCurrency, fPercent } from "src/utils/formatNumber";
-import { OneLineTextStyle } from "src/components/CommonStyles";
+import { OneLineTextStyle } from "src/components/custom-component/CommonStyles";
 import { useDispatch, useSelector } from "../../../redux/store";
+import ConnectButton from "../../custom-component/ConnectButton";
 import { PATH_DASHBOARD, PATH_PAGE } from "../../../routes/paths";
-import { ConnectButton } from "../../../components/ConnectButton";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
 
 // ----------------------------------------------------------------------

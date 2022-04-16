@@ -10,7 +10,7 @@ import {
 import { Box } from "@material-ui/core";
 //
 import Logo from "./Logo";
-import LoadingLogo from "./LoadingLogo";
+import LoadingLogo from "./custom-component/LoadingLogo";
 
 // ----------------------------------------------------------------------
 

@@ -29,13 +29,16 @@ import {
   varFadeInRight,
 } from "../../animate";
 import DonateDialog from "./DonateDialog";
-import OutlineCard from "../../OutlineCard";
+import OutlineCard from "../../custom-component/OutlineCard";
 import { diff } from "../../../utils/constants";
 import { useDispatch, useSelector } from "../../../redux/store";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
-import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
+import {
+  CardMediaStyle,
+  CoverImgStyle,
+} from "src/components/custom-component/CommonStyles";
 import SettingFullscreen from "src/components/settings/SettingFullscreen";
-import FullScreenButton from "src/components/FullScreenButton";
+import FullScreenButton from "src/components/custom-component/FullScreenButton";
 
 // ----------------------------------------------------------------------
 

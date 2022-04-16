@@ -84,7 +84,7 @@ Connect.propTypes = {
   sx: PropTypes.object,
 };
 
-export function Connect({ sx }) {
+export default function Connect({ sx }) {
   const [open, setOpen] = React.useState(false);
   const wallet = useWallet();
 

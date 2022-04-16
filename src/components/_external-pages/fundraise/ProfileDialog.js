@@ -32,7 +32,7 @@ import FundraiseEdit from "./FundraiseEdit";
 import { DialogAnimate } from "../../animate";
 import EmptyContent from "../../EmptyContent";
 import FundraiseUpdate from "./FundraiseUpdate";
-import Disconnect from "../../../components/Disconnect";
+import DisconnectButton from "../../custom-component/DisconnectButton";
 import { useDispatch, useSelector } from "../../../redux/store";
 
 // ----------------------------------------------------------------------
@@ -78,7 +78,7 @@ export default function ProfileDialog({ uid, open, onClose }) {
 
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Disconnect variant="contained" />
+        <DisconnectButton variant="contained" />
       </DialogActions>
     </DialogAnimate>
   );

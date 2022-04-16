@@ -35,8 +35,8 @@ import {
 import {
   CardMediaStyle,
   CoverImgStyle,
-} from "../../../components/CommonStyles";
-import OutlineCard from "../../OutlineCard";
+} from "../../custom-component/CommonStyles";
+import OutlineCard from "../../custom-component/OutlineCard";
 import { FundraiseHeader } from "../fundraise";
 import fakeRequest from "../../../utils/fakeRequest";
 import { useDispatch, useSelector } from "../../../redux/store";

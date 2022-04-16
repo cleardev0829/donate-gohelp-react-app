@@ -16,7 +16,7 @@ import {
   varFadeInRight,
 } from "../../animate";
 import { PATH_PAGE } from "../../../routes/paths";
-import { TitleStyle } from "../../../components/CommonStyles";
+import { TitleStyle } from "../../custom-component/CommonStyles";
 import { useSelector, useDispatch } from "../../../redux/store";
 import { setCheckout, onGotoStep } from "../../../redux/slices/fundraise";
 

@@ -29,7 +29,7 @@ import { FundraiseEditPhoto } from ".";
 import { FundraiseEditStory } from ".";
 import { FundraiseEditOverView } from ".";
 import { PATH_PAGE } from "src/routes/paths";
-import Loading from "../../../components/Loading";
+import Loading from "../../custom-component/Loading";
 import fakeRequest from "../../../utils/fakeRequest";
 import LoadingScreen from "src/components/LoadingScreen";
 import { useDispatch, useSelector } from "../../../redux/store";

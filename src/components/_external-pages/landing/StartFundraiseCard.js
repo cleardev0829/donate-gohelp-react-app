@@ -18,9 +18,9 @@ import {
   CardMediaStyle,
   CoverImgStyle,
   TitleStyle,
-} from "../../../components/CommonStyles";
+} from "../../custom-component/CommonStyles";
 import { PATH_PAGE } from "../../../routes/paths";
-import OutlineCard from "../../../components/OutlineCard";
+import OutlineCard from "../../custom-component/OutlineCard";
 import { useSelector, useDispatch } from "../../../redux/store";
 import { setCheckout, onGotoStep } from "../../../redux/slices/fundraise";
 

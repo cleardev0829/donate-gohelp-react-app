@@ -4,9 +4,12 @@ import {
   experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import { Grid, Stack, CardContent } from "@material-ui/core";
-import RoundedImg from "../../RoundedImg";
-import OutlineCard from "src/components/OutlineCard";
-import { TitleStyle, DescriptionStyle } from "../../../components/CommonStyles";
+import RoundedImg from "../../custom-component/RoundedImg";
+import OutlineCard from "src/components/custom-component/OutlineCard";
+import {
+  TitleStyle,
+  DescriptionStyle,
+} from "../../custom-component/CommonStyles";
 
 FundraiseTypeCard.propTypes = {
   post: PropTypes.object.isRequired,

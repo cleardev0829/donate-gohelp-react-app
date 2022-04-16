@@ -21,9 +21,9 @@ export default function SettingMode() {
 
   return (
     <RadioGroup name="themeMode" value={themeMode} onChange={onChangeMode}>
-      <Grid container spacing={1.5} dir="ltr">
+      <Grid container dir="ltr">
         {["light", "dark"].map((mode, index) => (
-          <Grid item xs={6} key={mode}>
+          <Grid hidden={themeMode === mode} item xs={12} key={mode}>
             <Paper
               sx={{
                 width: 1,
@@ -43,9 +43,9 @@ export default function SettingMode() {
                     display: "flex",
                     color: "text.disabled",
                     justifyContent: "center",
-                    ...(themeMode === mode && {
-                      color: "primary.main",
-                    }),
+                    // ...(themeMode === mode && {
+                    color: "primary.main",
+                    // }),
                   }}
                 >
                   <Icon

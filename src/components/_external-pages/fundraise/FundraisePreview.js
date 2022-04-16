@@ -38,11 +38,14 @@ import {
 import { FundraiseHeader } from ".";
 import { PATH_PAGE } from "src/routes/paths";
 import FundraiseFooter from "./FundraiseFooter";
-import DonateProgress from "../../DonateProgress";
+import DonateProgress from "../../custom-component/DonateProgress";
 import { fNumber } from "../../../utils/formatNumber";
 import { diff, filters } from "../../../utils/constants";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
+import {
+  CardMediaStyle,
+  CoverImgStyle,
+} from "src/components/custom-component/CommonStyles";
 
 // ----------------------------------------------------------------------
 

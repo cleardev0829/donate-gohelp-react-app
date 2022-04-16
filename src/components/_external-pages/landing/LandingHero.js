@@ -25,11 +25,8 @@ import {
   varFadeInRight,
 } from "../../animate";
 import FundraiseDialog from "./FundraiseDialog";
-import { PATH_PAGE } from "../../../routes/paths";
-import VideoPlayer from "../../../components/VideoPlayer";
-import YoutubeEmbed from "../../../components/YoutubeEmbed";
 import { CRYPTO_PRICE, CRYPTO_TYPES } from "src/utils/constants";
-import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
+import YoutubeEmbed from "../../../components/custom-component/YoutubeEmbed";
 
 // ----------------------------------------------------------------------
 

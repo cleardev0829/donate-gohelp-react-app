@@ -30,21 +30,5 @@ export default function FullScreenButton({ elementId }) {
     <IconButton onClick={toggleFullScreen}>
       <Icon icon="cil:fullscreen" width={20} height={20} />
     </IconButton>
-    // <Button
-    //   fullWidth
-    //   size="large"
-    //   variant="outlined"
-    //   color={fullscreen ? 'primary' : 'inherit'}
-    //   startIcon={<Icon icon={fullscreen ? roundFullscreenExit : roundFullscreen} />}
-    //   onClick={toggleFullScreen}
-    //   sx={{
-    //     fontSize: 14,
-    //     ...(fullscreen && {
-    //       bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity)
-    //     })
-    //   }}
-    // >
-    //   {fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-    // </Button>
   );
 }

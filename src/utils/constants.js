@@ -1,6 +1,7 @@
 import moment from "moment";
 
-export const ADDRESS = "0x2c3A2a9fBB92947216E2B5d5CD9B87cC4FDD0591";
+// export const ADDRESS = "0x2c3A2a9fBB92947216E2B5d5CD9B87cC4FDD0591"; //@uvin0
+export const ADDRESS = "0x76bA5D887BDACdd5bD721c9be074526f8361fEEb"; // Anatollo's wallet
 
 export const CRYPTO_TYPES = [
   { name: "BTC", price: 43602.25, type: "" },

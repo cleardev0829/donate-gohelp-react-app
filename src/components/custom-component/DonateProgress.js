@@ -2,7 +2,7 @@ import numeral from "numeral";
 import PropTypes from "prop-types";
 import { Stack, Typography, useTheme } from "@material-ui/core";
 import { alpha, experimentalStyled as styled } from "@material-ui/core/styles";
-import ProgressItem from "./ProgressItem";
+import ProgressItem from "../ProgressItem";
 import { OneLineTextStyle } from "./CommonStyles";
 import { fPercent, fCurrency } from "src/utils/formatNumber";
 

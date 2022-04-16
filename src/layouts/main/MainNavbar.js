@@ -17,21 +17,21 @@ import {
   Container,
   Typography,
 } from "@material-ui/core";
-import Searchbar from "./Searchbar";
 import navConfig from "./MenuConfig";
 import MenuMobile from "./MenuMobile";
 import MenuDesktop from "./MenuDesktop";
 import Logo from "../../components/Logo";
 import Label from "../../components/Label";
-import Search from "../../components/Search";
-import { Connect } from "../../components/Connect";
 import useOffSetTop from "../../hooks/useOffSetTop";
 import { PATH_AUTH, PATH_PAGE } from "../../routes/paths";
 import { MHidden } from "../../components/@material-extend";
+import Search from "../../components/custom-component/Search";
 import SettingMode from "../../components/settings/SettingMode";
 import { BlogPostsSearch } from "src/components/_dashboard/blog";
-import { ConnectButton } from "../../components/ConnectButton";
+import Searchbar from "../../components/custom-component/Searchbar";
 import { ProfileDialog } from "../../components/_external-pages/fundraise";
+import ProfileButton from "../../components/custom-component/ProfileButton";
+import ConnectButton from "../../components/custom-component/ConnectButton";
 
 const Web3 = require("web3");
 
@@ -115,23 +115,6 @@ export default function MainNavbar() {
               />
             </MHidden>
 
-            {/* <Button
-              component={RouterLink}
-              variant="subtitle2"
-              color="inherit"
-              underline="none"
-              to={PATH_PAGE.fundraisers}
-              disabled={!isWeb3Enabled || !isAuthenticated}
-              sx={{
-                display: "block",
-                color: "text.primary",
-                transition: (theme) => theme.transitions.create("all"),
-                "&:hover": { color: "primary.main" },
-              }}
-            >
-              Your Fundraisers
-            </Button> */}
-
             <MHidden width="mdUp">
               <Searchbar />
             </MHidden>
@@ -140,30 +123,11 @@ export default function MainNavbar() {
               <Search />
             </MHidden>
 
-            <MHidden width="mdUp">
-              <Box
-                sx={{
-                  display: "flex",
-                  color: "primary.main",
-                  justifyContent: "center",
-                }}
-              >
-                <Icon icon="carbon:wallet" width={24} height={24} />
-              </Box>
-            </MHidden>
-
-            <MHidden width="mdDown">
-              {isWeb3Enabled && isAuthenticated ? (
-                <Button
-                  component={RouterLink}
-                  to={`${PATH_PAGE.profile}/${account}`}
-                >
-                  Profile
-                </Button>
-              ) : (
-                <ConnectButton />
-              )}
-            </MHidden>
+            {isWeb3Enabled && isAuthenticated ? (
+              <ProfileButton />
+            ) : (
+              <ConnectButton />
+            )}
 
             <MHidden width="mdDown">
               <SettingMode />

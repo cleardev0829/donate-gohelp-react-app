@@ -12,7 +12,7 @@ import {
   ClickAwayListener,
 } from "@material-ui/core";
 // components
-import { MIconButton } from "../../components/@material-extend";
+import { MIconButton } from "../@material-extend";
 
 // ----------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ export default function Searchbar() {
       <div>
         {!isOpen && (
           <MIconButton onClick={handleOpen}>
-            <Icon icon={searchFill} width={20} height={20} />
+            <Icon icon={searchFill} width={24} height={24} />
           </MIconButton>
         )}
 

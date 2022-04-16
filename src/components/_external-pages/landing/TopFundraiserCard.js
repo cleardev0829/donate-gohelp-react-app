@@ -34,17 +34,18 @@ import {
   CardMediaStyle,
   DescriptionStyle,
   ConnectTextStyle,
-} from "src/components/CommonStyles";
+} from "src/components/custom-component/CommonStyles";
 import MoreMenu from "./MoreMenu";
-import { Connect } from "src/components/Connect";
-import DonateProgress from "../../DonateProgress";
+import DonateProgress from "../../custom-component/DonateProgress";
 import { PATH_PAGE } from "../../../routes/paths";
 import { filters } from "../../../utils/constants";
 import { fNumber } from "../../../utils/formatNumber";
 import { useDispatch, useSelector } from "../../../redux/store";
+import Connect from "../../../components/custom-component/Connect";
 import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
-import { addFavorite, removeFavorite } from "src/redux/slices/favorite";
+import { addFavorite, removeFavorite } from "../../../redux/slices/favorite";
 import { resetPost, getPostsInitial } from "../../../redux/slices/fundraise";
+import ConnectButton from "../../../components/custom-component/ConnectButton";
 
 // ----------------------------------------------------------------------
 
@@ -192,7 +193,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
                     {status}
                   </ConnectTextStyle>
                 ) : (
-                  <Connect sx={{ display: visibility }} />
+                  <ConnectButton variant="subtitle2" />
                 )}
               </Box>
               <Stack direction="row" alignItems={"center"}>

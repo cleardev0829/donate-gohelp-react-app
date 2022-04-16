@@ -24,7 +24,10 @@ import { DialogAnimate } from "../../animate";
 import EmptyContent from "../../EmptyContent";
 import { setCheckout } from "../../../redux/slices/fundraise";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { CardMediaStyle, CoverImgStyle } from "src/components/CommonStyles";
+import {
+  CardMediaStyle,
+  CoverImgStyle,
+} from "src/components/custom-component/CommonStyles";
 
 // ----------------------------------------------------------------------
 

@@ -32,7 +32,7 @@ import {
   getMoreDonates,
 } from "../../../redux/slices/donate";
 import { diff } from "../../../utils/constants";
-import OutlineCard from "../../../components/OutlineCard";
+import OutlineCard from "../../custom-component/OutlineCard";
 import { IconBullet } from "src/layouts/dashboard/MenuDesktop";
 import { useDispatch, useSelector } from "../../../redux/store";
 

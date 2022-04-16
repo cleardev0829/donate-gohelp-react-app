@@ -4,9 +4,12 @@ import {
   experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import { Box, Card, Link, Grid, Stack, CardContent } from "@material-ui/core";
-import RoundedImg from "src/components/RoundedImg";
-import OutlineCard from "src/components/OutlineCard";
-import { TitleStyle, DescriptionStyle } from "../../../components/CommonStyles";
+import RoundedImg from "src/components/custom-component/RoundedImg";
+import OutlineCard from "src/components/custom-component/OutlineCard";
+import {
+  TitleStyle,
+  DescriptionStyle,
+} from "../../custom-component/CommonStyles";
 
 // ----------------------------------------------------------------------
 

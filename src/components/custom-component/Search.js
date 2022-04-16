@@ -17,11 +17,11 @@ import {
   InputAdornment,
 } from "@material-ui/core";
 // utils
-import axios from "../utils/axios";
+import axios from "../../utils/axios";
 // routes
-import { PATH_DASHBOARD } from "../routes/paths";
+import { PATH_DASHBOARD } from "../../routes/paths";
 //
-import SearchNotFound from "./SearchNotFound";
+import SearchNotFound from "../SearchNotFound";
 
 // ----------------------------------------------------------------------
 

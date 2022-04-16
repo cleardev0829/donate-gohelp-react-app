@@ -27,7 +27,7 @@ import {
   History,
   NFT,
 } from "../components/_external-pages/profile";
-import { OneLineTextStyle } from "../components/CommonStyles";
+import { OneLineTextStyle } from "../components/custom-component/CommonStyles";
 
 // ----------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ export default function Profile() {
           <Avatar>
             <Icon icon="logos:metamask-icon" />
           </Avatar>
-          <OneLineTextStyle>{account}</OneLineTextStyle>
+          <OneLineTextStyle variant="subtitle2">{account}</OneLineTextStyle>
         </Stack>
         <Divider />
 

@@ -34,12 +34,15 @@ import {
   FundraiseEditDialog,
   FundraiseUpdateDialog,
 } from "../components/_external-pages/fundraise";
-import Loading from "../components/Loading";
+import Loading from "../components/custom-component/Loading";
 import { PATH_PAGE } from "../routes/paths";
 import { diff, filters } from "../utils/constants";
 import { useDispatch, useSelector } from "../redux/store";
-import DonateProgress from "../components/DonateProgress";
-import { CardMediaStyle, CoverImgStyle } from "../components/CommonStyles";
+import DonateProgress from "../components/custom-component/DonateProgress";
+import {
+  CardMediaStyle,
+  CoverImgStyle,
+} from "../components/custom-component/CommonStyles";
 import { onBackStep, onNextStep, getPost } from "../redux/slices/fundraise";
 import FundraiseHeader from "../components/_external-pages/fundraise/FundraiseHeader";
 import FundraiseShareDialog from "../components/_external-pages/fundraise/FundraiseShareDialog";

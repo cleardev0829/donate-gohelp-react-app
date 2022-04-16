@@ -17,11 +17,11 @@ import {
 import toast from "react-hot-toast";
 import useConnect from "src/hooks/useOffSetTop";
 
-Disconnect.propTypes = {
+DisconnectButton.propTypes = {
   variant: PropTypes.string,
 };
 
-export default function Disconnect({ variant, sx }) {
+export default function DisconnectButton({ variant, sx }) {
   const wallet = useWallet();
   const {
     Moralis,
