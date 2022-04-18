@@ -48,7 +48,7 @@ export const OneLineTextStyle = styled(Typography)({
   WebkitBoxOrient: "vertical",
 });
 
-export const ConnectTextStyle = styled(Typography)(({ theme }) => ({
+export const ConnectTextStyle = styled(Link)(({ theme }) => ({
   color: theme.palette.text.secondary,
   transition: theme.transitions.create("opacity", {
     duration: theme.transitions.duration.shortest,

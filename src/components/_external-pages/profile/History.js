@@ -85,6 +85,7 @@ export default function History() {
   }, [dispatch]);
 
   useEffect(() => {
+    if (!account) return;
     dispatch(getPostsInitial(index, step, account));
   }, [dispatch, index]);
 

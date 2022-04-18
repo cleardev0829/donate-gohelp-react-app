@@ -7,17 +7,20 @@ export default function Tabs(theme) {
         root: {
           padding: 0,
           fontWeight: theme.typography.fontWeightMedium,
-          borderRadius: theme.shape.borderRadius,
+          borderRadius: 0,
           color: theme.palette.text.primary,
           "&.Mui-selected": {
             color: theme.palette.text.primary,
             backgroundColor: theme.palette.background.default,
           },
           "&:not(:last-child)": {
-            marginRight: theme.spacing(2),
+            marginRight: theme.spacing(0),
           },
           "@media (min-width: 600px)": {
             minWidth: 48,
+          },
+          "&:hover": {
+            backgroundColor: theme.palette.background.paper,
           },
         },
         labelIcon: {

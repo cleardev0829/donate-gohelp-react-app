@@ -77,6 +77,7 @@ export default function Fundraiser() {
   }, [dispatch]);
 
   useEffect(() => {
+    if (!account) return;
     dispatch(getPostsInitial(index, step, account));
   }, [dispatch, index, account]);
 

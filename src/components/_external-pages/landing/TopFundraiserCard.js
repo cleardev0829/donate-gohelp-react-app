@@ -76,7 +76,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { account } = useMoralis();
+  const { isAuthenticated, isWeb3Enabled, account } = useMoralis();
   const filter = filters(post.donates);
   const [open, setOpen] = useState(false);
   const [visibility, setVisivility] = useState("none");
@@ -184,7 +184,7 @@ export default function TopFundraiserCard({ post, simple = false }) {
               justifyContent={"space-between"}
             >
               <Box>
-                {simple ? (
+                {simple && (
                   <ConnectTextStyle
                     variant="subtitle2"
                     color="primary"
@@ -192,7 +192,20 @@ export default function TopFundraiserCard({ post, simple = false }) {
                   >
                     {status}
                   </ConnectTextStyle>
-                ) : (
+                )}
+
+                {!simple && isAuthenticated && isWeb3Enabled && (
+                  <ConnectTextStyle
+                    variant="subtitle2"
+                    color="primary"
+                    component={RouterLink}
+                    to={`${PATH_PAGE.donate}/${post.id}`}
+                  >
+                    Give
+                  </ConnectTextStyle>
+                )}
+
+                {!simple && (!isAuthenticated || !isWeb3Enabled) && (
                   <ConnectButton variant="subtitle2" />
                 )}
               </Box>

@@ -70,6 +70,7 @@ export default function Favorite() {
   const { account } = useMoralis();
 
   const onScroll = useCallback(() => {
+    if (!account) return;
     dispatch(getMorePosts());
   }, [dispatch]);
 
