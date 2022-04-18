@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import _ from "lodash";
 import { Grid, Stack, Container, useTheme } from "@material-ui/core";
 import {
+  DonateCover,
   DonateList,
-  DonateAbout,
-  DonateUpdates,
+  DonateRight,
+  DonateStories,
 } from "../components/_external-pages/donate";
 import Page from "../components/Page";
-import { getPost } from "../redux/slices/fundraise";
-import useIsMountedRef from "../hooks/useIsMountedRef";
+import { getPost } from "../redux/slices/donate";
 import LoadingScreen from "../components/LoadingScreen";
 import { useDispatch, useSelector } from "../redux/store";
 
@@ -19,8 +19,8 @@ export default function Donate() {
   const theme = useTheme();
   const params = useParams();
   const dispatch = useDispatch();
-  const [data, setData] = useState({});
-  const { post, isLoading } = useSelector((state) => state.fundraise);
+  const [data, setData] = useState(null);
+  const { post, isLoading } = useSelector((state) => state.donate);
 
   useEffect(() => {
     dispatch(getPost(params.id));
@@ -30,7 +30,7 @@ export default function Donate() {
     setData(post);
   }, [post]);
 
-  if (isLoading || !post) {
+  if (isLoading || !data) {
     return (
       <LoadingScreen
         sx={{
@@ -57,13 +57,14 @@ export default function Donate() {
         <Grid container spacing={theme.shape.MAIN_HORIZONTAL_SPACING}>
           <Grid item xs={12} md={7}>
             <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-              <DonateUpdates />
+              <DonateCover />
+              <DonateStories />
               <DonateList />
             </Stack>
           </Grid>
 
           <Grid item xs={12} md={5}>
-            <DonateAbout />
+            <DonateRight />
           </Grid>
         </Grid>
       </Container>

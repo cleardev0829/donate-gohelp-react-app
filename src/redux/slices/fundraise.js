@@ -172,40 +172,6 @@ export function addPost(post) {
 
 // ----------------------------------------------------------------------
 
-export function addDonate(donate) {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.post("/api/donate/add", {
-        ...donate,
-      });
-
-      dispatch(getPost(donate.fundraiseId));
-    } catch (error) {
-      console.error(error);
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-
-// ----------------------------------------------------------------------
-
-export function addUpdate(update) {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.post("/api/update/add", {
-        ...update,
-      });
-      dispatch(getPost(update.fundraiseId));
-    } catch (error) {
-      console.error(error);
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-// ----------------------------------------------------------------------
-
 export function updatePost(post) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());

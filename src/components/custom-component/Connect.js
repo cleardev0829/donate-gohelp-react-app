@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import toast from "react-hot-toast";
 import useConnect from "src/hooks/useOffSetTop";
-import { ConnectTextStyle } from "./CommonStyles";
+import { HoverTextStyle } from "./CommonStyles";
 
 function SimpleDialog(props) {
   const wallet = useWallet();
@@ -98,7 +98,7 @@ export default function Connect({ sx }) {
 
   return (
     <>
-      <ConnectTextStyle sx={sx} variant="subtitle2" onClick={handleClickOpen}>
+      <HoverTextStyle sx={sx} variant="subtitle2" onClick={handleClickOpen}>
         {wallet?.status === "connected" && wallet.account ? (
           <span>
             {wallet.account.slice(0, 3)}...
@@ -107,7 +107,7 @@ export default function Connect({ sx }) {
         ) : (
           <span>Connect</span>
         )}
-      </ConnectTextStyle>
+      </HoverTextStyle>
       <SimpleDialog open={open} onClose={handleClose} />
     </>
   );

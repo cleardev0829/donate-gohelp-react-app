@@ -1,62 +1,61 @@
-import { useState } from "react";
-import moment from "moment";
-import PropTypes from "prop-types";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
-import { Icon } from "@iconify/react";
-import { motion } from "framer-motion";
-import { capitalCase } from "change-case";
-import shareFill from "@iconify/icons-eva/share-fill";
-// material
+import InfiniteScroll from "react-infinite-scroll-component";
 import {
   Box,
-  Tab,
-  Tabs,
+  Grid,
   Stack,
-  Button,
   Divider,
-  IconButton,
-  Typography,
+  Skeleton,
   CardContent,
 } from "@material-ui/core";
 import {
-  experimentalStyled as styled,
   useTheme,
+  experimentalStyled as styled,
 } from "@material-ui/core/styles";
 import {
-  varFadeIn,
-  varFadeInUp,
-  varWrapEnter,
-  varFadeInRight,
-} from "../../animate";
-import DonateDialog from "./DonateDialog";
-import OutlineCard from "../../custom-component/OutlineCard";
-import { diff } from "../../../utils/constants";
-import { useDispatch, useSelector } from "../../../redux/store";
-import FundraiseShareDialog from "../fundraise/FundraiseShareDialog";
-import {
-  CardMediaStyle,
   CoverImgStyle,
+  CardMediaStyle,
 } from "src/components/custom-component/CommonStyles";
-import SettingFullscreen from "src/components/settings/SettingFullscreen";
-import FullScreenButton from "src/components/custom-component/FullScreenButton";
+import { useDispatch } from "react-redux";
+import { filters } from "src/utils/constants";
+import { useSelector } from "../../../redux/store";
+import { getMorePosts, getPostsInitial } from "../../../redux/slices/update";
 
 // ----------------------------------------------------------------------
 
-const HeroStyle = styled("div")(({ theme }) => ({
-  paddingTop: "56%",
-  position: "relative",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  "&:before": {
-    top: 0,
-    content: "''",
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    backgroundColor: alpha(theme.palette.grey[900], 0.72),
+const modules = {
+  toolbar: false,
+  history: {
+    delay: 500,
+    maxStack: 100,
+    userOnly: true,
   },
-}));
+  syntax: true,
+  clipboard: {
+    matchVisual: false,
+  },
+};
+
+const SORT_OPTIONS = [
+  { value: "latest", label: "Latest" },
+  { value: "popular", label: "Popular" },
+  { value: "oldest", label: "Oldest" },
+];
+
+const applySort = (posts, sortBy) => {
+  if (sortBy === "latest") {
+    return orderBy(posts, ["createdAt"], ["desc"]);
+  }
+  if (sortBy === "oldest") {
+    return orderBy(posts, ["createdAt"], ["asc"]);
+  }
+  if (sortBy === "popular") {
+    return orderBy(posts, ["view"], ["desc"]);
+  }
+  return posts;
+};
 
 const QuillWrapperStyle = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -81,175 +80,107 @@ const QuillWrapperStyle = styled("div")(({ theme }) => ({
   },
 }));
 
+const SkeletonLoad = (
+  <CardContent>
+    <Grid container spacing={2}>
+      {[...Array(2)].map((_, index) => (
+        <Grid item xs={12} md={12} key={index}>
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            sx={{ height: 100, borderRadius: 2 }}
+          />
+          <Box sx={{ display: "flex", mt: 1 }}>
+            <Skeleton variant="circular" sx={{ width: 40, height: 40 }} />
+            <Skeleton variant="text" sx={{ mx: 1, flexGrow: 1 }} />
+          </Box>
+        </Grid>
+      ))}
+    </Grid>
+  </CardContent>
+);
+
 DonateUpdates.propTypes = {};
 
 export default function DonateUpdates() {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const [currentTab, setCurrentTab] = useState("Story");
-  const [donateDlgOpen, setDonateDlgOpen] = useState(false);
-  const { post, isLoading } = useSelector((state) => state.fundraise);
+  const params = useParams();
+  const listInnerRef = useRef();
+  const dispatch = useDispatch();
+  const { posts, hasMore, index, step } = useSelector((state) => state.update);
+  const [data, setData] = useState(posts);
 
-  const modules = {
-    toolbar: false,
-    history: {
-      delay: 500,
-      maxStack: 100,
-      userOnly: true,
-    },
-    syntax: true,
-    clipboard: {
-      matchVisual: false,
-    },
-  };
+  const onScroll = useCallback(() => {
+    if (listInnerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        dispatch(getMorePosts());
+      }
+    }
+  }, [dispatch]);
 
-  const handleChangeTab = (event, newValue) => {
-    setCurrentTab(newValue);
-  };
+  useEffect(() => {
+    dispatch(getPostsInitial(index, step, params.id));
+  }, [dispatch, index, params]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(close);
-  };
-
-  const handleDonateDlgOpen = () => {
-    setDonateDlgOpen(true);
-  };
-
-  const handleDonateDlgClose = () => {
-    setDonateDlgOpen(false);
-  };
+  useEffect(() => {
+    const sortedPosts = applySort(posts, filters);
+    setData(sortedPosts);
+  }, [posts]);
 
   return (
-    <>
-      <Box sx={{ py: 3 }}>
+    <div
+      id="scrollableDiv"
+      ref={listInnerRef}
+      style={{
+        height: 450,
+        overflow: "auto",
+        scrollbarWidth: "none",
+      }}
+      onScroll={onScroll}
+    >
+      <InfiniteScroll
+        next={onScroll}
+        hasMore={hasMore}
+        loader={SkeletonLoad}
+        dataLength={data.length}
+        style={{ overflow: "inherit" }}
+        scrollableTarget="scrollableDiv"
+      >
         <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
-          <OutlineCard>
-            <CardContent>
-              <Stack direction="row" justifyContent={"space-between"}>
-                <FullScreenButton elementId="cover" />
-                <Stack
-                  spacing={theme.shape.CARD_CONTENT_SPACING}
-                  direction="row"
-                  justifyContent={"flex-end"}
-                  alignItems="center"
-                >
-                  <IconButton onClick={handleDonateDlgOpen}>
-                    <Icon icon="carbon:wallet" width={20} height={20} />
-                  </IconButton>
-                  <IconButton onClick={handleOpen}>
-                    <Icon icon="carbon:share" width={20} height={20} />
-                  </IconButton>
-                </Stack>
-              </Stack>
-            </CardContent>
-            <Divider />
-            <div id="cover">
-              <CardMediaStyle>
-                <CoverImgStyle
-                  alt="cover"
-                  src={post.cover.preview}
-                  sx={{
-                    transform: `rotate(${
-                      ((-1 * post.cover.rotate) % 4) * 90
-                    }deg) scale(${1 + post.cover.scale / 100})`,
+          {data.map((update, index) => (
+            <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
+              <QuillWrapperStyle key={`quil-wrapper-${index}`}>
+                <ReactQuill
+                  key={`react-quill-${index}`}
+                  readOnly
+                  value={update.description.content}
+                  modules={modules}
+                  style={{
+                    margin: 0,
                   }}
                 />
-              </CardMediaStyle>
-            </div>
-          </OutlineCard>
-
-          <OutlineCard>
-            <Tabs
-              value={currentTab}
-              scrollButtons="auto"
-              variant="scrollable"
-              allowScrollButtonsMobile
-              onChange={handleChangeTab}
-            >
-              {["Story", "Updates"].map((tab) => (
-                <Tab
-                  disableRipple
-                  key={tab}
-                  value={tab}
-                  label={capitalCase(tab)}
-                  sx={{ px: 3 }}
-                />
-              ))}
-            </Tabs>
-            <Divider />
-
-            {currentTab === "Story" && (
-              <CardContent>
-                <QuillWrapperStyle>
-                  <ReactQuill
-                    readOnly
-                    value={post.description.content}
-                    modules={modules}
-                    style={{
-                      margin: 0,
-                    }}
-                  />
-                </QuillWrapperStyle>
-              </CardContent>
-            )}
-
-            {currentTab === "Updates" && (
-              <>
-                {/* <CardContent>
-                  <Typography variant="h5">News from Fundraiser</Typography>
+              </QuillWrapperStyle>
+              {update.cover && (
+                <CardContent>
+                  <CardMediaStyle>
+                    <CoverImgStyle
+                      alt="cover"
+                      src={update.cover.preview}
+                      sx={{
+                        transform: `rotate(${
+                          ((-1 * update.cover.rotate) % 4) * 90
+                        }deg) scale(${1 + update.cover.scale / 100})`,
+                      }}
+                    />
+                  </CardMediaStyle>
                 </CardContent>
-
-                <Divider /> */}
-
-                {post.updates.map((update, index) => (
-                  <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                    <QuillWrapperStyle key={`quil-wrapper-${index}`}>
-                      <ReactQuill
-                        key={`react-quill-${index}`}
-                        readOnly
-                        value={update.description.content}
-                        modules={modules}
-                        style={{
-                          margin: 0,
-                        }}
-                      />
-                    </QuillWrapperStyle>
-                    {update.cover && (
-                      <CardContent>
-                        <CardMediaStyle>
-                          <CoverImgStyle
-                            alt="cover"
-                            src={update.cover.preview}
-                            sx={{
-                              transform: `rotate(${
-                                ((-1 * update.cover.rotate) % 4) * 90
-                              }deg) scale(${1 + update.cover.scale / 100})`,
-                            }}
-                          />
-                        </CardMediaStyle>
-                      </CardContent>
-                    )}
-                    {index < post.updates.length - 1 && (
-                      <Divider key={`divider-${index}`} />
-                    )}
-                  </Stack>
-                ))}
-              </>
-            )}
-          </OutlineCard>
+              )}
+              {index < data.length - 1 && <Divider key={`divider-${index}`} />}
+            </Stack>
+          ))}
         </Stack>
-      </Box>
-
-      <FundraiseShareDialog post={post} open={open} onClose={handleClose} />
-      <DonateDialog
-        post={post}
-        open={donateDlgOpen}
-        onClose={handleDonateDlgClose}
-      />
-    </>
+      </InfiniteScroll>
+    </div>
   );
 }

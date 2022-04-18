@@ -107,6 +107,16 @@ export default function WalletDialog({ open, onClose }) {
             </ListItemAvatar>
             <ListItemText primary="Wallet Connect" />
           </ListItem>
+          <ListItem
+            autoFocus
+            button
+            onClick={() => handleConnect({ type: "sol" })}
+          >
+            <ListItemAvatar>
+              <Avatar src="/static/metamask/logo-phantom.jpg" />
+            </ListItemAvatar>
+            <ListItemText primary="Phantom" />
+          </ListItem>
         </List>
       </DialogContent>
       <DialogActions>

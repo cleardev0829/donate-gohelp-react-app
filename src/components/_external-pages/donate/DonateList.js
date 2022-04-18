@@ -26,11 +26,7 @@ import {
   varWrapEnter,
   varFadeInRight,
 } from "../../animate";
-import {
-  onNextStep,
-  getDonatesInitial,
-  getMoreDonates,
-} from "../../../redux/slices/donate";
+import { getPosts } from "../../../redux/slices/donate";
 import { diff } from "../../../utils/constants";
 import OutlineCard from "../../custom-component/OutlineCard";
 import { IconBullet } from "src/layouts/dashboard/MenuDesktop";
@@ -63,10 +59,7 @@ DonateList.propTypes = {};
 
 export default function DonateList() {
   const theme = useTheme();
-  const params = useParams();
-  const dispatch = useDispatch();
-  const [filters, setFilters] = useState("latest");
-  const { post, isLoading } = useSelector((state) => state.fundraise);
+  const { post } = useSelector((state) => state.donate);
 
   return (
     <Box>
@@ -134,7 +127,7 @@ export default function DonateList() {
                     {donate.message}
                   </Typography>
 
-                  {/* {index === post.donates.length - 1 && hasMore && (
+                  {/* {index === post.posts.length - 1 && hasMore && (
                     <motion.div
                       key={`motion-div-${index}`}
                       variants={varFadeInRight}
@@ -142,7 +135,7 @@ export default function DonateList() {
                       <Button
                         key={`button-${index}`}
                         variant="outlined"
-                        onClick={handleGetMoreDonates}
+                        onClick={handleGetMorePosts}
                       >
                         Show more
                       </Button>

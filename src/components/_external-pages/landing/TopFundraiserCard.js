@@ -33,7 +33,7 @@ import {
   CoverImgStyle,
   CardMediaStyle,
   DescriptionStyle,
-  ConnectTextStyle,
+  HoverTextStyle,
 } from "src/components/custom-component/CommonStyles";
 import MoreMenu from "./MoreMenu";
 import DonateProgress from "../../custom-component/DonateProgress";
@@ -185,24 +185,24 @@ export default function TopFundraiserCard({ post, simple = false }) {
             >
               <Box>
                 {simple && (
-                  <ConnectTextStyle
+                  <HoverTextStyle
                     variant="subtitle2"
                     color="primary"
                     sx={{ display: "visibility" }}
                   >
                     {status}
-                  </ConnectTextStyle>
+                  </HoverTextStyle>
                 )}
 
                 {!simple && isAuthenticated && isWeb3Enabled && (
-                  <ConnectTextStyle
+                  <HoverTextStyle
                     variant="subtitle2"
                     color="primary"
                     component={RouterLink}
                     to={`${PATH_PAGE.donate}/${post.id}`}
                   >
                     Give
-                  </ConnectTextStyle>
+                  </HoverTextStyle>
                 )}
 
                 {!simple && (!isAuthenticated || !isWeb3Enabled) && (

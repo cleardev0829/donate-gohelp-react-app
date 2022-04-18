@@ -11,6 +11,8 @@ import calendarReducer from "./slices/calendar";
 import kanbanReducer from "./slices/kanban";
 import postReducer from "./slices/post";
 import donateReducer from "./slices/donate";
+import updateReducer from "./slices/update";
+import donationReducer from "./slices/donation";
 import fundraiseReducer from "./slices/fundraise";
 import fundraiserReducer from "./slices/fundraiser";
 import historyReducer from "./slices/history";
@@ -50,6 +52,8 @@ const rootReducer = combineReducers({
   product: persistReducer(productPersistConfig, productReducer),
   // donate: persistReducer(donatePersistConfig, donateReducer),
   donate: donateReducer,
+  update: updateReducer,
+  donation: donationReducer,
   fundraise: fundraiseReducer,
   fundraiser: fundraiserReducer,
   history: historyReducer,

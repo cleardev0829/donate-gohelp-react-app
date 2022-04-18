@@ -12,6 +12,7 @@ export default function Tabs(theme) {
           "&.Mui-selected": {
             color: theme.palette.text.primary,
             backgroundColor: theme.palette.background.default,
+            // border: `solid 1px ${theme.palette.primary.main}`,
           },
           "&:not(:last-child)": {
             marginRight: theme.spacing(0),

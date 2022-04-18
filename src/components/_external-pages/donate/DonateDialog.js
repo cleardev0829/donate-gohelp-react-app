@@ -28,8 +28,8 @@ import Scrollbar from "../../Scrollbar";
 import { DialogAnimate } from "../../animate";
 import EmptyContent from "../../EmptyContent";
 import fakeRequest from "../../../utils/fakeRequest";
+import { addPost } from "../../../redux/slices/donate";
 import { useDispatch, useSelector } from "../../../redux/store";
-import { addDonate, resetPost } from "../../../redux/slices/fundraise";
 import { ADDRESS, cryptoToUSD, CRYPTO_PRICE } from "../../../utils/constants";
 
 // ----------------------------------------------------------------------
@@ -88,9 +88,8 @@ export default function DonateDialog({ post, open, onClose }) {
 
         await transfer();
 
-        dispatch(resetPost());
         dispatch(
-          addDonate({
+          addPost({
             fundraiseId: post.uid,
             account,
             crypto: {

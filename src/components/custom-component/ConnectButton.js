@@ -6,7 +6,7 @@ import { MHidden } from "../@material-extend";
 import { Button, IconButton } from "@material-ui/core";
 import WalletDialog from "./WalletDialog";
 import { PATH_AUTH, PATH_PAGE } from "../../routes/paths";
-import { ConnectTextStyle } from "./CommonStyles";
+import { HoverTextStyle } from "./CommonStyles";
 
 ConnectButton.propTypes = {
   variant: PropTypes.string,
@@ -26,9 +26,9 @@ export default function ConnectButton({ variant }) {
   return (
     <>
       <MHidden width="mdDown">
-        <ConnectTextStyle variant={variant} onClick={handleOpen}>
+        <HoverTextStyle variant={variant} onClick={handleOpen}>
           Connect
-        </ConnectTextStyle>
+        </HoverTextStyle>
       </MHidden>
 
       <MHidden width="mdUp">

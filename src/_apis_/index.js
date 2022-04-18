@@ -8,6 +8,7 @@ import "./products";
 import "./kanban";
 import "./fundraise";
 import "./donate";
+import "./update";
 import "./fundraiser";
 import "./history";
 import "./favorite";

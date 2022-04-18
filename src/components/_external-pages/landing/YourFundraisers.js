@@ -111,20 +111,6 @@ export default function TopFundraisers() {
     <RootStyle>
       <Container maxWidth="lg">
         <Fundraiser />
-        {/* <InfiniteScroll
-          next={onScroll}
-          hasMore={hasMore}
-          loader={SkeletonLoad}
-          dataLength={posts.length}
-          style={{ overflow: "inherit" }}
-        >
-          <Grid container spacing={theme.shape.CARD_MARGIN}>
-            {data.length > 0 &&
-              data.map((post, index) => (
-                <TopFundraiserCard key={post.id} post={post} simple />
-              ))}
-          </Grid>
-        </InfiniteScroll> */}
       </Container>
     </RootStyle>
   );

@@ -24,8 +24,8 @@ import { QuillEditor } from "../../editor";
 import fakeRequest from "../../../utils/fakeRequest";
 import { UploadSingleFileOverride } from "../../upload";
 import FundraisePhotoEditor from "./FundraisePhotoEditor";
-import { addUpdate } from "../../../redux/slices/fundraise";
 import { useDispatch, useSelector } from "../../../redux/store";
+import { addUpdate } from "../../../redux/slices/update";
 
 // ----------------------------------------------------------------------
 
@@ -87,7 +87,6 @@ export default function FundraiseUpdate({ uid, childRef }) {
           })
         );
         resetForm();
-        handleClose();
         setSubmitting(false);
         enqueueSnackbar("Post success", { variant: "success" });
       } catch (error) {
@@ -135,43 +134,10 @@ export default function FundraiseUpdate({ uid, childRef }) {
     <>
       <FormikProvider value={formik}>
         <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          {/* <Container maxWidth="md"> */}
           <Grid container>
             <Grid item xs={12} md={12}>
               <Stack spacing={theme.shape.MAIN_VERTICAL_SPACING}>
                 <Stack spacing={theme.shape.CARD_CONTENT_SPACING}>
-                  {/* <Typography
-                      component="p"
-                      variant="h5"
-                      sx={{ color: "text.primary" }}
-                    >
-                      Post an Update
-                    </Typography>
-
-                    <Typography
-                      component="p"
-                      variant="body1"
-                      sx={{ color: "text.primary" }}
-                    >
-                      So that people can get in touch with you.
-                    </Typography> */}
-
-                  {/* <Typography
-                      variant="subtitle1"
-                      paragraph
-                      sx={{
-                        ...(!isLight && {
-                          textShadow: (theme) =>
-                            `4px 4px 16px ${alpha(
-                              theme.palette.grey[800],
-                              0.48
-                            )}`,
-                        }),
-                      }}
-                    >
-                      Share your news
-                    </Typography> */}
-
                   <QuillEditor
                     id="product-description"
                     simple
@@ -247,7 +213,6 @@ export default function FundraiseUpdate({ uid, childRef }) {
               </Stack>
             </Grid>
           </Grid>
-          {/* </Container> */}
         </Form>
       </FormikProvider>
 
