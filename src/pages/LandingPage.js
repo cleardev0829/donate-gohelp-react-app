@@ -11,7 +11,6 @@ import {
 import Page from "../components/Page";
 import MainFooter from "../layouts/main/MainFooter";
 import { useDispatch, useSelector } from "../redux/store";
-// import { resetCheckout as resetDonate } from "../redux/slices/donate";
 import { resetCheckout as resetFundraise } from "../redux/slices/fundraise";
 
 // ----------------------------------------------------------------------
@@ -28,7 +27,6 @@ const ContentStyle = styled("div")(({ theme }) => ({
 
 export default function LandingPage() {
   const dispatch = useDispatch();
-  // dispatch(resetDonate());
   dispatch(resetFundraise());
 
   return (

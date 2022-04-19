@@ -2,7 +2,6 @@ import React from "react";
 import { experimentalStyled as styled } from "@material-ui/core/styles";
 import Page from "../components/Page";
 import { useDispatch, useSelector } from "../redux/store";
-// import { resetCheckout as resetDonate } from "../redux/slices/donate";
 import { YourFundraisers } from "../components/_external-pages/landing";
 import { resetCheckout as resetFundraise } from "../redux/slices/fundraise";
 
@@ -17,7 +16,6 @@ const ContentStyle = styled("div")(({ theme }) => ({
 export default function Fundraisers() {
   const dispatch = useDispatch();
   dispatch(resetFundraise());
-  // dispatch(resetDonate());
 
   return (
     <Page
