@@ -20,6 +20,7 @@ import {
   Grid,
   Stack,
   Divider,
+  IconButton,
   CardContent,
 } from "@material-ui/core";
 import {
@@ -210,14 +211,18 @@ export default function TopFundraiserCard({ post, simple = false }) {
                 )}
               </Box>
               <Stack direction="row" alignItems={"center"}>
-                {_.find(post.favorites, (item) => item.account === account) && (
+                <IconButton onClick={handleFavorite}>
                   <Icon
                     icon="carbon:favorite-filled"
-                    color={theme.palette.primary.main}
-                    width={18}
-                    height={18}
+                    color={
+                      _.find(post.favorites, (item) => item.account === account)
+                        ? theme.palette.error.main
+                        : theme.palette.text.primary
+                    }
+                    width={20}
+                    height={20}
                   />
-                )}
+                </IconButton>
                 <MoreMenu
                   uid={post.id}
                   onOpenShareDialog={handleOpenPreview}

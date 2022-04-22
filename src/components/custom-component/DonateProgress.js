@@ -22,19 +22,17 @@ export default function DonateProgress({ time, total, goal }) {
         direction="row"
         justifyContent="space-between"
       >
-        <OneLineTextStyle variant="h6" color="primary">
+        <OneLineTextStyle variant="h6">
           {`Last donation ${time}`}
         </OneLineTextStyle>
-        <Typography variant="h6" color="primary">
-          {fPercent((total * 100) / goal)}
-        </Typography>
+        <Typography variant="h6">{fPercent((total * 100) / goal)}</Typography>
       </Stack>
 
       <ProgressItem
         text={`Last donation ${time}`}
         progress={parseFloat(fPercent((total * 100) / goal))}
       />
-      <OneLineTextStyle variant="h6" color="primary">
+      <OneLineTextStyle variant="h6">
         {`${fCurrency(total)} raised of ${fCurrency(goal)}`}
       </OneLineTextStyle>
     </Stack>

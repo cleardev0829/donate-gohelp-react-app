@@ -6,7 +6,7 @@ import lodash from "lodash";
 import PropTypes from "prop-types";
 import { useSnackbar } from "notistack";
 import { Form, FormikProvider, useFormik } from "formik";
-// material
+import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import {
   alpha,
   useTheme,
@@ -55,6 +55,7 @@ export default function DonateDonation({ post, formik }) {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { account } = useMoralis();
   const filter = filters(post.donates);
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -250,22 +251,22 @@ export default function DonateDonation({ post, formik }) {
                     />
                   </Stack>
 
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Stack>
+                  <Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
                       <Typography variant="body2">Total donation</Typography>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ color: "text.disabled" }}
-                      >
-                        wallet address
+                      <Typography variant="subtitle2">
+                        {`${fCurrency(filter.totalAmount)}`}
                       </Typography>
                     </Stack>
-                    <Typography variant="subtitle2">
-                      {`${fCurrency(filter.totalAmount)}`}
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ color: "text.disabled" }}
+                    >
+                      {account}
                     </Typography>
                   </Stack>
                 </Stack>

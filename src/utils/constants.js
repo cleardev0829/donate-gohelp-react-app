@@ -4,9 +4,9 @@ import moment from "moment";
 export const ADDRESS = "0x76bA5D887BDACdd5bD721c9be074526f8361fEEb"; // Anatollo's wallet
 
 export const CRYPTO_TYPES = [
-  { name: "BTC", price: 43602.25, type: "" },
-  { name: "ETH", price: 3098.56, type: "native" },
-  { name: "SOL", price: 102.84, type: "sol" },
+  { name: "BTC", price: 43602.25, type: "", symbol: "btc" },
+  { name: "ETH", price: 3098.56, type: "native", symbol: "eth" },
+  { name: "SOL", price: 102.84, type: "sol", symbol: "sol" },
 ];
 
 export const CRYPTO_PRICE = {

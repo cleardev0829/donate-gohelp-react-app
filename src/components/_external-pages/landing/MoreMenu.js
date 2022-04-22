@@ -51,7 +51,7 @@ export default function MoreMenu({ uid, onOpenShareDialog, handleFavorite }) {
             handleFavorite();
             setIsOpen(false);
           }}
-          sx={{ color: "text.secondary" }}
+          sx={{ color: "text.primary" }}
         >
           <ListItemIcon>
             <Icon icon="carbon:favorite-filled" width={18} height={18} />
@@ -63,7 +63,7 @@ export default function MoreMenu({ uid, onOpenShareDialog, handleFavorite }) {
         </MenuItem>
 
         <MenuItem
-          sx={{ color: "text.secondary" }}
+          sx={{ color: "text.primary" }}
           component={RouterLink}
           to={`${PATH_PAGE.view}/${uid}`}
         >
@@ -76,7 +76,7 @@ export default function MoreMenu({ uid, onOpenShareDialog, handleFavorite }) {
           />
         </MenuItem>
 
-        <MenuItem onClick={onOpenShareDialog} sx={{ color: "text.secondary" }}>
+        <MenuItem onClick={onOpenShareDialog} sx={{ color: "text.primary" }}>
           <ListItemIcon>
             <Icon icon={shareFill} width={18} height={18} />
           </ListItemIcon>

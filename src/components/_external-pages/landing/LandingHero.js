@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import _ from "lodash";
+import axios from "axios";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { useMoralis } from "react-moralis";
@@ -81,7 +83,15 @@ export default function LandingHero() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const isLight = theme.palette.mode === "light";
+  const [cryptoCurrencies, setCryptoCurrencies] = useState([]);
   const { isWeb3Enabled, isAuthenticated } = useMoralis();
+
+  useEffect(async () => {
+    const response = await axios.get("https://api.coingecko.com/api/v3/coins");
+    const data = response.data;
+
+    setCryptoCurrencies(data);
+  }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -100,7 +110,7 @@ export default function LandingHero() {
               <ContentStyle>
                 <motion.div variants={varFadeInRight}>
                   <Typography variant="h3" sx={{ color: "text.primary" }}>
-                    Trusted fundraing for
+                    Trusted fundraising for
                     <br /> all of life’s moments
                   </Typography>
                 </motion.div>
@@ -178,9 +188,8 @@ export default function LandingHero() {
               >
                 <motion.div variants={varFadeInRight}>
                   <Button
+                    size="large"
                     variant="contained"
-                    // component={RouterLink}
-                    // to={PATH_PAGE.view}
                     disabled={!isWeb3Enabled || !isAuthenticated}
                     onClick={handleOpen}
                   >
@@ -189,38 +198,50 @@ export default function LandingHero() {
                 </motion.div>
 
                 <Stack spacing={6} direction="row">
-                  {CRYPTO_TYPES.map((option, index) => (
-                    <Stack spacing={6} direction="row" key={`box-${index}`}>
-                      <Stack
-                        key={`stack-${option.name}`}
-                        spacing={theme.shape.MAIN_SPACING}
-                      >
-                        <Typography
-                          key={`typography-1-${option.name}`}
-                          variant="caption"
+                  {cryptoCurrencies.length > 0 &&
+                    CRYPTO_TYPES.map((option, index) => (
+                      <Stack spacing={6} direction="row" key={`box-${index}`}>
+                        <Stack
+                          key={`stack-${option.name}`}
+                          spacing={theme.shape.MAIN_SPACING}
                         >
-                          {option.name}
-                        </Typography>
-                        <img
-                          key={`img-${option.name}`}
-                          src={`/static/coins/${option.name}.webp`}
-                          height={24}
-                          width={24}
-                        />
+                          <Typography
+                            key={`typography-1-${option.name}`}
+                            variant="caption"
+                          >
+                            {option.name}
+                          </Typography>
+                          <img
+                            key={`img-${option.name}`}
+                            // src={`/static/coins/${option.name}.webp`}
+                            src={
+                              _.find(
+                                cryptoCurrencies,
+                                (item) => item.symbol === option.symbol
+                              ).image.thumb
+                            }
+                            height={24}
+                            width={24}
+                          />
 
-                        <Typography
-                          key={`typography-2-${option.name}`}
-                          variant="caption"
-                        >
-                          {CRYPTO_PRICE[option.name]}
-                        </Typography>
+                          <Typography
+                            key={`typography-2-${option.name}`}
+                            variant="caption"
+                          >
+                            {
+                              _.find(
+                                cryptoCurrencies,
+                                (item) => item.symbol === option.symbol
+                              ).market_data.current_price.usd
+                            }
+                          </Typography>
+                        </Stack>
+
+                        {index < CRYPTO_TYPES.length - 1 && (
+                          <Divider orientation="vertical" />
+                        )}
                       </Stack>
-
-                      {index < CRYPTO_TYPES.length - 1 && (
-                        <Divider orientation="vertical" />
-                      )}
-                    </Stack>
-                  ))}
+                    ))}
                 </Stack>
 
                 <YoutubeEmbed embedId="whlymAuRtzU" style={{ height: "50%" }} />
