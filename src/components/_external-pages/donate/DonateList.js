@@ -31,6 +31,7 @@ import { diff } from "../../../utils/constants";
 import OutlineCard from "../../custom-component/OutlineCard";
 import { IconBullet } from "src/layouts/dashboard/MenuDesktop";
 import { useDispatch, useSelector } from "../../../redux/store";
+import { Icon } from "@iconify/react";
 
 // ----------------------------------------------------------------------
 
@@ -78,11 +79,13 @@ export default function DonateList() {
                 direction="row"
                 spacing={theme.shape.CARD_CONTENT_SPACING}
               >
-                {/* <Avatar
-                    key={donate.id}
-                    alt={donate.id}
-                    src={" /static/avatars/avatar_man.png"}
-                  /> */}
+                <Avatar
+                  key={donate.id}
+                  alt={donate.id}
+                  // src={" /static/avatars/avatar_man.png"}
+                >
+                  <Icon icon="logos:metamask-icon" />
+                </Avatar>
                 <Stack
                   key={`stack-2-${index}`}
                   spacing={theme.shape.CARD_CONTENT_SPACING}
